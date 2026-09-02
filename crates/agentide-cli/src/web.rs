@@ -71,7 +71,7 @@ async fn index() -> Response {
 }
 
 async fn asset(Path(path): Path<String>) -> Response {
-    embedded(&path)
+    embedded(&format!("assets/{path}"))
 }
 
 fn embedded(path: &str) -> Response {
@@ -176,5 +176,24 @@ impl IntoResponse for ApiError {
             |error| json!({"code": error.code, "message": error.message, "retryable": error.retryable}),
         );
         (status, Json(value)).into_response()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn asset_route_preserves_the_embedded_assets_prefix() {
+        assert_eq!(
+            asset(Path("styles.css".to_owned())).await.status(),
+            StatusCode::OK
+        );
+        assert_eq!(
+            asset(Path("generated/surface-profile.js".to_owned()))
+                .await
+                .status(),
+            StatusCode::OK
+        );
     }
 }

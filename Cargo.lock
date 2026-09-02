@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "agentide-cli"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "agentide-contracts",
  "agentide-core",
@@ -26,7 +26,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-contracts"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "serde",
  "serde_json",
@@ -36,7 +36,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-core"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "agentide-contracts",
  "chrono",
@@ -50,7 +50,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-harness"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "agentide-contracts",
  "agentide-core",
@@ -67,7 +67,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-substrate"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "agentide-contracts",
  "agentide-core",
@@ -79,7 +79,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-xtask"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "agentide-contracts",
  "anyhow",

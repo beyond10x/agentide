@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.1.1 - 2026-09-02
+
+- Fix the embedded browser workbench asset routing so its stylesheet, JavaScript, and generated
+  surface profile load instead of returning 404 responses.
 - Add the first native Harness-driven TUI session: ESS-derived AgentIDE intents are published as
   Harness tools, model output and tool activity stream into the workbench, and a `y`/`n` decision
   grants or denies the exact durable AgentIDE plan before a required intent can execute.
