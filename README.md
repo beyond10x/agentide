@@ -29,7 +29,7 @@ future Harness-native surface without changing the intent vocabulary.
 
 AgentIDE currently targets Linux because its standalone effects use Substrate confinement.
 
-```console
+```shell-session
 cargo build --locked --release -p agentide-cli
 target/release/agentide session start --workspace . --objective "Implement the change"
 target/release/agentide snapshot --session <session-id>
@@ -42,14 +42,14 @@ diff pane, `Tab` to focus the next pane, `x` to close the focused pane, and `q` 
 
 An agent invokes authority-free observations directly:
 
-```console
+```shell-session
 agentide intent call --session "$SESSION" code_read --input '{"path":"src/lib.rs"}'
 agentide intent call --session "$SESSION" file_open --input '{"path":"src/lib.rs","line":42}'
 ```
 
 A mutating intent is two-phase and bound to its exact SHA-256 plan:
 
-```console
+```shell-session
 agentide intent preview --session "$SESSION" code_edit \
   --input '{"path":"src/lib.rs","content":"...","expected_sha256":"..."}'
 agentide approval grant --session "$SESSION" --plan "$PLAN_DIGEST"
@@ -78,7 +78,7 @@ for the shared surface operations.
 
 Run the complete gate with:
 
-```console
+```shell-session
 cargo xtask gate
 ```
 
