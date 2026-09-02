@@ -43,10 +43,10 @@ jobs:
         run: |
           cargo install --git https://github.com/beyond10x/aep \
             --rev 1c4e614829cfa9a35e9b809c44855bd3c8aefd9d \
-            --locked --bin aep
+            --locked --package protocol-cli --bin aep
           cargo install --git https://github.com/beyond10x/ess \
             --rev 01f12c9d66cc8c4cb400ba786c1dcf268e0f752d \
-            --locked --bin ess
+            --locked --package ess-cli --bin ess
 
       - name: Run the one repository gate
         run: cargo xtask gate
