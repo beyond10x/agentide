@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.surface.PaneSnapshot",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "25e9166b8868f241427b472490b597717a3427148acd02a5708f3387524c60af",
+    "contract_digest": "8afc9ae2716715ef5386766a5c9246416fd13a8dc9b4d1477bce2a8f678888e7",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coding.Path": {
+      "title": "Path",
+      "x-ess-name": "agentide.coding.Path",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.surface.PaneId": {
+      "title": "PaneId",
+      "x-ess-name": "agentide.surface.PaneId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.surface.PaneKind": {
+      "title": "PaneKind",
+      "x-ess-name": "agentide.surface.PaneKind",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Editor",
+        "Diff",
+        "Terminal",
+        "Timeline",
+        "Agents",
+        "Approvals",
+        "Evidence"
+      ]
+    },
+    "agentide.surface.PaneSnapshot": {
+      "title": "PaneSnapshot",
+      "x-ess-name": "agentide.surface.PaneSnapshot",
+      "x-ess-kind": "struct",
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/agentide.surface.PaneId"
+        },
+        "kind": {
+          "$ref": "#/$defs/agentide.surface.PaneKind"
+        },
+        "title": {
+          "type": "string"
+        },
+        "path": {
+          "$ref": "#/$defs/agentide.coding.Path"
+        },
+        "line": {
+          "type": "integer"
+        },
+        "column": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "title"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -37,6 +37,10 @@ pub struct ApprovalRequest {
     pub command: String,
     /// Model-provided semantic arguments, without host-bound session fields.
     pub arguments: Value,
+    /// Harness consequence envelope published for the selected operation.
+    pub envelope: Envelope,
+    /// Concrete subjects resolved from this call's arguments.
+    pub subjects: Vec<Subject>,
     /// Exact implementation plan awaiting the decision.
     pub plan: Plan,
 }
@@ -341,7 +345,7 @@ impl<P: IntentPort> ToolPort for IntentTools<P> {
 }
 
 impl<P: IntentPort, A: PlanApprover> ApprovalPort for IntentApprovals<P, A> {
-    fn decide(&mut self, call: &ToolCall, _: &ToolSpec) -> ApprovalDecision {
+    fn decide(&mut self, call: &ToolCall, spec: &ToolSpec) -> ApprovalDecision {
         let Some(definition) = self.definitions.get(call.name.as_str()) else {
             return ApprovalDecision::denied("the AgentIDE intent is not part of this adapter");
         };
@@ -371,6 +375,8 @@ impl<P: IntentPort, A: PlanApprover> ApprovalPort for IntentApprovals<P, A> {
                 intent: call.name.as_str().to_owned(),
                 command: definition.command.clone(),
                 arguments: call.arguments.clone(),
+                envelope: spec.envelope.clone(),
+                subjects: subjects(definition, &call.arguments),
                 plan,
             }
         };
@@ -706,6 +712,19 @@ mod tests {
         }
     }
 
+    struct InspectsEnvelope;
+
+    impl PlanApprover for InspectsEnvelope {
+        fn decide(&mut self, request: &ApprovalRequest) -> ApprovalDecision {
+            assert!(request.envelope.effects.contains(&Effect::Write));
+            assert!(request.envelope.effects.contains(&Effect::Filesystem));
+            assert_eq!(request.envelope.risk, Risk::Medium);
+            assert_eq!(request.envelope.access, vec![AccessKind::Filesystem]);
+            assert_eq!(request.subjects[0].as_str(), "file:src/lib.rs");
+            ApprovalDecision::denied("inspection complete")
+        }
+    }
+
     struct ScriptedModel {
         wire: WireId,
         turn: u8,
@@ -873,6 +892,18 @@ mod tests {
         let outcome = tools.call(&call);
         assert!(outcome.failed);
         assert_eq!(outcome.output["code"], "harness.approval_missing");
+    }
+
+    #[test]
+    fn approval_request_preserves_the_mapped_envelope_and_call_subjects() {
+        let (tools, mut approvals, _, _, _temporary) = fixture_with(InspectsEnvelope);
+        let call = ToolCall {
+            call_id: CallId::new("call-envelope").expect("call id"),
+            name: ToolName::new("code_edit").expect("tool name"),
+            arguments: json!({"operation_id": "edit-1", "path": "src/lib.rs", "content": "new"}),
+        };
+        let spec = tools.invoked(&call).expect("spec");
+        assert!(!approvals.decide(&call, &spec).is_approved());
     }
 
     #[test]

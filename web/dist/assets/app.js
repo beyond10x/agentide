@@ -1,4 +1,4 @@
-"use strict";
+import { surfaceProfile, surfaceProfileFormat } from "./generated/surface-profile.js";
 const byId = (id) => {
     const element = document.getElementById(id);
     if (!element)
@@ -9,6 +9,23 @@ const state = {
     events: [],
     palette: false,
 };
+const themeVariables = {
+    background: "--bg",
+    panel: "--panel",
+    raised: "--raised",
+    line: "--line",
+    muted: "--muted",
+    text: "--text",
+    accent: "--cyan",
+    warning: "--amber",
+    danger: "--red",
+};
+for (const [role, value] of Object.entries(surfaceProfile.theme.truecolor)) {
+    const variable = themeVariables[role];
+    if (variable)
+        document.documentElement.style.setProperty(variable, value);
+}
+document.documentElement.dataset.surfaceProfile = surfaceProfileFormat;
 async function api(path, init) {
     const response = await fetch(path, {
         headers: { "content-type": "application/json" },
@@ -159,4 +176,5 @@ byId("command-input").addEventListener("keydown", async (event) => {
     await runCommand(value.includes("diff") ? "diff" : value.includes("refresh") ? "refresh" : "open");
 });
 refresh().catch((error) => { byId("notice").textContent = String(error); });
+byId("surface-profile").textContent = surfaceProfileFormat;
 window.setInterval(() => refresh().catch(() => undefined), 2_000);

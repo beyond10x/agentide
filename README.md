@@ -51,10 +51,11 @@ The credential value is read from the named source for each request and is never
 connection configuration or AgentIDE journal. `--wire anthropic-messages` selects Harness's second
 provider projection; `--oauth-token-env` and `--oauth-token-file` select user-bound token sources.
 
-In Harness mode, `i` opens the prompt line, `1` shows the streamed agent transcript, `2` shows the
-focused workbench pane, and `y`/`n` resolves an exact-plan approval. `o`, `d`, `Tab`, `x`, `r`, and
-`q` operate the shared virtual workbench. The browser continues to listen on `127.0.0.1:7788` by
-default. See the [Harness TUI guide](docs/harness-tui.md) for the execution and authority flow.
+In Harness mode, `Ctrl+K` opens the command palette, `Ctrl+P` quick-opens a file, `i` opens the
+prompt line, `Tab` moves among visible regions, `[`/`]` changes the durable pane, and `y`/`n`
+resolves an exact-plan approval. The adaptive terminal surface shares its theme and interaction
+profile with the browser workbench. See the [Harness TUI guide](docs/harness-tui.md) for the full
+execution, navigation, and authority flow.
 
 An agent invokes authority-free observations directly:
 
@@ -83,6 +84,8 @@ host effects.
 
 - `spec/agentide/` is the ESS semantic authority.
 - `contracts/intent-profile.yaml` adds model-facing consequence and binding declarations.
+- `contracts/surface-profile.yaml` defines strict, renderer-neutral presentation and interaction
+  rules shared by the browser and console.
 - `contracts/default-bindings.yaml` is the standalone Substrate binding supplied from outside the
   semantic request.
 - `contracts/schemas/` contains immutable v1 transport and configuration schemas.

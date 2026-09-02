@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/beyond10x/agentide/contracts/schemas/surface-profile-v1.schema.json",
+  "title": "AgentIDE surface profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "regions", "viewports", "actions", "modes", "theme"],
+  "properties": {
+    "format": { "const": "agentide.surface-profile/1" },
+    "regions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/region" }
+    },
+    "viewports": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/viewport" }
+    },
+    "actions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/action" }
+    },
+    "modes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/mode" }
+    },
+    "theme": { "$ref": "#/$defs/theme" }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "region": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "focusable"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "type": "string", "minLength": 1 },
+        "focusable": { "type": "boolean" },
+        "overlay_action": { "$ref": "#/$defs/id" }
+      }
+    },
+    "viewport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "min_columns", "min_rows", "visible_regions", "default_focus"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "min_columns": { "type": "integer", "minimum": 0, "maximum": 65535 },
+        "min_rows": { "type": "integer", "minimum": 0, "maximum": 65535 },
+        "visible_regions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "default_focus": { "$ref": "#/$defs/id" }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "kind", "availability"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["local", "intent"] },
+        "intent": { "$ref": "#/$defs/id" },
+        "palette": { "type": "boolean", "default": false },
+        "availability": { "enum": ["always", "idle", "pane"] },
+        "target_region": { "$ref": "#/$defs/id" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "intent" } } },
+          "then": { "required": ["intent"] },
+          "else": { "not": { "required": ["intent"] } }
+        }
+      ]
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "action"],
+      "properties": {
+        "key": { "type": "string", "pattern": "^[a-z0-9+?\\[\\]]+$" },
+        "action": { "$ref": "#/$defs/id" }
+      }
+    },
+    "mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "bindings"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "bindings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/binding" }
+        }
+      }
+    },
+    "color_roles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "background", "panel", "raised", "line", "muted", "text", "accent",
+        "warning", "danger", "success"
+      ],
+      "properties": {
+        "background": {},
+        "panel": {},
+        "raised": {},
+        "line": {},
+        "muted": {},
+        "text": {},
+        "accent": {},
+        "warning": {},
+        "danger": {},
+        "success": {}
+      }
+    },
+    "glyph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unicode", "ascii"],
+      "properties": {
+        "unicode": { "type": "string", "minLength": 1 },
+        "ascii": { "type": "string", "minLength": 1, "pattern": "^[\\x00-\\x7F]+$" }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["truecolor", "color_256", "color_16", "glyphs"],
+      "properties": {
+        "truecolor": {
+          "allOf": [
+            { "$ref": "#/$defs/color_roles" },
+            { "additionalProperties": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" } }
+          ]
+        },
+        "color_256": {
+          "allOf": [
+            { "$ref": "#/$defs/color_roles" },
+            { "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 255 } }
+          ]
+        },
+        "color_16": {
+          "allOf": [
+            { "$ref": "#/$defs/color_roles" },
+            {
+              "additionalProperties": {
+                "enum": [
+                  "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white",
+                  "bright_black", "bright_red", "bright_green", "bright_yellow", "bright_blue",
+                  "bright_magenta", "bright_cyan", "bright_white"
+                ]
+              }
+            }
+          ]
+        },
+        "glyphs": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "$ref": "#/$defs/glyph" }
+        }
+      }
+    }
+  }
+}

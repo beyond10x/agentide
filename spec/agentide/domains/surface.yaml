@@ -7,6 +7,15 @@ types:
   - name: agentide.surface.PaneKind
     kind: enum
     variants: [Editor, Diff, Terminal, Timeline, Agents, Approvals, Evidence]
+  - name: agentide.surface.PaneSnapshot
+    kind: struct
+    fields:
+      - {name: id, type: agentide.surface.PaneId}
+      - {name: kind, type: agentide.surface.PaneKind}
+      - {name: title, type: String}
+      - {name: path, type: Optional<agentide.coding.Path>}
+      - {name: line, type: Optional<Integer>}
+      - {name: column, type: Optional<Integer>}
   - name: agentide.surface.SplitDirection
     kind: enum
     variants: [Horizontal, Vertical]
@@ -15,7 +24,7 @@ entities:
   - name: agentide.surface.Workbench
     identity: {name: session_id, type: agentide.session.SessionId}
     fields:
-      - {name: panes, type: List<agentide.surface.PaneId>}
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
       - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
       - {name: open_files, type: List<agentide.coding.Path>}
     lifecycle:
@@ -153,7 +162,7 @@ views:
     consistency: read_your_writes
     fields:
       - {name: session_id, type: agentide.session.SessionId}
-      - {name: panes, type: List<agentide.surface.PaneId>}
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
       - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
       - {name: open_files, type: List<agentide.coding.Path>}
     naming: {wire: workbench, display: Workbench snapshot}

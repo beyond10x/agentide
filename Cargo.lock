@@ -85,6 +85,7 @@ dependencies = [
  "anyhow",
  "ess-compiler",
  "ess-domain",
+ "serde_json",
  "tempfile",
 ]
 

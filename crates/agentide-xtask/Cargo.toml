@@ -20,4 +20,5 @@ agentide-contracts.workspace = true
 anyhow.workspace = true
 ess-compiler = { git = "https://github.com/beyond10x/ess", rev = "01f12c9d66cc8c4cb400ba786c1dcf268e0f752d", version = "=0.3.0" }
 ess-domain = { git = "https://github.com/beyond10x/ess", rev = "01f12c9d66cc8c4cb400ba786c1dcf268e0f752d", version = "=0.3.0" }
+serde_json.workspace = true
 tempfile.workspace = true

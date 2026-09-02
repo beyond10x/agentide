@@ -1,6 +1,6 @@
 # generated from agentide v1
-# model digest 58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da
-# contract digest c678047808ff5e1b150c3b9315add7c46ce1824dff09450f840b7845fcbdb0c4
+# model digest 25e9166b8868f241427b472490b597717a3427148acd02a5708f3387524c60af
+# contract digest be9ca50dbea8e5c44414e566bb8d855d25bc5af9facd0d04d4bc9075729b5b0c
 # do not edit: regenerate with `ess generate`
 openapi: 3.1.0
 info:
@@ -16,8 +16,8 @@ info:
   x-ess-provenance:
     system: agentide
     specification_version: v1
-    source_digest: 58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da
-    contract_digest: c678047808ff5e1b150c3b9315add7c46ce1824dff09450f840b7845fcbdb0c4
+    source_digest: 25e9166b8868f241427b472490b597717a3427148acd02a5708f3387524c60af
+    contract_digest: be9ca50dbea8e5c44414e566bb8d855d25bc5af9facd0d04d4bc9075729b5b0c
   x-ess-reached-by: network
 tags:
 - name: coding
@@ -2746,6 +2746,29 @@ components:
       - Agents
       - Approvals
       - Evidence
+    agentide.surface.PaneSnapshot:
+      title: PaneSnapshot
+      x-ess-name: agentide.surface.PaneSnapshot
+      x-ess-kind: struct
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/agentide.surface.PaneId'
+        kind:
+          $ref: '#/components/schemas/agentide.surface.PaneKind'
+        title:
+          type: string
+        path:
+          $ref: '#/components/schemas/agentide.coding.Path'
+        line:
+          type: integer
+        column:
+          type: integer
+      required:
+      - id
+      - kind
+      - title
+      additionalProperties: false
     agentide.surface.ShowDiff.Input:
       title: Show diff input
       x-ess-name: agentide.surface.ShowDiff
@@ -2885,7 +2908,7 @@ components:
         panes:
           type: array
           items:
-            $ref: '#/components/schemas/agentide.surface.PaneId'
+            $ref: '#/components/schemas/agentide.surface.PaneSnapshot'
         focused_pane:
           $ref: '#/components/schemas/agentide.surface.PaneId'
         open_files:

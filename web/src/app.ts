@@ -1,3 +1,5 @@
+import { surfaceProfile, surfaceProfileFormat } from "./generated/surface-profile.js";
+
 type Pane = { id: string; kind: string; title: string; path?: string; line?: number; column?: number };
 type Plan = { digest: string; intent: string; risk?: string; approval_required: boolean };
 type Snapshot = {
@@ -21,6 +23,24 @@ const state: { snapshot?: Snapshot; events: JournalEvent[]; palette: boolean; ob
   events: [],
   palette: false,
 };
+
+const themeVariables: Record<string, string> = {
+  background: "--bg",
+  panel: "--panel",
+  raised: "--raised",
+  line: "--line",
+  muted: "--muted",
+  text: "--text",
+  accent: "--cyan",
+  warning: "--amber",
+  danger: "--red",
+};
+
+for (const [role, value] of Object.entries(surfaceProfile.theme.truecolor)) {
+  const variable = themeVariables[role];
+  if (variable) document.documentElement.style.setProperty(variable, value);
+}
+document.documentElement.dataset.surfaceProfile = surfaceProfileFormat;
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(path, {
@@ -164,4 +184,5 @@ byId<HTMLInputElement>("command-input").addEventListener("keydown", async (event
 });
 
 refresh().catch((error) => { byId("notice").textContent = String(error); });
+byId("surface-profile").textContent = surfaceProfileFormat;
 window.setInterval(() => refresh().catch(() => undefined), 2_000);

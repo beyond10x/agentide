@@ -70,6 +70,13 @@ The browser, JSON CLI, and console TUI are renderers over `agentide.snapshot/1` 
 authoritative list of open files or focused pane privately. Source contents are observations, not
 session state, and are not written to the journal.
 
+ESS describes renderer-neutral panes and workbench intentions. The separate, versioned
+`agentide.surface-profile/1` contract describes how a surface makes those semantics reachable:
+regions, adaptive viewport classes, interaction modes, keymaps, local actions, intent references,
+semantic theme roles, and fallbacks. It is strict rather than an arbitrary widget-property bag.
+AEP records the feature story and its evidence; it does not duplicate either semantic or visual
+contracts.
+
 This separation allows a Harness app-server, terminal host, or model-native tool surface to inject
 the projection directly without inheriting the standalone HTTP server or command-line parser.
 
@@ -77,6 +84,8 @@ The native TUI runs the synchronous Harness loop on a worker thread. A channel c
 `LoopEvent` values to the terminal renderer and carries one approval decision back; the model loop
 remains blocked until that decision arrives. The terminal owns no alternate tool semantics: file,
 diff, focus, and close shortcuts invoke the same AgentIDE intents as the model-facing surface.
+The TUI reducer is deterministic over key and resize events, and the renderer is a pure projection
+of reducer state, the durable snapshot, and the validated surface profile.
 
 ## Durable state and sensitive data
 

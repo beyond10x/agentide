@@ -1,0 +1,159 @@
+format: agentide.surface-profile/1
+
+regions:
+  - {id: explorer, label: Explorer, focusable: true, overlay_action: show_explorer}
+  - {id: pane_tabs, label: Open panes, focusable: false}
+  - {id: canvas, label: Workbench, focusable: true}
+  - {id: activity, label: Activity, focusable: true, overlay_action: show_activity}
+  - {id: context, label: Session context, focusable: true, overlay_action: show_context}
+  - {id: composer, label: Prompt, focusable: true}
+  - {id: status, label: Status, focusable: false}
+
+viewports:
+  - id: compact
+    min_columns: 0
+    min_rows: 20
+    visible_regions: [pane_tabs, canvas, composer, status]
+    default_focus: canvas
+  - id: standard
+    min_columns: 100
+    min_rows: 28
+    visible_regions: [explorer, pane_tabs, canvas, composer, status]
+    default_focus: canvas
+  - id: wide
+    min_columns: 150
+    min_rows: 34
+    visible_regions: [explorer, pane_tabs, canvas, activity, context, composer, status]
+    default_focus: canvas
+
+actions:
+  - {id: command_palette, label: Command palette, kind: local, palette: false, availability: always}
+  - {id: quick_open, label: Quick open file, kind: local, palette: true, availability: idle}
+  - {id: prompt, label: Prompt agent, kind: local, palette: true, availability: idle}
+  - {id: show_agent, label: Show agent transcript, kind: local, palette: true, availability: always, target_region: canvas}
+  - {id: show_workbench, label: Show workbench, kind: local, palette: true, availability: always, target_region: canvas}
+  - {id: show_diff, label: Show workspace changes, kind: intent, intent: diff_show, palette: true, availability: idle, target_region: canvas}
+  - {id: close_pane, label: Close focused pane, kind: intent, intent: pane_close, palette: true, availability: pane}
+  - {id: refresh, label: Refresh focused pane, kind: local, palette: true, availability: idle}
+  - {id: previous_pane, label: Previous pane, kind: intent, intent: pane_focus, palette: true, availability: pane}
+  - {id: next_pane, label: Next pane, kind: intent, intent: pane_focus, palette: true, availability: pane}
+  - {id: focus_next, label: Focus next region, kind: local, palette: false, availability: always}
+  - {id: focus_previous, label: Focus previous region, kind: local, palette: false, availability: always}
+  - {id: show_explorer, label: Show explorer, kind: local, palette: true, availability: always, target_region: explorer}
+  - {id: show_activity, label: Show activity, kind: local, palette: true, availability: always, target_region: activity}
+  - {id: show_context, label: Show session context, kind: local, palette: true, availability: always, target_region: context}
+  - {id: help, label: Keyboard help, kind: local, palette: true, availability: always}
+  - {id: close_overlay, label: Close overlay, kind: local, palette: false, availability: always}
+  - {id: quit, label: Quit AgentIDE, kind: local, palette: false, availability: always}
+  - {id: cancel_input, label: Cancel, kind: local, palette: false, availability: always}
+  - {id: submit_input, label: Submit, kind: local, palette: false, availability: always}
+  - {id: palette_previous, label: Previous command, kind: local, palette: false, availability: always}
+  - {id: palette_next, label: Next command, kind: local, palette: false, availability: always}
+  - {id: palette_run, label: Run selected command, kind: local, palette: false, availability: always}
+  - {id: scroll_up, label: Scroll up, kind: local, palette: false, availability: always}
+  - {id: scroll_down, label: Scroll down, kind: local, palette: false, availability: always}
+  - {id: scroll_left, label: Scroll left, kind: local, palette: false, availability: always}
+  - {id: scroll_right, label: Scroll right, kind: local, palette: false, availability: always}
+  - {id: approve, label: Approve exact plan, kind: local, palette: false, availability: always}
+  - {id: deny, label: Deny exact plan, kind: local, palette: false, availability: always}
+
+modes:
+  - id: normal
+    bindings:
+      - {key: ctrl+k, action: command_palette}
+      - {key: ctrl+p, action: quick_open}
+      - {key: tab, action: focus_next}
+      - {key: shift+tab, action: focus_previous}
+      - {key: "[", action: previous_pane}
+      - {key: "]", action: next_pane}
+      - {key: i, action: prompt}
+      - {key: "?", action: help}
+      - {key: escape, action: close_overlay}
+      - {key: "1", action: show_agent}
+      - {key: "2", action: show_workbench}
+      - {key: d, action: show_diff}
+      - {key: x, action: close_pane}
+      - {key: r, action: refresh}
+      - {key: up, action: scroll_up}
+      - {key: down, action: scroll_down}
+      - {key: left, action: scroll_left}
+      - {key: right, action: scroll_right}
+      - {key: q, action: quit}
+  - id: prompt
+    bindings:
+      - {key: escape, action: cancel_input}
+      - {key: enter, action: submit_input}
+  - id: quick_open
+    bindings:
+      - {key: escape, action: cancel_input}
+      - {key: enter, action: submit_input}
+      - {key: up, action: palette_previous}
+      - {key: down, action: palette_next}
+  - id: palette
+    bindings:
+      - {key: escape, action: cancel_input}
+      - {key: enter, action: palette_run}
+      - {key: up, action: palette_previous}
+      - {key: down, action: palette_next}
+  - id: approval
+    bindings:
+      - {key: y, action: approve}
+      - {key: n, action: deny}
+      - {key: escape, action: deny}
+      - {key: up, action: scroll_up}
+      - {key: down, action: scroll_down}
+      - {key: left, action: scroll_left}
+      - {key: right, action: scroll_right}
+  - id: help
+    bindings:
+      - {key: escape, action: cancel_input}
+      - {key: "?", action: cancel_input}
+
+theme:
+  truecolor:
+    background: "#11100e"
+    panel: "#171614"
+    raised: "#1e1d1a"
+    line: "#302e29"
+    muted: "#8c887f"
+    text: "#ece8de"
+    accent: "#55d7c5"
+    warning: "#e5b567"
+    danger: "#ee7b6c"
+    success: "#7ea99d"
+  color_256:
+    background: 233
+    panel: 234
+    raised: 235
+    line: 237
+    muted: 102
+    text: 254
+    accent: 80
+    warning: 179
+    danger: 210
+    success: 108
+  color_16:
+    background: black
+    panel: black
+    raised: bright_black
+    line: bright_black
+    muted: white
+    text: bright_white
+    accent: bright_cyan
+    warning: bright_yellow
+    danger: bright_red
+    success: bright_green
+  glyphs:
+    brand: {unicode: "A", ascii: "A"}
+    active: {unicode: "●", ascii: "*"}
+    inactive: {unicode: "○", ascii: "o"}
+    editor: {unicode: "◫", ascii: "E"}
+    diff: {unicode: "±", ascii: "D"}
+    terminal: {unicode: "›_", ascii: ">_"}
+    timeline: {unicode: "◷", ascii: "T"}
+    agents: {unicode: "◎", ascii: "A"}
+    approvals: {unicode: "◇", ascii: "!"}
+    evidence: {unicode: "✓", ascii: "+"}
+    busy: {unicode: "◌", ascii: "."}
+    success: {unicode: "✓", ascii: "+"}
+    failure: {unicode: "×", ascii: "x"}

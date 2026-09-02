@@ -110,6 +110,7 @@
       "types": [
         "agentide.surface.PaneId",
         "agentide.surface.PaneKind",
+        "agentide.surface.PaneSnapshot",
         "agentide.surface.SplitDirection",
         "agentide.surface.Workbench.State"
       ],
@@ -355,6 +356,73 @@
       },
       "naming": {}
     },
+    "agentide.surface.PaneSnapshot": {
+      "name": "agentide.surface.PaneSnapshot",
+      "body": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type_ref": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            },
+            "naming": {}
+          },
+          {
+            "name": "kind",
+            "type_ref": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneKind"
+            },
+            "naming": {}
+          },
+          {
+            "name": "title",
+            "type_ref": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "naming": {}
+          },
+          {
+            "name": "path",
+            "type_ref": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "naming": {}
+          },
+          {
+            "name": "line",
+            "type_ref": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "integer"
+              }
+            },
+            "naming": {}
+          },
+          {
+            "name": "column",
+            "type_ref": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "integer"
+              }
+            },
+            "naming": {}
+          }
+        ],
+        "invariants": []
+      },
+      "naming": {}
+    },
     "agentide.surface.SplitDirection": {
       "name": "agentide.surface.SplitDirection",
       "body": {
@@ -449,7 +517,7 @@
             "kind": "list",
             "of": {
               "kind": "declared",
-              "name": "agentide.surface.PaneId"
+              "name": "agentide.surface.PaneSnapshot"
             }
           },
           "naming": {}
@@ -3380,7 +3448,7 @@
             "kind": "list",
             "of": {
               "kind": "declared",
-              "name": "agentide.surface.PaneId"
+              "name": "agentide.surface.PaneSnapshot"
             }
           },
           "naming": {}

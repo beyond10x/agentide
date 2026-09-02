@@ -6,6 +6,8 @@
 )]
 
 mod harness_tui;
+mod surface_render;
+mod surface_ui;
 mod tui;
 mod web;
 

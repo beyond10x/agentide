@@ -1,6 +1,5 @@
 //! Interactive AgentIDE renderer over a native Harness model loop.
 
-use std::collections::VecDeque;
 use std::fmt::Write as _;
 use std::io;
 use std::path::Path;
@@ -8,7 +7,7 @@ use std::sync::mpsc::{self, Receiver, Sender, TryRecvError};
 use std::thread;
 use std::time::Duration;
 
-use agentide_contracts::{BindingConfig, IntentProfile};
+use agentide_contracts::{BindingConfig, IntentProfile, SurfaceProfile};
 use agentide_core::{Engine, Snapshot, StateStore, project};
 use agentide_harness::{ApprovalRequest, ModelConnection, PlanApprover, ports};
 use agentide_substrate::SubstratePort;
@@ -18,18 +17,17 @@ use b10x_harness_loop::{
     RunLedger,
 };
 use b10x_harness_wire::{CallId, Item, Risk, ToolCall, ToolName, ToolOutcome, ToolPort};
-use crossterm::event::{self, Event, KeyCode, KeyEventKind, KeyModifiers};
+use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use crossterm::execute;
 use crossterm::terminal::{
     EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode,
 };
 use ratatui::Terminal;
 use ratatui::backend::CrosstermBackend;
-use ratatui::layout::{Constraint, Direction, Layout, Rect};
-use ratatui::style::{Color, Modifier, Style};
-use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, Borders, List, ListItem, Paragraph, Wrap};
 use serde_json::{Value, json};
+
+use crate::surface_render::{RenderState, draw};
+use crate::surface_ui::{MainView, SurfaceState, UiEffect, UiEvent};
 
 /// Runs the interactive Harness-native TUI for one durable AgentIDE session.
 pub fn run(
@@ -41,6 +39,7 @@ pub fn run(
 ) -> Result<()> {
     let session = store.load(session_id)?;
     let bindings = binding_path.map_or_else(BindingConfig::embedded, BindingConfig::from_path)?;
+    let surface_profile = SurfaceProfile::embedded()?;
     let ui_store = store.clone();
     let model_name = connection.model.clone();
     let (commands, worker_commands) = mpsc::channel();
@@ -77,6 +76,7 @@ pub fn run(
         &ui_store,
         session_id,
         &model_name,
+        &surface_profile,
     );
     cancel.cancel();
     drop(commands);
@@ -275,19 +275,6 @@ impl PlanApprover for ChannelApprover {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum MainView {
-    Agent,
-    Workbench,
-}
-
-#[derive(Debug)]
-enum InputMode {
-    Normal,
-    Prompt(String),
-    OpenFile(String),
-}
-
 struct PendingApproval {
     request: ApprovalRequest,
     reply: Sender<ApprovalDecision>,
@@ -295,15 +282,13 @@ struct PendingApproval {
 
 struct UiState {
     harness: HarnessProjection,
-    mode: InputMode,
-    view: MainView,
+    surface: SurfaceState,
     notice: String,
     observation: String,
     observed_target: Option<String>,
     approval: Option<PendingApproval>,
     model_busy: bool,
     pending_intents: usize,
-    scroll: u16,
     fatal: Option<String>,
 }
 
@@ -311,15 +296,13 @@ impl Default for UiState {
     fn default() -> Self {
         Self {
             harness: HarnessProjection::default(),
-            mode: InputMode::Normal,
-            view: MainView::Agent,
+            surface: SurfaceState::default(),
             notice: "connecting Harness…".into(),
             observation: String::new(),
             observed_target: None,
             approval: None,
             model_busy: false,
             pending_intents: 0,
-            scroll: 0,
             fatal: None,
         }
     }
@@ -336,7 +319,7 @@ struct HarnessProjection {
     status: String,
     transcript: String,
     reasoning: String,
-    activity: VecDeque<String>,
+    activity: Vec<String>,
     turn: u64,
     input_tokens: u64,
     output_tokens: u64,
@@ -431,9 +414,9 @@ impl HarnessProjection {
     }
 
     fn push(&mut self, line: String) {
-        self.activity.push_back(line);
+        self.activity.push(line);
         while self.activity.len() > 200 {
-            self.activity.pop_front();
+            self.activity.remove(0);
         }
     }
 }
@@ -445,6 +428,7 @@ fn ui_loop(
     store: &StateStore,
     session_id: &str,
     model: &str,
+    profile: &SurfaceProfile,
 ) -> Result<()> {
     let mut state = UiState::default();
     loop {
@@ -453,13 +437,56 @@ fn ui_loop(
             return Err(anyhow!(error));
         }
         let snapshot = project(&store.load(session_id)?);
-        terminal.draw(|frame| draw(frame, &snapshot, model, &state))?;
+        let area = terminal.size()?;
+        state.surface.reduce(
+            UiEvent::Resize {
+                columns: area.width,
+                rows: area.height,
+            },
+            profile,
+            &snapshot,
+            state.busy(),
+            state.approval.is_some(),
+        );
+        terminal.draw(|frame| {
+            draw(
+                frame,
+                &RenderState {
+                    snapshot: &snapshot,
+                    profile,
+                    surface: &state.surface,
+                    model,
+                    harness_status: &state.harness.status,
+                    transcript: &state.harness.transcript,
+                    activity: &state.harness.activity,
+                    observation: &state.observation,
+                    notice: &state.notice,
+                    turn: state.harness.turn,
+                    input_tokens: state.harness.input_tokens,
+                    output_tokens: state.harness.output_tokens,
+                    reasoning: !state.harness.reasoning.is_empty(),
+                    busy: state.busy(),
+                    approval: state.approval.as_ref().map(|pending| &pending.request),
+                },
+            );
+        })?;
         if !event::poll(Duration::from_millis(60))? {
             maybe_refresh(commands, &snapshot, &mut state);
             continue;
         }
-        let Event::Key(key) = event::read()? else {
-            continue;
+        let key = match event::read()? {
+            Event::Key(key) => key,
+            Event::Resize(columns, rows) => {
+                state.surface.reduce(
+                    UiEvent::Resize { columns, rows },
+                    profile,
+                    &snapshot,
+                    state.busy(),
+                    state.approval.is_some(),
+                );
+                continue;
+            }
+            _ => continue,
         };
         if key.kind != KeyEventKind::Press {
             continue;
@@ -469,105 +496,102 @@ fn ui_loop(
             let _ = commands.send(WorkerCommand::Shutdown);
             return Ok(());
         }
-        if state.approval.is_some() {
-            match key.code {
-                KeyCode::Char('y') => resolve_approval(&mut state, true),
-                KeyCode::Char('n') | KeyCode::Esc => resolve_approval(&mut state, false),
-                KeyCode::Up => state.scroll = state.scroll.saturating_sub(3),
-                KeyCode::Down => state.scroll = state.scroll.saturating_add(3),
-                _ => {}
+        let effects = state.surface.reduce(
+            UiEvent::Key {
+                chord: key_chord(key),
+                character: key_character(key),
+            },
+            profile,
+            &snapshot,
+            state.busy(),
+            state.approval.is_some(),
+        );
+        if apply_effects(effects, commands, &snapshot, &mut state)? {
+            let _ = commands.send(WorkerCommand::Shutdown);
+            return Ok(());
+        }
+    }
+}
+
+fn apply_effects(
+    effects: Vec<UiEffect>,
+    commands: &Sender<WorkerCommand>,
+    snapshot: &Snapshot,
+    state: &mut UiState,
+) -> Result<bool> {
+    for effect in effects {
+        match effect {
+            UiEffect::Prompt(prompt) => {
+                let _ = write!(state.harness.transcript, "\n\nYou › {prompt}\n\nAgent › ");
+                state.harness.answer_start = state.harness.transcript.len();
+                commands
+                    .send(WorkerCommand::Prompt(prompt))
+                    .context("starting Harness prompt")?;
+                state.model_busy = true;
+                state.notice = "Harness is running".into();
             }
-            continue;
-        }
-        match &mut state.mode {
-            InputMode::Normal => match key.code {
-                KeyCode::Char('q') => {
-                    let _ = commands.send(WorkerCommand::Shutdown);
-                    return Ok(());
-                }
-                KeyCode::Char('i') if !state.busy() => {
-                    state.mode = InputMode::Prompt(String::new());
-                }
-                KeyCode::Char('o') if !state.busy() => {
-                    state.mode = InputMode::OpenFile(String::new());
-                }
-                KeyCode::Char('1') => {
-                    state.view = MainView::Agent;
-                    state.scroll = 0;
-                }
-                KeyCode::Char('2') => {
-                    state.view = MainView::Workbench;
-                    state.scroll = 0;
-                }
-                KeyCode::Char('d') if !state.busy() => {
-                    send_intent(commands, &mut state, "diff_show", json!({}));
-                    send_intent(commands, &mut state, "code_changes", json!({}));
-                    state.view = MainView::Workbench;
+            UiEffect::Intent { name, input } => {
+                if name == "code_changes" {
                     state.observed_target = Some("diff".into());
-                }
-                KeyCode::Tab if !state.busy() => {
-                    if let Some(next) = next_pane(&snapshot) {
-                        send_intent(commands, &mut state, "pane_focus", json!({"pane_id": next}));
-                    }
-                }
-                KeyCode::Char('x') if !state.busy() => {
-                    if let Some(id) = &snapshot.workbench.focused_pane {
-                        send_intent(commands, &mut state, "pane_close", json!({"pane_id": id}));
-                        state.observed_target = None;
-                    }
-                }
-                KeyCode::Char('r') if !state.busy() => {
+                } else if name == "code_read" {
+                    state.observed_target = input
+                        .get("path")
+                        .and_then(Value::as_str)
+                        .map(ToOwned::to_owned);
+                } else if name == "pane_close" {
                     state.observed_target = None;
-                    maybe_refresh(commands, &snapshot, &mut state);
                 }
-                KeyCode::Up => state.scroll = state.scroll.saturating_sub(3),
-                KeyCode::Down => state.scroll = state.scroll.saturating_add(3),
-                _ => {}
-            },
-            InputMode::Prompt(input) => match key.code {
-                KeyCode::Esc => state.mode = InputMode::Normal,
-                KeyCode::Backspace => {
-                    input.pop();
-                }
-                KeyCode::Char(character) => input.push(character),
-                KeyCode::Enter => {
-                    let prompt = std::mem::take(input);
-                    if !prompt.trim().is_empty() {
-                        let _ = write!(
-                            state.harness.transcript,
-                            "\n\nYou › {}\n\nAgent › ",
-                            prompt.trim()
-                        );
-                        state.harness.answer_start = state.harness.transcript.len();
-                        commands
-                            .send(WorkerCommand::Prompt(prompt))
-                            .context("starting Harness prompt")?;
-                        state.model_busy = true;
-                        state.notice = "Harness is running".into();
-                    }
-                    state.mode = InputMode::Normal;
-                }
-                _ => {}
-            },
-            InputMode::OpenFile(path) => match key.code {
-                KeyCode::Esc => state.mode = InputMode::Normal,
-                KeyCode::Backspace => {
-                    path.pop();
-                }
-                KeyCode::Char(character) => path.push(character),
-                KeyCode::Enter => {
-                    let path = std::mem::take(path);
-                    if !path.is_empty() {
-                        send_intent(commands, &mut state, "file_open", json!({"path": path}));
-                        send_intent(commands, &mut state, "code_read", json!({"path": path}));
-                        state.view = MainView::Workbench;
-                        state.observed_target = Some(path);
-                    }
-                    state.mode = InputMode::Normal;
-                }
-                _ => {}
-            },
+                send_intent(commands, state, &name, input);
+            }
+            UiEffect::Refresh => {
+                state.observed_target = None;
+                maybe_refresh(commands, snapshot, state);
+            }
+            UiEffect::Approval(approved) => resolve_approval(state, approved),
+            UiEffect::Quit => return Ok(true),
         }
+    }
+    Ok(false)
+}
+
+fn key_chord(key: KeyEvent) -> String {
+    let prefix = if key.modifiers.contains(KeyModifiers::CONTROL) {
+        "ctrl+"
+    } else if key.modifiers.contains(KeyModifiers::ALT) {
+        "alt+"
+    } else {
+        ""
+    };
+    let key = match key.code {
+        KeyCode::BackTab => "shift+tab".into(),
+        KeyCode::Tab => "tab".into(),
+        KeyCode::Enter => "enter".into(),
+        KeyCode::Esc => "escape".into(),
+        KeyCode::Backspace => "backspace".into(),
+        KeyCode::Up => "up".into(),
+        KeyCode::Down => "down".into(),
+        KeyCode::Left => "left".into(),
+        KeyCode::Right => "right".into(),
+        KeyCode::Char(character) => character.to_ascii_lowercase().to_string(),
+        _ => return String::new(),
+    };
+    if key.starts_with("shift+") {
+        key
+    } else {
+        format!("{prefix}{key}")
+    }
+}
+
+fn key_character(key: KeyEvent) -> Option<char> {
+    match key.code {
+        KeyCode::Char(character)
+            if !key
+                .modifiers
+                .intersects(KeyModifiers::CONTROL | KeyModifiers::ALT) =>
+        {
+            Some(character)
+        }
+        _ => None,
     }
 }
 
@@ -578,7 +602,7 @@ fn drain_messages(messages: &Receiver<UiMessage>, state: &mut UiState) {
             Ok(UiMessage::Loop(event)) => state.harness.event(&event),
             Ok(UiMessage::Approval { request, reply }) => {
                 state.notice = format!("approve exact plan {}?", short(&request.plan.digest));
-                state.scroll = 0;
+                state.surface.reset_approval_scroll();
                 state.approval = Some(PendingApproval { request, reply });
             }
             Ok(UiMessage::PromptFinished(result)) => {
@@ -636,7 +660,7 @@ fn send_intent(commands: &Sender<WorkerCommand>, state: &mut UiState, name: &str
 }
 
 fn maybe_refresh(commands: &Sender<WorkerCommand>, snapshot: &Snapshot, state: &mut UiState) {
-    if state.busy() || state.view != MainView::Workbench {
+    if state.busy() || state.surface.view != MainView::Workbench {
         return;
     }
     let Some(pane) = focused_pane(snapshot) else {
@@ -684,20 +708,6 @@ fn deny_pending(state: &mut UiState, reason: &str) {
     }
 }
 
-fn next_pane(snapshot: &Snapshot) -> Option<String> {
-    let panes = &snapshot.workbench.panes;
-    if panes.is_empty() {
-        return None;
-    }
-    let current = snapshot
-        .workbench
-        .focused_pane
-        .as_deref()
-        .and_then(|id| panes.iter().position(|pane| pane.id == id))
-        .unwrap_or(0);
-    Some(panes[(current + 1) % panes.len()].id.clone())
-}
-
 fn focused_pane(snapshot: &Snapshot) -> Option<&agentide_core::Pane> {
     snapshot
         .workbench
@@ -717,267 +727,6 @@ fn render_observation(value: &Value) -> String {
         .chars()
         .take(150_000)
         .collect()
-}
-
-fn draw(frame: &mut ratatui::Frame<'_>, snapshot: &Snapshot, model: &str, state: &UiState) {
-    let rows = Layout::default()
-        .direction(Direction::Vertical)
-        .constraints([
-            Constraint::Length(3),
-            Constraint::Min(10),
-            Constraint::Length(3),
-            Constraint::Length(3),
-        ])
-        .split(frame.area());
-    let body = Layout::default()
-        .direction(Direction::Horizontal)
-        .constraints([
-            Constraint::Percentage(23),
-            Constraint::Percentage(53),
-            Constraint::Percentage(24),
-        ])
-        .split(rows[1]);
-    draw_header(frame, rows[0], snapshot, model, state);
-    draw_workbench_index(frame, body[0], snapshot);
-    draw_main(frame, body[1], snapshot, state);
-    draw_context(frame, body[2], snapshot, state);
-    draw_input(frame, rows[2], state);
-    draw_keys(frame, rows[3], state);
-}
-
-fn draw_header(
-    frame: &mut ratatui::Frame<'_>,
-    area: Rect,
-    snapshot: &Snapshot,
-    model: &str,
-    state: &UiState,
-) {
-    frame.render_widget(
-        Paragraph::new(Line::from(vec![
-            Span::styled(
-                " AgentIDE ",
-                Style::default()
-                    .fg(Color::Black)
-                    .bg(Color::Cyan)
-                    .add_modifier(Modifier::BOLD),
-            ),
-            Span::styled(" Harness ", Style::default().fg(Color::Cyan)),
-            Span::raw(format!(
-                "{} · {} · event {} · {}",
-                snapshot.objective, model, snapshot.cursor, state.harness.status
-            )),
-        ]))
-        .block(Block::default().borders(Borders::ALL)),
-        area,
-    );
-}
-
-fn draw_workbench_index(frame: &mut ratatui::Frame<'_>, area: Rect, snapshot: &Snapshot) {
-    let regions = Layout::default()
-        .direction(Direction::Vertical)
-        .constraints([Constraint::Percentage(38), Constraint::Percentage(62)])
-        .split(area);
-    let files = snapshot
-        .workbench
-        .open_files
-        .iter()
-        .map(|path| ListItem::new(path.as_str()));
-    frame.render_widget(
-        List::new(files).block(Block::default().title(" Open files ").borders(Borders::ALL)),
-        regions[0],
-    );
-    let panes = snapshot.workbench.panes.iter().map(|pane| {
-        let marker = if snapshot.workbench.focused_pane.as_deref() == Some(&pane.id) {
-            "●"
-        } else {
-            "○"
-        };
-        ListItem::new(format!("{marker} {}  {}", pane.kind, pane.title))
-    });
-    frame.render_widget(
-        List::new(panes).block(
-            Block::default()
-                .title(" Virtual panes ")
-                .borders(Borders::ALL),
-        ),
-        regions[1],
-    );
-}
-
-fn draw_main(frame: &mut ratatui::Frame<'_>, area: Rect, snapshot: &Snapshot, state: &UiState) {
-    if let Some(pending) = &state.approval {
-        let arguments = serde_json::to_string_pretty(&pending.request.arguments)
-            .unwrap_or_else(|_| "<arguments could not be rendered>".into());
-        let detail = format!(
-            "intent    {}\ncommand   {}\ndriver    {}\noperation {}\nplan      {}\ninput     {}\nbinding   {}\n\nExact semantic arguments:\n{}",
-            pending.request.intent,
-            pending.request.command,
-            pending.request.plan.driver,
-            pending.request.plan.operation,
-            pending.request.plan.digest,
-            pending.request.plan.input_sha256,
-            pending.request.plan.binding_sha256,
-            arguments,
-        );
-        frame.render_widget(
-            Paragraph::new(detail)
-                .scroll((state.scroll, 0))
-                .wrap(Wrap { trim: false })
-                .style(Style::default().fg(Color::Yellow))
-                .block(
-                    Block::default()
-                        .title(" Exact-plan approval · ↑↓ inspect · y/n decide ")
-                        .borders(Borders::ALL),
-                ),
-            area,
-        );
-        return;
-    }
-    let (title, body) = match state.view {
-        MainView::Agent => (" 1 Agent ", state.harness.transcript.as_str()),
-        MainView::Workbench => {
-            let title = focused_pane(snapshot).map_or_else(
-                || " 2 Workbench ".into(),
-                |pane| format!(" 2 {} · {} ", pane.kind, pane.title),
-            );
-            let body = if state.observation.is_empty() {
-                "No observation loaded. Open a file with o or show changes with d."
-            } else {
-                state.observation.as_str()
-            };
-            frame.render_widget(
-                Paragraph::new(body)
-                    .scroll((state.scroll, 0))
-                    .wrap(Wrap { trim: false })
-                    .block(Block::default().title(title).borders(Borders::ALL)),
-                area,
-            );
-            return;
-        }
-    };
-    frame.render_widget(
-        Paragraph::new(body)
-            .scroll((state.scroll, 0))
-            .wrap(Wrap { trim: false })
-            .block(Block::default().title(title).borders(Borders::ALL)),
-        area,
-    );
-}
-
-fn draw_context(frame: &mut ratatui::Frame<'_>, area: Rect, snapshot: &Snapshot, state: &UiState) {
-    let regions = Layout::default()
-        .direction(Direction::Vertical)
-        .constraints([Constraint::Percentage(62), Constraint::Percentage(38)])
-        .split(area);
-    let activity = state
-        .harness
-        .activity
-        .iter()
-        .rev()
-        .take(18)
-        .rev()
-        .map(|line| ListItem::new(line.as_str()));
-    frame.render_widget(
-        List::new(activity).block(
-            Block::default()
-                .title(" Harness activity ")
-                .borders(Borders::ALL),
-        ),
-        regions[0],
-    );
-    let context = if let Some(pending) = &state.approval {
-        format!(
-            "APPROVAL REQUIRED\n{}\n{} · {}\nplan {}\ninput {}\n\ny approve · n deny",
-            pending.request.intent,
-            pending.request.plan.driver,
-            pending.request.plan.operation,
-            short(&pending.request.plan.digest),
-            short(&pending.request.plan.input_sha256),
-        )
-    } else {
-        format!(
-            "turn       {}\ntokens     {} in / {} out\napprovals  {}\nprocesses  {}\nagents     {}\nevidence   {}\n\n{}",
-            state.harness.turn,
-            state.harness.input_tokens,
-            state.harness.output_tokens,
-            snapshot.pending_approvals.len(),
-            snapshot.processes.len(),
-            snapshot.agents.len(),
-            snapshot.evidence.len(),
-            if state.harness.reasoning.is_empty() {
-                ""
-            } else {
-                "model is reasoning…"
-            },
-        )
-    };
-    let style = if state.approval.is_some() {
-        Style::default()
-            .fg(Color::Yellow)
-            .add_modifier(Modifier::BOLD)
-    } else {
-        Style::default()
-    };
-    frame.render_widget(
-        Paragraph::new(context)
-            .style(style)
-            .wrap(Wrap { trim: false })
-            .block(
-                Block::default()
-                    .title(" Session context ")
-                    .borders(Borders::ALL),
-            ),
-        regions[1],
-    );
-}
-
-fn draw_input(frame: &mut ratatui::Frame<'_>, area: Rect, state: &UiState) {
-    let (title, text, style) = if let Some(pending) = &state.approval {
-        (
-            " Exact-plan approval ",
-            format!(
-                "{} {} · y approve / n deny · {}",
-                pending.request.intent,
-                compact_json(&pending.request.arguments, 220),
-                short(&pending.request.plan.digest),
-            ),
-            Style::default()
-                .fg(Color::Yellow)
-                .add_modifier(Modifier::BOLD),
-        )
-    } else {
-        match &state.mode {
-            InputMode::Normal => (" Status ", state.notice.clone(), Style::default()),
-            InputMode::Prompt(input) => (
-                " Prompt Harness ",
-                format!("> {input}_"),
-                Style::default().fg(Color::Cyan),
-            ),
-            InputMode::OpenFile(path) => (
-                " Open workspace file ",
-                format!("> {path}_"),
-                Style::default().fg(Color::Cyan),
-            ),
-        }
-    };
-    frame.render_widget(
-        Paragraph::new(text)
-            .style(style)
-            .block(Block::default().title(title).borders(Borders::ALL)),
-        area,
-    );
-}
-
-fn draw_keys(frame: &mut ratatui::Frame<'_>, area: Rect, state: &UiState) {
-    let keys = if state.approval.is_some() {
-        "↑↓ inspect exact input · y approve exact plan · n/Esc deny · Ctrl-C cancel session"
-    } else {
-        "i prompt · 1 agent · 2 workbench · o open · d diff · Tab focus · x close · r refresh · ↑↓ scroll · q quit"
-    };
-    frame.render_widget(
-        Paragraph::new(keys).block(Block::default().title(" Commands ").borders(Borders::ALL)),
-        area,
-    );
 }
 
 fn compact_json(value: &Value, limit: usize) -> String {
@@ -1052,7 +801,7 @@ mod tests {
         assert!(
             projection
                 .activity
-                .back()
+                .last()
                 .expect("activity")
                 .contains("ReadCode")
         );
