@@ -1,0 +1,50 @@
+format: agentide.bindings/1
+bindings:
+  session_snapshot: {driver: core, operation: session_snapshot}
+  event_read: {driver: core, operation: event_read}
+  code_search: {driver: substrate, operation: search}
+  code_read: {driver: substrate, operation: file_read}
+  code_changes: {driver: substrate, operation: exec, options: {argv: [git, diff, --]}}
+  code_edit: {driver: substrate, operation: file_write}
+  worktree_status: {driver: substrate, operation: exec, options: {argv: [git, status, --short]}}
+  code_verify:
+    driver: substrate
+    operation: exec_profile
+    options:
+      writable_subtrees: [target]
+      profiles:
+        focused: [cargo, test, --quiet]
+        full: [cargo, test, --workspace, --all-targets]
+        release: [cargo, xtask, gate]
+  process_start:
+    driver: substrate
+    operation: exec_profile
+    options:
+      writable_subtrees: [target]
+      profiles:
+        tests: [cargo, test, --workspace]
+        gate: [cargo, xtask, gate]
+  evidence_record: {driver: core, operation: evidence_record}
+  file_open: {driver: core, operation: surface}
+  file_close: {driver: core, operation: surface}
+  pane_open: {driver: core, operation: surface}
+  pane_close: {driver: core, operation: surface}
+  pane_focus: {driver: core, operation: surface}
+  cursor_move: {driver: core, operation: surface}
+  diff_show: {driver: core, operation: surface}
+  surface_snapshot: {driver: core, operation: surface}
+unbound:
+  - worktree_create
+  - worktree_finish
+  - process_observe
+  - process_input
+  - process_wait
+  - process_cancel
+  - agent_observe
+  - agent_delegate
+  - agent_message
+  - agent_wait
+  - code_publish
+  - release_cut
+  - deployment_observe
+  - deployment_apply

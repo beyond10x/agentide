@@ -1,0 +1,13 @@
+version: '3'
+
+tasks:
+  check:
+    desc: Run the complete AgentIDE gate.
+    cmds:
+      - cargo xtask gate
+  web-build:
+    desc: Build the embedded browser application.
+    dir: web
+    cmds:
+      - npm ci
+      - npm run build

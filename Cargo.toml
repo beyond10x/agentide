@@ -1,0 +1,49 @@
+[workspace]
+members = [
+  "crates/agentide-cli",
+  "crates/agentide-contracts",
+  "crates/agentide-core",
+  "crates/agentide-substrate",
+  "crates/agentide-xtask",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.98"
+license = "Apache-2.0"
+repository = "https://github.com/beyond10x/agentide"
+publish = false
+
+[workspace.dependencies]
+agentide-contracts = { path = "crates/agentide-contracts" }
+agentide-core = { path = "crates/agentide-core" }
+agentide-substrate = { path = "crates/agentide-substrate" }
+anyhow = "1"
+async-trait = "0.1"
+axum = { version = "0.8", features = ["json", "tokio"] }
+chrono = { version = "0.4", default-features = false, features = ["clock", "serde", "std"] }
+clap = { version = "4", features = ["derive", "env"] }
+crossterm = "0.29"
+mime_guess = "2"
+ratatui = "0.29"
+rust-embed = "8"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml_ng = "0.10"
+sha2 = "0.11.0"
+tempfile = "3.23"
+thiserror = "2"
+tokio = { version = "1.53", features = ["macros", "net", "rt-multi-thread", "signal", "sync", "time"] }
+ulid = { version = "3.0", features = ["serde"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[workspace.lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+module_name_repetitions = "allow"
+must_use_candidate = "allow"

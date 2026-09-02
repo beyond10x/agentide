@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://beyond10x.github.io/agentide/contracts/intent-profile-v1.schema.json",
+  "title": "AgentIDE intent profile v1",
+  "type": "object",
+  "required": ["format", "rules", "intents"],
+  "properties": {
+    "format": {"const": "agentide.intent-profile/1"},
+    "rules": {"type": "object"},
+    "intents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "command", "exposure", "port", "effect", "risk", "approval", "subjects"],
+        "properties": {
+          "name": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+          "command": {"type": "string"},
+          "exposure": {"enum": ["model", "operator", "conditional"]},
+          "port": {"type": "string"},
+          "effect": {"enum": ["observe", "state", "mutate", "execute", "communicate", "external"]},
+          "risk": {"enum": ["none", "low", "medium", "high", "critical"]},
+          "approval": {"enum": ["never", "required"]},
+          "subjects": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": true
+}

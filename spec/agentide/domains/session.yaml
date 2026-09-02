@@ -1,0 +1,150 @@
+domain: agentide.session
+summary: The durable identity and observable projection of one coding session.
+naming: {wire: sessions, display: Sessions}
+
+types:
+  - name: agentide.session.SessionId
+    kind: newtype
+    of: String
+  - name: agentide.session.RequestId
+    kind: newtype
+    of: String
+  - name: agentide.session.WorkspaceRoot
+    kind: newtype
+    of: String
+  - name: agentide.session.Cursor
+    kind: newtype
+    of: Integer
+  - name: agentide.session.EventLimit
+    kind: newtype
+    of: Integer
+
+entities:
+  - name: agentide.session.CodingSession
+    identity: {name: session_id, type: agentide.session.SessionId}
+    fields:
+      - {name: workspace_root, type: agentide.session.WorkspaceRoot}
+      - {name: objective, type: String}
+    lifecycle:
+      initial: Active
+      states: [Active, Closed]
+      terminal: [Closed]
+      transitions:
+        - {name: close, from: [Active], to: Closed}
+
+actors:
+  - name: agentide.session.Operator
+    may: [agentide.session.StartSession, agentide.session.CloseSession]
+    naming: {display: Operator}
+  - name: agentide.session.CodingAgent
+    may: [agentide.session.SnapshotSession, agentide.session.ReadEvents]
+    naming: {display: Coding agent}
+
+errors:
+  - name: agentide.session.SessionRefusal
+    summary: The session operation was not admitted or could not be observed exactly.
+    fields:
+      - {name: code, type: String}
+      - {name: message, type: String}
+      - {name: retryable, type: Boolean}
+  - name: agentide.session.SessionStateConflict
+    summary: The session is not in a state this command acts from.
+    fields:
+      - {name: state, type: agentide.session.CodingSession.State}
+
+commands:
+  - name: agentide.session.StartSession
+    naming: {wire: session-start, display: Start session}
+    input:
+      - {name: workspace_root, type: agentide.session.WorkspaceRoot}
+      - {name: objective, type: String}
+    outcomes:
+      - name: started
+        creates: agentide.session.CodingSession
+        instance: session_id
+        emits: [agentide.session.SessionStarted]
+        payload:
+          agentide.session.SessionStarted:
+            workspace_root: input.workspace_root
+            objective: input.objective
+      - name: refused
+        external: the workspace or standalone binding is unavailable
+        error: agentide.session.SessionRefusal
+
+  - name: agentide.session.CloseSession
+    naming: {wire: session-close, display: Close session}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+    outcomes:
+      - name: closed
+        moves: agentide.session.CodingSession.close
+        instance: session_id
+        emits: [agentide.session.SessionClosed]
+        payload:
+          agentide.session.SessionClosed:
+            session_id: input.session_id
+      - name: wrong-state
+        wrong_state: true
+        error: agentide.session.SessionStateConflict
+      - name: refused
+        external: durable state cannot be updated
+        error: agentide.session.SessionRefusal
+
+  - name: agentide.session.SnapshotSession
+    naming: {wire: session-snapshot, display: Snapshot session}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+    outcomes:
+      - name: observed
+        emits: [agentide.session.SessionObserved]
+        payload:
+          agentide.session.SessionObserved:
+            session_id: input.session_id
+            request_id: input.request_id
+      - name: refused
+        external: the durable session cannot be read exactly
+        error: agentide.session.SessionRefusal
+
+  - name: agentide.session.ReadEvents
+    naming: {wire: event-read, display: Read session events}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: after, type: Optional<agentide.session.Cursor>}
+      - {name: limit, type: agentide.session.EventLimit}
+    outcomes:
+      - name: observed
+        emits: [agentide.session.SessionObserved]
+        payload:
+          agentide.session.SessionObserved:
+            session_id: input.session_id
+            request_id: input.request_id
+      - name: refused
+        external: the requested event window cannot be represented
+        error: agentide.session.SessionRefusal
+
+events:
+  - name: agentide.session.SessionStarted
+    fields:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: workspace_root, type: agentide.session.WorkspaceRoot}
+      - {name: objective, type: String}
+  - name: agentide.session.SessionClosed
+    fields:
+      - {name: session_id, type: agentide.session.SessionId}
+  - name: agentide.session.SessionObserved
+    fields:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+
+views:
+  - name: agentide.session.SessionSnapshot
+    source: agentide.session.CodingSession
+    consistency: read_your_writes
+    fields:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: workspace_root, type: agentide.session.WorkspaceRoot}
+      - {name: objective, type: String}
+    naming: {wire: snapshot, display: Session snapshot}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.coding.VerificationLevel",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "39bc3ed4ac9aa77984364b0b065f6cc955d87a47e7104e9270854514dbe18d6f",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coding.VerificationLevel": {
+      "title": "VerificationLevel",
+      "x-ess-name": "agentide.coding.VerificationLevel",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Focused",
+        "Full",
+        "Release"
+      ]
+    }
+  }
+}

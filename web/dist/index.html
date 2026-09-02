@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#11100e">
+    <title>AgentIDE</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/"><span>A</span>AgentIDE <em>local</em></a>
+      <div class="session"><strong id="objective">Loading session…</strong><small id="session-meta"></small></div>
+      <button class="command" data-command="palette">Command <kbd>⌘ K</kbd></button>
+    </header>
+    <main class="shell">
+      <aside class="rail">
+        <nav aria-label="Session views">
+          <button class="selected" title="Workspace">◫</button><button title="Changes">±</button><button title="Processes">›_</button><button title="Agents">◎</button><button title="Evidence">✓</button>
+        </nav>
+        <button class="settings" title="Bindings">⌘</button>
+      </aside>
+      <aside class="explorer">
+        <div class="section-title"><span>OPEN FILES</span><button data-command="open" title="Open file">+</button></div>
+        <div id="files"></div>
+        <div class="section-title"><span>APPROVALS</span></div>
+        <div id="approvals"></div>
+      </aside>
+      <section class="workbench">
+        <div id="tabs" class="tabs"></div>
+        <div id="canvas" class="canvas"></div>
+        <div id="notice" class="notice" role="status"></div>
+      </section>
+      <aside class="context">
+        <div class="section-title"><span>SESSION TIMELINE</span><button data-command="refresh">↻</button></div>
+        <ol id="timeline"></ol>
+      </aside>
+    </main>
+    <footer><span><b>●</b> Substrate boundary</span><span>Semantic intents · exact approvals · durable replay</span><span>JSON · Web · TUI</span></footer>
+    <dialog id="palette">
+      <div class="palette"><span>⌘</span><input id="command-input" autocomplete="off" placeholder="Open file, show diff, refresh…"></div>
+      <p><kbd>Enter</kbd> run · <kbd>Esc</kbd> close</p>
+    </dialog>
+    <script type="module" src="/assets/app.js"></script>
+  </body>
+</html>

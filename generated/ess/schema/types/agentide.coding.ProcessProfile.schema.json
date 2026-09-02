@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.coding.ProcessProfile",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "bf589e1f80dd52f9ddd9ce93a9a0464d42a554e36e1a0c8afbb475a38b54855b",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coding.ProcessProfile": {
+      "title": "ProcessProfile",
+      "x-ess-name": "agentide.coding.ProcessProfile",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

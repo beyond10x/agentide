@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.coding.Signal",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "02c6de2edbeb0e237fa8d332ad9be004068f3fa30c572657b97956943e795f70",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coding.Signal": {
+      "title": "Signal",
+      "x-ess-name": "agentide.coding.Signal",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Interrupt",
+        "Terminate",
+        "Kill"
+      ]
+    }
+  }
+}

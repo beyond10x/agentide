@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.session.WorkspaceRoot",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "edd4dcc2dd7125cd4b13ef210310985e1ab87e7cbc4bfc531adb3b71e3f801c8",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.session.WorkspaceRoot": {
+      "title": "WorkspaceRoot",
+      "x-ess-name": "agentide.session.WorkspaceRoot",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

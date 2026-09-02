@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.coding.AgentId",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "0089599fd1c92716e4bfc66423954c59cc884b3c3316d2713bc417337adf5a0c",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coding.AgentId": {
+      "title": "AgentId",
+      "x-ess-name": "agentide.coding.AgentId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

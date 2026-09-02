@@ -1,0 +1,12 @@
+format: ess/1
+system: agentide
+version: v1
+
+summary: >-
+  A coding-session interface in which agents invoke stable semantic intents while deployments bind
+  those intents to guarded implementations and humans observe the same durable event projection.
+
+domains:
+  - agentide.session
+  - agentide.coding
+  - agentide.surface

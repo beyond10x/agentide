@@ -1,0 +1,231 @@
+//! Repository-local reproducibility and conformance gate.
+#![allow(clippy::missing_errors_doc, clippy::too_many_lines)]
+
+use std::collections::BTreeSet;
+use std::path::Path;
+use std::process::Command;
+
+use anyhow::{Context, Result, anyhow, bail};
+use ess_compiler::source::SourceMap;
+use ess_domain::spec::{RawSpecFile, Specification};
+use ess_domain::system::Source;
+
+fn main() -> Result<()> {
+    let command = std::env::args().nth(1).unwrap_or_else(|| "help".into());
+    if command != "gate" {
+        bail!("usage: cargo xtask gate");
+    }
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .ancestors()
+        .nth(2)
+        .expect("xtask is two levels below workspace root");
+
+    validate_contracts()?;
+    validate_ess(root)?;
+    validate_generated_ess(root)?;
+    validate_fixtures(root)?;
+    run(root, "aep", &["artifact", "validate"])?;
+    run(root, "cargo", &["fmt", "--all", "--", "--check"])?;
+    run(root, "cargo", &["check", "--workspace", "--locked"])?;
+    run(root, "cargo", &["test", "--workspace", "--locked"])?;
+    run(
+        root,
+        "cargo",
+        &[
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--locked",
+            "--",
+            "-D",
+            "warnings",
+        ],
+    )?;
+    run(&root.join("web"), "npm", &["ci", "--ignore-scripts"])?;
+    run(&root.join("web"), "npm", &["run", "check"])?;
+    run(&root.join("web"), "npm", &["run", "build"])?;
+    run(
+        root,
+        "git",
+        &["diff", "--exit-code", "--", "web/dist", "generated/ess"],
+    )?;
+    println!("AgentIDE gate passed");
+    Ok(())
+}
+
+fn validate_contracts() -> Result<()> {
+    let profile = agentide_contracts::IntentProfile::embedded()?;
+    let bindings = agentide_contracts::BindingConfig::embedded()?;
+    bindings.validate_against(&profile)?;
+    Ok(())
+}
+
+fn validate_ess(root: &Path) -> Result<()> {
+    let directory = root.join("spec/agentide");
+    let mut pending = vec![directory.clone()];
+    let mut files = Vec::new();
+    while let Some(path) = pending.pop() {
+        for entry in std::fs::read_dir(&path)
+            .with_context(|| format!("reading ESS directory {}", path.display()))?
+        {
+            let path = entry?.path();
+            if path.is_dir() {
+                pending.push(path);
+            } else if path
+                .extension()
+                .is_some_and(|extension| extension == "yaml")
+            {
+                files.push(path);
+            }
+        }
+    }
+    files.sort();
+    let mut parsed = Vec::new();
+    let mut sources = SourceMap::new();
+    let mut labels = Vec::new();
+    for path in files {
+        let label = path.strip_prefix(&directory)?.display().to_string();
+        let text = std::fs::read_to_string(&path)?;
+        let raw = RawSpecFile::parse(&text)
+            .map_err(|error| anyhow!("ESS {label} did not parse: {error}"))?;
+        sources.insert(label.clone(), text);
+        labels.push(label.clone());
+        parsed.push((Source::new(label), raw));
+    }
+    let specification = Specification::assemble(parsed)
+        .map_err(|errors| anyhow!("ESS did not validate:\n{errors}"))?;
+    let ir = ess_compiler::resolve::compile_locating(&specification, &sources, &labels)
+        .map_err(|errors| anyhow!("ESS did not resolve:\n{errors}"))?;
+    let profile = agentide_contracts::IntentProfile::embedded()?;
+    let semantic_commands: BTreeSet<_> = ir.commands().keys().map(ToString::to_string).collect();
+    let profiled_commands: BTreeSet<_> = profile
+        .intents
+        .iter()
+        .map(|intent| intent.command.clone())
+        .collect();
+    if semantic_commands != profiled_commands {
+        let missing_profile: Vec<_> = semantic_commands.difference(&profiled_commands).collect();
+        let missing_ess: Vec<_> = profiled_commands.difference(&semantic_commands).collect();
+        bail!(
+            "ESS/profile command drift: absent from profile {missing_profile:?}; absent from ESS {missing_ess:?}"
+        );
+    }
+    let expected = std::fs::read_to_string(root.join("generated/ess/ir.json"))
+        .context("reading generated/ess/ir.json; regenerate it with ESS")?;
+    if expected != ir.to_canonical_json() {
+        bail!("generated/ess/ir.json has drifted; regenerate it with the pinned ESS revision");
+    }
+    Ok(())
+}
+
+fn validate_fixtures(root: &Path) -> Result<()> {
+    let directory = root.join("fixtures/sessions");
+    for entry in std::fs::read_dir(directory)? {
+        let path = entry?.path();
+        if !path.is_file() {
+            continue;
+        }
+        let text = std::fs::read_to_string(&path)?;
+        for forbidden in [
+            "/home/",
+            "/Users/",
+            "BEGIN PRIVATE",
+            "access_token",
+            "reasoning",
+            "prompt",
+        ] {
+            if text
+                .to_ascii_lowercase()
+                .contains(&forbidden.to_ascii_lowercase())
+            {
+                bail!(
+                    "fixture {} contains forbidden marker `{forbidden}`",
+                    path.display()
+                );
+            }
+        }
+    }
+    Ok(())
+}
+
+fn validate_generated_ess(root: &Path) -> Result<()> {
+    let temporary = tempfile::tempdir()?;
+    let out = temporary.path();
+    let specification = root.join("spec/agentide");
+    let ess = std::env::var_os("AGENTIDE_ESS_BIN").unwrap_or_else(|| "ess".into());
+    let compile = Command::new(&ess)
+        .args(["compile", "--path"])
+        .arg(&specification)
+        .args(["--out"])
+        .arg(out.join("ir.json"))
+        .status()
+        .with_context(
+            || "starting the pinned ESS CLI; install revision 01f12c9 or set AGENTIDE_ESS_BIN",
+        )?;
+    if !compile.success() {
+        bail!("ESS canonical IR generation failed with {compile}");
+    }
+    for kind in ["docs", "schema", "openapi", "asyncapi"] {
+        let status = Command::new(&ess)
+            .args(["generate", "--path"])
+            .arg(&specification)
+            .args(["--kind", kind, "--out"])
+            .arg(out)
+            .status()
+            .with_context(|| format!("starting ESS {kind} generation"))?;
+        if !status.success() {
+            bail!("ESS {kind} generation failed with {status}");
+        }
+    }
+    let expected = read_tree(&root.join("generated/ess"))?;
+    let observed = read_tree(out)?;
+    if expected != observed {
+        let missing: Vec<_> = observed
+            .keys()
+            .filter(|path| !expected.contains_key(*path))
+            .collect();
+        let stale: Vec<_> = expected
+            .keys()
+            .filter(|path| !observed.contains_key(*path))
+            .collect();
+        let changed: Vec<_> = observed
+            .keys()
+            .filter(|path| {
+                expected
+                    .get(*path)
+                    .is_some_and(|bytes| bytes != observed.get(*path).expect("present"))
+            })
+            .collect();
+        bail!("generated ESS drift: missing {missing:?}; stale {stale:?}; changed {changed:?}");
+    }
+    Ok(())
+}
+
+fn read_tree(root: &Path) -> Result<std::collections::BTreeMap<std::path::PathBuf, Vec<u8>>> {
+    let mut files = std::collections::BTreeMap::new();
+    let mut pending = vec![root.to_path_buf()];
+    while let Some(directory) = pending.pop() {
+        for entry in std::fs::read_dir(&directory)? {
+            let path = entry?.path();
+            if path.is_dir() {
+                pending.push(path);
+            } else if path.is_file() {
+                files.insert(path.strip_prefix(root)?.to_path_buf(), std::fs::read(path)?);
+            }
+        }
+    }
+    Ok(files)
+}
+
+fn run(directory: &Path, program: &str, arguments: &[&str]) -> Result<()> {
+    println!("+ {program} {}", arguments.join(" "));
+    let status = Command::new(program)
+        .args(arguments)
+        .current_dir(directory)
+        .status()
+        .with_context(|| format!("starting `{program}`"))?;
+    if !status.success() {
+        bail!("`{program} {}` failed with {status}", arguments.join(" "));
+    }
+    Ok(())
+}

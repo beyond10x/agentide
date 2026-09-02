@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.surface.SplitDirection",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "e27dec1ef9a553dd4916d1ce15cf28cdce11e3ee953f8c78ff0f99b1dbbd60c7",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.surface.SplitDirection": {
+      "title": "SplitDirection",
+      "x-ess-name": "agentide.surface.SplitDirection",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Horizontal",
+        "Vertical"
+      ]
+    }
+  }
+}

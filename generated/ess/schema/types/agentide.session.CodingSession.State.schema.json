@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.session.CodingSession.State",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "90a14c4cabe70fb213400a16bf6746b5167116a4013625f0534e7753af9ea134",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.session.CodingSession.State": {
+      "title": "State",
+      "x-ess-name": "agentide.session.CodingSession.State",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Active",
+        "Closed"
+      ]
+    }
+  }
+}

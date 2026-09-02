@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SessionRefusal payload",
+  "description": "The session operation was not admitted or could not be observed exactly.",
+  "x-ess-name": "agentide.session.SessionRefusal",
+  "x-ess-kind": "error-payload",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "retryable": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "retryable"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "4f032f1547deee51e12a8c693a56efc567ef1f2528807aa2d43a032feaa1dc7e",
+    "regenerate": "ess generate"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Read session events input",
+  "x-ess-name": "agentide.session.ReadEvents",
+  "x-ess-kind": "command-input",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "request_id": {
+      "$ref": "#/$defs/agentide.session.RequestId"
+    },
+    "after": {
+      "$ref": "#/$defs/agentide.session.Cursor"
+    },
+    "limit": {
+      "$ref": "#/$defs/agentide.session.EventLimit"
+    }
+  },
+  "required": [
+    "session_id",
+    "request_id",
+    "limit"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "21ea0c24cdd9f7279f3d91739e9be963951e415d13bfa476c5ccfb5530bab32f",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.session.Cursor": {
+      "title": "Cursor",
+      "x-ess-name": "agentide.session.Cursor",
+      "x-ess-kind": "newtype",
+      "type": "integer"
+    },
+    "agentide.session.EventLimit": {
+      "title": "EventLimit",
+      "x-ess-name": "agentide.session.EventLimit",
+      "x-ess-kind": "newtype",
+      "type": "integer"
+    },
+    "agentide.session.RequestId": {
+      "title": "RequestId",
+      "x-ess-name": "agentide.session.RequestId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

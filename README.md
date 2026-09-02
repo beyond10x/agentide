@@ -1,0 +1,87 @@
+# AgentIDE
+
+AgentIDE is an agent-first coding-session interface. It gives a model stable semantic intents such
+as `code_read`, `code_verify`, `file_open`, and `code_publish`; an embedding application supplies
+the concrete implementation, arguments, credentials, destinations, and authority policy.
+
+```text
+agent / browser / TUI
+          │
+          ▼
+ typed semantic intent ──► exact plan ──► authority ──► implementation port
+          │                                      │                │
+          └──────────────── durable event journal ◄────────────────┘
+                                  │
+                     shared session projection
+```
+
+The released binary includes three surfaces over that projection:
+
+- a JSON CLI optimized for agent tool use;
+- an embedded local browser workbench;
+- a keyboard-driven console TUI built on the same Harness/Substrate execution adapter.
+
+Virtual panes, open files, focus, cursor positions, diffs, approvals, processes, agent lanes, and
+evidence are session state rather than UI-private state. They can be replayed and rendered by a
+future Harness-native surface without changing the intent vocabulary.
+
+## Build and run
+
+AgentIDE currently targets Linux because its standalone effects use Substrate confinement.
+
+```console
+cargo build --locked --release -p agentide-cli
+target/release/agentide session start --workspace . --objective "Implement the change"
+target/release/agentide snapshot --session <session-id>
+target/release/agentide tui --session <session-id>
+target/release/agentide serve --session <session-id>
+```
+
+The browser listens on `127.0.0.1:7788` by default. The TUI uses `o` to open a file, `d` for a
+diff pane, `Tab` to focus the next pane, `x` to close the focused pane, and `q` to quit.
+
+An agent invokes authority-free observations directly:
+
+```console
+agentide intent call --session "$SESSION" code_read --input '{"path":"src/lib.rs"}'
+agentide intent call --session "$SESSION" file_open --input '{"path":"src/lib.rs","line":42}'
+```
+
+A mutating intent is two-phase and bound to its exact SHA-256 plan:
+
+```console
+agentide intent preview --session "$SESSION" code_edit \
+  --input '{"path":"src/lib.rs","content":"...","expected_sha256":"..."}'
+agentide approval grant --session "$SESSION" --plan "$PLAN_DIGEST"
+agentide intent resume --session "$SESSION" --plan "$PLAN_DIGEST" \
+  --input '{"path":"src/lib.rs","content":"...","expected_sha256":"..."}'
+```
+
+The original input is not persisted with a pending plan; resume must supply matching bytes. Session
+state lives under `${XDG_STATE_HOME:-$HOME/.local/state}/agentide`, never in the target workspace.
+A model request cannot select a driver or executable. Missing Substrate facts, bindings,
+profiles, approvals, or recovery facts produce named refusals; AgentIDE never falls back to direct
+host effects.
+
+## Contracts and embedding
+
+- `spec/agentide/` is the ESS semantic authority.
+- `contracts/intent-profile.yaml` adds model-facing consequence and binding declarations.
+- `contracts/default-bindings.yaml` is the standalone Substrate binding supplied from outside the
+  semantic request.
+- `contracts/schemas/` contains immutable v1 transport and configuration schemas.
+- `agentide_core::IntentPort` is the implementation seam a standalone or Harness host binds.
+- `.engineering/planning/` is the AEP-governed plan and evidence graph.
+
+See [architecture](docs/architecture.md) for the exact boundaries and [keyboard interface](docs/keyboard-interface.md)
+for the shared surface operations.
+
+Run the complete gate with:
+
+```console
+cargo xtask gate
+```
+
+The gate validates AEP, compiles ESS through the pinned compiler, checks generated IR drift,
+validates profile/binding coverage, runs Rust tests and Clippy, type-checks the browser, checks built
+asset drift, and scans replay fixtures for sensitive data.

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.surface.PaneId",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "cff2ad32e9868524f4e2681ab32dcd3beaf963e4f429498c31eb0fa2cdc90696",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.surface.PaneId": {
+      "title": "PaneId",
+      "x-ess-name": "agentide.surface.PaneId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

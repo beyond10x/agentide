@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SurfaceFailure payload",
+  "description": "The requested virtual-surface transition was refused or could not be projected.",
+  "x-ess-name": "agentide.surface.SurfaceFailure",
+  "x-ess-kind": "error-payload",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "retryable": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "retryable"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "51778556a15039b01de3d678f1da5905052a4b9cf58f509763a00e585411ff30",
+    "regenerate": "ess generate"
+  }
+}

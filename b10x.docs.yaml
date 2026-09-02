@@ -1,0 +1,11 @@
+version: 1
+project:
+  id: agentide
+  name: AgentIDE
+  repository: https://github.com/beyond10x/agentide
+  summary: Agent-first coding sessions through typed intents, evidence, and pluggable execution bindings.
+source:
+  include:
+    - README.md
+    - CHANGELOG.md
+    - docs/**/*.md

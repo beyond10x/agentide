@@ -1,0 +1,57 @@
+components:
+  - component: agentide-engine
+    summary: Validates intents, plans effects, obtains authority, journals, dispatches, and projects sessions.
+    owns:
+      domains: [agentide.session, agentide.coding, agentide.surface]
+    accepts:
+      commands:
+        - agentide.session.StartSession
+        - agentide.session.CloseSession
+        - agentide.session.SnapshotSession
+        - agentide.session.ReadEvents
+        - agentide.coding.SearchCode
+        - agentide.coding.ReadCode
+        - agentide.coding.ObserveChanges
+        - agentide.coding.EditCode
+        - agentide.coding.VerifyCode
+        - agentide.coding.ObserveWorktree
+        - agentide.coding.CreateWorktree
+        - agentide.coding.FinishWorktree
+        - agentide.coding.StartProcess
+        - agentide.coding.ObserveProcess
+        - agentide.coding.InputProcess
+        - agentide.coding.WaitProcess
+        - agentide.coding.CancelProcess
+        - agentide.coding.ObserveAgents
+        - agentide.coding.DelegateAgent
+        - agentide.coding.MessageAgent
+        - agentide.coding.WaitAgent
+        - agentide.coding.RecordEvidence
+        - agentide.coding.PublishCode
+        - agentide.coding.CutRelease
+        - agentide.coding.ObserveDeployment
+        - agentide.coding.ApplyDeployment
+        - agentide.surface.OpenFile
+        - agentide.surface.CloseFile
+        - agentide.surface.OpenPane
+        - agentide.surface.ClosePane
+        - agentide.surface.FocusPane
+        - agentide.surface.MoveCursor
+        - agentide.surface.ShowDiff
+        - agentide.surface.SnapshotSurface
+    publishes:
+      events:
+        - agentide.session.SessionStarted
+        - agentide.session.SessionClosed
+        - agentide.session.SessionObserved
+        - agentide.coding.IntentCompleted
+        - agentide.coding.IntentRefused
+        - agentide.surface.FileOpened
+        - agentide.surface.FileClosed
+        - agentide.surface.PaneOpened
+        - agentide.surface.PaneClosed
+        - agentide.surface.PaneFocused
+        - agentide.surface.CursorMoved
+        - agentide.surface.DiffShown
+        - agentide.surface.SurfaceObserved
+    reached_by: network

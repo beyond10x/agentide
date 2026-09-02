@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Open pane input",
+  "x-ess-name": "agentide.surface.OpenPane",
+  "x-ess-kind": "command-input",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "request_id": {
+      "$ref": "#/$defs/agentide.session.RequestId"
+    },
+    "pane_id": {
+      "$ref": "#/$defs/agentide.surface.PaneId"
+    },
+    "kind": {
+      "$ref": "#/$defs/agentide.surface.PaneKind"
+    },
+    "split": {
+      "$ref": "#/$defs/agentide.surface.SplitDirection"
+    }
+  },
+  "required": [
+    "session_id",
+    "request_id",
+    "pane_id",
+    "kind"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "b59323c3349048bb7a15aaaad55085ae7bb5842eedd788ace122478406e09fc8",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.session.RequestId": {
+      "title": "RequestId",
+      "x-ess-name": "agentide.session.RequestId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.surface.PaneId": {
+      "title": "PaneId",
+      "x-ess-name": "agentide.surface.PaneId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.surface.PaneKind": {
+      "title": "PaneKind",
+      "x-ess-name": "agentide.surface.PaneKind",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Editor",
+        "Diff",
+        "Terminal",
+        "Timeline",
+        "Agents",
+        "Approvals",
+        "Evidence"
+      ]
+    },
+    "agentide.surface.SplitDirection": {
+      "title": "SplitDirection",
+      "x-ess-name": "agentide.surface.SplitDirection",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Horizontal",
+        "Vertical"
+      ]
+    }
+  }
+}

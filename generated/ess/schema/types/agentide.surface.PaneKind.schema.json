@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.surface.PaneKind",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "12ce0670831f3489cbeff96eae749485738594b83d4fd3c2057294cc576f5ba2",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.surface.PaneKind": {
+      "title": "PaneKind",
+      "x-ess-name": "agentide.surface.PaneKind",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Editor",
+        "Diff",
+        "Terminal",
+        "Timeline",
+        "Agents",
+        "Approvals",
+        "Evidence"
+      ]
+    }
+  }
+}

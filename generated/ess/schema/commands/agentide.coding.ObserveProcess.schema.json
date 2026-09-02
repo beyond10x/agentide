@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Observe process input",
+  "x-ess-name": "agentide.coding.ObserveProcess",
+  "x-ess-kind": "command-input",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "request_id": {
+      "$ref": "#/$defs/agentide.session.RequestId"
+    },
+    "process_id": {
+      "$ref": "#/$defs/agentide.coding.ProcessId"
+    }
+  },
+  "required": [
+    "session_id",
+    "request_id",
+    "process_id"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "a33e231bb35a6390d654d91d9d6e759d83aa5bf32c23a56141c92cd1f7fb3693",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coding.ProcessId": {
+      "title": "ProcessId",
+      "x-ess-name": "agentide.coding.ProcessId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.RequestId": {
+      "title": "RequestId",
+      "x-ess-name": "agentide.session.RequestId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

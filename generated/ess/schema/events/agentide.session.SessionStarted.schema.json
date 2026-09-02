@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SessionStarted payload",
+  "x-ess-name": "agentide.session.SessionStarted",
+  "x-ess-kind": "event-payload",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "workspace_root": {
+      "$ref": "#/$defs/agentide.session.WorkspaceRoot"
+    },
+    "objective": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "session_id",
+    "workspace_root",
+    "objective"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "42b76f67e118a7a9c8b8e1759d5643fb0f343ac712e6eb6206e40355cb12d4c9",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.WorkspaceRoot": {
+      "title": "WorkspaceRoot",
+      "x-ess-name": "agentide.session.WorkspaceRoot",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

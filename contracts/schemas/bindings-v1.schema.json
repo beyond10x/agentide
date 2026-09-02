@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://beyond10x.github.io/agentide/contracts/bindings-v1.schema.json",
+  "title": "AgentIDE external bindings v1",
+  "type": "object",
+  "required": ["format", "bindings"],
+  "properties": {
+    "format": {"const": "agentide.bindings/1"},
+    "bindings": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["driver", "operation"],
+        "properties": {
+          "driver": {"type": "string"},
+          "operation": {"type": "string"},
+          "options": {"type": "object"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "unbound": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+  },
+  "additionalProperties": false
+}

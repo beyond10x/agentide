@@ -1,0 +1,41 @@
+{
+  "format": "agentide.fixture/1",
+  "session": {
+    "id": "session-example",
+    "workspace_root": "workspace",
+    "workspace_id": "workspace",
+    "objective": "Add deterministic projection coverage",
+    "status": "active"
+  },
+  "events": [
+    {
+      "sequence": 1,
+      "kind": "session.started",
+      "payload": {"objective": "Add deterministic projection coverage"}
+    },
+    {
+      "sequence": 2,
+      "kind": "intent.completed",
+      "intent": "file_open",
+      "payload": {
+        "surface_event": "file_opened",
+        "pane_id": "editor-main",
+        "kind": "editor",
+        "title": "src/lib.rs",
+        "path": "src/lib.rs",
+        "line": 18
+      }
+    },
+    {
+      "sequence": 3,
+      "kind": "intent.completed",
+      "intent": "diff_show",
+      "payload": {
+        "surface_event": "diff_shown",
+        "pane_id": "changes",
+        "kind": "diff",
+        "title": "Changes"
+      }
+    }
+  ]
+}

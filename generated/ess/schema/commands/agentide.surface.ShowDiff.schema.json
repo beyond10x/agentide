@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Show diff input",
+  "x-ess-name": "agentide.surface.ShowDiff",
+  "x-ess-kind": "command-input",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "request_id": {
+      "$ref": "#/$defs/agentide.session.RequestId"
+    },
+    "pane_id": {
+      "$ref": "#/$defs/agentide.surface.PaneId"
+    },
+    "path": {
+      "$ref": "#/$defs/agentide.coding.Path"
+    },
+    "base": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "session_id",
+    "request_id"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "0f789ff0d173bc5097a36a7d6c7e7750bbe5d7eded4aba58bdf8e89fb492c26b",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coding.Path": {
+      "title": "Path",
+      "x-ess-name": "agentide.coding.Path",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.RequestId": {
+      "title": "RequestId",
+      "x-ess-name": "agentide.session.RequestId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.surface.PaneId": {
+      "title": "PaneId",
+      "x-ess-name": "agentide.surface.PaneId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

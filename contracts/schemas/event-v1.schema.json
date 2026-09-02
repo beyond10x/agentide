@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://beyond10x.github.io/agentide/contracts/event-v1.schema.json",
+  "title": "AgentIDE event v1",
+  "type": "object",
+  "required": ["format", "id", "sequence", "at", "session_id", "kind", "payload"],
+  "properties": {
+    "format": {"const": "agentide.event/1"},
+    "id": {"type": "string"},
+    "sequence": {"type": "integer", "minimum": 1},
+    "at": {"type": "string", "format": "date-time"},
+    "session_id": {"type": "string"},
+    "kind": {"type": "string"},
+    "intent": {"type": ["string", "null"]},
+    "plan_digest": {"type": ["string", "null"]},
+    "payload": {}
+  },
+  "additionalProperties": false
+}

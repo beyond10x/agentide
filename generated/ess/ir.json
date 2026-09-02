@@ -1,0 +1,3554 @@
+{
+  "system": "agentide",
+  "version": 1,
+  "naming": {},
+  "summary": "A coding-session interface in which agents invoke stable semantic intents while deployments bind those intents to guarded implementations and humans observe the same durable event projection.",
+  "domains": {
+    "agentide.coding": {
+      "name": "agentide.coding",
+      "naming": {
+        "wire": "coding",
+        "display": "Coding session",
+        "summary": "Semantic observation, change, execution, collaboration, evidence, and delivery intents."
+      },
+      "types": [
+        "agentide.coding.AgentId",
+        "agentide.coding.ExpectedDigest",
+        "agentide.coding.OperationId",
+        "agentide.coding.Path",
+        "agentide.coding.Pattern",
+        "agentide.coding.ProcessId",
+        "agentide.coding.ProcessProfile",
+        "agentide.coding.Signal",
+        "agentide.coding.VerificationLevel"
+      ],
+      "entities": [],
+      "commands": [
+        "agentide.coding.ApplyDeployment",
+        "agentide.coding.CancelProcess",
+        "agentide.coding.CreateWorktree",
+        "agentide.coding.CutRelease",
+        "agentide.coding.DelegateAgent",
+        "agentide.coding.EditCode",
+        "agentide.coding.FinishWorktree",
+        "agentide.coding.InputProcess",
+        "agentide.coding.MessageAgent",
+        "agentide.coding.ObserveAgents",
+        "agentide.coding.ObserveChanges",
+        "agentide.coding.ObserveDeployment",
+        "agentide.coding.ObserveProcess",
+        "agentide.coding.ObserveWorktree",
+        "agentide.coding.PublishCode",
+        "agentide.coding.ReadCode",
+        "agentide.coding.RecordEvidence",
+        "agentide.coding.SearchCode",
+        "agentide.coding.StartProcess",
+        "agentide.coding.VerifyCode",
+        "agentide.coding.WaitAgent",
+        "agentide.coding.WaitProcess"
+      ],
+      "events": [
+        "agentide.coding.IntentCompleted",
+        "agentide.coding.IntentRefused"
+      ],
+      "errors": [
+        "agentide.coding.IntentFailure"
+      ],
+      "views": [],
+      "actors": [
+        "agentide.coding.CodingAgent"
+      ]
+    },
+    "agentide.session": {
+      "name": "agentide.session",
+      "naming": {
+        "wire": "sessions",
+        "display": "Sessions",
+        "summary": "The durable identity and observable projection of one coding session."
+      },
+      "types": [
+        "agentide.session.CodingSession.State",
+        "agentide.session.Cursor",
+        "agentide.session.EventLimit",
+        "agentide.session.RequestId",
+        "agentide.session.SessionId",
+        "agentide.session.WorkspaceRoot"
+      ],
+      "entities": [
+        "agentide.session.CodingSession"
+      ],
+      "commands": [
+        "agentide.session.CloseSession",
+        "agentide.session.ReadEvents",
+        "agentide.session.SnapshotSession",
+        "agentide.session.StartSession"
+      ],
+      "events": [
+        "agentide.session.SessionClosed",
+        "agentide.session.SessionObserved",
+        "agentide.session.SessionStarted"
+      ],
+      "errors": [
+        "agentide.session.SessionRefusal",
+        "agentide.session.SessionStateConflict"
+      ],
+      "views": [
+        "agentide.session.SessionSnapshot"
+      ],
+      "actors": [
+        "agentide.session.CodingAgent",
+        "agentide.session.Operator"
+      ]
+    },
+    "agentide.surface": {
+      "name": "agentide.surface",
+      "naming": {
+        "wire": "surface",
+        "display": "Workspace surface",
+        "summary": "A renderer-neutral virtual workbench shared by agents, the browser, CLI snapshots, and the console TUI."
+      },
+      "types": [
+        "agentide.surface.PaneId",
+        "agentide.surface.PaneKind",
+        "agentide.surface.SplitDirection",
+        "agentide.surface.Workbench.State"
+      ],
+      "entities": [
+        "agentide.surface.Workbench"
+      ],
+      "commands": [
+        "agentide.surface.CloseFile",
+        "agentide.surface.ClosePane",
+        "agentide.surface.FocusPane",
+        "agentide.surface.MoveCursor",
+        "agentide.surface.OpenFile",
+        "agentide.surface.OpenPane",
+        "agentide.surface.ShowDiff",
+        "agentide.surface.SnapshotSurface"
+      ],
+      "events": [
+        "agentide.surface.CursorMoved",
+        "agentide.surface.DiffShown",
+        "agentide.surface.FileClosed",
+        "agentide.surface.FileOpened",
+        "agentide.surface.PaneClosed",
+        "agentide.surface.PaneFocused",
+        "agentide.surface.PaneOpened",
+        "agentide.surface.SurfaceObserved"
+      ],
+      "errors": [
+        "agentide.surface.SurfaceFailure"
+      ],
+      "views": [
+        "agentide.surface.WorkbenchSnapshot"
+      ],
+      "actors": [
+        "agentide.surface.CodingAgent"
+      ]
+    }
+  },
+  "types": {
+    "agentide.coding.AgentId": {
+      "name": "agentide.coding.AgentId",
+      "body": {
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "invariants": []
+      },
+      "naming": {}
+    },
+    "agentide.coding.ExpectedDigest": {
+      "name": "agentide.coding.ExpectedDigest",
+      "body": {
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "invariants": []
+      },
+      "naming": {}
+    },
+    "agentide.coding.OperationId": {
+      "name": "agentide.coding.OperationId",
+      "body": {
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "invariants": []
+      },
+      "naming": {}
+    },
+    "agentide.coding.Path": {
+      "name": "agentide.coding.Path",
+      "body": {
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "invariants": []
+      },
+      "naming": {}
+    },
+    "agentide.coding.Pattern": {
+      "name": "agentide.coding.Pattern",
+      "body": {
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "invariants": []
+      },
+      "naming": {}
+    },
+    "agentide.coding.ProcessId": {
+      "name": "agentide.coding.ProcessId",
+      "body": {
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "invariants": []
+      },
+      "naming": {}
+    },
+    "agentide.coding.ProcessProfile": {
+      "name": "agentide.coding.ProcessProfile",
+      "body": {
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "invariants": []
+      },
+      "naming": {}
+    },
+    "agentide.coding.Signal": {
+      "name": "agentide.coding.Signal",
+      "body": {
+        "kind": "enum",
+        "variants": [
+          "Interrupt",
+          "Terminate",
+          "Kill"
+        ]
+      },
+      "naming": {}
+    },
+    "agentide.coding.VerificationLevel": {
+      "name": "agentide.coding.VerificationLevel",
+      "body": {
+        "kind": "enum",
+        "variants": [
+          "Focused",
+          "Full",
+          "Release"
+        ]
+      },
+      "naming": {}
+    },
+    "agentide.session.CodingSession.State": {
+      "name": "agentide.session.CodingSession.State",
+      "body": {
+        "kind": "enum",
+        "variants": [
+          "Active",
+          "Closed"
+        ]
+      },
+      "naming": {}
+    },
+    "agentide.session.Cursor": {
+      "name": "agentide.session.Cursor",
+      "body": {
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "integer"
+        },
+        "invariants": []
+      },
+      "naming": {}
+    },
+    "agentide.session.EventLimit": {
+      "name": "agentide.session.EventLimit",
+      "body": {
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "integer"
+        },
+        "invariants": []
+      },
+      "naming": {}
+    },
+    "agentide.session.RequestId": {
+      "name": "agentide.session.RequestId",
+      "body": {
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "invariants": []
+      },
+      "naming": {}
+    },
+    "agentide.session.SessionId": {
+      "name": "agentide.session.SessionId",
+      "body": {
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "invariants": []
+      },
+      "naming": {}
+    },
+    "agentide.session.WorkspaceRoot": {
+      "name": "agentide.session.WorkspaceRoot",
+      "body": {
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "invariants": []
+      },
+      "naming": {}
+    },
+    "agentide.surface.PaneId": {
+      "name": "agentide.surface.PaneId",
+      "body": {
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "invariants": []
+      },
+      "naming": {}
+    },
+    "agentide.surface.PaneKind": {
+      "name": "agentide.surface.PaneKind",
+      "body": {
+        "kind": "enum",
+        "variants": [
+          "Editor",
+          "Diff",
+          "Terminal",
+          "Timeline",
+          "Agents",
+          "Approvals",
+          "Evidence"
+        ]
+      },
+      "naming": {}
+    },
+    "agentide.surface.SplitDirection": {
+      "name": "agentide.surface.SplitDirection",
+      "body": {
+        "kind": "enum",
+        "variants": [
+          "Horizontal",
+          "Vertical"
+        ]
+      },
+      "naming": {}
+    },
+    "agentide.surface.Workbench.State": {
+      "name": "agentide.surface.Workbench.State",
+      "body": {
+        "kind": "enum",
+        "variants": [
+          "Active"
+        ]
+      },
+      "naming": {}
+    }
+  },
+  "conversions": [],
+  "entities": {
+    "agentide.session.CodingSession": {
+      "name": "agentide.session.CodingSession",
+      "domain": "agentide.session",
+      "identity": {
+        "name": "session_id",
+        "type_ref": {
+          "kind": "declared",
+          "name": "agentide.session.SessionId"
+        },
+        "naming": {}
+      },
+      "fields": [
+        {
+          "name": "workspace_root",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.WorkspaceRoot"
+          },
+          "naming": {}
+        },
+        {
+          "name": "objective",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        }
+      ],
+      "state_type": "agentide.session.CodingSession.State",
+      "lifecycle": {
+        "states": [
+          "Active",
+          "Closed"
+        ],
+        "initial": "Active",
+        "terminal": [
+          "Closed"
+        ],
+        "transitions": [
+          {
+            "name": "close",
+            "from": [
+              "Active"
+            ],
+            "to": "Closed"
+          }
+        ]
+      },
+      "invariants": [],
+      "naming": {}
+    },
+    "agentide.surface.Workbench": {
+      "name": "agentide.surface.Workbench",
+      "domain": "agentide.surface",
+      "identity": {
+        "name": "session_id",
+        "type_ref": {
+          "kind": "declared",
+          "name": "agentide.session.SessionId"
+        },
+        "naming": {}
+      },
+      "fields": [
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
+          },
+          "naming": {}
+        }
+      ],
+      "state_type": "agentide.surface.Workbench.State",
+      "lifecycle": {
+        "states": [
+          "Active"
+        ],
+        "initial": "Active",
+        "terminal": [
+          "Active"
+        ]
+      },
+      "invariants": [],
+      "naming": {}
+    }
+  },
+  "commands": {
+    "agentide.coding.ApplyDeployment": {
+      "name": "agentide.coding.ApplyDeployment",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "operation_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.OperationId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "environment",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "revision",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.ExpectedDigest"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "deployment-apply",
+        "display": "Apply deployment"
+      }
+    },
+    "agentide.coding.CancelProcess": {
+      "name": "agentide.coding.CancelProcess",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "operation_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.OperationId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "process_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.ProcessId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "signal",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.Signal"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "process-cancel",
+        "display": "Cancel process"
+      }
+    },
+    "agentide.coding.CreateWorktree": {
+      "name": "agentide.coding.CreateWorktree",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "operation_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.OperationId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "purpose",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "base",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "primitive",
+              "name": "string"
+            }
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "worktree-create",
+        "display": "Create worktree"
+      }
+    },
+    "agentide.coding.CutRelease": {
+      "name": "agentide.coding.CutRelease",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "operation_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.OperationId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "version",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "expected_head",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.ExpectedDigest"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "release-cut",
+        "display": "Cut release"
+      }
+    },
+    "agentide.coding.DelegateAgent": {
+      "name": "agentide.coding.DelegateAgent",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "operation_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.OperationId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "task",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "agent-delegate",
+        "display": "Delegate to agent"
+      }
+    },
+    "agentide.coding.EditCode": {
+      "name": "agentide.coding.EditCode",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "operation_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.OperationId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "path",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.Path"
+          },
+          "naming": {}
+        },
+        {
+          "name": "content",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "expected_sha256",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.ExpectedDigest"
+            }
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "code-edit",
+        "display": "Edit code"
+      }
+    },
+    "agentide.coding.FinishWorktree": {
+      "name": "agentide.coding.FinishWorktree",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "operation_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.OperationId"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "worktree-finish",
+        "display": "Finish worktree"
+      }
+    },
+    "agentide.coding.InputProcess": {
+      "name": "agentide.coding.InputProcess",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "operation_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.OperationId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "process_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.ProcessId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "content",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "process-input",
+        "display": "Write process input"
+      }
+    },
+    "agentide.coding.MessageAgent": {
+      "name": "agentide.coding.MessageAgent",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "operation_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.OperationId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "agent_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.AgentId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "message",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "agent-message",
+        "display": "Message agent"
+      }
+    },
+    "agentide.coding.ObserveAgents": {
+      "name": "agentide.coding.ObserveAgents",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "agent-observe",
+        "display": "Observe agents"
+      }
+    },
+    "agentide.coding.ObserveChanges": {
+      "name": "agentide.coding.ObserveChanges",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "code-changes",
+        "display": "Observe code changes"
+      }
+    },
+    "agentide.coding.ObserveDeployment": {
+      "name": "agentide.coding.ObserveDeployment",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "environment",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "deployment-observe",
+        "display": "Observe deployment"
+      }
+    },
+    "agentide.coding.ObserveProcess": {
+      "name": "agentide.coding.ObserveProcess",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "process_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.ProcessId"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "process-observe",
+        "display": "Observe process"
+      }
+    },
+    "agentide.coding.ObserveWorktree": {
+      "name": "agentide.coding.ObserveWorktree",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "worktree-status",
+        "display": "Observe worktree"
+      }
+    },
+    "agentide.coding.PublishCode": {
+      "name": "agentide.coding.PublishCode",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "operation_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.OperationId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "expected_head",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.ExpectedDigest"
+          },
+          "naming": {}
+        },
+        {
+          "name": "summary",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "evidence",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "primitive",
+              "name": "string"
+            }
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "code-publish",
+        "display": "Publish code"
+      }
+    },
+    "agentide.coding.ReadCode": {
+      "name": "agentide.coding.ReadCode",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "path",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.Path"
+          },
+          "naming": {}
+        },
+        {
+          "name": "offset",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "integer"
+          },
+          "naming": {}
+        },
+        {
+          "name": "limit_bytes",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "integer"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "code-read",
+        "display": "Read code"
+      }
+    },
+    "agentide.coding.RecordEvidence": {
+      "name": "agentide.coding.RecordEvidence",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "operation_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.OperationId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "subject",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "kind",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "source",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "reference",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "primitive",
+              "name": "string"
+            }
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "evidence-record",
+        "display": "Record evidence"
+      }
+    },
+    "agentide.coding.SearchCode": {
+      "name": "agentide.coding.SearchCode",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "pattern",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.Pattern"
+          },
+          "naming": {}
+        },
+        {
+          "name": "paths",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "code-search",
+        "display": "Search code"
+      }
+    },
+    "agentide.coding.StartProcess": {
+      "name": "agentide.coding.StartProcess",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "operation_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.OperationId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "profile",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.ProcessProfile"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "process-start",
+        "display": "Start process"
+      }
+    },
+    "agentide.coding.VerifyCode": {
+      "name": "agentide.coding.VerifyCode",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "operation_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.OperationId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "level",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.VerificationLevel"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "code-verify",
+        "display": "Verify code"
+      }
+    },
+    "agentide.coding.WaitAgent": {
+      "name": "agentide.coding.WaitAgent",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "agent_ids",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.AgentId"
+            }
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "agent-wait",
+        "display": "Wait for agents"
+      }
+    },
+    "agentide.coding.WaitProcess": {
+      "name": "agentide.coding.WaitProcess",
+      "domain": "agentide.coding",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "process_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.ProcessId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "timeout_ms",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "integer"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.coding.IntentCompleted"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the selected implementation cannot admit or complete the intent"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.coding.IntentFailure"
+        }
+      ],
+      "naming": {
+        "wire": "process-wait",
+        "display": "Wait for process"
+      }
+    },
+    "agentide.session.CloseSession": {
+      "name": "agentide.session.CloseSession",
+      "domain": "agentide.session",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "closed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "subject": {
+            "entity": "agentide.session.CodingSession",
+            "effect": "moves",
+            "transition": {
+              "name": "close",
+              "from": [
+                "Active"
+              ],
+              "to": "Closed"
+            },
+            "instance": {
+              "from": "supplied",
+              "field": {
+                "name": "session_id",
+                "type_ref": {
+                  "kind": "declared",
+                  "name": "agentide.session.SessionId"
+                },
+                "naming": {}
+              }
+            }
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.session.SessionClosed"
+          ],
+          "payload": [
+            {
+              "event": "agentide.session.SessionClosed",
+              "fields": [
+                {
+                  "target": "session_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.SessionId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "session_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.SessionId"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wrong-state",
+          "condition": {
+            "kind": "wrong_state"
+          },
+          "test_strategy": "arrange_state",
+          "emits": [],
+          "error": "agentide.session.SessionStateConflict"
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "durable state cannot be updated"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.session.SessionRefusal"
+        }
+      ],
+      "naming": {
+        "wire": "session-close",
+        "display": "Close session"
+      }
+    },
+    "agentide.session.ReadEvents": {
+      "name": "agentide.session.ReadEvents",
+      "domain": "agentide.session",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "after",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.session.Cursor"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "limit",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.EventLimit"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "observed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.session.SessionObserved"
+          ],
+          "payload": [
+            {
+              "event": "agentide.session.SessionObserved",
+              "fields": [
+                {
+                  "target": "session_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.SessionId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "session_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.SessionId"
+                    }
+                  }
+                },
+                {
+                  "target": "request_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.RequestId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "request_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.RequestId"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the requested event window cannot be represented"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.session.SessionRefusal"
+        }
+      ],
+      "naming": {
+        "wire": "event-read",
+        "display": "Read session events"
+      }
+    },
+    "agentide.session.SnapshotSession": {
+      "name": "agentide.session.SnapshotSession",
+      "domain": "agentide.session",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "observed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.session.SessionObserved"
+          ],
+          "payload": [
+            {
+              "event": "agentide.session.SessionObserved",
+              "fields": [
+                {
+                  "target": "session_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.SessionId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "session_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.SessionId"
+                    }
+                  }
+                },
+                {
+                  "target": "request_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.RequestId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "request_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.RequestId"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the durable session cannot be read exactly"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.session.SessionRefusal"
+        }
+      ],
+      "naming": {
+        "wire": "session-snapshot",
+        "display": "Snapshot session"
+      }
+    },
+    "agentide.session.StartSession": {
+      "name": "agentide.session.StartSession",
+      "domain": "agentide.session",
+      "input": [
+        {
+          "name": "workspace_root",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.WorkspaceRoot"
+          },
+          "naming": {}
+        },
+        {
+          "name": "objective",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "started",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "subject": {
+            "entity": "agentide.session.CodingSession",
+            "effect": "creates",
+            "instance": {
+              "from": "observed",
+              "event": "agentide.session.SessionStarted",
+              "field": {
+                "name": "session_id",
+                "type_ref": {
+                  "kind": "declared",
+                  "name": "agentide.session.SessionId"
+                },
+                "naming": {}
+              }
+            }
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.session.SessionStarted"
+          ],
+          "payload": [
+            {
+              "event": "agentide.session.SessionStarted",
+              "fields": [
+                {
+                  "target": "workspace_root",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.WorkspaceRoot"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "workspace_root",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.WorkspaceRoot"
+                    }
+                  }
+                },
+                {
+                  "target": "objective",
+                  "target_type": {
+                    "kind": "primitive",
+                    "name": "string"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "objective",
+                    "type_ref": {
+                      "kind": "primitive",
+                      "name": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the workspace or standalone binding is unavailable"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.session.SessionRefusal"
+        }
+      ],
+      "naming": {
+        "wire": "session-start",
+        "display": "Start session"
+      }
+    },
+    "agentide.surface.CloseFile": {
+      "name": "agentide.surface.CloseFile",
+      "domain": "agentide.surface",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "path",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.Path"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.surface.SurfaceObserved"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the requested surface state is unavailable"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.surface.SurfaceFailure"
+        }
+      ],
+      "naming": {
+        "wire": "file-close",
+        "display": "Close file"
+      }
+    },
+    "agentide.surface.ClosePane": {
+      "name": "agentide.surface.ClosePane",
+      "domain": "agentide.surface",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "pane_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.surface.PaneId"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.surface.SurfaceObserved"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the requested surface state is unavailable"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.surface.SurfaceFailure"
+        }
+      ],
+      "naming": {
+        "wire": "pane-close",
+        "display": "Close pane"
+      }
+    },
+    "agentide.surface.FocusPane": {
+      "name": "agentide.surface.FocusPane",
+      "domain": "agentide.surface",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "pane_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.surface.PaneId"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.surface.SurfaceObserved"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the requested surface state is unavailable"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.surface.SurfaceFailure"
+        }
+      ],
+      "naming": {
+        "wire": "pane-focus",
+        "display": "Focus pane"
+      }
+    },
+    "agentide.surface.MoveCursor": {
+      "name": "agentide.surface.MoveCursor",
+      "domain": "agentide.surface",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "pane_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.surface.PaneId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "path",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.Path"
+          },
+          "naming": {}
+        },
+        {
+          "name": "line",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "integer"
+          },
+          "naming": {}
+        },
+        {
+          "name": "column",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "integer"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.surface.SurfaceObserved"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the requested surface state is unavailable"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.surface.SurfaceFailure"
+        }
+      ],
+      "naming": {
+        "wire": "cursor-move",
+        "display": "Move editor cursor"
+      }
+    },
+    "agentide.surface.OpenFile": {
+      "name": "agentide.surface.OpenFile",
+      "domain": "agentide.surface",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "path",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.Path"
+          },
+          "naming": {}
+        },
+        {
+          "name": "line",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "primitive",
+              "name": "integer"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "pane_id",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.surface.SurfaceObserved"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the requested surface state is unavailable"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.surface.SurfaceFailure"
+        }
+      ],
+      "naming": {
+        "wire": "file-open",
+        "display": "Open file"
+      }
+    },
+    "agentide.surface.OpenPane": {
+      "name": "agentide.surface.OpenPane",
+      "domain": "agentide.surface",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "pane_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.surface.PaneId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "kind",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.surface.PaneKind"
+          },
+          "naming": {}
+        },
+        {
+          "name": "split",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.SplitDirection"
+            }
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.surface.SurfaceObserved"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the requested surface state is unavailable"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.surface.SurfaceFailure"
+        }
+      ],
+      "naming": {
+        "wire": "pane-open",
+        "display": "Open pane"
+      }
+    },
+    "agentide.surface.ShowDiff": {
+      "name": "agentide.surface.ShowDiff",
+      "domain": "agentide.surface",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "pane_id",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "path",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "base",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "primitive",
+              "name": "string"
+            }
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.surface.SurfaceObserved"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the requested surface state is unavailable"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.surface.SurfaceFailure"
+        }
+      ],
+      "naming": {
+        "wire": "diff-show",
+        "display": "Show diff"
+      }
+    },
+    "agentide.surface.SnapshotSurface": {
+      "name": "agentide.surface.SnapshotSurface",
+      "domain": "agentide.surface",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "completed",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.surface.SurfaceObserved"
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the requested surface state is unavailable"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.surface.SurfaceFailure"
+        }
+      ],
+      "naming": {
+        "wire": "surface-snapshot",
+        "display": "Snapshot workspace surface"
+      }
+    }
+  },
+  "events": {
+    "agentide.coding.IntentCompleted": {
+      "name": "agentide.coding.IntentCompleted",
+      "domain": "agentide.coding",
+      "fields": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        }
+      ],
+      "naming": {}
+    },
+    "agentide.coding.IntentRefused": {
+      "name": "agentide.coding.IntentRefused",
+      "domain": "agentide.coding",
+      "fields": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "code",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        }
+      ],
+      "naming": {}
+    },
+    "agentide.session.SessionClosed": {
+      "name": "agentide.session.SessionClosed",
+      "domain": "agentide.session",
+      "fields": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        }
+      ],
+      "naming": {}
+    },
+    "agentide.session.SessionObserved": {
+      "name": "agentide.session.SessionObserved",
+      "domain": "agentide.session",
+      "fields": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        }
+      ],
+      "naming": {}
+    },
+    "agentide.session.SessionStarted": {
+      "name": "agentide.session.SessionStarted",
+      "domain": "agentide.session",
+      "fields": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "workspace_root",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.WorkspaceRoot"
+          },
+          "naming": {}
+        },
+        {
+          "name": "objective",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        }
+      ],
+      "naming": {}
+    },
+    "agentide.surface.CursorMoved": {
+      "name": "agentide.surface.CursorMoved",
+      "domain": "agentide.surface",
+      "fields": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "pane_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.surface.PaneId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "line",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "integer"
+          },
+          "naming": {}
+        },
+        {
+          "name": "column",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "integer"
+          },
+          "naming": {}
+        }
+      ],
+      "naming": {}
+    },
+    "agentide.surface.DiffShown": {
+      "name": "agentide.surface.DiffShown",
+      "domain": "agentide.surface",
+      "fields": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "pane_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.surface.PaneId"
+          },
+          "naming": {}
+        }
+      ],
+      "naming": {}
+    },
+    "agentide.surface.FileClosed": {
+      "name": "agentide.surface.FileClosed",
+      "domain": "agentide.surface",
+      "fields": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "path",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.Path"
+          },
+          "naming": {}
+        }
+      ],
+      "naming": {}
+    },
+    "agentide.surface.FileOpened": {
+      "name": "agentide.surface.FileOpened",
+      "domain": "agentide.surface",
+      "fields": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "path",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.coding.Path"
+          },
+          "naming": {}
+        },
+        {
+          "name": "pane_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.surface.PaneId"
+          },
+          "naming": {}
+        }
+      ],
+      "naming": {}
+    },
+    "agentide.surface.PaneClosed": {
+      "name": "agentide.surface.PaneClosed",
+      "domain": "agentide.surface",
+      "fields": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "pane_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.surface.PaneId"
+          },
+          "naming": {}
+        }
+      ],
+      "naming": {}
+    },
+    "agentide.surface.PaneFocused": {
+      "name": "agentide.surface.PaneFocused",
+      "domain": "agentide.surface",
+      "fields": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "pane_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.surface.PaneId"
+          },
+          "naming": {}
+        }
+      ],
+      "naming": {}
+    },
+    "agentide.surface.PaneOpened": {
+      "name": "agentide.surface.PaneOpened",
+      "domain": "agentide.surface",
+      "fields": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "pane_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.surface.PaneId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "kind",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.surface.PaneKind"
+          },
+          "naming": {}
+        }
+      ],
+      "naming": {}
+    },
+    "agentide.surface.SurfaceObserved": {
+      "name": "agentide.surface.SurfaceObserved",
+      "domain": "agentide.surface",
+      "fields": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "request_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        }
+      ],
+      "naming": {}
+    }
+  },
+  "errors": {
+    "agentide.coding.IntentFailure": {
+      "name": "agentide.coding.IntentFailure",
+      "domain": "agentide.coding",
+      "summary": "The intent was refused or failed without claiming the requested effect happened.",
+      "fields": [
+        {
+          "name": "code",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "message",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "retryable",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "boolean"
+          },
+          "naming": {}
+        }
+      ]
+    },
+    "agentide.session.SessionRefusal": {
+      "name": "agentide.session.SessionRefusal",
+      "domain": "agentide.session",
+      "summary": "The session operation was not admitted or could not be observed exactly.",
+      "fields": [
+        {
+          "name": "code",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "message",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "retryable",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "boolean"
+          },
+          "naming": {}
+        }
+      ]
+    },
+    "agentide.session.SessionStateConflict": {
+      "name": "agentide.session.SessionStateConflict",
+      "domain": "agentide.session",
+      "summary": "The session is not in a state this command acts from.",
+      "fields": [
+        {
+          "name": "state",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.CodingSession.State"
+          },
+          "naming": {}
+        }
+      ]
+    },
+    "agentide.surface.SurfaceFailure": {
+      "name": "agentide.surface.SurfaceFailure",
+      "domain": "agentide.surface",
+      "summary": "The requested virtual-surface transition was refused or could not be projected.",
+      "fields": [
+        {
+          "name": "code",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "message",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "retryable",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "boolean"
+          },
+          "naming": {}
+        }
+      ]
+    }
+  },
+  "views": {
+    "agentide.session.SessionSnapshot": {
+      "name": "agentide.session.SessionSnapshot",
+      "domain": "agentide.session",
+      "source": "agentide.session.CodingSession",
+      "fields": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "workspace_root",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.WorkspaceRoot"
+          },
+          "naming": {}
+        },
+        {
+          "name": "objective",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        }
+      ],
+      "consistency": "read_your_writes",
+      "assertion_style": "expect",
+      "naming": {
+        "wire": "snapshot",
+        "display": "Session snapshot"
+      }
+    },
+    "agentide.surface.WorkbenchSnapshot": {
+      "name": "agentide.surface.WorkbenchSnapshot",
+      "domain": "agentide.surface",
+      "source": "agentide.surface.Workbench",
+      "fields": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
+          },
+          "naming": {}
+        }
+      ],
+      "consistency": "read_your_writes",
+      "assertion_style": "expect",
+      "naming": {
+        "wire": "workbench",
+        "display": "Workbench snapshot"
+      }
+    }
+  },
+  "actors": {
+    "agentide.coding.CodingAgent": {
+      "name": "agentide.coding.CodingAgent",
+      "domain": "agentide.coding",
+      "may": [
+        "agentide.coding.ApplyDeployment",
+        "agentide.coding.CancelProcess",
+        "agentide.coding.CreateWorktree",
+        "agentide.coding.CutRelease",
+        "agentide.coding.DelegateAgent",
+        "agentide.coding.EditCode",
+        "agentide.coding.FinishWorktree",
+        "agentide.coding.InputProcess",
+        "agentide.coding.MessageAgent",
+        "agentide.coding.ObserveAgents",
+        "agentide.coding.ObserveChanges",
+        "agentide.coding.ObserveDeployment",
+        "agentide.coding.ObserveProcess",
+        "agentide.coding.ObserveWorktree",
+        "agentide.coding.PublishCode",
+        "agentide.coding.ReadCode",
+        "agentide.coding.RecordEvidence",
+        "agentide.coding.SearchCode",
+        "agentide.coding.StartProcess",
+        "agentide.coding.VerifyCode",
+        "agentide.coding.WaitAgent",
+        "agentide.coding.WaitProcess"
+      ],
+      "naming": {}
+    },
+    "agentide.session.CodingAgent": {
+      "name": "agentide.session.CodingAgent",
+      "domain": "agentide.session",
+      "may": [
+        "agentide.session.ReadEvents",
+        "agentide.session.SnapshotSession"
+      ],
+      "naming": {
+        "display": "Coding agent"
+      }
+    },
+    "agentide.session.Operator": {
+      "name": "agentide.session.Operator",
+      "domain": "agentide.session",
+      "may": [
+        "agentide.session.CloseSession",
+        "agentide.session.StartSession"
+      ],
+      "naming": {
+        "display": "Operator"
+      }
+    },
+    "agentide.surface.CodingAgent": {
+      "name": "agentide.surface.CodingAgent",
+      "domain": "agentide.surface",
+      "may": [
+        "agentide.surface.CloseFile",
+        "agentide.surface.ClosePane",
+        "agentide.surface.FocusPane",
+        "agentide.surface.MoveCursor",
+        "agentide.surface.OpenFile",
+        "agentide.surface.OpenPane",
+        "agentide.surface.ShowDiff",
+        "agentide.surface.SnapshotSurface"
+      ],
+      "naming": {}
+    }
+  },
+  "bindings": {},
+  "components": {
+    "agentide-engine": {
+      "name": "agentide-engine",
+      "owns": [
+        "agentide.coding",
+        "agentide.session",
+        "agentide.surface"
+      ],
+      "accepts": [
+        "agentide.coding.ApplyDeployment",
+        "agentide.coding.CancelProcess",
+        "agentide.coding.CreateWorktree",
+        "agentide.coding.CutRelease",
+        "agentide.coding.DelegateAgent",
+        "agentide.coding.EditCode",
+        "agentide.coding.FinishWorktree",
+        "agentide.coding.InputProcess",
+        "agentide.coding.MessageAgent",
+        "agentide.coding.ObserveAgents",
+        "agentide.coding.ObserveChanges",
+        "agentide.coding.ObserveDeployment",
+        "agentide.coding.ObserveProcess",
+        "agentide.coding.ObserveWorktree",
+        "agentide.coding.PublishCode",
+        "agentide.coding.ReadCode",
+        "agentide.coding.RecordEvidence",
+        "agentide.coding.SearchCode",
+        "agentide.coding.StartProcess",
+        "agentide.coding.VerifyCode",
+        "agentide.coding.WaitAgent",
+        "agentide.coding.WaitProcess",
+        "agentide.session.CloseSession",
+        "agentide.session.ReadEvents",
+        "agentide.session.SnapshotSession",
+        "agentide.session.StartSession",
+        "agentide.surface.CloseFile",
+        "agentide.surface.ClosePane",
+        "agentide.surface.FocusPane",
+        "agentide.surface.MoveCursor",
+        "agentide.surface.OpenFile",
+        "agentide.surface.OpenPane",
+        "agentide.surface.ShowDiff",
+        "agentide.surface.SnapshotSurface"
+      ],
+      "publishes": [
+        "agentide.coding.IntentCompleted",
+        "agentide.coding.IntentRefused",
+        "agentide.session.SessionClosed",
+        "agentide.session.SessionObserved",
+        "agentide.session.SessionStarted",
+        "agentide.surface.CursorMoved",
+        "agentide.surface.DiffShown",
+        "agentide.surface.FileClosed",
+        "agentide.surface.FileOpened",
+        "agentide.surface.PaneClosed",
+        "agentide.surface.PaneFocused",
+        "agentide.surface.PaneOpened",
+        "agentide.surface.SurfaceObserved"
+      ],
+      "reached_by": "network",
+      "naming": {
+        "summary": "Validates intents, plans effects, obtains authority, journals, dispatches, and projects sessions."
+      }
+    }
+  },
+  "workloads": {}
+}

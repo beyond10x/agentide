@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://beyond10x.github.io/agentide/contracts/snapshot-v1.schema.json",
+  "title": "AgentIDE session snapshot v1",
+  "type": "object",
+  "required": ["format", "session_id", "objective", "status", "cursor", "workbench", "pending_approvals", "processes", "agents", "evidence"],
+  "properties": {
+    "format": {"const": "agentide.snapshot/1"},
+    "session_id": {"type": "string"},
+    "objective": {"type": "string"},
+    "status": {"enum": ["active", "closed"]},
+    "cursor": {"type": "integer", "minimum": 0},
+    "workbench": {"type": "object"},
+    "pending_approvals": {"type": "array"},
+    "processes": {"type": "array"},
+    "agents": {"type": "array"},
+    "evidence": {"type": "array"},
+    "last_result": {}
+  },
+  "additionalProperties": true
+}

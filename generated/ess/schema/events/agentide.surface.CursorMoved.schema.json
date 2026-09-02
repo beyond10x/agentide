@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CursorMoved payload",
+  "x-ess-name": "agentide.surface.CursorMoved",
+  "x-ess-kind": "event-payload",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "pane_id": {
+      "$ref": "#/$defs/agentide.surface.PaneId"
+    },
+    "line": {
+      "type": "integer"
+    },
+    "column": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "session_id",
+    "pane_id",
+    "line",
+    "column"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "543ad2f98d924b966d5bcc25d05fcc920146559a735cb0c08a64c021dd8f04b4",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.surface.PaneId": {
+      "title": "PaneId",
+      "x-ess-name": "agentide.surface.PaneId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

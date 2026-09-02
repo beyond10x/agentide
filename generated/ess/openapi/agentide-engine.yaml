@@ -1,0 +1,2899 @@
+# generated from agentide v1
+# model digest 58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da
+# contract digest c678047808ff5e1b150c3b9315add7c46ce1824dff09450f840b7845fcbdb0c4
+# do not edit: regenerate with `ess generate`
+openapi: 3.1.0
+info:
+  title: agentide-engine
+  summary: Validates intents, plans effects, obtains authority, journals, dispatches, and projects sessions.
+  description: |-
+    The HTTP surface of `agentide-engine`, one of the components of `agentide` v1.
+
+    Every path here is one semantic command, so the method is always POST and the path is the command's wire name under its domain's: a command is not a resource, and this document does not invent one. A status code is the outcome the specification declares — 202 for a branch that was taken, 422 for a refusal the input decides, 502 for a refusal decided outside the request — and the `outcome` property of every response body names the branch. Events emitted by a branch are published to consumers through the event transport; they are not returned here.
+
+    This component declares `reached_by: network`, so its callers are not deployed with it and this contract is the surface they reach it through. That declaration is also why the views its domains declare have paths here: a GET under `views` per projection, answering every row it holds. There is no page size, no cursor, no ordering and no filter parameter, because the specification states none — a view's filter is part of the projection, not of the request.
+  version: v1
+  x-ess-provenance:
+    system: agentide
+    specification_version: v1
+    source_digest: 58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da
+    contract_digest: c678047808ff5e1b150c3b9315add7c46ce1824dff09450f840b7845fcbdb0c4
+  x-ess-reached-by: network
+tags:
+- name: coding
+  description: Semantic observation, change, execution, collaboration, evidence, and delivery intents.
+- name: sessions
+  description: The durable identity and observable projection of one coding session.
+- name: surface
+  description: A renderer-neutral virtual workbench shared by agents, the browser, CLI snapshots, and the console TUI.
+paths:
+  /coding/commands/agent-delegate:
+    post:
+      operationId: agentide.coding.DelegateAgent
+      summary: Delegate to agent
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.DelegateAgent` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.DelegateAgent.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.DelegateAgent.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.DelegateAgent.refused.Response'
+  /coding/commands/agent-message:
+    post:
+      operationId: agentide.coding.MessageAgent
+      summary: Message agent
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.MessageAgent` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.MessageAgent.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.MessageAgent.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.MessageAgent.refused.Response'
+  /coding/commands/agent-observe:
+    post:
+      operationId: agentide.coding.ObserveAgents
+      summary: Observe agents
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.ObserveAgents` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.ObserveAgents.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.ObserveAgents.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.ObserveAgents.refused.Response'
+  /coding/commands/agent-wait:
+    post:
+      operationId: agentide.coding.WaitAgent
+      summary: Wait for agents
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.WaitAgent` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.WaitAgent.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.WaitAgent.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.WaitAgent.refused.Response'
+  /coding/commands/code-changes:
+    post:
+      operationId: agentide.coding.ObserveChanges
+      summary: Observe code changes
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.ObserveChanges` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.ObserveChanges.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.ObserveChanges.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.ObserveChanges.refused.Response'
+  /coding/commands/code-edit:
+    post:
+      operationId: agentide.coding.EditCode
+      summary: Edit code
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.EditCode` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.EditCode.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.EditCode.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.EditCode.refused.Response'
+  /coding/commands/code-publish:
+    post:
+      operationId: agentide.coding.PublishCode
+      summary: Publish code
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.PublishCode` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.PublishCode.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.PublishCode.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.PublishCode.refused.Response'
+  /coding/commands/code-read:
+    post:
+      operationId: agentide.coding.ReadCode
+      summary: Read code
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.ReadCode` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.ReadCode.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.ReadCode.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.ReadCode.refused.Response'
+  /coding/commands/code-search:
+    post:
+      operationId: agentide.coding.SearchCode
+      summary: Search code
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.SearchCode` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.SearchCode.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.SearchCode.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.SearchCode.refused.Response'
+  /coding/commands/code-verify:
+    post:
+      operationId: agentide.coding.VerifyCode
+      summary: Verify code
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.VerifyCode` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.VerifyCode.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.VerifyCode.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.VerifyCode.refused.Response'
+  /coding/commands/deployment-apply:
+    post:
+      operationId: agentide.coding.ApplyDeployment
+      summary: Apply deployment
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.ApplyDeployment` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.ApplyDeployment.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.ApplyDeployment.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.ApplyDeployment.refused.Response'
+  /coding/commands/deployment-observe:
+    post:
+      operationId: agentide.coding.ObserveDeployment
+      summary: Observe deployment
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.ObserveDeployment` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.ObserveDeployment.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.ObserveDeployment.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.ObserveDeployment.refused.Response'
+  /coding/commands/evidence-record:
+    post:
+      operationId: agentide.coding.RecordEvidence
+      summary: Record evidence
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.RecordEvidence` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.RecordEvidence.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.RecordEvidence.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.RecordEvidence.refused.Response'
+  /coding/commands/process-cancel:
+    post:
+      operationId: agentide.coding.CancelProcess
+      summary: Cancel process
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.CancelProcess` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.CancelProcess.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.CancelProcess.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.CancelProcess.refused.Response'
+  /coding/commands/process-input:
+    post:
+      operationId: agentide.coding.InputProcess
+      summary: Write process input
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.InputProcess` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.InputProcess.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.InputProcess.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.InputProcess.refused.Response'
+  /coding/commands/process-observe:
+    post:
+      operationId: agentide.coding.ObserveProcess
+      summary: Observe process
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.ObserveProcess` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.ObserveProcess.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.ObserveProcess.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.ObserveProcess.refused.Response'
+  /coding/commands/process-start:
+    post:
+      operationId: agentide.coding.StartProcess
+      summary: Start process
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.StartProcess` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.StartProcess.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.StartProcess.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.StartProcess.refused.Response'
+  /coding/commands/process-wait:
+    post:
+      operationId: agentide.coding.WaitProcess
+      summary: Wait for process
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.WaitProcess` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.WaitProcess.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.WaitProcess.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.WaitProcess.refused.Response'
+  /coding/commands/release-cut:
+    post:
+      operationId: agentide.coding.CutRelease
+      summary: Cut release
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.CutRelease` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.CutRelease.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.CutRelease.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.CutRelease.refused.Response'
+  /coding/commands/worktree-create:
+    post:
+      operationId: agentide.coding.CreateWorktree
+      summary: Create worktree
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.CreateWorktree` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.CreateWorktree.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.CreateWorktree.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.CreateWorktree.refused.Response'
+  /coding/commands/worktree-finish:
+    post:
+      operationId: agentide.coding.FinishWorktree
+      summary: Finish worktree
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.FinishWorktree` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.FinishWorktree.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.FinishWorktree.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.FinishWorktree.refused.Response'
+  /coding/commands/worktree-status:
+    post:
+      operationId: agentide.coding.ObserveWorktree
+      summary: Observe worktree
+      tags:
+      - coding
+      x-ess-may-invoke:
+      - agentide.coding.CodingAgent
+      requestBody:
+        description: The input `agentide.coding.ObserveWorktree` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coding.ObserveWorktree.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.ObserveWorktree.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coding.ObserveWorktree.refused.Response'
+  /sessions/commands/event-read:
+    post:
+      operationId: agentide.session.ReadEvents
+      summary: Read session events
+      tags:
+      - sessions
+      x-ess-may-invoke:
+      - agentide.session.CodingAgent
+      requestBody:
+        description: The input `agentide.session.ReadEvents` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.session.ReadEvents.Input'
+      responses:
+        '202':
+          description: 'Outcome `observed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.session.ReadEvents.observed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.session.ReadEvents.refused.Response'
+  /sessions/commands/session-close:
+    post:
+      operationId: agentide.session.CloseSession
+      summary: Close session
+      tags:
+      - sessions
+      x-ess-may-invoke:
+      - agentide.session.Operator
+      requestBody:
+        description: The input `agentide.session.CloseSession` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.session.CloseSession.Input'
+      responses:
+        '202':
+          description: 'Outcome `closed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.session.CloseSession.closed.Response'
+        '409':
+          description: 'Outcome `wrong-state`: the input was acceptable and the subject is in a state this command does not act from. Resending the same request changes nothing until something else moves it.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.session.CloseSession.wrong-state.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.session.CloseSession.refused.Response'
+  /sessions/commands/session-snapshot:
+    post:
+      operationId: agentide.session.SnapshotSession
+      summary: Snapshot session
+      tags:
+      - sessions
+      x-ess-may-invoke:
+      - agentide.session.CodingAgent
+      requestBody:
+        description: The input `agentide.session.SnapshotSession` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.session.SnapshotSession.Input'
+      responses:
+        '202':
+          description: 'Outcome `observed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.session.SnapshotSession.observed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.session.SnapshotSession.refused.Response'
+  /sessions/commands/session-start:
+    post:
+      operationId: agentide.session.StartSession
+      summary: Start session
+      tags:
+      - sessions
+      x-ess-may-invoke:
+      - agentide.session.Operator
+      requestBody:
+        description: The input `agentide.session.StartSession` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.session.StartSession.Input'
+      responses:
+        '202':
+          description: 'Outcome `started`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.session.StartSession.started.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.session.StartSession.refused.Response'
+  /sessions/views/snapshot:
+    get:
+      operationId: agentide.session.SessionSnapshot
+      summary: Session snapshot
+      tags:
+      - sessions
+      x-ess-consistency: read_your_writes
+      responses:
+        '200':
+          description: 'Every row of `agentide.session.SessionSnapshot`, a projection of `agentide.session.CodingSession`. Contains every instance. Read-your-writes: a caller that has just issued a command sees its effect here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.session.SessionSnapshot.Response'
+  /surface/commands/cursor-move:
+    post:
+      operationId: agentide.surface.MoveCursor
+      summary: Move editor cursor
+      tags:
+      - surface
+      x-ess-may-invoke:
+      - agentide.surface.CodingAgent
+      requestBody:
+        description: The input `agentide.surface.MoveCursor` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.surface.MoveCursor.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.MoveCursor.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.MoveCursor.refused.Response'
+  /surface/commands/diff-show:
+    post:
+      operationId: agentide.surface.ShowDiff
+      summary: Show diff
+      tags:
+      - surface
+      x-ess-may-invoke:
+      - agentide.surface.CodingAgent
+      requestBody:
+        description: The input `agentide.surface.ShowDiff` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.surface.ShowDiff.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.ShowDiff.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.ShowDiff.refused.Response'
+  /surface/commands/file-close:
+    post:
+      operationId: agentide.surface.CloseFile
+      summary: Close file
+      tags:
+      - surface
+      x-ess-may-invoke:
+      - agentide.surface.CodingAgent
+      requestBody:
+        description: The input `agentide.surface.CloseFile` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.surface.CloseFile.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.CloseFile.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.CloseFile.refused.Response'
+  /surface/commands/file-open:
+    post:
+      operationId: agentide.surface.OpenFile
+      summary: Open file
+      tags:
+      - surface
+      x-ess-may-invoke:
+      - agentide.surface.CodingAgent
+      requestBody:
+        description: The input `agentide.surface.OpenFile` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.surface.OpenFile.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.OpenFile.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.OpenFile.refused.Response'
+  /surface/commands/pane-close:
+    post:
+      operationId: agentide.surface.ClosePane
+      summary: Close pane
+      tags:
+      - surface
+      x-ess-may-invoke:
+      - agentide.surface.CodingAgent
+      requestBody:
+        description: The input `agentide.surface.ClosePane` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.surface.ClosePane.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.ClosePane.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.ClosePane.refused.Response'
+  /surface/commands/pane-focus:
+    post:
+      operationId: agentide.surface.FocusPane
+      summary: Focus pane
+      tags:
+      - surface
+      x-ess-may-invoke:
+      - agentide.surface.CodingAgent
+      requestBody:
+        description: The input `agentide.surface.FocusPane` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.surface.FocusPane.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.FocusPane.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.FocusPane.refused.Response'
+  /surface/commands/pane-open:
+    post:
+      operationId: agentide.surface.OpenPane
+      summary: Open pane
+      tags:
+      - surface
+      x-ess-may-invoke:
+      - agentide.surface.CodingAgent
+      requestBody:
+        description: The input `agentide.surface.OpenPane` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.surface.OpenPane.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.OpenPane.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.OpenPane.refused.Response'
+  /surface/commands/surface-snapshot:
+    post:
+      operationId: agentide.surface.SnapshotSurface
+      summary: Snapshot workspace surface
+      tags:
+      - surface
+      x-ess-may-invoke:
+      - agentide.surface.CodingAgent
+      requestBody:
+        description: The input `agentide.surface.SnapshotSurface` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.surface.SnapshotSurface.Input'
+      responses:
+        '202':
+          description: 'Outcome `completed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.SnapshotSurface.completed.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.SnapshotSurface.refused.Response'
+  /surface/views/workbench:
+    get:
+      operationId: agentide.surface.WorkbenchSnapshot
+      summary: Workbench snapshot
+      tags:
+      - surface
+      x-ess-consistency: read_your_writes
+      responses:
+        '200':
+          description: 'Every row of `agentide.surface.WorkbenchSnapshot`, a projection of `agentide.surface.Workbench`. Contains every instance. Read-your-writes: a caller that has just issued a command sees its effect here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.surface.WorkbenchSnapshot.Response'
+components:
+  schemas:
+    agentide.coding.AgentId:
+      title: AgentId
+      x-ess-name: agentide.coding.AgentId
+      x-ess-kind: newtype
+      type: string
+    agentide.coding.ApplyDeployment.Input:
+      title: Apply deployment input
+      x-ess-name: agentide.coding.ApplyDeployment
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        operation_id:
+          $ref: '#/components/schemas/agentide.coding.OperationId'
+        environment:
+          type: string
+        revision:
+          $ref: '#/components/schemas/agentide.coding.ExpectedDigest'
+      required:
+      - session_id
+      - request_id
+      - operation_id
+      - environment
+      - revision
+      additionalProperties: false
+    agentide.coding.ApplyDeployment.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.ApplyDeployment.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.CancelProcess.Input:
+      title: Cancel process input
+      x-ess-name: agentide.coding.CancelProcess
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        operation_id:
+          $ref: '#/components/schemas/agentide.coding.OperationId'
+        process_id:
+          $ref: '#/components/schemas/agentide.coding.ProcessId'
+        signal:
+          $ref: '#/components/schemas/agentide.coding.Signal'
+      required:
+      - session_id
+      - request_id
+      - operation_id
+      - process_id
+      - signal
+      additionalProperties: false
+    agentide.coding.CancelProcess.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.CancelProcess.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.CreateWorktree.Input:
+      title: Create worktree input
+      x-ess-name: agentide.coding.CreateWorktree
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        operation_id:
+          $ref: '#/components/schemas/agentide.coding.OperationId'
+        purpose:
+          type: string
+        base:
+          type: string
+      required:
+      - session_id
+      - request_id
+      - operation_id
+      - purpose
+      additionalProperties: false
+    agentide.coding.CreateWorktree.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.CreateWorktree.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.CutRelease.Input:
+      title: Cut release input
+      x-ess-name: agentide.coding.CutRelease
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        operation_id:
+          $ref: '#/components/schemas/agentide.coding.OperationId'
+        version:
+          type: string
+        expected_head:
+          $ref: '#/components/schemas/agentide.coding.ExpectedDigest'
+      required:
+      - session_id
+      - request_id
+      - operation_id
+      - version
+      - expected_head
+      additionalProperties: false
+    agentide.coding.CutRelease.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.CutRelease.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.DelegateAgent.Input:
+      title: Delegate to agent input
+      x-ess-name: agentide.coding.DelegateAgent
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        operation_id:
+          $ref: '#/components/schemas/agentide.coding.OperationId'
+        task:
+          type: string
+      required:
+      - session_id
+      - request_id
+      - operation_id
+      - task
+      additionalProperties: false
+    agentide.coding.DelegateAgent.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.DelegateAgent.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.EditCode.Input:
+      title: Edit code input
+      x-ess-name: agentide.coding.EditCode
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        operation_id:
+          $ref: '#/components/schemas/agentide.coding.OperationId'
+        path:
+          $ref: '#/components/schemas/agentide.coding.Path'
+        content:
+          type: string
+        expected_sha256:
+          $ref: '#/components/schemas/agentide.coding.ExpectedDigest'
+      required:
+      - session_id
+      - request_id
+      - operation_id
+      - path
+      - content
+      additionalProperties: false
+    agentide.coding.EditCode.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.EditCode.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.ExpectedDigest:
+      title: ExpectedDigest
+      x-ess-name: agentide.coding.ExpectedDigest
+      x-ess-kind: newtype
+      type: string
+    agentide.coding.FinishWorktree.Input:
+      title: Finish worktree input
+      x-ess-name: agentide.coding.FinishWorktree
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        operation_id:
+          $ref: '#/components/schemas/agentide.coding.OperationId'
+      required:
+      - session_id
+      - request_id
+      - operation_id
+      additionalProperties: false
+    agentide.coding.FinishWorktree.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.FinishWorktree.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.InputProcess.Input:
+      title: Write process input input
+      x-ess-name: agentide.coding.InputProcess
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        operation_id:
+          $ref: '#/components/schemas/agentide.coding.OperationId'
+        process_id:
+          $ref: '#/components/schemas/agentide.coding.ProcessId'
+        content:
+          type: string
+      required:
+      - session_id
+      - request_id
+      - operation_id
+      - process_id
+      - content
+      additionalProperties: false
+    agentide.coding.InputProcess.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.InputProcess.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.IntentFailure.Error:
+      title: IntentFailure payload
+      description: The intent was refused or failed without claiming the requested effect happened.
+      x-ess-name: agentide.coding.IntentFailure
+      x-ess-kind: error-payload
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        retryable:
+          type: boolean
+      required:
+      - code
+      - message
+      - retryable
+      additionalProperties: false
+    agentide.coding.MessageAgent.Input:
+      title: Message agent input
+      x-ess-name: agentide.coding.MessageAgent
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        operation_id:
+          $ref: '#/components/schemas/agentide.coding.OperationId'
+        agent_id:
+          $ref: '#/components/schemas/agentide.coding.AgentId'
+        message:
+          type: string
+      required:
+      - session_id
+      - request_id
+      - operation_id
+      - agent_id
+      - message
+      additionalProperties: false
+    agentide.coding.MessageAgent.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.MessageAgent.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.ObserveAgents.Input:
+      title: Observe agents input
+      x-ess-name: agentide.coding.ObserveAgents
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+      required:
+      - session_id
+      - request_id
+      additionalProperties: false
+    agentide.coding.ObserveAgents.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.ObserveAgents.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.ObserveChanges.Input:
+      title: Observe code changes input
+      x-ess-name: agentide.coding.ObserveChanges
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+      required:
+      - session_id
+      - request_id
+      additionalProperties: false
+    agentide.coding.ObserveChanges.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.ObserveChanges.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.ObserveDeployment.Input:
+      title: Observe deployment input
+      x-ess-name: agentide.coding.ObserveDeployment
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        environment:
+          type: string
+      required:
+      - session_id
+      - request_id
+      - environment
+      additionalProperties: false
+    agentide.coding.ObserveDeployment.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.ObserveDeployment.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.ObserveProcess.Input:
+      title: Observe process input
+      x-ess-name: agentide.coding.ObserveProcess
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        process_id:
+          $ref: '#/components/schemas/agentide.coding.ProcessId'
+      required:
+      - session_id
+      - request_id
+      - process_id
+      additionalProperties: false
+    agentide.coding.ObserveProcess.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.ObserveProcess.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.ObserveWorktree.Input:
+      title: Observe worktree input
+      x-ess-name: agentide.coding.ObserveWorktree
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+      required:
+      - session_id
+      - request_id
+      additionalProperties: false
+    agentide.coding.ObserveWorktree.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.ObserveWorktree.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.OperationId:
+      title: OperationId
+      x-ess-name: agentide.coding.OperationId
+      x-ess-kind: newtype
+      type: string
+    agentide.coding.Path:
+      title: Path
+      x-ess-name: agentide.coding.Path
+      x-ess-kind: newtype
+      type: string
+    agentide.coding.Pattern:
+      title: Pattern
+      x-ess-name: agentide.coding.Pattern
+      x-ess-kind: newtype
+      type: string
+    agentide.coding.ProcessId:
+      title: ProcessId
+      x-ess-name: agentide.coding.ProcessId
+      x-ess-kind: newtype
+      type: string
+    agentide.coding.ProcessProfile:
+      title: ProcessProfile
+      x-ess-name: agentide.coding.ProcessProfile
+      x-ess-kind: newtype
+      type: string
+    agentide.coding.PublishCode.Input:
+      title: Publish code input
+      x-ess-name: agentide.coding.PublishCode
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        operation_id:
+          $ref: '#/components/schemas/agentide.coding.OperationId'
+        expected_head:
+          $ref: '#/components/schemas/agentide.coding.ExpectedDigest'
+        summary:
+          type: string
+        evidence:
+          type: array
+          items:
+            type: string
+      required:
+      - session_id
+      - request_id
+      - operation_id
+      - expected_head
+      - summary
+      - evidence
+      additionalProperties: false
+    agentide.coding.PublishCode.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.PublishCode.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.ReadCode.Input:
+      title: Read code input
+      x-ess-name: agentide.coding.ReadCode
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        path:
+          $ref: '#/components/schemas/agentide.coding.Path'
+        offset:
+          type: integer
+        limit_bytes:
+          type: integer
+      required:
+      - session_id
+      - request_id
+      - path
+      - offset
+      - limit_bytes
+      additionalProperties: false
+    agentide.coding.ReadCode.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.ReadCode.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.RecordEvidence.Input:
+      title: Record evidence input
+      x-ess-name: agentide.coding.RecordEvidence
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        operation_id:
+          $ref: '#/components/schemas/agentide.coding.OperationId'
+        subject:
+          type: string
+        kind:
+          type: string
+        source:
+          type: string
+        reference:
+          type: string
+      required:
+      - session_id
+      - request_id
+      - operation_id
+      - subject
+      - kind
+      - source
+      additionalProperties: false
+    agentide.coding.RecordEvidence.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.RecordEvidence.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.SearchCode.Input:
+      title: Search code input
+      x-ess-name: agentide.coding.SearchCode
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        pattern:
+          $ref: '#/components/schemas/agentide.coding.Pattern'
+        paths:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.coding.Path'
+      required:
+      - session_id
+      - request_id
+      - pattern
+      - paths
+      additionalProperties: false
+    agentide.coding.SearchCode.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.SearchCode.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.Signal:
+      title: Signal
+      x-ess-name: agentide.coding.Signal
+      x-ess-kind: enum
+      type: string
+      enum:
+      - Interrupt
+      - Terminate
+      - Kill
+    agentide.coding.StartProcess.Input:
+      title: Start process input
+      x-ess-name: agentide.coding.StartProcess
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        operation_id:
+          $ref: '#/components/schemas/agentide.coding.OperationId'
+        profile:
+          $ref: '#/components/schemas/agentide.coding.ProcessProfile'
+      required:
+      - session_id
+      - request_id
+      - operation_id
+      - profile
+      additionalProperties: false
+    agentide.coding.StartProcess.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.StartProcess.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.VerificationLevel:
+      title: VerificationLevel
+      x-ess-name: agentide.coding.VerificationLevel
+      x-ess-kind: enum
+      type: string
+      enum:
+      - Focused
+      - Full
+      - Release
+    agentide.coding.VerifyCode.Input:
+      title: Verify code input
+      x-ess-name: agentide.coding.VerifyCode
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        operation_id:
+          $ref: '#/components/schemas/agentide.coding.OperationId'
+        level:
+          $ref: '#/components/schemas/agentide.coding.VerificationLevel'
+      required:
+      - session_id
+      - request_id
+      - operation_id
+      - level
+      additionalProperties: false
+    agentide.coding.VerifyCode.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.VerifyCode.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.WaitAgent.Input:
+      title: Wait for agents input
+      x-ess-name: agentide.coding.WaitAgent
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        agent_ids:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.coding.AgentId'
+      required:
+      - session_id
+      - request_id
+      - agent_ids
+      additionalProperties: false
+    agentide.coding.WaitAgent.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.WaitAgent.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coding.WaitProcess.Input:
+      title: Wait for process input
+      x-ess-name: agentide.coding.WaitProcess
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        process_id:
+          $ref: '#/components/schemas/agentide.coding.ProcessId'
+        timeout_ms:
+          type: integer
+      required:
+      - session_id
+      - request_id
+      - process_id
+      - timeout_ms
+      additionalProperties: false
+    agentide.coding.WaitProcess.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `IntentCompleted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coding.WaitProcess.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the selected implementation cannot admit or complete the intent.'
+      properties:
+        error:
+          const: agentide.coding.IntentFailure
+          description: The intent was refused or failed without claiming the requested effect happened.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coding.IntentFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.session.CloseSession.Input:
+      title: Close session input
+      x-ess-name: agentide.session.CloseSession
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+      required:
+      - session_id
+      - request_id
+      additionalProperties: false
+    agentide.session.CloseSession.closed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. A `agentide.session.CodingSession` has moved to `Closed`, along `close`. The instance is the one `session_id` names. Emits `SessionClosed`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: closed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.session.CloseSession.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: durable state cannot be updated.'
+      properties:
+        error:
+          const: agentide.session.SessionRefusal
+          description: The session operation was not admitted or could not be observed exactly.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.session.SessionRefusal.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.session.CloseSession.wrong-state.Response:
+      additionalProperties: false
+      description: Taken when the subject is in a state none of this command's declared moves start from. Which states those are is the lifecycle's answer, not this command's.
+      properties:
+        error:
+          const: agentide.session.SessionStateConflict
+          description: The session is not in a state this command acts from.
+          type: string
+        outcome:
+          const: wrong-state
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.session.SessionStateConflict.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.session.CodingSession.State:
+      title: State
+      x-ess-name: agentide.session.CodingSession.State
+      x-ess-kind: enum
+      type: string
+      enum:
+      - Active
+      - Closed
+    agentide.session.Cursor:
+      title: Cursor
+      x-ess-name: agentide.session.Cursor
+      x-ess-kind: newtype
+      type: integer
+    agentide.session.EventLimit:
+      title: EventLimit
+      x-ess-name: agentide.session.EventLimit
+      x-ess-kind: newtype
+      type: integer
+    agentide.session.ReadEvents.Input:
+      title: Read session events input
+      x-ess-name: agentide.session.ReadEvents
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        after:
+          $ref: '#/components/schemas/agentide.session.Cursor'
+        limit:
+          $ref: '#/components/schemas/agentide.session.EventLimit'
+      required:
+      - session_id
+      - request_id
+      - limit
+      additionalProperties: false
+    agentide.session.ReadEvents.observed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `SessionObserved`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: observed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.session.ReadEvents.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the requested event window cannot be represented.'
+      properties:
+        error:
+          const: agentide.session.SessionRefusal
+          description: The session operation was not admitted or could not be observed exactly.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.session.SessionRefusal.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.session.RequestId:
+      title: RequestId
+      x-ess-name: agentide.session.RequestId
+      x-ess-kind: newtype
+      type: string
+    agentide.session.SessionId:
+      title: SessionId
+      x-ess-name: agentide.session.SessionId
+      x-ess-kind: newtype
+      type: string
+    agentide.session.SessionRefusal.Error:
+      title: SessionRefusal payload
+      description: The session operation was not admitted or could not be observed exactly.
+      x-ess-name: agentide.session.SessionRefusal
+      x-ess-kind: error-payload
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        retryable:
+          type: boolean
+      required:
+      - code
+      - message
+      - retryable
+      additionalProperties: false
+    agentide.session.SessionSnapshot.Response:
+      additionalProperties: false
+      description: The rows of `agentide.session.SessionSnapshot`.
+      properties:
+        rows:
+          description: Every row the projection holds, in the order it holds them.
+          items:
+            $ref: '#/components/schemas/agentide.session.SessionSnapshot.Row'
+          type: array
+      required:
+      - rows
+      type: object
+    agentide.session.SessionSnapshot.Row:
+      title: Session snapshot row
+      x-ess-name: agentide.session.SessionSnapshot
+      x-ess-kind: view-row
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        workspace_root:
+          $ref: '#/components/schemas/agentide.session.WorkspaceRoot'
+        objective:
+          type: string
+      required:
+      - session_id
+      - workspace_root
+      - objective
+      additionalProperties: false
+    agentide.session.SessionStateConflict.Error:
+      title: SessionStateConflict payload
+      description: The session is not in a state this command acts from.
+      x-ess-name: agentide.session.SessionStateConflict
+      x-ess-kind: error-payload
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/agentide.session.CodingSession.State'
+      required:
+      - state
+      additionalProperties: false
+    agentide.session.SnapshotSession.Input:
+      title: Snapshot session input
+      x-ess-name: agentide.session.SnapshotSession
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+      required:
+      - session_id
+      - request_id
+      additionalProperties: false
+    agentide.session.SnapshotSession.observed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `SessionObserved`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: observed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.session.SnapshotSession.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the durable session cannot be read exactly.'
+      properties:
+        error:
+          const: agentide.session.SessionRefusal
+          description: The session operation was not admitted or could not be observed exactly.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.session.SessionRefusal.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.session.StartSession.Input:
+      title: Start session input
+      x-ess-name: agentide.session.StartSession
+      x-ess-kind: command-input
+      type: object
+      properties:
+        workspace_root:
+          $ref: '#/components/schemas/agentide.session.WorkspaceRoot'
+        objective:
+          type: string
+      required:
+      - workspace_root
+      - objective
+      additionalProperties: false
+    agentide.session.StartSession.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the workspace or standalone binding is unavailable.'
+      properties:
+        error:
+          const: agentide.session.SessionRefusal
+          description: The session operation was not admitted or could not be observed exactly.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.session.SessionRefusal.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.session.StartSession.started.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. A `agentide.session.CodingSession` now exists, in `Active`. Its identity is published as `session_id` on `agentide.session.SessionStarted`. Emits `SessionStarted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: started
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.session.WorkspaceRoot:
+      title: WorkspaceRoot
+      x-ess-name: agentide.session.WorkspaceRoot
+      x-ess-kind: newtype
+      type: string
+    agentide.surface.CloseFile.Input:
+      title: Close file input
+      x-ess-name: agentide.surface.CloseFile
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        path:
+          $ref: '#/components/schemas/agentide.coding.Path'
+      required:
+      - session_id
+      - request_id
+      - path
+      additionalProperties: false
+    agentide.surface.CloseFile.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `SurfaceObserved`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.surface.CloseFile.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the requested surface state is unavailable.'
+      properties:
+        error:
+          const: agentide.surface.SurfaceFailure
+          description: The requested virtual-surface transition was refused or could not be projected.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.surface.SurfaceFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.surface.ClosePane.Input:
+      title: Close pane input
+      x-ess-name: agentide.surface.ClosePane
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        pane_id:
+          $ref: '#/components/schemas/agentide.surface.PaneId'
+      required:
+      - session_id
+      - request_id
+      - pane_id
+      additionalProperties: false
+    agentide.surface.ClosePane.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `SurfaceObserved`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.surface.ClosePane.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the requested surface state is unavailable.'
+      properties:
+        error:
+          const: agentide.surface.SurfaceFailure
+          description: The requested virtual-surface transition was refused or could not be projected.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.surface.SurfaceFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.surface.FocusPane.Input:
+      title: Focus pane input
+      x-ess-name: agentide.surface.FocusPane
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        pane_id:
+          $ref: '#/components/schemas/agentide.surface.PaneId'
+      required:
+      - session_id
+      - request_id
+      - pane_id
+      additionalProperties: false
+    agentide.surface.FocusPane.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `SurfaceObserved`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.surface.FocusPane.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the requested surface state is unavailable.'
+      properties:
+        error:
+          const: agentide.surface.SurfaceFailure
+          description: The requested virtual-surface transition was refused or could not be projected.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.surface.SurfaceFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.surface.MoveCursor.Input:
+      title: Move editor cursor input
+      x-ess-name: agentide.surface.MoveCursor
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        pane_id:
+          $ref: '#/components/schemas/agentide.surface.PaneId'
+        path:
+          $ref: '#/components/schemas/agentide.coding.Path'
+        line:
+          type: integer
+        column:
+          type: integer
+      required:
+      - session_id
+      - request_id
+      - pane_id
+      - path
+      - line
+      - column
+      additionalProperties: false
+    agentide.surface.MoveCursor.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `SurfaceObserved`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.surface.MoveCursor.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the requested surface state is unavailable.'
+      properties:
+        error:
+          const: agentide.surface.SurfaceFailure
+          description: The requested virtual-surface transition was refused or could not be projected.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.surface.SurfaceFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.surface.OpenFile.Input:
+      title: Open file input
+      x-ess-name: agentide.surface.OpenFile
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        path:
+          $ref: '#/components/schemas/agentide.coding.Path'
+        line:
+          type: integer
+        pane_id:
+          $ref: '#/components/schemas/agentide.surface.PaneId'
+      required:
+      - session_id
+      - request_id
+      - path
+      additionalProperties: false
+    agentide.surface.OpenFile.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `SurfaceObserved`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.surface.OpenFile.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the requested surface state is unavailable.'
+      properties:
+        error:
+          const: agentide.surface.SurfaceFailure
+          description: The requested virtual-surface transition was refused or could not be projected.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.surface.SurfaceFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.surface.OpenPane.Input:
+      title: Open pane input
+      x-ess-name: agentide.surface.OpenPane
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        pane_id:
+          $ref: '#/components/schemas/agentide.surface.PaneId'
+        kind:
+          $ref: '#/components/schemas/agentide.surface.PaneKind'
+        split:
+          $ref: '#/components/schemas/agentide.surface.SplitDirection'
+      required:
+      - session_id
+      - request_id
+      - pane_id
+      - kind
+      additionalProperties: false
+    agentide.surface.OpenPane.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `SurfaceObserved`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.surface.OpenPane.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the requested surface state is unavailable.'
+      properties:
+        error:
+          const: agentide.surface.SurfaceFailure
+          description: The requested virtual-surface transition was refused or could not be projected.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.surface.SurfaceFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.surface.PaneId:
+      title: PaneId
+      x-ess-name: agentide.surface.PaneId
+      x-ess-kind: newtype
+      type: string
+    agentide.surface.PaneKind:
+      title: PaneKind
+      x-ess-name: agentide.surface.PaneKind
+      x-ess-kind: enum
+      type: string
+      enum:
+      - Editor
+      - Diff
+      - Terminal
+      - Timeline
+      - Agents
+      - Approvals
+      - Evidence
+    agentide.surface.ShowDiff.Input:
+      title: Show diff input
+      x-ess-name: agentide.surface.ShowDiff
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        pane_id:
+          $ref: '#/components/schemas/agentide.surface.PaneId'
+        path:
+          $ref: '#/components/schemas/agentide.coding.Path'
+        base:
+          type: string
+      required:
+      - session_id
+      - request_id
+      additionalProperties: false
+    agentide.surface.ShowDiff.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `SurfaceObserved`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.surface.ShowDiff.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the requested surface state is unavailable.'
+      properties:
+        error:
+          const: agentide.surface.SurfaceFailure
+          description: The requested virtual-surface transition was refused or could not be projected.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.surface.SurfaceFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.surface.SnapshotSurface.Input:
+      title: Snapshot workspace surface input
+      x-ess-name: agentide.surface.SnapshotSurface
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+      required:
+      - session_id
+      - request_id
+      additionalProperties: false
+    agentide.surface.SnapshotSurface.completed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. Emits `SurfaceObserved`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: completed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.surface.SnapshotSurface.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the requested surface state is unavailable.'
+      properties:
+        error:
+          const: agentide.surface.SurfaceFailure
+          description: The requested virtual-surface transition was refused or could not be projected.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.surface.SurfaceFailure.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.surface.SplitDirection:
+      title: SplitDirection
+      x-ess-name: agentide.surface.SplitDirection
+      x-ess-kind: enum
+      type: string
+      enum:
+      - Horizontal
+      - Vertical
+    agentide.surface.SurfaceFailure.Error:
+      title: SurfaceFailure payload
+      description: The requested virtual-surface transition was refused or could not be projected.
+      x-ess-name: agentide.surface.SurfaceFailure
+      x-ess-kind: error-payload
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        retryable:
+          type: boolean
+      required:
+      - code
+      - message
+      - retryable
+      additionalProperties: false
+    agentide.surface.WorkbenchSnapshot.Response:
+      additionalProperties: false
+      description: The rows of `agentide.surface.WorkbenchSnapshot`.
+      properties:
+        rows:
+          description: Every row the projection holds, in the order it holds them.
+          items:
+            $ref: '#/components/schemas/agentide.surface.WorkbenchSnapshot.Row'
+          type: array
+      required:
+      - rows
+      type: object
+    agentide.surface.WorkbenchSnapshot.Row:
+      title: Workbench snapshot row
+      x-ess-name: agentide.surface.WorkbenchSnapshot
+      x-ess-kind: view-row
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.surface.PaneId'
+        focused_pane:
+          $ref: '#/components/schemas/agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.coding.Path'
+      required:
+      - session_id
+      - panes
+      - open_files
+      additionalProperties: false

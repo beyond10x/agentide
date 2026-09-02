@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Start session input",
+  "x-ess-name": "agentide.session.StartSession",
+  "x-ess-kind": "command-input",
+  "type": "object",
+  "properties": {
+    "workspace_root": {
+      "$ref": "#/$defs/agentide.session.WorkspaceRoot"
+    },
+    "objective": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "workspace_root",
+    "objective"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "ef195b977d0780bba333cd848b263c24b7b167d8ccd132b4193e099cb362ee48",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.session.WorkspaceRoot": {
+      "title": "WorkspaceRoot",
+      "x-ess-name": "agentide.session.WorkspaceRoot",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,566 @@
+# generated from agentide v1
+# model digest 58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da
+# contract digest 1f4d00ab43429d54eaee6a77a4105c16602d18fc4fe4a7483973dc70be96a789
+# do not edit: regenerate with `ess generate`
+asyncapi: 3.0.0
+info:
+  title: agentide-engine
+  version: v1
+  description: |-
+    `agentide-engine` in the `agentide` specification.
+
+    Validates intents, plans effects, obtains authority, journals, dispatches, and projects sessions.
+
+    A coding-session interface in which agents invoke stable semantic intents while deployments bind those intents to guarded implementations and humans observe the same durable event projection.
+
+    The specification declares no transport, so each address below is a name and not a topic on a named broker. Servers, protocol bindings, security schemes, message keys, partitioning, retention and ordering are absent because the model does not state them.
+  x-ess-component: agentide-engine
+  x-ess-provenance:
+    system: agentide
+    specification_version: v1
+    source_digest: 58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da
+    contract_digest: 1f4d00ab43429d54eaee6a77a4105c16602d18fc4fe4a7483973dc70be96a789
+defaultContentType: application/json
+channels:
+  agentide.coding.IntentCompleted:
+    address: agentide.coding.IntentCompleted
+    title: IntentCompleted
+    messages:
+      agentide.coding.IntentCompleted:
+        $ref: '#/components/messages/agentide.coding.IntentCompleted'
+    x-ess-event: agentide.coding.IntentCompleted
+    x-ess-address-source: qualified-name
+  agentide.coding.IntentRefused:
+    address: agentide.coding.IntentRefused
+    title: IntentRefused
+    messages:
+      agentide.coding.IntentRefused:
+        $ref: '#/components/messages/agentide.coding.IntentRefused'
+    x-ess-event: agentide.coding.IntentRefused
+    x-ess-address-source: qualified-name
+  agentide.session.SessionClosed:
+    address: agentide.session.SessionClosed
+    title: SessionClosed
+    messages:
+      agentide.session.SessionClosed:
+        $ref: '#/components/messages/agentide.session.SessionClosed'
+    x-ess-event: agentide.session.SessionClosed
+    x-ess-address-source: qualified-name
+  agentide.session.SessionObserved:
+    address: agentide.session.SessionObserved
+    title: SessionObserved
+    messages:
+      agentide.session.SessionObserved:
+        $ref: '#/components/messages/agentide.session.SessionObserved'
+    x-ess-event: agentide.session.SessionObserved
+    x-ess-address-source: qualified-name
+  agentide.session.SessionStarted:
+    address: agentide.session.SessionStarted
+    title: SessionStarted
+    messages:
+      agentide.session.SessionStarted:
+        $ref: '#/components/messages/agentide.session.SessionStarted'
+    x-ess-event: agentide.session.SessionStarted
+    x-ess-address-source: qualified-name
+  agentide.surface.CursorMoved:
+    address: agentide.surface.CursorMoved
+    title: CursorMoved
+    messages:
+      agentide.surface.CursorMoved:
+        $ref: '#/components/messages/agentide.surface.CursorMoved'
+    x-ess-event: agentide.surface.CursorMoved
+    x-ess-address-source: qualified-name
+  agentide.surface.DiffShown:
+    address: agentide.surface.DiffShown
+    title: DiffShown
+    messages:
+      agentide.surface.DiffShown:
+        $ref: '#/components/messages/agentide.surface.DiffShown'
+    x-ess-event: agentide.surface.DiffShown
+    x-ess-address-source: qualified-name
+  agentide.surface.FileClosed:
+    address: agentide.surface.FileClosed
+    title: FileClosed
+    messages:
+      agentide.surface.FileClosed:
+        $ref: '#/components/messages/agentide.surface.FileClosed'
+    x-ess-event: agentide.surface.FileClosed
+    x-ess-address-source: qualified-name
+  agentide.surface.FileOpened:
+    address: agentide.surface.FileOpened
+    title: FileOpened
+    messages:
+      agentide.surface.FileOpened:
+        $ref: '#/components/messages/agentide.surface.FileOpened'
+    x-ess-event: agentide.surface.FileOpened
+    x-ess-address-source: qualified-name
+  agentide.surface.PaneClosed:
+    address: agentide.surface.PaneClosed
+    title: PaneClosed
+    messages:
+      agentide.surface.PaneClosed:
+        $ref: '#/components/messages/agentide.surface.PaneClosed'
+    x-ess-event: agentide.surface.PaneClosed
+    x-ess-address-source: qualified-name
+  agentide.surface.PaneFocused:
+    address: agentide.surface.PaneFocused
+    title: PaneFocused
+    messages:
+      agentide.surface.PaneFocused:
+        $ref: '#/components/messages/agentide.surface.PaneFocused'
+    x-ess-event: agentide.surface.PaneFocused
+    x-ess-address-source: qualified-name
+  agentide.surface.PaneOpened:
+    address: agentide.surface.PaneOpened
+    title: PaneOpened
+    messages:
+      agentide.surface.PaneOpened:
+        $ref: '#/components/messages/agentide.surface.PaneOpened'
+    x-ess-event: agentide.surface.PaneOpened
+    x-ess-address-source: qualified-name
+  agentide.surface.SurfaceObserved:
+    address: agentide.surface.SurfaceObserved
+    title: SurfaceObserved
+    messages:
+      agentide.surface.SurfaceObserved:
+        $ref: '#/components/messages/agentide.surface.SurfaceObserved'
+    x-ess-event: agentide.surface.SurfaceObserved
+    x-ess-address-source: qualified-name
+operations:
+  send.agentide.coding.IntentCompleted:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.coding.IntentCompleted'
+    title: Publish IntentCompleted
+    summary: Publishes `agentide.coding.IntentCompleted`.
+    description: Nothing in this specification reacts to `agentide.coding.IntentCompleted`.
+    messages:
+    - $ref: '#/channels/agentide.coding.IntentCompleted/messages/agentide.coding.IntentCompleted'
+  send.agentide.coding.IntentRefused:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.coding.IntentRefused'
+    title: Publish IntentRefused
+    summary: Publishes `agentide.coding.IntentRefused`.
+    description: Nothing in this specification reacts to `agentide.coding.IntentRefused`.
+    messages:
+    - $ref: '#/channels/agentide.coding.IntentRefused/messages/agentide.coding.IntentRefused'
+  send.agentide.session.SessionClosed:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.session.SessionClosed'
+    title: Publish SessionClosed
+    summary: Publishes `agentide.session.SessionClosed`.
+    description: |-
+      Nothing in this specification reacts to `agentide.session.SessionClosed`.
+      `agentide.session.CloseSession` emits it on `closed`, which moves a `agentide.session.CodingSession` to `Closed` along `close`.
+    messages:
+    - $ref: '#/channels/agentide.session.SessionClosed/messages/agentide.session.SessionClosed'
+  send.agentide.session.SessionObserved:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.session.SessionObserved'
+    title: Publish SessionObserved
+    summary: Publishes `agentide.session.SessionObserved`.
+    description: Nothing in this specification reacts to `agentide.session.SessionObserved`.
+    messages:
+    - $ref: '#/channels/agentide.session.SessionObserved/messages/agentide.session.SessionObserved'
+  send.agentide.session.SessionStarted:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.session.SessionStarted'
+    title: Publish SessionStarted
+    summary: Publishes `agentide.session.SessionStarted`.
+    description: |-
+      Nothing in this specification reacts to `agentide.session.SessionStarted`.
+      `agentide.session.StartSession` emits it on `started`, which creates a `agentide.session.CodingSession` in `Active`. It carries the new instance's identity in `session_id`.
+    messages:
+    - $ref: '#/channels/agentide.session.SessionStarted/messages/agentide.session.SessionStarted'
+  send.agentide.surface.CursorMoved:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.surface.CursorMoved'
+    title: Publish CursorMoved
+    summary: Publishes `agentide.surface.CursorMoved`.
+    description: Nothing in this specification reacts to `agentide.surface.CursorMoved`.
+    messages:
+    - $ref: '#/channels/agentide.surface.CursorMoved/messages/agentide.surface.CursorMoved'
+  send.agentide.surface.DiffShown:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.surface.DiffShown'
+    title: Publish DiffShown
+    summary: Publishes `agentide.surface.DiffShown`.
+    description: Nothing in this specification reacts to `agentide.surface.DiffShown`.
+    messages:
+    - $ref: '#/channels/agentide.surface.DiffShown/messages/agentide.surface.DiffShown'
+  send.agentide.surface.FileClosed:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.surface.FileClosed'
+    title: Publish FileClosed
+    summary: Publishes `agentide.surface.FileClosed`.
+    description: Nothing in this specification reacts to `agentide.surface.FileClosed`.
+    messages:
+    - $ref: '#/channels/agentide.surface.FileClosed/messages/agentide.surface.FileClosed'
+  send.agentide.surface.FileOpened:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.surface.FileOpened'
+    title: Publish FileOpened
+    summary: Publishes `agentide.surface.FileOpened`.
+    description: Nothing in this specification reacts to `agentide.surface.FileOpened`.
+    messages:
+    - $ref: '#/channels/agentide.surface.FileOpened/messages/agentide.surface.FileOpened'
+  send.agentide.surface.PaneClosed:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.surface.PaneClosed'
+    title: Publish PaneClosed
+    summary: Publishes `agentide.surface.PaneClosed`.
+    description: Nothing in this specification reacts to `agentide.surface.PaneClosed`.
+    messages:
+    - $ref: '#/channels/agentide.surface.PaneClosed/messages/agentide.surface.PaneClosed'
+  send.agentide.surface.PaneFocused:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.surface.PaneFocused'
+    title: Publish PaneFocused
+    summary: Publishes `agentide.surface.PaneFocused`.
+    description: Nothing in this specification reacts to `agentide.surface.PaneFocused`.
+    messages:
+    - $ref: '#/channels/agentide.surface.PaneFocused/messages/agentide.surface.PaneFocused'
+  send.agentide.surface.PaneOpened:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.surface.PaneOpened'
+    title: Publish PaneOpened
+    summary: Publishes `agentide.surface.PaneOpened`.
+    description: Nothing in this specification reacts to `agentide.surface.PaneOpened`.
+    messages:
+    - $ref: '#/channels/agentide.surface.PaneOpened/messages/agentide.surface.PaneOpened'
+  send.agentide.surface.SurfaceObserved:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.surface.SurfaceObserved'
+    title: Publish SurfaceObserved
+    summary: Publishes `agentide.surface.SurfaceObserved`.
+    description: Nothing in this specification reacts to `agentide.surface.SurfaceObserved`.
+    messages:
+    - $ref: '#/channels/agentide.surface.SurfaceObserved/messages/agentide.surface.SurfaceObserved'
+components:
+  messages:
+    agentide.coding.IntentCompleted:
+      name: agentide.coding.IntentCompleted
+      title: IntentCompleted
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.coding.IntentCompleted'
+    agentide.coding.IntentRefused:
+      name: agentide.coding.IntentRefused
+      title: IntentRefused
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.coding.IntentRefused'
+    agentide.session.SessionClosed:
+      name: agentide.session.SessionClosed
+      title: SessionClosed
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.session.SessionClosed'
+    agentide.session.SessionObserved:
+      name: agentide.session.SessionObserved
+      title: SessionObserved
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.session.SessionObserved'
+    agentide.session.SessionStarted:
+      name: agentide.session.SessionStarted
+      title: SessionStarted
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.session.SessionStarted'
+    agentide.surface.CursorMoved:
+      name: agentide.surface.CursorMoved
+      title: CursorMoved
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.surface.CursorMoved'
+    agentide.surface.DiffShown:
+      name: agentide.surface.DiffShown
+      title: DiffShown
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.surface.DiffShown'
+    agentide.surface.FileClosed:
+      name: agentide.surface.FileClosed
+      title: FileClosed
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.surface.FileClosed'
+    agentide.surface.FileOpened:
+      name: agentide.surface.FileOpened
+      title: FileOpened
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.surface.FileOpened'
+    agentide.surface.PaneClosed:
+      name: agentide.surface.PaneClosed
+      title: PaneClosed
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.surface.PaneClosed'
+    agentide.surface.PaneFocused:
+      name: agentide.surface.PaneFocused
+      title: PaneFocused
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.surface.PaneFocused'
+    agentide.surface.PaneOpened:
+      name: agentide.surface.PaneOpened
+      title: PaneOpened
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.surface.PaneOpened'
+    agentide.surface.SurfaceObserved:
+      name: agentide.surface.SurfaceObserved
+      title: SurfaceObserved
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.surface.SurfaceObserved'
+  schemas:
+    event.agentide.coding.IntentCompleted:
+      title: IntentCompleted payload
+      x-ess-name: agentide.coding.IntentCompleted
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/type.agentide.session.RequestId'
+      required:
+      - session_id
+      - request_id
+      additionalProperties: false
+    event.agentide.coding.IntentRefused:
+      title: IntentRefused payload
+      x-ess-name: agentide.coding.IntentRefused
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/type.agentide.session.RequestId'
+        code:
+          type: string
+      required:
+      - session_id
+      - request_id
+      - code
+      additionalProperties: false
+    event.agentide.session.SessionClosed:
+      title: SessionClosed payload
+      x-ess-name: agentide.session.SessionClosed
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+      required:
+      - session_id
+      additionalProperties: false
+    event.agentide.session.SessionObserved:
+      title: SessionObserved payload
+      x-ess-name: agentide.session.SessionObserved
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/type.agentide.session.RequestId'
+      required:
+      - session_id
+      - request_id
+      additionalProperties: false
+    event.agentide.session.SessionStarted:
+      title: SessionStarted payload
+      x-ess-name: agentide.session.SessionStarted
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        workspace_root:
+          $ref: '#/components/schemas/type.agentide.session.WorkspaceRoot'
+        objective:
+          type: string
+      required:
+      - session_id
+      - workspace_root
+      - objective
+      additionalProperties: false
+    event.agentide.surface.CursorMoved:
+      title: CursorMoved payload
+      x-ess-name: agentide.surface.CursorMoved
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        pane_id:
+          $ref: '#/components/schemas/type.agentide.surface.PaneId'
+        line:
+          type: integer
+        column:
+          type: integer
+      required:
+      - session_id
+      - pane_id
+      - line
+      - column
+      additionalProperties: false
+    event.agentide.surface.DiffShown:
+      title: DiffShown payload
+      x-ess-name: agentide.surface.DiffShown
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        pane_id:
+          $ref: '#/components/schemas/type.agentide.surface.PaneId'
+      required:
+      - session_id
+      - pane_id
+      additionalProperties: false
+    event.agentide.surface.FileClosed:
+      title: FileClosed payload
+      x-ess-name: agentide.surface.FileClosed
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        path:
+          $ref: '#/components/schemas/type.agentide.coding.Path'
+      required:
+      - session_id
+      - path
+      additionalProperties: false
+    event.agentide.surface.FileOpened:
+      title: FileOpened payload
+      x-ess-name: agentide.surface.FileOpened
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        path:
+          $ref: '#/components/schemas/type.agentide.coding.Path'
+        pane_id:
+          $ref: '#/components/schemas/type.agentide.surface.PaneId'
+      required:
+      - session_id
+      - path
+      - pane_id
+      additionalProperties: false
+    event.agentide.surface.PaneClosed:
+      title: PaneClosed payload
+      x-ess-name: agentide.surface.PaneClosed
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        pane_id:
+          $ref: '#/components/schemas/type.agentide.surface.PaneId'
+      required:
+      - session_id
+      - pane_id
+      additionalProperties: false
+    event.agentide.surface.PaneFocused:
+      title: PaneFocused payload
+      x-ess-name: agentide.surface.PaneFocused
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        pane_id:
+          $ref: '#/components/schemas/type.agentide.surface.PaneId'
+      required:
+      - session_id
+      - pane_id
+      additionalProperties: false
+    event.agentide.surface.PaneOpened:
+      title: PaneOpened payload
+      x-ess-name: agentide.surface.PaneOpened
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        pane_id:
+          $ref: '#/components/schemas/type.agentide.surface.PaneId'
+        kind:
+          $ref: '#/components/schemas/type.agentide.surface.PaneKind'
+      required:
+      - session_id
+      - pane_id
+      - kind
+      additionalProperties: false
+    event.agentide.surface.SurfaceObserved:
+      title: SurfaceObserved payload
+      x-ess-name: agentide.surface.SurfaceObserved
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/type.agentide.session.RequestId'
+      required:
+      - session_id
+      - request_id
+      additionalProperties: false
+    type.agentide.coding.Path:
+      title: Path
+      x-ess-name: agentide.coding.Path
+      x-ess-kind: newtype
+      type: string
+    type.agentide.session.RequestId:
+      title: RequestId
+      x-ess-name: agentide.session.RequestId
+      x-ess-kind: newtype
+      type: string
+    type.agentide.session.SessionId:
+      title: SessionId
+      x-ess-name: agentide.session.SessionId
+      x-ess-kind: newtype
+      type: string
+    type.agentide.session.WorkspaceRoot:
+      title: WorkspaceRoot
+      x-ess-name: agentide.session.WorkspaceRoot
+      x-ess-kind: newtype
+      type: string
+    type.agentide.surface.PaneId:
+      title: PaneId
+      x-ess-name: agentide.surface.PaneId
+      x-ess-kind: newtype
+      type: string
+    type.agentide.surface.PaneKind:
+      title: PaneKind
+      x-ess-name: agentide.surface.PaneKind
+      x-ess-kind: enum
+      type: string
+      enum:
+      - Editor
+      - Diff
+      - Terminal
+      - Timeline
+      - Agents
+      - Approvals
+      - Evidence

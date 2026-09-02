@@ -1,0 +1,43 @@
+format: agentide.intent-profile/1
+summary: Strict model-facing profile layered over the ESS command semantics.
+rules:
+  implementation_selection: operator_only
+  options: operator_only
+  credentials: never_model_visible
+  mutation_authority: exact_plan_digest
+  missing_capability: refuse
+intents:
+  - {name: session_start, command: agentide.session.StartSession, exposure: operator, port: session, effect: state, risk: low, approval: never, subjects: [workspace]}
+  - {name: session_close, command: agentide.session.CloseSession, exposure: operator, port: session, effect: state, risk: low, approval: never, subjects: [session]}
+  - {name: session_snapshot, command: agentide.session.SnapshotSession, exposure: model, port: session, effect: observe, risk: none, approval: never, subjects: [session]}
+  - {name: event_read, command: agentide.session.ReadEvents, exposure: model, port: session, effect: observe, risk: none, approval: never, subjects: [session]}
+  - {name: code_search, command: agentide.coding.SearchCode, exposure: model, port: workspace, effect: observe, risk: none, approval: never, subjects: [workspace, paths]}
+  - {name: code_read, command: agentide.coding.ReadCode, exposure: model, port: workspace, effect: observe, risk: none, approval: never, subjects: [workspace, path]}
+  - {name: code_changes, command: agentide.coding.ObserveChanges, exposure: model, port: workspace, effect: observe, risk: none, approval: never, subjects: [workspace]}
+  - {name: code_edit, command: agentide.coding.EditCode, exposure: model, port: workspace, effect: mutate, risk: medium, approval: required, subjects: [workspace, path]}
+  - {name: code_verify, command: agentide.coding.VerifyCode, exposure: model, port: process, effect: execute, risk: medium, approval: required, subjects: [workspace]}
+  - {name: worktree_status, command: agentide.coding.ObserveWorktree, exposure: model, port: workspace, effect: observe, risk: none, approval: never, subjects: [workspace]}
+  - {name: worktree_create, command: agentide.coding.CreateWorktree, exposure: model, port: worktree, effect: mutate, risk: medium, approval: required, subjects: [repository]}
+  - {name: worktree_finish, command: agentide.coding.FinishWorktree, exposure: model, port: worktree, effect: mutate, risk: high, approval: required, subjects: [worktree]}
+  - {name: process_start, command: agentide.coding.StartProcess, exposure: model, port: process, effect: execute, risk: medium, approval: required, subjects: [workspace, process_profile]}
+  - {name: process_observe, command: agentide.coding.ObserveProcess, exposure: model, port: process, effect: observe, risk: none, approval: never, subjects: [process]}
+  - {name: process_input, command: agentide.coding.InputProcess, exposure: model, port: process, effect: mutate, risk: medium, approval: required, subjects: [process]}
+  - {name: process_wait, command: agentide.coding.WaitProcess, exposure: model, port: process, effect: observe, risk: none, approval: never, subjects: [process]}
+  - {name: process_cancel, command: agentide.coding.CancelProcess, exposure: model, port: process, effect: mutate, risk: medium, approval: required, subjects: [process]}
+  - {name: agent_observe, command: agentide.coding.ObserveAgents, exposure: model, port: agents, effect: observe, risk: none, approval: never, subjects: [session]}
+  - {name: agent_delegate, command: agentide.coding.DelegateAgent, exposure: model, port: agents, effect: communicate, risk: medium, approval: required, subjects: [session]}
+  - {name: agent_message, command: agentide.coding.MessageAgent, exposure: model, port: agents, effect: communicate, risk: medium, approval: required, subjects: [agent]}
+  - {name: agent_wait, command: agentide.coding.WaitAgent, exposure: model, port: agents, effect: observe, risk: none, approval: never, subjects: [agent]}
+  - {name: evidence_record, command: agentide.coding.RecordEvidence, exposure: model, port: evidence, effect: state, risk: low, approval: never, subjects: [evidence_subject]}
+  - {name: code_publish, command: agentide.coding.PublishCode, exposure: model, port: delivery, effect: external, risk: high, approval: required, subjects: [repository, revision]}
+  - {name: release_cut, command: agentide.coding.CutRelease, exposure: conditional, port: delivery, effect: external, risk: critical, approval: required, subjects: [repository, version]}
+  - {name: deployment_observe, command: agentide.coding.ObserveDeployment, exposure: conditional, port: deployment, effect: observe, risk: none, approval: never, subjects: [environment]}
+  - {name: deployment_apply, command: agentide.coding.ApplyDeployment, exposure: conditional, port: deployment, effect: external, risk: critical, approval: required, subjects: [environment, revision]}
+  - {name: file_open, command: agentide.surface.OpenFile, exposure: model, port: surface, effect: state, risk: low, approval: never, subjects: [session, path]}
+  - {name: file_close, command: agentide.surface.CloseFile, exposure: model, port: surface, effect: state, risk: low, approval: never, subjects: [session, path]}
+  - {name: pane_open, command: agentide.surface.OpenPane, exposure: model, port: surface, effect: state, risk: low, approval: never, subjects: [session, pane]}
+  - {name: pane_close, command: agentide.surface.ClosePane, exposure: model, port: surface, effect: state, risk: low, approval: never, subjects: [session, pane]}
+  - {name: pane_focus, command: agentide.surface.FocusPane, exposure: model, port: surface, effect: state, risk: low, approval: never, subjects: [session, pane]}
+  - {name: cursor_move, command: agentide.surface.MoveCursor, exposure: model, port: surface, effect: state, risk: low, approval: never, subjects: [session, pane, path]}
+  - {name: diff_show, command: agentide.surface.ShowDiff, exposure: model, port: surface, effect: state, risk: low, approval: never, subjects: [session, path]}
+  - {name: surface_snapshot, command: agentide.surface.SnapshotSurface, exposure: model, port: surface, effect: observe, risk: none, approval: never, subjects: [session]}

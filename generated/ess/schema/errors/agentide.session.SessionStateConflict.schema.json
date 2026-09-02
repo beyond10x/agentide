@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SessionStateConflict payload",
+  "description": "The session is not in a state this command acts from.",
+  "x-ess-name": "agentide.session.SessionStateConflict",
+  "x-ess-kind": "error-payload",
+  "type": "object",
+  "properties": {
+    "state": {
+      "$ref": "#/$defs/agentide.session.CodingSession.State"
+    }
+  },
+  "required": [
+    "state"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "0af9fc455f577501f062249a0c2e06b4a344d4a9936d4ee54205ea2de32b92e9",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.session.CodingSession.State": {
+      "title": "State",
+      "x-ess-name": "agentide.session.CodingSession.State",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Active",
+        "Closed"
+      ]
+    }
+  }
+}

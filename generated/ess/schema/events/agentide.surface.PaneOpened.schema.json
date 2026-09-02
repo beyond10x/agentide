@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PaneOpened payload",
+  "x-ess-name": "agentide.surface.PaneOpened",
+  "x-ess-kind": "event-payload",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "pane_id": {
+      "$ref": "#/$defs/agentide.surface.PaneId"
+    },
+    "kind": {
+      "$ref": "#/$defs/agentide.surface.PaneKind"
+    }
+  },
+  "required": [
+    "session_id",
+    "pane_id",
+    "kind"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "58797505a3290f8148d59cef148f849bf91ea9836f1f9d89d5cc63dac190f3da",
+    "contract_digest": "fa7c75b77f39e680fdbb6b01bfcf84284d21af98c1e06ef2f80b7565a5e4e2b3",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.surface.PaneId": {
+      "title": "PaneId",
+      "x-ess-name": "agentide.surface.PaneId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.surface.PaneKind": {
+      "title": "PaneKind",
+      "x-ess-name": "agentide.surface.PaneKind",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Editor",
+        "Diff",
+        "Terminal",
+        "Timeline",
+        "Agents",
+        "Approvals",
+        "Evidence"
+      ]
+    }
+  }
+}

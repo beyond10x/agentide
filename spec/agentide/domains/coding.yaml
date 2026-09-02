@@ -1,0 +1,243 @@
+domain: agentide.coding
+summary: Semantic observation, change, execution, collaboration, evidence, and delivery intents.
+naming: {wire: coding, display: Coding session}
+
+types:
+  - {name: agentide.coding.Path, kind: newtype, of: String}
+  - {name: agentide.coding.Pattern, kind: newtype, of: String}
+  - {name: agentide.coding.ProcessId, kind: newtype, of: String}
+  - {name: agentide.coding.AgentId, kind: newtype, of: String}
+  - {name: agentide.coding.ExpectedDigest, kind: newtype, of: String}
+  - {name: agentide.coding.OperationId, kind: newtype, of: String}
+  - {name: agentide.coding.ProcessProfile, kind: newtype, of: String}
+  - name: agentide.coding.VerificationLevel
+    kind: enum
+    variants: [Focused, Full, Release]
+  - name: agentide.coding.Signal
+    kind: enum
+    variants: [Interrupt, Terminate, Kill]
+
+actors:
+  - name: agentide.coding.CodingAgent
+    may:
+      - agentide.coding.SearchCode
+      - agentide.coding.ReadCode
+      - agentide.coding.ObserveChanges
+      - agentide.coding.EditCode
+      - agentide.coding.VerifyCode
+      - agentide.coding.ObserveWorktree
+      - agentide.coding.CreateWorktree
+      - agentide.coding.FinishWorktree
+      - agentide.coding.StartProcess
+      - agentide.coding.ObserveProcess
+      - agentide.coding.InputProcess
+      - agentide.coding.WaitProcess
+      - agentide.coding.CancelProcess
+      - agentide.coding.ObserveAgents
+      - agentide.coding.DelegateAgent
+      - agentide.coding.MessageAgent
+      - agentide.coding.WaitAgent
+      - agentide.coding.RecordEvidence
+      - agentide.coding.PublishCode
+      - agentide.coding.CutRelease
+      - agentide.coding.ObserveDeployment
+      - agentide.coding.ApplyDeployment
+
+errors:
+  - name: agentide.coding.IntentFailure
+    summary: The intent was refused or failed without claiming the requested effect happened.
+    fields:
+      - {name: code, type: String}
+      - {name: message, type: String}
+      - {name: retryable, type: Boolean}
+
+commands:
+  - name: agentide.coding.SearchCode
+    naming: {wire: code-search, display: Search code}
+    input: &session_request
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: pattern, type: agentide.coding.Pattern}
+      - {name: paths, type: List<agentide.coding.Path>}
+    outcomes: &ordinary_outcomes
+      - {name: completed, emits: [agentide.coding.IntentCompleted]}
+      - {name: refused, external: the selected implementation cannot admit or complete the intent, error: agentide.coding.IntentFailure}
+  - name: agentide.coding.ReadCode
+    naming: {wire: code-read, display: Read code}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: path, type: agentide.coding.Path}
+      - {name: offset, type: Integer}
+      - {name: limit_bytes, type: Integer}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.ObserveChanges
+    naming: {wire: code-changes, display: Observe code changes}
+    input: &basic_request
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.EditCode
+    naming: {wire: code-edit, display: Edit code}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: path, type: agentide.coding.Path}
+      - {name: content, type: String}
+      - {name: expected_sha256, type: Optional<agentide.coding.ExpectedDigest>}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.VerifyCode
+    naming: {wire: code-verify, display: Verify code}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: level, type: agentide.coding.VerificationLevel}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.ObserveWorktree
+    naming: {wire: worktree-status, display: Observe worktree}
+    input: *basic_request
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.CreateWorktree
+    naming: {wire: worktree-create, display: Create worktree}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: purpose, type: String}
+      - {name: base, type: Optional<String>}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.FinishWorktree
+    naming: {wire: worktree-finish, display: Finish worktree}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.StartProcess
+    naming: {wire: process-start, display: Start process}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: profile, type: agentide.coding.ProcessProfile}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.ObserveProcess
+    naming: {wire: process-observe, display: Observe process}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: process_id, type: agentide.coding.ProcessId}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.InputProcess
+    naming: {wire: process-input, display: Write process input}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: process_id, type: agentide.coding.ProcessId}
+      - {name: content, type: String}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.WaitProcess
+    naming: {wire: process-wait, display: Wait for process}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: process_id, type: agentide.coding.ProcessId}
+      - {name: timeout_ms, type: Integer}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.CancelProcess
+    naming: {wire: process-cancel, display: Cancel process}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: process_id, type: agentide.coding.ProcessId}
+      - {name: signal, type: agentide.coding.Signal}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.ObserveAgents
+    naming: {wire: agent-observe, display: Observe agents}
+    input: *basic_request
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.DelegateAgent
+    naming: {wire: agent-delegate, display: Delegate to agent}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: task, type: String}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.MessageAgent
+    naming: {wire: agent-message, display: Message agent}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: agent_id, type: agentide.coding.AgentId}
+      - {name: message, type: String}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.WaitAgent
+    naming: {wire: agent-wait, display: Wait for agents}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: agent_ids, type: List<agentide.coding.AgentId>}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.RecordEvidence
+    naming: {wire: evidence-record, display: Record evidence}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: subject, type: String}
+      - {name: kind, type: String}
+      - {name: source, type: String}
+      - {name: reference, type: Optional<String>}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.PublishCode
+    naming: {wire: code-publish, display: Publish code}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: expected_head, type: agentide.coding.ExpectedDigest}
+      - {name: summary, type: String}
+      - {name: evidence, type: List<String>}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.CutRelease
+    naming: {wire: release-cut, display: Cut release}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: version, type: String}
+      - {name: expected_head, type: agentide.coding.ExpectedDigest}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.ObserveDeployment
+    naming: {wire: deployment-observe, display: Observe deployment}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: environment, type: String}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.ApplyDeployment
+    naming: {wire: deployment-apply, display: Apply deployment}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: environment, type: String}
+      - {name: revision, type: agentide.coding.ExpectedDigest}
+    outcomes: *ordinary_outcomes
+
+events:
+  - name: agentide.coding.IntentCompleted
+    fields:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+  - name: agentide.coding.IntentRefused
+    fields:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: code, type: String}

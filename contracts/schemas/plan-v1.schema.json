@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://beyond10x.github.io/agentide/contracts/plan-v1.schema.json",
+  "title": "AgentIDE exact effect plan v1",
+  "type": "object",
+  "required": ["format", "session_id", "intent", "driver", "operation", "binding_sha256", "input_sha256", "approval_required", "digest"],
+  "properties": {
+    "format": {"const": "agentide.plan/1"},
+    "session_id": {"type": "string"},
+    "intent": {"type": "string"},
+    "driver": {"type": "string"},
+    "operation": {"type": "string"},
+    "binding_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "input_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "approval_required": {"type": "boolean"},
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}
