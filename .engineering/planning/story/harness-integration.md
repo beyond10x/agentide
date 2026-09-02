@@ -2,13 +2,13 @@
 format: aep.planning-md/1
 id: story:harness-integration
 kind: story
-status: draft
+status: implemented
 title: Bind AgentIDE intents into Harness
 summary: Implement native ToolPort projection and Harness-specific operation bindings after v1.
 relations:
 - decomposes: epic:agentide-v1
 - serves: vision:agent-first-coding-surface
-revision: 1
+revision: 4
 ---
 ## Acceptance
 

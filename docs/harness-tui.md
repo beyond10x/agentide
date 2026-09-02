@@ -1,0 +1,66 @@
+# Harness-native TUI
+
+The Harness mode of `agentide tui` is the first runnable console surface that composes the AgentIDE
+specification with the native Harness agent loop. It keeps four kinds of state separate:
+
+```text
+ESS command schema ──► Harness ToolSpec ──► model turn
+                              │                 │
+                              │          neutral LoopEvent stream
+                              ▼                 ▼
+                    exact-plan approval ──► terminal projection
+                              │
+                              ▼
+                    AgentIDE IntentPort
+```
+
+AgentIDE owns the semantic intent, exact implementation plan, durable approval event, and replayable
+workbench. Harness owns model turns, provider-wire projection, tool publication, budgets,
+cancellation, and the call-time approval gate. The terminal is a renderer and decision surface; it
+does not implement a third execution path.
+
+## Start a session
+
+Create an AgentIDE session for an existing workspace, then attach the Harness TUI:
+
+```shell-session
+agentide session start --workspace . --objective "Implement and verify the change"
+agentide tui --session <session-id> \
+  --base-url https://api.example/v1 \
+  --model model-id \
+  --api-key-env MODEL_API_KEY
+```
+
+The default wire is `openai-responses`. Use `--wire anthropic-messages` for a Messages-compatible
+endpoint. The connection has no ambient credential fallback:
+
+- `--api-key-env NAME` reads an API key from `NAME` for each request;
+- `--oauth-token-env NAME` reads a user token from `NAME` for each request;
+- `--oauth-token-file FILE --oauth-token-pointer /path` re-reads a token document for each request;
+- naming none sends no credential header, which is useful only for an explicitly unauthenticated
+  local gateway.
+
+The TUI does not renew credentials in this first slice. Harness cancellation, turn retry,
+compaction, tool-result bounds, and the declared `--max-turns` budget still apply.
+
+## Work in the terminal
+
+Press `i` to type a prompt. Harness streams visible text and neutral activity events while the
+model works. The left column is the replayed AgentIDE workbench, the center switches between the
+agent transcript (`1`) and focused file or diff (`2`), and the right column shows calls, usage, and
+session context.
+
+When a required intent is requested, the loop pauses and the terminal displays:
+
+- the semantic intent and model arguments;
+- the externally selected driver and operation;
+- the exact plan digest and input digest.
+
+Press `y` to grant that plan or `n`/`Esc` to deny it. The paired tool port refuses a required call
+that did not pass through this handshake, even if another embedder accidentally invokes it
+directly.
+
+The Harness conversation is in memory for the lifetime of this first TUI process. AgentIDE's
+secret-free intent journal and virtual workbench remain durable. Persisted Harness conversation
+resume and direct app-server injection are follow-on host adapters, not hidden behavior in this
+surface.

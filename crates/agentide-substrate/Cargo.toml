@@ -14,7 +14,7 @@ workspace = true
 [dependencies]
 agentide-contracts.workspace = true
 agentide-core.workspace = true
-b10x-harness-substrate = { git = "https://github.com/beyond10x/harness", rev = "60b2e0537b1e1a0af66ea55bdeac72941b2bdf58", version = "=0.11.0" }
-b10x-harness-toolchain = { git = "https://github.com/beyond10x/harness", rev = "60b2e0537b1e1a0af66ea55bdeac72941b2bdf58", version = "=0.11.0" }
+b10x-harness-substrate.workspace = true
+b10x-harness-toolchain.workspace = true
 serde_json.workspace = true
 sha2.workspace = true

@@ -49,6 +49,20 @@ Harness owns credentials, subjects, policies, tool publication, and lifecycle. A
 Harness global state, and Harness does not need to depend on AgentIDE: generated contract adapters
 can implement the same port from either side.
 
+The first concrete composition is `agentide-harness`. It turns the bound model-visible subset of
+the intent profile into a flat Harness `ToolPort`; each input schema comes from its generated ESS
+command schema. The embedding host removes `session_id` and `request_id` from what the model may
+supply and injects those values from the active session and Harness call instead. Consequence and
+risk metadata map into Harness envelopes, while the qualified ESS command is recorded as the
+operation reached by each call.
+
+Required intents use paired ports. Harness asks its `ApprovalPort`; that port previews the call in
+AgentIDE and shows the resulting plan digest. Approval durably grants that digest and leaves the
+exact input waiting for the paired `ToolPort`; denial durably removes it. A required intent that
+reaches the tool port without that handshake is refused as `harness.approval_missing`. Thus the TUI
+does not introduce a second, weaker mutation path and Harness cannot execute a plan different from
+the one the operator saw.
+
 ## Surface boundary
 
 The browser, JSON CLI, and console TUI are renderers over `agentide.snapshot/1` and
@@ -58,6 +72,11 @@ session state, and are not written to the journal.
 
 This separation allows a Harness app-server, terminal host, or model-native tool surface to inject
 the projection directly without inheriting the standalone HTTP server or command-line parser.
+
+The native TUI runs the synchronous Harness loop on a worker thread. A channel carries neutral
+`LoopEvent` values to the terminal renderer and carries one approval decision back; the model loop
+remains blocked until that decision arrives. The terminal owns no alternate tool semantics: file,
+diff, focus, and close shortcuts invoke the same AgentIDE intents as the model-facing surface.
 
 ## Durable state and sensitive data
 

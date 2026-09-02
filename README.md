@@ -37,8 +37,24 @@ target/release/agentide tui --session <session-id>
 target/release/agentide serve --session <session-id>
 ```
 
-The browser listens on `127.0.0.1:7788` by default. The TUI uses `o` to open a file, `d` for a
-diff pane, `Tab` to focus the next pane, `x` to close the focused pane, and `q` to quit.
+Without model options, `tui` is a projection-only workbench. Add a model connection to run the
+native Harness loop inside the same terminal surface:
+
+```shell-session
+target/release/agentide tui --session <session-id> \
+  --base-url https://api.example/v1 \
+  --model model-id \
+  --api-key-env MODEL_API_KEY
+```
+
+The credential value is read from the named source for each request and is never stored in the
+connection configuration or AgentIDE journal. `--wire anthropic-messages` selects Harness's second
+provider projection; `--oauth-token-env` and `--oauth-token-file` select user-bound token sources.
+
+In Harness mode, `i` opens the prompt line, `1` shows the streamed agent transcript, `2` shows the
+focused workbench pane, and `y`/`n` resolves an exact-plan approval. `o`, `d`, `Tab`, `x`, `r`, and
+`q` operate the shared virtual workbench. The browser continues to listen on `127.0.0.1:7788` by
+default. See the [Harness TUI guide](docs/harness-tui.md) for the execution and authority flow.
 
 An agent invokes authority-free observations directly:
 
@@ -71,6 +87,8 @@ host effects.
   semantic request.
 - `contracts/schemas/` contains immutable v1 transport and configuration schemas.
 - `agentide_core::IntentPort` is the implementation seam a standalone or Harness host binds.
+- `agentide_harness::ports` publishes the bound ESS schemas through Harness and pairs the tool port
+  with the exact-plan approval port used by the TUI.
 - `.engineering/planning/` is the AEP-governed plan and evidence graph.
 
 See [architecture](docs/architecture.md) for the exact boundaries and [keyboard interface](docs/keyboard-interface.md)

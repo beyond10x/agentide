@@ -1,0 +1,27 @@
+[package]
+name = "agentide-harness"
+description = "Harness model-loop and tool-port adapter for AgentIDE semantic sessions"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+agentide-contracts.workspace = true
+agentide-core.workspace = true
+b10x-harness-credential.workspace = true
+b10x-harness-loop.workspace = true
+b10x-harness-messages.workspace = true
+b10x-harness-responses.workspace = true
+b10x-harness-wire.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

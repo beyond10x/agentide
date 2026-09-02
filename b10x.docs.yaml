@@ -57,6 +57,9 @@ surfaces:
     label: Architecture
     url: https://beyond10x.github.io/docs/agentide/architecture/
   - kind: guide
+    label: Harness-native TUI
+    url: https://beyond10x.github.io/docs/agentide/harness-tui/
+  - kind: guide
     label: Keyboard interface
     url: https://beyond10x.github.io/docs/agentide/keyboard-interface/
   - kind: reference

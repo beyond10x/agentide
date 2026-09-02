@@ -18,9 +18,12 @@ workspace = true
 [dependencies]
 agentide-contracts.workspace = true
 agentide-core.workspace = true
+agentide-harness.workspace = true
 agentide-substrate.workspace = true
 anyhow.workspace = true
 axum.workspace = true
+b10x-harness-loop.workspace = true
+b10x-harness-wire.workspace = true
 clap.workspace = true
 crossterm.workspace = true
 mime_guess.workspace = true

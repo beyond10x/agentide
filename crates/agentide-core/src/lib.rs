@@ -413,6 +413,26 @@ impl<P: IntentPort> Engine<P> {
         self.store.save(&session).map_err(store_refusal)
     }
 
+    /// Denies and removes one exact pending plan without dispatching it.
+    pub fn deny(&self, session_id: &str, digest: &str, reason: &str) -> Result<(), Refusal> {
+        let mut session = self.store.load(session_id).map_err(store_refusal)?;
+        if session.pending.remove(digest).is_none() {
+            return Err(Refusal::named(
+                "approval.unknown_plan",
+                "the plan digest is not pending in this session",
+            ));
+        }
+        session.approvals.remove(digest);
+        append_event(
+            &mut session,
+            "approval.denied",
+            None,
+            Some(digest),
+            json!({"plan_digest": digest, "reason": reason}),
+        );
+        self.store.save(&session).map_err(store_refusal)
+    }
+
     /// Dispatches a previously previewed plan if its authority is satisfied.
     pub fn resume(&self, session_id: &str, digest: &str, input: Value) -> Result<Value, Refusal> {
         let mut session = self.store.load(session_id).map_err(store_refusal)?;

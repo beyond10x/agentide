@@ -5,6 +5,7 @@
     clippy::too_many_lines
 )]
 
+mod harness_tui;
 mod tui;
 mod web;
 
@@ -13,9 +14,10 @@ use std::sync::Arc;
 
 use agentide_contracts::{BindingConfig, IntentProfile};
 use agentide_core::{Engine, Refusal, StateStore};
+use agentide_harness::{CredentialSource, ModelConnection, ModelWire};
 use agentide_substrate::SubstratePort;
 use anyhow::{Context, Result, anyhow};
-use clap::{Args, Parser, Subcommand};
+use clap::{Args, Parser, Subcommand, ValueEnum};
 use serde_json::{Value, json};
 
 #[derive(Debug, Parser)]
@@ -67,8 +69,8 @@ enum Command {
     },
     /// Serve the embedded browser workbench.
     Serve(ServeArgs),
-    /// Run the interactive console workbench.
-    Tui(SessionArg),
+    /// Run the interactive console workbench, optionally with a Harness model loop.
+    Tui(TuiArgs),
 }
 
 #[derive(Debug, Subcommand)]
@@ -91,6 +93,58 @@ struct SessionArg {
     /// Session id.
     #[arg(long)]
     session: String,
+}
+
+#[derive(Debug, Clone, Args)]
+struct TuiArgs {
+    /// Session id.
+    #[arg(long)]
+    session: String,
+    /// Harness model API origin plus prefix. Omit together with --model for projection-only mode.
+    #[arg(long, env = "AGENTIDE_BASE_URL", requires = "model")]
+    base_url: Option<String>,
+    /// Exact model identifier. Omit together with --base-url for projection-only mode.
+    #[arg(long, env = "AGENTIDE_MODEL", requires = "base_url")]
+    model: Option<String>,
+    /// Harness provider-wire projection.
+    #[arg(long, value_enum, default_value_t = TuiWire::OpenaiResponses)]
+    wire: TuiWire,
+    /// Declared model context window.
+    #[arg(long, default_value_t = 200_000)]
+    context_window: u64,
+    /// Messages API per-turn output ceiling.
+    #[arg(long, default_value_t = 8_192)]
+    max_output_tokens: u64,
+    /// Maximum Harness model turns for one submitted prompt.
+    #[arg(long, default_value_t = 40)]
+    max_turns: u64,
+    /// Read an API key from this environment variable at request time.
+    #[arg(long, value_name = "NAME", conflicts_with_all = ["oauth_token_env", "oauth_token_file"])]
+    api_key_env: Option<String>,
+    /// Read an OAuth token from this environment variable at request time.
+    #[arg(long, value_name = "NAME", conflicts_with_all = ["api_key_env", "oauth_token_file"])]
+    oauth_token_env: Option<String>,
+    /// Read an OAuth token from this file at request time.
+    #[arg(long, value_name = "FILE", conflicts_with_all = ["api_key_env", "oauth_token_env"])]
+    oauth_token_file: Option<PathBuf>,
+    /// JSON pointer inside --oauth-token-file.
+    #[arg(long, value_name = "POINTER", requires = "oauth_token_file")]
+    oauth_token_pointer: Option<String>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
+enum TuiWire {
+    OpenaiResponses,
+    AnthropicMessages,
+}
+
+impl From<TuiWire> for ModelWire {
+    fn from(wire: TuiWire) -> Self {
+        match wire {
+            TuiWire::OpenaiResponses => Self::OpenaiResponses,
+            TuiWire::AnthropicMessages => Self::AnthropicMessages,
+        }
+    }
 }
 
 #[derive(Debug, Subcommand)]
@@ -320,8 +374,37 @@ fn run(cli: Cli) -> Result<Option<Value>> {
             Ok(None)
         }
         Command::Tui(argument) => {
-            let engine = engine(&store, &argument.session, cli.bindings.as_deref())?;
-            tui::run(&engine, &argument.session)?;
+            if let (Some(base_url), Some(model)) = (argument.base_url, argument.model) {
+                let credential = if let Some(variable) = argument.api_key_env {
+                    CredentialSource::ApiKeyEnvironment(variable)
+                } else if let Some(variable) = argument.oauth_token_env {
+                    CredentialSource::OauthEnvironment(variable)
+                } else if let Some(path) = argument.oauth_token_file {
+                    CredentialSource::OauthFile {
+                        path,
+                        pointer: argument.oauth_token_pointer,
+                    }
+                } else {
+                    CredentialSource::None
+                };
+                harness_tui::run(
+                    store,
+                    cli.bindings.as_deref(),
+                    &argument.session,
+                    ModelConnection {
+                        wire: argument.wire.into(),
+                        base_url,
+                        model,
+                        context_window: argument.context_window,
+                        max_output_tokens: argument.max_output_tokens,
+                        credential,
+                    },
+                    argument.max_turns,
+                )?;
+            } else {
+                let engine = engine(&store, &argument.session, cli.bindings.as_deref())?;
+                tui::run(&engine, &argument.session)?;
+            }
             Ok(None)
         }
     }
