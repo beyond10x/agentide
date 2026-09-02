@@ -85,3 +85,9 @@ cargo xtask gate
 The gate validates AEP, compiles ESS through the pinned compiler, checks generated IR drift,
 validates profile/binding coverage, runs Rust tests and Clippy, type-checks the browser, checks built
 asset drift, and scans replay fixtures for sensitive data.
+
+<!-- b10x-docs:start -->
+## Documentation
+
+[AgentIDE documentation](https://beyond10x.github.io/docs/agentide/) · [Start](https://beyond10x.github.io/) · [Ecosystem](https://beyond10x.github.io/ecosystem/) · [Impact](https://beyond10x.github.io/changes/) · [Releases](https://beyond10x.github.io/releases/)
+<!-- b10x-docs:end -->
