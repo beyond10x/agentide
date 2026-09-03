@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "agentide-cli"
-version = "0.2.1"
+version = "0.3.0"
 dependencies = [
  "agentide-contracts",
  "agentide-core",
@@ -26,7 +26,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-contracts"
-version = "0.2.1"
+version = "0.3.0"
 dependencies = [
  "chrono",
  "schemars 1.2.2",
@@ -39,7 +39,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-core"
-version = "0.2.1"
+version = "0.3.0"
 dependencies = [
  "agentide-contracts",
  "chrono",
@@ -64,7 +64,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-harness"
-version = "0.2.1"
+version = "0.3.0"
 dependencies = [
  "agentide-contracts",
  "agentide-core",
@@ -81,7 +81,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-substrate"
-version = "0.2.1"
+version = "0.3.0"
 dependencies = [
  "agentide-contracts",
  "agentide-core",
@@ -93,7 +93,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-xtask"
-version = "0.2.1"
+version = "0.3.0"
 dependencies = [
  "agentide-contracts",
  "anyhow",

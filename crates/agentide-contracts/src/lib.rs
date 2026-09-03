@@ -10,8 +10,10 @@ use serde_json::Value;
 use thiserror::Error;
 
 mod hosted;
+mod renderer;
 
 pub use hosted::*;
+pub use renderer::*;
 
 /// The immutable v1 intent catalogue retained for compatibility loading.
 pub const INTENT_PROFILE_V1_YAML: &str = include_str!("../../../contracts/intent-profile.yaml");

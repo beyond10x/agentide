@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 0.3.0 - 2026-09-03
+
+- Add a versioned, transport-neutral browser renderer protocol with immutable frames, transient
+  host events, typed semantic actions, and discoverable target manifests.
+- Split the embedded browser host from presentation, ship feature-equivalent Vanilla DOM and Vue
+  targets at explicit comparison routes, and refuse transport or persistence APIs inside targets.
+- Add shared renderer conformance tests and reproducible Chromium/build benchmarks so framework
+  choices can be based on measured bundle, startup, update, memory, install, and build costs.
+
 ## 0.2.1 - 2026-09-03
 
 - Add an explicit provenance-free `ContextSelectionDraft` contract for interactive renderers and
