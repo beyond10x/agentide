@@ -1,0 +1,98 @@
+{
+  "$defs": {
+    "SelectionKind": {
+      "description": "Source of one deliberately attached context selection.",
+      "oneOf": [
+        {
+          "const": "editor",
+          "description": "Saved editor range.",
+          "type": "string"
+        },
+        {
+          "const": "diff_hunk",
+          "description": "Canonical server-resolved diff hunk.",
+          "type": "string"
+        },
+        {
+          "const": "terminal",
+          "description": "Explicit terminal selection.",
+          "type": "string"
+        },
+        {
+          "const": "process",
+          "description": "Structured process result.",
+          "type": "string"
+        },
+        {
+          "const": "evidence",
+          "description": "Durable evidence record.",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "$id": "https://beyond10x.github.io/agentide/contracts/hosted/context-selection-draft-v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Untrusted, provenance-free selection submitted by an interactive renderer.\n\nServers validate this complete draft, derive the authenticated actor and source revision, and\nseal it before the bytes can enter a model-facing [`ContextPack`].",
+  "properties": {
+    "content": {
+      "description": "Complete selected UTF-8 content.",
+      "type": "string"
+    },
+    "end_line": {
+      "description": "Optional one-based end line.",
+      "format": "uint64",
+      "minimum": 0,
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "format": {
+      "const": "agentide.context-selection-draft/1",
+      "type": "string"
+    },
+    "id": {
+      "description": "Stable selection reference.",
+      "type": "string"
+    },
+    "kind": {
+      "$ref": "#/$defs/SelectionKind",
+      "description": "Selection source."
+    },
+    "reference": {
+      "description": "Workspace path or durable record reference.",
+      "type": "string"
+    },
+    "sha256": {
+      "description": "SHA-256 of the complete content.",
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "start_line": {
+      "description": "Optional one-based start line.",
+      "format": "uint64",
+      "minimum": 0,
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "truncated": {
+      "description": "Whether the renderer knows the bytes are incomplete.",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "format",
+    "id",
+    "kind",
+    "reference",
+    "content",
+    "sha256",
+    "truncated"
+  ],
+  "title": "ContextSelectionDraft",
+  "type": "object"
+}

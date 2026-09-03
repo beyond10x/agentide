@@ -1,0 +1,11 @@
+{
+  "format": "agentide.context-selection-draft/1",
+  "id": "selection:one",
+  "kind": "editor",
+  "reference": "src/lib.rs",
+  "start_line": 1,
+  "end_line": 1,
+  "content": "pub fn example() {}\n",
+  "sha256": "bbdb342f0ea09169f1308ee7c6059400d87620df91b83a81c026e8111ea1163c",
+  "truncated": false
+}

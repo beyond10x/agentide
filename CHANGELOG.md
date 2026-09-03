@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.2.1 - 2026-09-03
+
+- Add an explicit provenance-free `ContextSelectionDraft` contract for interactive renderers and
+  one AgentIDE-owned transition that seals complete bytes with a server-derived actor, canonical
+  authority source, immutable source revision, and observation time.
+- Publish and gate a standalone JSON Schema and golden vector for the renderer-to-hosted-runtime
+  attachment handoff so DevCenter and future clients cannot silently drift from model context.
+
 ## 0.2.0 - 2026-09-03
 
 - Promote the published `0.1.4` Linux archive and its exact SHA-256 digest into the standalone

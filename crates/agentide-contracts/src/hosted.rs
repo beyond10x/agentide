@@ -264,6 +264,132 @@ pub enum SelectionKind {
     Evidence,
 }
 
+impl SelectionKind {
+    /// Canonical authority namespace that supplies this selection kind.
+    #[must_use]
+    pub const fn authority_source(self) -> &'static str {
+        match self {
+            Self::Editor => "workspace.editor",
+            Self::DiffHunk => "workspace.diff",
+            Self::Terminal => "workspace.terminal",
+            Self::Process => "workspace.process",
+            Self::Evidence => "agentide.evidence",
+        }
+    }
+}
+
+/// Untrusted, provenance-free selection submitted by an interactive renderer.
+///
+/// Servers validate this complete draft, derive the authenticated actor and source revision, and
+/// seal it before the bytes can enter a model-facing [`ContextPack`].
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct ContextSelectionDraft {
+    /// Contract discriminator.
+    pub format: String,
+    /// Stable selection reference.
+    pub id: String,
+    /// Selection source.
+    pub kind: SelectionKind,
+    /// Workspace path or durable record reference.
+    pub reference: String,
+    /// Optional one-based start line.
+    pub start_line: Option<u64>,
+    /// Optional one-based end line.
+    pub end_line: Option<u64>,
+    /// Complete selected UTF-8 content.
+    pub content: String,
+    /// SHA-256 of the complete content.
+    pub sha256: String,
+    /// Whether the renderer knows the bytes are incomplete.
+    pub truncated: bool,
+}
+
+impl ContextSelectionDraft {
+    /// Builds a complete renderer draft with the digest of its exact UTF-8 bytes.
+    pub fn new(
+        id: impl Into<String>,
+        kind: SelectionKind,
+        reference: impl Into<String>,
+        start_line: Option<u64>,
+        end_line: Option<u64>,
+        content: impl Into<String>,
+    ) -> Result<Self, String> {
+        let content = content.into();
+        let draft = Self {
+            format: "agentide.context-selection-draft/1".into(),
+            id: id.into(),
+            kind,
+            reference: reference.into(),
+            start_line,
+            end_line,
+            sha256: sha256(content.as_bytes()),
+            content,
+            truncated: false,
+        };
+        draft.validate()?;
+        Ok(draft)
+    }
+
+    /// Validates the untrusted renderer shape without assigning actor authority.
+    pub fn validate(&self) -> Result<(), String> {
+        if self.format != "agentide.context-selection-draft/1"
+            || !valid_reference(&self.id)
+            || !valid_reference(&self.reference)
+        {
+            return Err(
+                "context.draft_invalid: selection draft identity or reference is invalid".into(),
+            );
+        }
+        match (self.start_line, self.end_line) {
+            (None, None) => {}
+            (Some(start), Some(end)) if start > 0 && end >= start => {}
+            _ => {
+                return Err(
+                    "context.range_invalid: line bounds must be paired, one-based, and ordered"
+                        .into(),
+                );
+            }
+        }
+        if !valid_sha256(&self.sha256) || sha256(self.content.as_bytes()) != self.sha256 {
+            return Err("context.digest_mismatch: selection bytes do not match sha256".into());
+        }
+        Ok(())
+    }
+
+    /// Seals a complete draft with server-derived actor and source coordinates.
+    pub fn seal(
+        self,
+        actor: ActorContext,
+        source_revision: impl Into<String>,
+        observed_at: impl Into<String>,
+    ) -> Result<ContextSelection, String> {
+        self.validate()?;
+        if self.truncated {
+            return Err(format!(
+                "context.selection_incomplete: `{}` is truncated",
+                self.id
+            ));
+        }
+        let provenance = AttachmentProvenance {
+            format: "agentide.attachment-provenance/1".into(),
+            actor,
+            source: self.kind.authority_source().into(),
+            source_revision: source_revision.into(),
+            observed_at: observed_at.into(),
+        };
+        ContextSelection::new(
+            self.id,
+            self.kind,
+            self.reference,
+            self.start_line,
+            self.end_line,
+            self.content,
+            provenance,
+        )
+    }
+}
+
 /// Server-derived provenance for deliberately shared context bytes.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
@@ -2251,6 +2377,44 @@ mod tests {
         assert_eq!(
             selection.validate().expect_err("digest mismatch"),
             "context.digest_mismatch: selection bytes do not match sha256"
+        );
+    }
+
+    #[test]
+    fn renderer_draft_requires_server_sealing_before_model_context() {
+        let mut draft = ContextSelectionDraft::new(
+            "selection",
+            SelectionKind::Editor,
+            "src/lib.rs",
+            Some(1),
+            Some(1),
+            "trusted bytes",
+        )
+        .expect("draft");
+        let digest = draft.sha256.clone();
+        let sealed = draft
+            .clone()
+            .seal(
+                ActorContext::new(ActorKind::Human, "user:one").expect("actor"),
+                digest.clone(),
+                "2026-09-03T10:00:00Z",
+            )
+            .expect("sealed selection");
+        assert_eq!(sealed.sha256, digest);
+        assert_eq!(sealed.provenance.source, "workspace.editor");
+        assert_eq!(sealed.provenance.actor.subject, "user:one");
+        sealed.validate().expect("valid sealed selection");
+
+        draft.truncated = true;
+        assert_eq!(
+            draft
+                .seal(
+                    ActorContext::new(ActorKind::Human, "user:one").expect("actor"),
+                    "revision:one",
+                    "2026-09-03T10:00:00Z",
+                )
+                .expect_err("truncated draft"),
+            "context.selection_incomplete: `selection` is truncated"
         );
     }
 

@@ -8,12 +8,12 @@ use std::process::Command;
 use agentide_contracts::{
     ActorContext, ActorKind, ActorView, ActorWorkbench, Approval, AttachmentProvenance, Audience,
     AuthorityGrant, AuthorizationPath, AvailableIntent, ChangeSelector, ContextPack, ContextRecord,
-    ContextSelection, CoordinationRevision, DiffFile, DiffFileStatus, DiffHunk, DiffLine,
-    DiffLineKind, DiffMode, DiffProjection, DiffRange, Effect, FileModificationState,
-    FileProjection, FileRevision, IntentDefinition, IntentInventory, Risk, SelectionKind,
-    TerminalControl, TerminalControlFrame, TerminalEvent, TerminalProfile, TerminalReplayBounds,
-    TerminalServerFrame, TerminalSession, TerminalState, TerminalWorkspaceAccess, TreeEntry,
-    TreeEntryKind, TreeProjection, WorkbenchPane,
+    ContextSelection, ContextSelectionDraft, CoordinationRevision, DiffFile, DiffFileStatus,
+    DiffHunk, DiffLine, DiffLineKind, DiffMode, DiffProjection, DiffRange, Effect,
+    FileModificationState, FileProjection, FileRevision, IntentDefinition, IntentInventory, Risk,
+    SelectionKind, TerminalControl, TerminalControlFrame, TerminalEvent, TerminalProfile,
+    TerminalReplayBounds, TerminalServerFrame, TerminalSession, TerminalState,
+    TerminalWorkspaceAccess, TreeEntry, TreeEntryKind, TreeProjection, WorkbenchPane,
 };
 use anyhow::{Context, Result, anyhow, bail};
 use ess_compiler::source::SourceMap;
@@ -241,6 +241,11 @@ fn hosted_contract_documents() -> Result<HostedContractDocuments> {
     actor_view.validate().map_err(anyhow::Error::msg)?;
 
     contract!("actor-context-v2.schema", ActorContext, actor);
+    contract!(
+        "context-selection-draft-v1.schema",
+        ContextSelectionDraft,
+        sample_selection_draft()?
+    );
     contract!("context-pack-v2.schema", ContextPack, context);
     contract!("intent-inventory-v2.schema", IntentInventory, inventory);
     contract!("actor-view-v2.schema", ActorView, actor_view);
@@ -336,6 +341,7 @@ fn format_for_schema_title(title: &str) -> Option<&'static str> {
     match title {
         "ActorContext" => Some("agentide.actor-context/2"),
         "AttachmentProvenance" => Some("agentide.attachment-provenance/1"),
+        "ContextSelectionDraft" => Some("agentide.context-selection-draft/1"),
         "ContextSelection" => Some("agentide.context-selection/1"),
         "ContextPack" => Some("agentide.context-pack/2"),
         "IntentInventory" => Some("agentide.intent-inventory/2"),
@@ -397,6 +403,11 @@ fn validate_hosted_fixture(path: &Path, value: &serde_json::Value) -> Result<()>
         "actor-context-v2.schema.json" => serde_json::from_value::<ActorContext>(value.clone())?
             .validate()
             .map_err(anyhow::Error::msg),
+        "context-selection-draft-v1.schema.json" => {
+            serde_json::from_value::<ContextSelectionDraft>(value.clone())?
+                .validate()
+                .map_err(anyhow::Error::msg)
+        }
         "context-pack-v2.schema.json" => serde_json::from_value::<ContextPack>(value.clone())?
             .validate()
             .map_err(anyhow::Error::msg),
@@ -457,6 +468,18 @@ fn validate_hosted_fixture(path: &Path, value: &serde_json::Value) -> Result<()>
 
 fn sample_actor() -> Result<ActorContext> {
     ActorContext::new(ActorKind::Human, "user:example").map_err(anyhow::Error::msg)
+}
+
+fn sample_selection_draft() -> Result<ContextSelectionDraft> {
+    ContextSelectionDraft::new(
+        "selection:one",
+        SelectionKind::Editor,
+        "src/lib.rs",
+        Some(1),
+        Some(1),
+        "pub fn example() {}\n",
+    )
+    .map_err(anyhow::Error::msg)
 }
 
 fn sample_selection(actor: ActorContext) -> Result<ContextSelection> {
