@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.coordination.GrantRisk",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6",
+    "contract_digest": "051031945ef03a50c55e0ba53bf2cef7785767ce44cea8163756cc5ed5a6e1f6",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coordination.GrantRisk": {
+      "title": "GrantRisk",
+      "x-ess-name": "agentide.coordination.GrantRisk",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Low",
+        "Medium"
+      ]
+    }
+  }
+}

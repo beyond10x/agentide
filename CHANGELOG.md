@@ -7,6 +7,9 @@
 - Generate the hosted coordination service from Service SDK instead of adding an AgentIDE-specific
   database or service repository. The package includes authenticated session projections, Eventlog
   persistence, a Connector factory, public contracts, and executable conformance scenarios.
+- Extend that generated session aggregate with nested authority grants, Workspace-backed context
+  references, and exact approval-checkpoint records. Their authenticated projections and lifecycle
+  events use the same Eventlog stream; no source buffer or alternate file store is introduced.
 - Add exact create/delete/rename and interactive-terminal semantics, bounded context injection,
   actor-specific tool inventory resolution, confined path grants, expiry/revocation checks, and
   delegated-grant intersection.

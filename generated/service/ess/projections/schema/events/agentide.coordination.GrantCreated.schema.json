@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GrantCreated payload",
+  "x-ess-name": "agentide.coordination.GrantCreated",
+  "x-ess-kind": "event-payload",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "grant_id": {
+      "$ref": "#/$defs/agentide.coordination.GrantId"
+    },
+    "grantee": {
+      "$ref": "#/$defs/agentide.coordination.SubjectRef"
+    },
+    "allowed_intents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/agentide.coordination.IntentRef"
+      }
+    },
+    "path_prefixes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/agentide.coordination.PathPrefix"
+      }
+    },
+    "maximum_risk": {
+      "$ref": "#/$defs/agentide.coordination.GrantRisk"
+    },
+    "expires_at": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "session_id",
+    "grant_id",
+    "grantee",
+    "allowed_intents",
+    "path_prefixes",
+    "maximum_risk",
+    "revision"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6",
+    "contract_digest": "5f9483cd5d282d36d79a0ae87e69c87b0b64ca96838aec3b71e3b74f2b9f70d4",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coordination.GrantId": {
+      "title": "GrantId",
+      "x-ess-name": "agentide.coordination.GrantId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coordination.GrantRisk": {
+      "title": "GrantRisk",
+      "x-ess-name": "agentide.coordination.GrantRisk",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Low",
+        "Medium"
+      ]
+    },
+    "agentide.coordination.IntentRef": {
+      "title": "IntentRef",
+      "x-ess-name": "agentide.coordination.IntentRef",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coordination.PathPrefix": {
+      "title": "PathPrefix",
+      "x-ess-name": "agentide.coordination.PathPrefix",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coordination.SubjectRef": {
+      "title": "SubjectRef",
+      "x-ess-name": "agentide.coordination.SubjectRef",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

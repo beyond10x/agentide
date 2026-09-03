@@ -35,6 +35,13 @@ bindings:
   surface_snapshot: {driver: core, operation: surface}
 unbound:
   - session_start
+  - grant_create
+  - grant_revoke
+  - context_pin
+  - context_unpin
+  - approval_checkpoint_record
+  - approval_checkpoint_approve
+  - approval_checkpoint_deny
   - code_create
   - code_delete
   - code_rename

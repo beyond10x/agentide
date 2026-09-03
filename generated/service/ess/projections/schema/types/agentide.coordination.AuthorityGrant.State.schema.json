@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.coordination.AuthorityGrant.State",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6",
+    "contract_digest": "c264c88d00e22aae0dce12b288ed78022b022a95fd56844e77ccca6d6b325e7c",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coordination.AuthorityGrant.State": {
+      "title": "State",
+      "x-ess-name": "agentide.coordination.AuthorityGrant.State",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Active",
+        "Revoked"
+      ]
+    }
+  }
+}

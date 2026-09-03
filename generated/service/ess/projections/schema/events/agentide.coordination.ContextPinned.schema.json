@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ContextPinned payload",
+  "x-ess-name": "agentide.coordination.ContextPinned",
+  "x-ess-kind": "event-payload",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "pin_id": {
+      "$ref": "#/$defs/agentide.coordination.ContextPinId"
+    },
+    "kind": {
+      "$ref": "#/$defs/agentide.coordination.ContextKind"
+    },
+    "reference": {
+      "$ref": "#/$defs/agentide.coordination.OpaqueRef"
+    },
+    "start_line": {
+      "type": "integer"
+    },
+    "end_line": {
+      "type": "integer"
+    },
+    "sha256": {
+      "$ref": "#/$defs/agentide.coordination.Digest"
+    }
+  },
+  "required": [
+    "session_id",
+    "pin_id",
+    "kind",
+    "reference",
+    "sha256"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6",
+    "contract_digest": "9e1d7859264418abd168d68948258cd96d4d098daf3ef54e93bf1f557cd17f4c",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coordination.ContextKind": {
+      "title": "ContextKind",
+      "x-ess-name": "agentide.coordination.ContextKind",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Editor",
+        "DiffHunk",
+        "Terminal",
+        "Process",
+        "Evidence"
+      ]
+    },
+    "agentide.coordination.ContextPinId": {
+      "title": "ContextPinId",
+      "x-ess-name": "agentide.coordination.ContextPinId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coordination.Digest": {
+      "title": "Digest",
+      "x-ess-name": "agentide.coordination.Digest",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coordination.OpaqueRef": {
+      "title": "OpaqueRef",
+      "x-ess-name": "agentide.coordination.OpaqueRef",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

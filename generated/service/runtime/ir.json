@@ -3,21 +3,25 @@
   "ess": {
     "system": "agentide",
     "version": "v1",
-    "source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7"
+    "source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6"
   },
   "synthesis": {
     "profile": "component-skeletons",
-    "digest": "4fdd1158e4d68faba1060b3b61daa9cb2de19bfc472d7926ee7686b94190bbaf",
-    "capabilities": 136
+    "digest": "609fbc711e068cea5a05521bd26d1eee90ad467d9d5ee82ab2e29aae6824f763",
+    "capabilities": 184
   },
   "obligation_catalog": {
     "digest": "a81885ebb75473d43f9ccbcee29b5d3147a24bebf0632a9582df0f3f3c3c305e",
     "providers": [
       "sdk.aggregate.event-sourced/v1",
+      "sdk.aggregate.nested-entity/v1",
       "sdk.auth.owner-and-conjunctive-scopes/v1",
       "sdk.auth.requested-scopes/v1",
+      "sdk.auth.same-partition-owner-transfer/v1",
+      "sdk.derive.inherit-parent-authority/v1",
       "sdk.lifecycle.require-state/v1",
-      "sdk.projection.auth-partitioned-visibility/v1"
+      "sdk.projection.auth-partitioned-visibility/v1",
+      "sdk.projection.hide-terminal-parent/v1"
     ]
   },
   "admission": [
@@ -126,6 +130,219 @@
           "authorize_session_owner",
           "require_active_session"
         ]
+      },
+      {
+        "name": "create_grant",
+        "command": "agentide.coordination.CreateGrant",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "operation_field",
+          "field": "expected_version"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [
+          {
+            "event": "agentide.coordination.GrantCreated",
+            "field": "grant_id",
+            "source": {
+              "kind": "generated_uuid_v7"
+            }
+          }
+        ],
+        "projections": [
+          "grant_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_session_stream",
+          "authorize_session_owner",
+          "require_active_session",
+          "validate_grantee_partition",
+          "inherit_grant_authority"
+        ]
+      },
+      {
+        "name": "revoke_grant",
+        "command": "agentide.coordination.RevokeGrant",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "operation_field",
+          "field": "expected_version"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [],
+        "projections": [
+          "grant_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_session_stream",
+          "authorize_session_owner",
+          "require_active_session",
+          "nested_grant"
+        ]
+      },
+      {
+        "name": "pin_context",
+        "command": "agentide.coordination.PinContext",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "operation_field",
+          "field": "expected_version"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [
+          {
+            "event": "agentide.coordination.ContextPinned",
+            "field": "pin_id",
+            "source": {
+              "kind": "generated_uuid_v7"
+            }
+          }
+        ],
+        "projections": [
+          "context_pin_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_session_stream",
+          "authorize_session_owner",
+          "require_active_session",
+          "inherit_context_pin_authority"
+        ]
+      },
+      {
+        "name": "remove_context_pin",
+        "command": "agentide.coordination.RemoveContextPin",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "operation_field",
+          "field": "expected_version"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [],
+        "projections": [
+          "context_pin_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_session_stream",
+          "authorize_session_owner",
+          "require_active_session",
+          "nested_context_pin"
+        ]
+      },
+      {
+        "name": "record_approval_checkpoint",
+        "command": "agentide.coordination.RecordApprovalCheckpoint",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "operation_field",
+          "field": "expected_version"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [],
+        "projections": [
+          "approval_checkpoint_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_session_stream",
+          "authorize_session_owner",
+          "require_active_session",
+          "inherit_checkpoint_authority"
+        ]
+      },
+      {
+        "name": "approve_checkpoint",
+        "command": "agentide.coordination.ApproveCheckpoint",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "operation_field",
+          "field": "expected_version"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [],
+        "projections": [
+          "approval_checkpoint_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_session_stream",
+          "authorize_session_owner",
+          "require_active_session",
+          "nested_approval_checkpoint"
+        ]
+      },
+      {
+        "name": "deny_checkpoint",
+        "command": "agentide.coordination.DenyCheckpoint",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "operation_field",
+          "field": "expected_version"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [],
+        "projections": [
+          "approval_checkpoint_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_session_stream",
+          "authorize_session_owner",
+          "require_active_session",
+          "nested_approval_checkpoint"
+        ]
       }
     ],
     "projections": [
@@ -135,6 +352,36 @@
         "delivery": "inline_transactional",
         "obligations": [
           "partition_session_projection"
+        ]
+      },
+      {
+        "name": "grant_snapshot_projection",
+        "view": "agentide.coordination.GrantSnapshot",
+        "delivery": "inline_transactional",
+        "obligations": [
+          "partition_session_projection",
+          "inherit_grant_authority",
+          "hide_closed_session_children"
+        ]
+      },
+      {
+        "name": "context_pin_snapshot_projection",
+        "view": "agentide.coordination.ContextPinSnapshot",
+        "delivery": "inline_transactional",
+        "obligations": [
+          "partition_session_projection",
+          "inherit_context_pin_authority",
+          "hide_closed_session_children"
+        ]
+      },
+      {
+        "name": "approval_checkpoint_snapshot_projection",
+        "view": "agentide.coordination.ApprovalCheckpointSnapshot",
+        "delivery": "inline_transactional",
+        "obligations": [
+          "partition_session_projection",
+          "inherit_checkpoint_authority",
+          "hide_closed_session_children"
         ]
       }
     ],
@@ -241,6 +488,147 @@
           "partition_session_projection",
           "filter_visible_sessions"
         ]
+      },
+      {
+        "name": "list_grants",
+        "view": "agentide.coordination.GrantSnapshot",
+        "projection": "grant_snapshot_projection",
+        "selectors": [
+          {
+            "parameter": "session_id",
+            "view_field": "session_id"
+          }
+        ],
+        "guards": [
+          {
+            "name": "grants_are_visible",
+            "refusal_code": "session_not_visible",
+            "reads": [
+              {
+                "kind": "view_field",
+                "field": "owner"
+              },
+              {
+                "kind": "view_field",
+                "field": "scopes"
+              },
+              {
+                "kind": "context",
+                "value": "current_authority"
+              },
+              {
+                "kind": "context",
+                "value": "executor_optional"
+              }
+            ]
+          }
+        ],
+        "sort": [
+          {
+            "view_field": "grant_id",
+            "direction": "ascending"
+          }
+        ],
+        "delivery": "read_your_writes",
+        "obligations": [
+          "partition_session_projection",
+          "filter_visible_sessions",
+          "hide_closed_session_children"
+        ]
+      },
+      {
+        "name": "list_context_pins",
+        "view": "agentide.coordination.ContextPinSnapshot",
+        "projection": "context_pin_snapshot_projection",
+        "selectors": [
+          {
+            "parameter": "session_id",
+            "view_field": "session_id"
+          }
+        ],
+        "guards": [
+          {
+            "name": "context_pins_are_visible",
+            "refusal_code": "session_not_visible",
+            "reads": [
+              {
+                "kind": "view_field",
+                "field": "owner"
+              },
+              {
+                "kind": "view_field",
+                "field": "scopes"
+              },
+              {
+                "kind": "context",
+                "value": "current_authority"
+              },
+              {
+                "kind": "context",
+                "value": "executor_optional"
+              }
+            ]
+          }
+        ],
+        "sort": [
+          {
+            "view_field": "pin_id",
+            "direction": "ascending"
+          }
+        ],
+        "delivery": "read_your_writes",
+        "obligations": [
+          "partition_session_projection",
+          "filter_visible_sessions",
+          "hide_closed_session_children"
+        ]
+      },
+      {
+        "name": "list_approval_checkpoints",
+        "view": "agentide.coordination.ApprovalCheckpointSnapshot",
+        "projection": "approval_checkpoint_snapshot_projection",
+        "selectors": [
+          {
+            "parameter": "session_id",
+            "view_field": "session_id"
+          }
+        ],
+        "guards": [
+          {
+            "name": "checkpoints_are_visible",
+            "refusal_code": "session_not_visible",
+            "reads": [
+              {
+                "kind": "view_field",
+                "field": "owner"
+              },
+              {
+                "kind": "view_field",
+                "field": "scopes"
+              },
+              {
+                "kind": "context",
+                "value": "current_authority"
+              },
+              {
+                "kind": "context",
+                "value": "executor_optional"
+              }
+            ]
+          }
+        ],
+        "sort": [
+          {
+            "view_field": "checkpoint_id",
+            "direction": "ascending"
+          }
+        ],
+        "delivery": "read_your_writes",
+        "obligations": [
+          "partition_session_projection",
+          "filter_visible_sessions",
+          "hide_closed_session_children"
+        ]
       }
     ],
     "content": [],
@@ -291,6 +679,97 @@
         "description": "Partition session projections by authenticated tenant, exact realm, owner and scopes."
       },
       {
+        "name": "validate_grantee_partition",
+        "provider": "sdk.auth.same-partition-owner-transfer/v1",
+        "bindings": {
+          "new_owner": "grantee",
+          "owner": "agentide.session.CodingSession.owner"
+        },
+        "description": "Admit grants only for a subject resolved inside the same authenticated partition."
+      },
+      {
+        "name": "nested_grant",
+        "provider": "sdk.aggregate.nested-entity/v1",
+        "bindings": {
+          "child": "agentide.coordination.AuthorityGrant",
+          "child_identity": "grant_id",
+          "parent": "agentide.session.CodingSession",
+          "parent_identity": "session_id"
+        },
+        "description": "Resolve a grant only inside its parent coding-session stream."
+      },
+      {
+        "name": "nested_context_pin",
+        "provider": "sdk.aggregate.nested-entity/v1",
+        "bindings": {
+          "child": "agentide.coordination.ContextPin",
+          "child_identity": "pin_id",
+          "parent": "agentide.session.CodingSession",
+          "parent_identity": "session_id"
+        },
+        "description": "Resolve a context pin only inside its parent coding-session stream."
+      },
+      {
+        "name": "nested_approval_checkpoint",
+        "provider": "sdk.aggregate.nested-entity/v1",
+        "bindings": {
+          "child": "agentide.coordination.ApprovalCheckpoint",
+          "child_identity": "checkpoint_id",
+          "parent": "agentide.session.CodingSession",
+          "parent_identity": "session_id"
+        },
+        "description": "Resolve an approval checkpoint only inside its parent coding-session stream."
+      },
+      {
+        "name": "inherit_grant_authority",
+        "provider": "sdk.derive.inherit-parent-authority/v1",
+        "bindings": {
+          "child": "agentide.coordination.AuthorityGrant",
+          "child_owner": "agentide.coordination.AuthorityGrant.owner",
+          "child_scopes": "agentide.coordination.AuthorityGrant.scopes",
+          "parent": "agentide.session.CodingSession",
+          "parent_owner": "agentide.session.CodingSession.owner",
+          "parent_scopes": "agentide.session.CodingSession.scopes"
+        },
+        "description": "Derive grant visibility from the session; callers cannot supply owner or scope."
+      },
+      {
+        "name": "inherit_context_pin_authority",
+        "provider": "sdk.derive.inherit-parent-authority/v1",
+        "bindings": {
+          "child": "agentide.coordination.ContextPin",
+          "child_owner": "agentide.coordination.ContextPin.owner",
+          "child_scopes": "agentide.coordination.ContextPin.scopes",
+          "parent": "agentide.session.CodingSession",
+          "parent_owner": "agentide.session.CodingSession.owner",
+          "parent_scopes": "agentide.session.CodingSession.scopes"
+        },
+        "description": "Derive context-pin visibility from the session; callers cannot supply owner or scope."
+      },
+      {
+        "name": "inherit_checkpoint_authority",
+        "provider": "sdk.derive.inherit-parent-authority/v1",
+        "bindings": {
+          "child": "agentide.coordination.ApprovalCheckpoint",
+          "child_owner": "agentide.coordination.ApprovalCheckpoint.owner",
+          "child_scopes": "agentide.coordination.ApprovalCheckpoint.scopes",
+          "parent": "agentide.session.CodingSession",
+          "parent_owner": "agentide.session.CodingSession.owner",
+          "parent_scopes": "agentide.session.CodingSession.scopes"
+        },
+        "description": "Derive checkpoint visibility from the session; callers cannot supply owner or scope."
+      },
+      {
+        "name": "hide_closed_session_children",
+        "provider": "sdk.projection.hide-terminal-parent/v1",
+        "bindings": {
+          "parent": "agentide.session.CodingSession",
+          "parent_identity": "session_id",
+          "terminal_states": "Closed"
+        },
+        "description": "Hide child coordination projections once their session is closed."
+      },
+      {
         "name": "filter_visible_sessions",
         "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
         "bindings": {
@@ -334,6 +813,81 @@
         "scopes": "scopes"
       }
     },
+    "hide_closed_session_children": {
+      "name": "hide_closed_session_children",
+      "provider": "sdk.projection.hide-terminal-parent/v1",
+      "bindings": {
+        "parent": "agentide.session.CodingSession",
+        "parent_identity": "session_id",
+        "terminal_states": "Closed"
+      }
+    },
+    "inherit_checkpoint_authority": {
+      "name": "inherit_checkpoint_authority",
+      "provider": "sdk.derive.inherit-parent-authority/v1",
+      "bindings": {
+        "child": "agentide.coordination.ApprovalCheckpoint",
+        "child_owner": "agentide.coordination.ApprovalCheckpoint.owner",
+        "child_scopes": "agentide.coordination.ApprovalCheckpoint.scopes",
+        "parent": "agentide.session.CodingSession",
+        "parent_owner": "agentide.session.CodingSession.owner",
+        "parent_scopes": "agentide.session.CodingSession.scopes"
+      }
+    },
+    "inherit_context_pin_authority": {
+      "name": "inherit_context_pin_authority",
+      "provider": "sdk.derive.inherit-parent-authority/v1",
+      "bindings": {
+        "child": "agentide.coordination.ContextPin",
+        "child_owner": "agentide.coordination.ContextPin.owner",
+        "child_scopes": "agentide.coordination.ContextPin.scopes",
+        "parent": "agentide.session.CodingSession",
+        "parent_owner": "agentide.session.CodingSession.owner",
+        "parent_scopes": "agentide.session.CodingSession.scopes"
+      }
+    },
+    "inherit_grant_authority": {
+      "name": "inherit_grant_authority",
+      "provider": "sdk.derive.inherit-parent-authority/v1",
+      "bindings": {
+        "child": "agentide.coordination.AuthorityGrant",
+        "child_owner": "agentide.coordination.AuthorityGrant.owner",
+        "child_scopes": "agentide.coordination.AuthorityGrant.scopes",
+        "parent": "agentide.session.CodingSession",
+        "parent_owner": "agentide.session.CodingSession.owner",
+        "parent_scopes": "agentide.session.CodingSession.scopes"
+      }
+    },
+    "nested_approval_checkpoint": {
+      "name": "nested_approval_checkpoint",
+      "provider": "sdk.aggregate.nested-entity/v1",
+      "bindings": {
+        "child": "agentide.coordination.ApprovalCheckpoint",
+        "child_identity": "checkpoint_id",
+        "parent": "agentide.session.CodingSession",
+        "parent_identity": "session_id"
+      }
+    },
+    "nested_context_pin": {
+      "name": "nested_context_pin",
+      "provider": "sdk.aggregate.nested-entity/v1",
+      "bindings": {
+        "child": "agentide.coordination.ContextPin",
+        "child_identity": "pin_id",
+        "parent": "agentide.session.CodingSession",
+        "parent_identity": "session_id"
+      }
+    },
+    "nested_grant": {
+      "name": "nested_grant",
+      "provider": "sdk.aggregate.nested-entity/v1",
+      "bindings": {
+        "child": "agentide.coordination.AuthorityGrant",
+        "child_identity": "grant_id",
+        "parent": "agentide.session.CodingSession",
+        "parent_identity": "session_id"
+      }
+    },
     "partition_session_projection": {
       "name": "partition_session_projection",
       "provider": "sdk.projection.auth-partitioned-visibility/v1",
@@ -349,9 +903,51 @@
         "allowed": "Active",
         "entity": "agentide.session.CodingSession"
       }
+    },
+    "validate_grantee_partition": {
+      "name": "validate_grantee_partition",
+      "provider": "sdk.auth.same-partition-owner-transfer/v1",
+      "bindings": {
+        "new_owner": "grantee",
+        "owner": "agentide.session.CodingSession.owner"
+      }
     }
   },
   "intents": {
+    "approve_checkpoint": {
+      "command": "agentide.coordination.ApproveCheckpoint",
+      "input_fields": {
+        "checkpoint_id": "agentide.coordination.CheckpointId",
+        "request_id": "agentide.session.RequestId",
+        "session_id": "agentide.session.SessionId"
+      },
+      "emitted_events": [
+        "agentide.coordination.ApprovalCheckpointApproved"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: durable state is unavailable",
+        "contract": "given `agentide.coordination.ApproveCheckpoint` input, decide and enact exactly one outcome — `approved` otherwise, takes `approve` of `agentide.coordination.ApprovalCheckpoint`, emits `agentide.coordination.ApprovalCheckpointApproved`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
     "close_session": {
       "command": "agentide.session.CloseSession",
       "input_fields": {
@@ -368,6 +964,222 @@
         "disposition": "obligation",
         "reason": "decided outside the system: durable state cannot be updated",
         "contract": "given `agentide.session.CloseSession` input, decide and enact exactly one outcome — `closed` otherwise, takes `close` of `agentide.session.CodingSession`, emits `agentide.session.SessionClosed`; `wrong-state` from a state no declared move starts in, error `agentide.session.SessionStateConflict`; `refused` externally decided (durable state cannot be updated), error `agentide.session.SessionRefusal`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
+    "create_grant": {
+      "command": "agentide.coordination.CreateGrant",
+      "input_fields": {
+        "allowed_intents": "List<agentide.coordination.IntentRef>",
+        "expires_at": "Optional<String>",
+        "grantee": "agentide.coordination.SubjectRef",
+        "maximum_risk": "agentide.coordination.GrantRisk",
+        "path_prefixes": "List<agentide.coordination.PathPrefix>",
+        "request_id": "agentide.session.RequestId",
+        "revision": "Integer",
+        "session_id": "agentide.session.SessionId"
+      },
+      "emitted_events": [
+        "agentide.coordination.GrantCreated"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: authority or durable state is unavailable",
+        "contract": "given `agentide.coordination.CreateGrant` input, decide and enact exactly one outcome — `created` otherwise, creates `agentide.coordination.AuthorityGrant`, emits `agentide.coordination.GrantCreated`; `refused` externally decided (authority or durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
+    "deny_checkpoint": {
+      "command": "agentide.coordination.DenyCheckpoint",
+      "input_fields": {
+        "checkpoint_id": "agentide.coordination.CheckpointId",
+        "request_id": "agentide.session.RequestId",
+        "session_id": "agentide.session.SessionId"
+      },
+      "emitted_events": [
+        "agentide.coordination.ApprovalCheckpointDenied"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: durable state is unavailable",
+        "contract": "given `agentide.coordination.DenyCheckpoint` input, decide and enact exactly one outcome — `denied` otherwise, takes `deny` of `agentide.coordination.ApprovalCheckpoint`, emits `agentide.coordination.ApprovalCheckpointDenied`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
+    "pin_context": {
+      "command": "agentide.coordination.PinContext",
+      "input_fields": {
+        "end_line": "Optional<Integer>",
+        "kind": "agentide.coordination.ContextKind",
+        "reference": "agentide.coordination.OpaqueRef",
+        "request_id": "agentide.session.RequestId",
+        "session_id": "agentide.session.SessionId",
+        "sha256": "agentide.coordination.Digest",
+        "start_line": "Optional<Integer>"
+      },
+      "emitted_events": [
+        "agentide.coordination.ContextPinned"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: the reference cannot be admitted or durable state is unavailable",
+        "contract": "given `agentide.coordination.PinContext` input, decide and enact exactly one outcome — `pinned` otherwise, creates `agentide.coordination.ContextPin`, emits `agentide.coordination.ContextPinned`; `refused` externally decided (the reference cannot be admitted or durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
+    "record_approval_checkpoint": {
+      "command": "agentide.coordination.RecordApprovalCheckpoint",
+      "input_fields": {
+        "attempt_ref": "agentide.coordination.OpaqueRef",
+        "checkpoint_id": "agentide.coordination.CheckpointId",
+        "checkpoint_ref": "agentide.coordination.OpaqueRef",
+        "plan_digest": "agentide.coordination.Digest",
+        "request_id": "agentide.session.RequestId",
+        "session_id": "agentide.session.SessionId"
+      },
+      "emitted_events": [
+        "agentide.coordination.ApprovalCheckpointRecorded"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: durable state is unavailable",
+        "contract": "given `agentide.coordination.RecordApprovalCheckpoint` input, decide and enact exactly one outcome — `recorded` otherwise, creates `agentide.coordination.ApprovalCheckpoint`, emits `agentide.coordination.ApprovalCheckpointRecorded`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
+    "remove_context_pin": {
+      "command": "agentide.coordination.RemoveContextPin",
+      "input_fields": {
+        "pin_id": "agentide.coordination.ContextPinId",
+        "request_id": "agentide.session.RequestId",
+        "session_id": "agentide.session.SessionId"
+      },
+      "emitted_events": [
+        "agentide.coordination.ContextPinRemoved"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: durable state is unavailable",
+        "contract": "given `agentide.coordination.RemoveContextPin` input, decide and enact exactly one outcome — `removed` otherwise, takes `remove` of `agentide.coordination.ContextPin`, emits `agentide.coordination.ContextPinRemoved`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
+    "revoke_grant": {
+      "command": "agentide.coordination.RevokeGrant",
+      "input_fields": {
+        "grant_id": "agentide.coordination.GrantId",
+        "request_id": "agentide.session.RequestId",
+        "session_id": "agentide.session.SessionId"
+      },
+      "emitted_events": [
+        "agentide.coordination.GrantRevoked"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: durable state is unavailable",
+        "contract": "given `agentide.coordination.RevokeGrant` input, decide and enact exactly one outcome — `revoked` otherwise, takes `revoke` of `agentide.coordination.AuthorityGrant`, emits `agentide.coordination.GrantRevoked`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
       },
       "pipeline": [
         "resolve_idempotency",
@@ -425,6 +1237,77 @@
     }
   },
   "projections": {
+    "approval_checkpoint_snapshot_projection": {
+      "view": "agentide.coordination.ApprovalCheckpointSnapshot",
+      "fields": {
+        "attempt_ref": "agentide.coordination.OpaqueRef",
+        "checkpoint_id": "agentide.coordination.CheckpointId",
+        "checkpoint_ref": "agentide.coordination.OpaqueRef",
+        "owner": "String",
+        "plan_digest": "agentide.coordination.Digest",
+        "scopes": "agentide.session.SessionScopes",
+        "session_id": "agentide.session.SessionId",
+        "state": "agentide.coordination.ApprovalCheckpoint.State"
+      },
+      "consistency": "read_your_writes",
+      "view_type": {
+        "disposition": "generated"
+      },
+      "view_query": {
+        "disposition": "obligation",
+        "reason": "how the projection is kept current is a storage decision",
+        "contract": "a query answering `agentide.coordination.ApprovalCheckpointSnapshot` with rows projected from `agentide.coordination.ApprovalCheckpoint` at `read_your_writes` consistency"
+      }
+    },
+    "context_pin_snapshot_projection": {
+      "view": "agentide.coordination.ContextPinSnapshot",
+      "fields": {
+        "end_line": "Optional<Integer>",
+        "kind": "agentide.coordination.ContextKind",
+        "owner": "String",
+        "pin_id": "agentide.coordination.ContextPinId",
+        "reference": "agentide.coordination.OpaqueRef",
+        "scopes": "agentide.session.SessionScopes",
+        "session_id": "agentide.session.SessionId",
+        "sha256": "agentide.coordination.Digest",
+        "start_line": "Optional<Integer>",
+        "state": "agentide.coordination.ContextPin.State"
+      },
+      "consistency": "read_your_writes",
+      "view_type": {
+        "disposition": "generated"
+      },
+      "view_query": {
+        "disposition": "obligation",
+        "reason": "how the projection is kept current is a storage decision",
+        "contract": "a query answering `agentide.coordination.ContextPinSnapshot` with rows projected from `agentide.coordination.ContextPin` at `read_your_writes` consistency"
+      }
+    },
+    "grant_snapshot_projection": {
+      "view": "agentide.coordination.GrantSnapshot",
+      "fields": {
+        "allowed_intents": "List<agentide.coordination.IntentRef>",
+        "expires_at": "Optional<String>",
+        "grant_id": "agentide.coordination.GrantId",
+        "grantee": "agentide.coordination.SubjectRef",
+        "maximum_risk": "agentide.coordination.GrantRisk",
+        "owner": "String",
+        "path_prefixes": "List<agentide.coordination.PathPrefix>",
+        "revision": "Integer",
+        "scopes": "agentide.session.SessionScopes",
+        "session_id": "agentide.session.SessionId",
+        "state": "agentide.coordination.AuthorityGrant.State"
+      },
+      "consistency": "read_your_writes",
+      "view_type": {
+        "disposition": "generated"
+      },
+      "view_query": {
+        "disposition": "obligation",
+        "reason": "how the projection is kept current is a storage decision",
+        "contract": "a query answering `agentide.coordination.GrantSnapshot` with rows projected from `agentide.coordination.AuthorityGrant` at `read_your_writes` consistency"
+      }
+    },
     "session_snapshot_projection": {
       "view": "agentide.session.SessionSnapshot",
       "fields": {
@@ -471,6 +1354,92 @@
         "disposition": "obligation",
         "reason": "how the projection is kept current is a storage decision",
         "contract": "a query answering `agentide.session.SessionSnapshot` with rows projected from `agentide.session.CodingSession` at `read_your_writes` consistency"
+      },
+      "pipeline": [
+        "guards",
+        "bind_selectors",
+        "read_projection"
+      ]
+    },
+    "list_approval_checkpoints": {
+      "view": "agentide.coordination.ApprovalCheckpointSnapshot",
+      "projection": "approval_checkpoint_snapshot_projection",
+      "fields": {
+        "attempt_ref": "agentide.coordination.OpaqueRef",
+        "checkpoint_id": "agentide.coordination.CheckpointId",
+        "checkpoint_ref": "agentide.coordination.OpaqueRef",
+        "owner": "String",
+        "plan_digest": "agentide.coordination.Digest",
+        "scopes": "agentide.session.SessionScopes",
+        "session_id": "agentide.session.SessionId",
+        "state": "agentide.coordination.ApprovalCheckpoint.State"
+      },
+      "view_type": {
+        "disposition": "generated"
+      },
+      "view_query": {
+        "disposition": "obligation",
+        "reason": "how the projection is kept current is a storage decision",
+        "contract": "a query answering `agentide.coordination.ApprovalCheckpointSnapshot` with rows projected from `agentide.coordination.ApprovalCheckpoint` at `read_your_writes` consistency"
+      },
+      "pipeline": [
+        "guards",
+        "bind_selectors",
+        "read_projection"
+      ]
+    },
+    "list_context_pins": {
+      "view": "agentide.coordination.ContextPinSnapshot",
+      "projection": "context_pin_snapshot_projection",
+      "fields": {
+        "end_line": "Optional<Integer>",
+        "kind": "agentide.coordination.ContextKind",
+        "owner": "String",
+        "pin_id": "agentide.coordination.ContextPinId",
+        "reference": "agentide.coordination.OpaqueRef",
+        "scopes": "agentide.session.SessionScopes",
+        "session_id": "agentide.session.SessionId",
+        "sha256": "agentide.coordination.Digest",
+        "start_line": "Optional<Integer>",
+        "state": "agentide.coordination.ContextPin.State"
+      },
+      "view_type": {
+        "disposition": "generated"
+      },
+      "view_query": {
+        "disposition": "obligation",
+        "reason": "how the projection is kept current is a storage decision",
+        "contract": "a query answering `agentide.coordination.ContextPinSnapshot` with rows projected from `agentide.coordination.ContextPin` at `read_your_writes` consistency"
+      },
+      "pipeline": [
+        "guards",
+        "bind_selectors",
+        "read_projection"
+      ]
+    },
+    "list_grants": {
+      "view": "agentide.coordination.GrantSnapshot",
+      "projection": "grant_snapshot_projection",
+      "fields": {
+        "allowed_intents": "List<agentide.coordination.IntentRef>",
+        "expires_at": "Optional<String>",
+        "grant_id": "agentide.coordination.GrantId",
+        "grantee": "agentide.coordination.SubjectRef",
+        "maximum_risk": "agentide.coordination.GrantRisk",
+        "owner": "String",
+        "path_prefixes": "List<agentide.coordination.PathPrefix>",
+        "revision": "Integer",
+        "scopes": "agentide.session.SessionScopes",
+        "session_id": "agentide.session.SessionId",
+        "state": "agentide.coordination.AuthorityGrant.State"
+      },
+      "view_type": {
+        "disposition": "generated"
+      },
+      "view_query": {
+        "disposition": "obligation",
+        "reason": "how the projection is kept current is a storage decision",
+        "contract": "a query answering `agentide.coordination.GrantSnapshot` with rows projected from `agentide.coordination.AuthorityGrant` at `read_your_writes` consistency"
       },
       "pipeline": [
         "guards",

@@ -2,8 +2,8 @@
   "provenance": {
     "system": "agentide",
     "specification_version": "v1",
-    "source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
-    "contract_digest": "dd678f8103754dc8a9fbfe5fe0fc15ed859a78be562212dc996affb84ba723b7"
+    "source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6",
+    "contract_digest": "e350fe759363d3f1cee42987942a896a324c986766bfb6314fc0f625dfce3474"
   },
   "scope": {
     "profile": "component-skeletons"
@@ -82,6 +82,97 @@
     {
       "kind": "domain_type",
       "source": "agentide.coding.VerificationLevel",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coordination.ApprovalCheckpoint.State",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coordination.AuthorityGrant.State",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coordination.CheckpointId",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coordination.ContextKind",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coordination.ContextPin.State",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coordination.ContextPinId",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coordination.Digest",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coordination.GrantId",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coordination.GrantRisk",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coordination.IntentRef",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coordination.OpaqueRef",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coordination.PathPrefix",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coordination.SubjectRef",
       "disposition": {
         "disposition": "generated"
       }
@@ -194,6 +285,27 @@
     {
       "kind": "domain_type",
       "source": "agentide.surface.Workbench.State",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "entity_lifecycle",
+      "source": "agentide.coordination.ApprovalCheckpoint",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "entity_lifecycle",
+      "source": "agentide.coordination.AuthorityGrant",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "entity_lifecycle",
+      "source": "agentide.coordination.ContextPin",
       "disposition": {
         "disposition": "generated"
       }
@@ -746,6 +858,139 @@
     },
     {
       "kind": "command_contract",
+      "source": "agentide.coordination.ApproveCheckpoint",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coordination.ApproveCheckpoint",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "durable state is unavailable"
+        },
+        "contract": "given `agentide.coordination.ApproveCheckpoint` input, decide and enact exactly one outcome — `approved` otherwise, takes `approve` of `agentide.coordination.ApprovalCheckpoint`, emits `agentide.coordination.ApprovalCheckpointApproved`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coordination.CreateGrant",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coordination.CreateGrant",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "authority or durable state is unavailable"
+        },
+        "contract": "given `agentide.coordination.CreateGrant` input, decide and enact exactly one outcome — `created` otherwise, creates `agentide.coordination.AuthorityGrant`, emits `agentide.coordination.GrantCreated`; `refused` externally decided (authority or durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coordination.DenyCheckpoint",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coordination.DenyCheckpoint",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "durable state is unavailable"
+        },
+        "contract": "given `agentide.coordination.DenyCheckpoint` input, decide and enact exactly one outcome — `denied` otherwise, takes `deny` of `agentide.coordination.ApprovalCheckpoint`, emits `agentide.coordination.ApprovalCheckpointDenied`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coordination.PinContext",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coordination.PinContext",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the reference cannot be admitted or durable state is unavailable"
+        },
+        "contract": "given `agentide.coordination.PinContext` input, decide and enact exactly one outcome — `pinned` otherwise, creates `agentide.coordination.ContextPin`, emits `agentide.coordination.ContextPinned`; `refused` externally decided (the reference cannot be admitted or durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coordination.RecordApprovalCheckpoint",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coordination.RecordApprovalCheckpoint",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "durable state is unavailable"
+        },
+        "contract": "given `agentide.coordination.RecordApprovalCheckpoint` input, decide and enact exactly one outcome — `recorded` otherwise, creates `agentide.coordination.ApprovalCheckpoint`, emits `agentide.coordination.ApprovalCheckpointRecorded`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coordination.RemoveContextPin",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coordination.RemoveContextPin",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "durable state is unavailable"
+        },
+        "contract": "given `agentide.coordination.RemoveContextPin` input, decide and enact exactly one outcome — `removed` otherwise, takes `remove` of `agentide.coordination.ContextPin`, emits `agentide.coordination.ContextPinRemoved`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coordination.RevokeGrant",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coordination.RevokeGrant",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "durable state is unavailable"
+        },
+        "contract": "given `agentide.coordination.RevokeGrant` input, decide and enact exactly one outcome — `revoked` otherwise, takes `revoke` of `agentide.coordination.AuthorityGrant`, emits `agentide.coordination.GrantRevoked`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
+      }
+    },
+    {
+      "kind": "command_contract",
       "source": "agentide.session.CloseSession",
       "disposition": {
         "disposition": "generated"
@@ -988,6 +1233,55 @@
     },
     {
       "kind": "event_type",
+      "source": "agentide.coordination.ApprovalCheckpointApproved",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.coordination.ApprovalCheckpointDenied",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.coordination.ApprovalCheckpointRecorded",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.coordination.ContextPinRemoved",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.coordination.ContextPinned",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.coordination.GrantCreated",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.coordination.GrantRevoked",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
       "source": "agentide.session.SessionClosed",
       "disposition": {
         "disposition": "generated"
@@ -1072,6 +1366,20 @@
     },
     {
       "kind": "error_type",
+      "source": "agentide.coordination.CoordinationRefusal",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "error_type",
+      "source": "agentide.coordination.CoordinationStateConflict",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "error_type",
       "source": "agentide.session.SessionRefusal",
       "disposition": {
         "disposition": "generated"
@@ -1089,6 +1397,60 @@
       "source": "agentide.surface.SurfaceFailure",
       "disposition": {
         "disposition": "generated"
+      }
+    },
+    {
+      "kind": "view_type",
+      "source": "agentide.coordination.ApprovalCheckpointSnapshot",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "view_query",
+      "source": "agentide.coordination.ApprovalCheckpointSnapshot",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "projection_maintenance"
+        },
+        "contract": "a query answering `agentide.coordination.ApprovalCheckpointSnapshot` with rows projected from `agentide.coordination.ApprovalCheckpoint` at `read_your_writes` consistency"
+      }
+    },
+    {
+      "kind": "view_type",
+      "source": "agentide.coordination.ContextPinSnapshot",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "view_query",
+      "source": "agentide.coordination.ContextPinSnapshot",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "projection_maintenance"
+        },
+        "contract": "a query answering `agentide.coordination.ContextPinSnapshot` with rows projected from `agentide.coordination.ContextPin` at `read_your_writes` consistency"
+      }
+    },
+    {
+      "kind": "view_type",
+      "source": "agentide.coordination.GrantSnapshot",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "view_query",
+      "source": "agentide.coordination.GrantSnapshot",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "projection_maintenance"
+        },
+        "contract": "a query answering `agentide.coordination.GrantSnapshot` with rows projected from `agentide.coordination.AuthorityGrant` at `read_your_writes` consistency"
       }
     },
     {
@@ -1135,6 +1497,36 @@
         "reason": "needs_caller_identity",
         "stage": "planning",
         "detail": "may invoke `agentide.coding.ApplyDeployment`, `agentide.coding.CancelProcess`, `agentide.coding.CreateCode`, `agentide.coding.CreateWorktree`, `agentide.coding.CutRelease`, `agentide.coding.DelegateAgent`, `agentide.coding.DeleteCode`, `agentide.coding.EditCode`, `agentide.coding.FinishWorktree`, `agentide.coding.InputProcess`, `agentide.coding.ListTerminals`, `agentide.coding.MessageAgent`, `agentide.coding.ObserveAgents`, `agentide.coding.ObserveChanges`, `agentide.coding.ObserveDeployment`, `agentide.coding.ObserveProcess`, `agentide.coding.ObserveWorktree`, `agentide.coding.OpenInteractiveTerminal`, `agentide.coding.PublishCode`, `agentide.coding.ReadCode`, `agentide.coding.RecordEvidence`, `agentide.coding.RenameCode`, `agentide.coding.SearchCode`, `agentide.coding.StartProcess`, `agentide.coding.TerminateTerminal`, `agentide.coding.VerifyCode`, `agentide.coding.WaitAgent`, `agentide.coding.WaitProcess`; a grant is checked against a caller identity, which types do not carry, and enforcement belongs to the layer that knows who is calling"
+      }
+    },
+    {
+      "kind": "actor_grants",
+      "source": "agentide.coordination.SessionExecutor",
+      "disposition": {
+        "disposition": "refused",
+        "reason": "needs_caller_identity",
+        "stage": "planning",
+        "detail": "may invoke `agentide.coordination.PinContext`, `agentide.coordination.RemoveContextPin`; a grant is checked against a caller identity, which types do not carry, and enforcement belongs to the layer that knows who is calling"
+      }
+    },
+    {
+      "kind": "actor_grants",
+      "source": "agentide.coordination.SessionOwner",
+      "disposition": {
+        "disposition": "refused",
+        "reason": "needs_caller_identity",
+        "stage": "planning",
+        "detail": "may invoke `agentide.coordination.ApproveCheckpoint`, `agentide.coordination.CreateGrant`, `agentide.coordination.DenyCheckpoint`, `agentide.coordination.PinContext`, `agentide.coordination.RemoveContextPin`, `agentide.coordination.RevokeGrant`; a grant is checked against a caller identity, which types do not carry, and enforcement belongs to the layer that knows who is calling"
+      }
+    },
+    {
+      "kind": "actor_grants",
+      "source": "agentide.coordination.TaskAuthority",
+      "disposition": {
+        "disposition": "refused",
+        "reason": "needs_caller_identity",
+        "stage": "planning",
+        "detail": "may invoke `agentide.coordination.RecordApprovalCheckpoint`; a grant is checked against a caller identity, which types do not carry, and enforcement belongs to the layer that knows who is calling"
       }
     },
     {

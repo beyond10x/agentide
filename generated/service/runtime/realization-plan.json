@@ -2,10 +2,127 @@
   "format": "service-realization-plan/1",
   "service": "agentide",
   "realm": "optional",
-  "ess_source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+  "ess_source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6",
   "obligation_catalog_digest": "a81885ebb75473d43f9ccbcee29b5d3147a24bebf0632a9582df0f3f3c3c305e",
   "content": {},
   "intents": {
+    "approve_checkpoint": {
+      "command": "agentide.coordination.ApproveCheckpoint",
+      "inputs": [
+        {
+          "name": "checkpoint_id",
+          "type_ref": "agentide.coordination.CheckpointId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "command_field",
+        "field": "session_id"
+      },
+      "expected_version": {
+        "kind": "operation_field",
+        "field": "expected_version"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.session.CodingSession",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.session.CodingSession.owner",
+            "scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.lifecycle.require-state/v1",
+          "bindings": {
+            "allowed": "Active",
+            "entity": "agentide.session.CodingSession"
+          }
+        },
+        {
+          "provider": "sdk.aggregate.nested-entity/v1",
+          "bindings": {
+            "child": "agentide.coordination.ApprovalCheckpoint",
+            "child_identity": "checkpoint_id",
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "approved",
+        "events": [
+          {
+            "event": "agentide.coordination.ApprovalCheckpointApproved",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              },
+              {
+                "name": "checkpoint_id",
+                "source": {
+                  "kind": "input",
+                  "field": "checkpoint_id"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "approval_checkpoint_snapshot_projection"
+      ]
+    },
     "close_session": {
       "command": "agentide.session.CloseSession",
       "inputs": [
@@ -97,6 +214,913 @@
       },
       "projections": [
         "session_snapshot_projection"
+      ]
+    },
+    "create_grant": {
+      "command": "agentide.coordination.CreateGrant",
+      "inputs": [
+        {
+          "name": "allowed_intents",
+          "type_ref": "List<agentide.coordination.IntentRef>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "expires_at",
+          "type_ref": "Optional<String>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "grantee",
+          "type_ref": "agentide.coordination.SubjectRef",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "maximum_risk",
+          "type_ref": "agentide.coordination.GrantRisk",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "path_prefixes",
+          "type_ref": "List<agentide.coordination.PathPrefix>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "revision",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "command_field",
+        "field": "session_id"
+      },
+      "expected_version": {
+        "kind": "operation_field",
+        "field": "expected_version"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.session.CodingSession",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.session.CodingSession.owner",
+            "scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.lifecycle.require-state/v1",
+          "bindings": {
+            "allowed": "Active",
+            "entity": "agentide.session.CodingSession"
+          }
+        },
+        {
+          "provider": "sdk.auth.same-partition-owner-transfer/v1",
+          "bindings": {
+            "new_owner": "grantee",
+            "owner": "agentide.session.CodingSession.owner"
+          }
+        },
+        {
+          "provider": "sdk.derive.inherit-parent-authority/v1",
+          "bindings": {
+            "child": "agentide.coordination.AuthorityGrant",
+            "child_owner": "agentide.coordination.AuthorityGrant.owner",
+            "child_scopes": "agentide.coordination.AuthorityGrant.scopes",
+            "parent": "agentide.session.CodingSession",
+            "parent_owner": "agentide.session.CodingSession.owner",
+            "parent_scopes": "agentide.session.CodingSession.scopes"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "created",
+        "events": [
+          {
+            "event": "agentide.coordination.GrantCreated",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              },
+              {
+                "name": "grant_id",
+                "source": {
+                  "kind": "generated_uuid_v7"
+                }
+              },
+              {
+                "name": "grantee",
+                "source": {
+                  "kind": "input",
+                  "field": "grantee"
+                }
+              },
+              {
+                "name": "allowed_intents",
+                "source": {
+                  "kind": "input",
+                  "field": "allowed_intents"
+                }
+              },
+              {
+                "name": "path_prefixes",
+                "source": {
+                  "kind": "input",
+                  "field": "path_prefixes"
+                }
+              },
+              {
+                "name": "maximum_risk",
+                "source": {
+                  "kind": "input",
+                  "field": "maximum_risk"
+                }
+              },
+              {
+                "name": "expires_at",
+                "source": {
+                  "kind": "input",
+                  "field": "expires_at"
+                }
+              },
+              {
+                "name": "revision",
+                "source": {
+                  "kind": "input",
+                  "field": "revision"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "grant_snapshot_projection"
+      ]
+    },
+    "deny_checkpoint": {
+      "command": "agentide.coordination.DenyCheckpoint",
+      "inputs": [
+        {
+          "name": "checkpoint_id",
+          "type_ref": "agentide.coordination.CheckpointId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "command_field",
+        "field": "session_id"
+      },
+      "expected_version": {
+        "kind": "operation_field",
+        "field": "expected_version"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.session.CodingSession",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.session.CodingSession.owner",
+            "scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.lifecycle.require-state/v1",
+          "bindings": {
+            "allowed": "Active",
+            "entity": "agentide.session.CodingSession"
+          }
+        },
+        {
+          "provider": "sdk.aggregate.nested-entity/v1",
+          "bindings": {
+            "child": "agentide.coordination.ApprovalCheckpoint",
+            "child_identity": "checkpoint_id",
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "denied",
+        "events": [
+          {
+            "event": "agentide.coordination.ApprovalCheckpointDenied",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              },
+              {
+                "name": "checkpoint_id",
+                "source": {
+                  "kind": "input",
+                  "field": "checkpoint_id"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "approval_checkpoint_snapshot_projection"
+      ]
+    },
+    "pin_context": {
+      "command": "agentide.coordination.PinContext",
+      "inputs": [
+        {
+          "name": "end_line",
+          "type_ref": "Optional<Integer>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "kind",
+          "type_ref": "agentide.coordination.ContextKind",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "reference",
+          "type_ref": "agentide.coordination.OpaqueRef",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "sha256",
+          "type_ref": "agentide.coordination.Digest",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "start_line",
+          "type_ref": "Optional<Integer>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "command_field",
+        "field": "session_id"
+      },
+      "expected_version": {
+        "kind": "operation_field",
+        "field": "expected_version"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.session.CodingSession",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.session.CodingSession.owner",
+            "scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.lifecycle.require-state/v1",
+          "bindings": {
+            "allowed": "Active",
+            "entity": "agentide.session.CodingSession"
+          }
+        },
+        {
+          "provider": "sdk.derive.inherit-parent-authority/v1",
+          "bindings": {
+            "child": "agentide.coordination.ContextPin",
+            "child_owner": "agentide.coordination.ContextPin.owner",
+            "child_scopes": "agentide.coordination.ContextPin.scopes",
+            "parent": "agentide.session.CodingSession",
+            "parent_owner": "agentide.session.CodingSession.owner",
+            "parent_scopes": "agentide.session.CodingSession.scopes"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "pinned",
+        "events": [
+          {
+            "event": "agentide.coordination.ContextPinned",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              },
+              {
+                "name": "pin_id",
+                "source": {
+                  "kind": "generated_uuid_v7"
+                }
+              },
+              {
+                "name": "kind",
+                "source": {
+                  "kind": "input",
+                  "field": "kind"
+                }
+              },
+              {
+                "name": "reference",
+                "source": {
+                  "kind": "input",
+                  "field": "reference"
+                }
+              },
+              {
+                "name": "start_line",
+                "source": {
+                  "kind": "input",
+                  "field": "start_line"
+                }
+              },
+              {
+                "name": "end_line",
+                "source": {
+                  "kind": "input",
+                  "field": "end_line"
+                }
+              },
+              {
+                "name": "sha256",
+                "source": {
+                  "kind": "input",
+                  "field": "sha256"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "context_pin_snapshot_projection"
+      ]
+    },
+    "record_approval_checkpoint": {
+      "command": "agentide.coordination.RecordApprovalCheckpoint",
+      "inputs": [
+        {
+          "name": "attempt_ref",
+          "type_ref": "agentide.coordination.OpaqueRef",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "checkpoint_id",
+          "type_ref": "agentide.coordination.CheckpointId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "checkpoint_ref",
+          "type_ref": "agentide.coordination.OpaqueRef",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "plan_digest",
+          "type_ref": "agentide.coordination.Digest",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "command_field",
+        "field": "session_id"
+      },
+      "expected_version": {
+        "kind": "operation_field",
+        "field": "expected_version"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.session.CodingSession",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.session.CodingSession.owner",
+            "scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.lifecycle.require-state/v1",
+          "bindings": {
+            "allowed": "Active",
+            "entity": "agentide.session.CodingSession"
+          }
+        },
+        {
+          "provider": "sdk.derive.inherit-parent-authority/v1",
+          "bindings": {
+            "child": "agentide.coordination.ApprovalCheckpoint",
+            "child_owner": "agentide.coordination.ApprovalCheckpoint.owner",
+            "child_scopes": "agentide.coordination.ApprovalCheckpoint.scopes",
+            "parent": "agentide.session.CodingSession",
+            "parent_owner": "agentide.session.CodingSession.owner",
+            "parent_scopes": "agentide.session.CodingSession.scopes"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "recorded",
+        "events": [
+          {
+            "event": "agentide.coordination.ApprovalCheckpointRecorded",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              },
+              {
+                "name": "checkpoint_id",
+                "source": {
+                  "kind": "input",
+                  "field": "checkpoint_id"
+                }
+              },
+              {
+                "name": "attempt_ref",
+                "source": {
+                  "kind": "input",
+                  "field": "attempt_ref"
+                }
+              },
+              {
+                "name": "plan_digest",
+                "source": {
+                  "kind": "input",
+                  "field": "plan_digest"
+                }
+              },
+              {
+                "name": "checkpoint_ref",
+                "source": {
+                  "kind": "input",
+                  "field": "checkpoint_ref"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "approval_checkpoint_snapshot_projection"
+      ]
+    },
+    "remove_context_pin": {
+      "command": "agentide.coordination.RemoveContextPin",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "pin_id",
+          "type_ref": "agentide.coordination.ContextPinId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "command_field",
+        "field": "session_id"
+      },
+      "expected_version": {
+        "kind": "operation_field",
+        "field": "expected_version"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.session.CodingSession",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.session.CodingSession.owner",
+            "scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.lifecycle.require-state/v1",
+          "bindings": {
+            "allowed": "Active",
+            "entity": "agentide.session.CodingSession"
+          }
+        },
+        {
+          "provider": "sdk.aggregate.nested-entity/v1",
+          "bindings": {
+            "child": "agentide.coordination.ContextPin",
+            "child_identity": "pin_id",
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "removed",
+        "events": [
+          {
+            "event": "agentide.coordination.ContextPinRemoved",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              },
+              {
+                "name": "pin_id",
+                "source": {
+                  "kind": "input",
+                  "field": "pin_id"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "context_pin_snapshot_projection"
+      ]
+    },
+    "revoke_grant": {
+      "command": "agentide.coordination.RevokeGrant",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "grant_id",
+          "type_ref": "agentide.coordination.GrantId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "command_field",
+        "field": "session_id"
+      },
+      "expected_version": {
+        "kind": "operation_field",
+        "field": "expected_version"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.session.CodingSession",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.session.CodingSession.owner",
+            "scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.lifecycle.require-state/v1",
+          "bindings": {
+            "allowed": "Active",
+            "entity": "agentide.session.CodingSession"
+          }
+        },
+        {
+          "provider": "sdk.aggregate.nested-entity/v1",
+          "bindings": {
+            "child": "agentide.coordination.AuthorityGrant",
+            "child_identity": "grant_id",
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "revoked",
+        "events": [
+          {
+            "event": "agentide.coordination.GrantRevoked",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              },
+              {
+                "name": "grant_id",
+                "source": {
+                  "kind": "input",
+                  "field": "grant_id"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "grant_snapshot_projection"
       ]
     },
     "start_session": {
@@ -301,6 +1325,120 @@
         }
       ]
     },
+    "list_approval_checkpoints": {
+      "view": "agentide.coordination.ApprovalCheckpointSnapshot",
+      "inputs": [
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "selector",
+            "view_field": "session_id"
+          }
+        }
+      ],
+      "obligations": [
+        {
+          "provider": "sdk.projection.auth-partitioned-visibility/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        },
+        {
+          "provider": "sdk.projection.hide-terminal-parent/v1",
+          "bindings": {
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id",
+            "terminal_states": "Closed"
+          }
+        }
+      ]
+    },
+    "list_context_pins": {
+      "view": "agentide.coordination.ContextPinSnapshot",
+      "inputs": [
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "selector",
+            "view_field": "session_id"
+          }
+        }
+      ],
+      "obligations": [
+        {
+          "provider": "sdk.projection.auth-partitioned-visibility/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        },
+        {
+          "provider": "sdk.projection.hide-terminal-parent/v1",
+          "bindings": {
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id",
+            "terminal_states": "Closed"
+          }
+        }
+      ]
+    },
+    "list_grants": {
+      "view": "agentide.coordination.GrantSnapshot",
+      "inputs": [
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "selector",
+            "view_field": "session_id"
+          }
+        }
+      ],
+      "obligations": [
+        {
+          "provider": "sdk.projection.auth-partitioned-visibility/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        },
+        {
+          "provider": "sdk.projection.hide-terminal-parent/v1",
+          "bindings": {
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id",
+            "terminal_states": "Closed"
+          }
+        }
+      ]
+    },
     "list_sessions": {
       "view": "agentide.session.SessionSnapshot",
       "inputs": [],
@@ -323,6 +1461,161 @@
     }
   },
   "reducers": {
+    "agentide.coordination.ApprovalCheckpointApproved": {
+      "entity": "agentide.coordination.ApprovalCheckpoint",
+      "identity_field": "checkpoint_id",
+      "effect": {
+        "kind": "move",
+        "from": [
+          "Pending"
+        ],
+        "to": "Approved"
+      },
+      "fields": [
+        "session_id",
+        "attempt_ref",
+        "plan_digest",
+        "checkpoint_ref",
+        "owner",
+        "scopes"
+      ]
+    },
+    "agentide.coordination.ApprovalCheckpointDenied": {
+      "entity": "agentide.coordination.ApprovalCheckpoint",
+      "identity_field": "checkpoint_id",
+      "effect": {
+        "kind": "move",
+        "from": [
+          "Pending"
+        ],
+        "to": "Denied"
+      },
+      "fields": [
+        "session_id",
+        "attempt_ref",
+        "plan_digest",
+        "checkpoint_ref",
+        "owner",
+        "scopes"
+      ]
+    },
+    "agentide.coordination.ApprovalCheckpointRecorded": {
+      "entity": "agentide.coordination.ApprovalCheckpoint",
+      "identity_field": "checkpoint_id",
+      "effect": {
+        "kind": "create",
+        "initial_state": "Pending"
+      },
+      "fields": [
+        "session_id",
+        "attempt_ref",
+        "plan_digest",
+        "checkpoint_ref",
+        "owner",
+        "scopes"
+      ],
+      "inherit": {
+        "parent": "agentide.session.CodingSession",
+        "parent_owner": "owner",
+        "parent_scopes": "scopes",
+        "child_owner": "owner",
+        "child_scopes": "scopes"
+      }
+    },
+    "agentide.coordination.ContextPinRemoved": {
+      "entity": "agentide.coordination.ContextPin",
+      "identity_field": "pin_id",
+      "effect": {
+        "kind": "move",
+        "from": [
+          "Active"
+        ],
+        "to": "Removed"
+      },
+      "fields": [
+        "session_id",
+        "kind",
+        "reference",
+        "start_line",
+        "end_line",
+        "sha256",
+        "owner",
+        "scopes"
+      ]
+    },
+    "agentide.coordination.ContextPinned": {
+      "entity": "agentide.coordination.ContextPin",
+      "identity_field": "pin_id",
+      "effect": {
+        "kind": "create",
+        "initial_state": "Active"
+      },
+      "fields": [
+        "session_id",
+        "kind",
+        "reference",
+        "start_line",
+        "end_line",
+        "sha256",
+        "owner",
+        "scopes"
+      ],
+      "inherit": {
+        "parent": "agentide.session.CodingSession",
+        "parent_owner": "owner",
+        "parent_scopes": "scopes",
+        "child_owner": "owner",
+        "child_scopes": "scopes"
+      }
+    },
+    "agentide.coordination.GrantCreated": {
+      "entity": "agentide.coordination.AuthorityGrant",
+      "identity_field": "grant_id",
+      "effect": {
+        "kind": "create",
+        "initial_state": "Active"
+      },
+      "fields": [
+        "session_id",
+        "grantee",
+        "allowed_intents",
+        "path_prefixes",
+        "maximum_risk",
+        "expires_at",
+        "revision",
+        "owner",
+        "scopes"
+      ],
+      "inherit": {
+        "parent": "agentide.session.CodingSession",
+        "parent_owner": "owner",
+        "parent_scopes": "scopes",
+        "child_owner": "owner",
+        "child_scopes": "scopes"
+      }
+    },
+    "agentide.coordination.GrantRevoked": {
+      "entity": "agentide.coordination.AuthorityGrant",
+      "identity_field": "grant_id",
+      "effect": {
+        "kind": "move",
+        "from": [
+          "Active"
+        ],
+        "to": "Revoked"
+      },
+      "fields": [
+        "session_id",
+        "grantee",
+        "allowed_intents",
+        "path_prefixes",
+        "maximum_risk",
+        "expires_at",
+        "revision",
+        "owner",
+        "scopes"
+      ]
+    },
     "agentide.session.SessionClosed": {
       "entity": "agentide.session.CodingSession",
       "identity_field": "session_id",
@@ -364,6 +1657,134 @@
     }
   },
   "views": {
+    "agentide.coordination.ApprovalCheckpointSnapshot": {
+      "source": "agentide.coordination.ApprovalCheckpoint",
+      "fields": [
+        "checkpoint_id",
+        "session_id",
+        "attempt_ref",
+        "plan_digest",
+        "checkpoint_ref",
+        "owner",
+        "scopes",
+        "state"
+      ],
+      "obligations": [
+        {
+          "provider": "sdk.projection.auth-partitioned-visibility/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        },
+        {
+          "provider": "sdk.derive.inherit-parent-authority/v1",
+          "bindings": {
+            "child": "agentide.coordination.ApprovalCheckpoint",
+            "child_owner": "agentide.coordination.ApprovalCheckpoint.owner",
+            "child_scopes": "agentide.coordination.ApprovalCheckpoint.scopes",
+            "parent": "agentide.session.CodingSession",
+            "parent_owner": "agentide.session.CodingSession.owner",
+            "parent_scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.projection.hide-terminal-parent/v1",
+          "bindings": {
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id",
+            "terminal_states": "Closed"
+          }
+        }
+      ]
+    },
+    "agentide.coordination.ContextPinSnapshot": {
+      "source": "agentide.coordination.ContextPin",
+      "fields": [
+        "pin_id",
+        "session_id",
+        "kind",
+        "reference",
+        "start_line",
+        "end_line",
+        "sha256",
+        "owner",
+        "scopes",
+        "state"
+      ],
+      "obligations": [
+        {
+          "provider": "sdk.projection.auth-partitioned-visibility/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        },
+        {
+          "provider": "sdk.derive.inherit-parent-authority/v1",
+          "bindings": {
+            "child": "agentide.coordination.ContextPin",
+            "child_owner": "agentide.coordination.ContextPin.owner",
+            "child_scopes": "agentide.coordination.ContextPin.scopes",
+            "parent": "agentide.session.CodingSession",
+            "parent_owner": "agentide.session.CodingSession.owner",
+            "parent_scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.projection.hide-terminal-parent/v1",
+          "bindings": {
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id",
+            "terminal_states": "Closed"
+          }
+        }
+      ]
+    },
+    "agentide.coordination.GrantSnapshot": {
+      "source": "agentide.coordination.AuthorityGrant",
+      "fields": [
+        "grant_id",
+        "session_id",
+        "grantee",
+        "allowed_intents",
+        "path_prefixes",
+        "maximum_risk",
+        "expires_at",
+        "revision",
+        "owner",
+        "scopes",
+        "state"
+      ],
+      "obligations": [
+        {
+          "provider": "sdk.projection.auth-partitioned-visibility/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        },
+        {
+          "provider": "sdk.derive.inherit-parent-authority/v1",
+          "bindings": {
+            "child": "agentide.coordination.AuthorityGrant",
+            "child_owner": "agentide.coordination.AuthorityGrant.owner",
+            "child_scopes": "agentide.coordination.AuthorityGrant.scopes",
+            "parent": "agentide.session.CodingSession",
+            "parent_owner": "agentide.session.CodingSession.owner",
+            "parent_scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.projection.hide-terminal-parent/v1",
+          "bindings": {
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id",
+            "terminal_states": "Closed"
+          }
+        }
+      ]
+    },
     "agentide.session.SessionSnapshot": {
       "source": "agentide.session.CodingSession",
       "fields": [

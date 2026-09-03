@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.coordination.Digest",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6",
+    "contract_digest": "1f573d744a2c518723a7048e6c4761ff68bff4d316bcef0f604e6f568468eeee",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coordination.Digest": {
+      "title": "Digest",
+      "x-ess-name": "agentide.coordination.Digest",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

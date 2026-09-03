@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.coordination.OpaqueRef",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6",
+    "contract_digest": "c7a835f70a64101076399552c51fa8554f4b0e9746ff15852d7948fdc4cb167d",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coordination.OpaqueRef": {
+      "title": "OpaqueRef",
+      "x-ess-name": "agentide.coordination.OpaqueRef",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

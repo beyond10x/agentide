@@ -1,6 +1,6 @@
 # generated from agentide v1
-# model digest 667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7
-# contract digest 6022107b30440a2420e071dc7581ce7340326b9d0a5f502394028d4064525b20
+# model digest 560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6
+# contract digest 7cfd751a3f4407f5f46cd032b726984c52d4c654760edbd5277e283d1092b198
 # do not edit: regenerate with `ess generate`
 asyncapi: 3.0.0
 info:
@@ -18,8 +18,8 @@ info:
   x-ess-provenance:
     system: agentide
     specification_version: v1
-    source_digest: 667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7
-    contract_digest: 6022107b30440a2420e071dc7581ce7340326b9d0a5f502394028d4064525b20
+    source_digest: 560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6
+    contract_digest: 7cfd751a3f4407f5f46cd032b726984c52d4c654760edbd5277e283d1092b198
 defaultContentType: application/json
 channels:
   agentide.coding.IntentCompleted:
@@ -37,6 +37,62 @@ channels:
       agentide.coding.IntentRefused:
         $ref: '#/components/messages/agentide.coding.IntentRefused'
     x-ess-event: agentide.coding.IntentRefused
+    x-ess-address-source: qualified-name
+  agentide.coordination.ApprovalCheckpointApproved:
+    address: agentide.coordination.ApprovalCheckpointApproved
+    title: ApprovalCheckpointApproved
+    messages:
+      agentide.coordination.ApprovalCheckpointApproved:
+        $ref: '#/components/messages/agentide.coordination.ApprovalCheckpointApproved'
+    x-ess-event: agentide.coordination.ApprovalCheckpointApproved
+    x-ess-address-source: qualified-name
+  agentide.coordination.ApprovalCheckpointDenied:
+    address: agentide.coordination.ApprovalCheckpointDenied
+    title: ApprovalCheckpointDenied
+    messages:
+      agentide.coordination.ApprovalCheckpointDenied:
+        $ref: '#/components/messages/agentide.coordination.ApprovalCheckpointDenied'
+    x-ess-event: agentide.coordination.ApprovalCheckpointDenied
+    x-ess-address-source: qualified-name
+  agentide.coordination.ApprovalCheckpointRecorded:
+    address: agentide.coordination.ApprovalCheckpointRecorded
+    title: ApprovalCheckpointRecorded
+    messages:
+      agentide.coordination.ApprovalCheckpointRecorded:
+        $ref: '#/components/messages/agentide.coordination.ApprovalCheckpointRecorded'
+    x-ess-event: agentide.coordination.ApprovalCheckpointRecorded
+    x-ess-address-source: qualified-name
+  agentide.coordination.ContextPinRemoved:
+    address: agentide.coordination.ContextPinRemoved
+    title: ContextPinRemoved
+    messages:
+      agentide.coordination.ContextPinRemoved:
+        $ref: '#/components/messages/agentide.coordination.ContextPinRemoved'
+    x-ess-event: agentide.coordination.ContextPinRemoved
+    x-ess-address-source: qualified-name
+  agentide.coordination.ContextPinned:
+    address: agentide.coordination.ContextPinned
+    title: ContextPinned
+    messages:
+      agentide.coordination.ContextPinned:
+        $ref: '#/components/messages/agentide.coordination.ContextPinned'
+    x-ess-event: agentide.coordination.ContextPinned
+    x-ess-address-source: qualified-name
+  agentide.coordination.GrantCreated:
+    address: agentide.coordination.GrantCreated
+    title: GrantCreated
+    messages:
+      agentide.coordination.GrantCreated:
+        $ref: '#/components/messages/agentide.coordination.GrantCreated'
+    x-ess-event: agentide.coordination.GrantCreated
+    x-ess-address-source: qualified-name
+  agentide.coordination.GrantRevoked:
+    address: agentide.coordination.GrantRevoked
+    title: GrantRevoked
+    messages:
+      agentide.coordination.GrantRevoked:
+        $ref: '#/components/messages/agentide.coordination.GrantRevoked'
+    x-ess-event: agentide.coordination.GrantRevoked
     x-ess-address-source: qualified-name
   agentide.session.SessionClosed:
     address: agentide.session.SessionClosed
@@ -145,6 +201,83 @@ operations:
     description: Nothing in this specification reacts to `agentide.coding.IntentRefused`.
     messages:
     - $ref: '#/channels/agentide.coding.IntentRefused/messages/agentide.coding.IntentRefused'
+  send.agentide.coordination.ApprovalCheckpointApproved:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.coordination.ApprovalCheckpointApproved'
+    title: Publish ApprovalCheckpointApproved
+    summary: Publishes `agentide.coordination.ApprovalCheckpointApproved`.
+    description: |-
+      Nothing in this specification reacts to `agentide.coordination.ApprovalCheckpointApproved`.
+      `agentide.coordination.ApproveCheckpoint` emits it on `approved`, which moves a `agentide.coordination.ApprovalCheckpoint` to `Approved` along `approve`.
+    messages:
+    - $ref: '#/channels/agentide.coordination.ApprovalCheckpointApproved/messages/agentide.coordination.ApprovalCheckpointApproved'
+  send.agentide.coordination.ApprovalCheckpointDenied:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.coordination.ApprovalCheckpointDenied'
+    title: Publish ApprovalCheckpointDenied
+    summary: Publishes `agentide.coordination.ApprovalCheckpointDenied`.
+    description: |-
+      Nothing in this specification reacts to `agentide.coordination.ApprovalCheckpointDenied`.
+      `agentide.coordination.DenyCheckpoint` emits it on `denied`, which moves a `agentide.coordination.ApprovalCheckpoint` to `Denied` along `deny`.
+    messages:
+    - $ref: '#/channels/agentide.coordination.ApprovalCheckpointDenied/messages/agentide.coordination.ApprovalCheckpointDenied'
+  send.agentide.coordination.ApprovalCheckpointRecorded:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.coordination.ApprovalCheckpointRecorded'
+    title: Publish ApprovalCheckpointRecorded
+    summary: Publishes `agentide.coordination.ApprovalCheckpointRecorded`.
+    description: |-
+      Nothing in this specification reacts to `agentide.coordination.ApprovalCheckpointRecorded`.
+      `agentide.coordination.RecordApprovalCheckpoint` emits it on `recorded`, which creates a `agentide.coordination.ApprovalCheckpoint` in `Pending`. It carries the new instance's identity in `checkpoint_id`.
+    messages:
+    - $ref: '#/channels/agentide.coordination.ApprovalCheckpointRecorded/messages/agentide.coordination.ApprovalCheckpointRecorded'
+  send.agentide.coordination.ContextPinRemoved:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.coordination.ContextPinRemoved'
+    title: Publish ContextPinRemoved
+    summary: Publishes `agentide.coordination.ContextPinRemoved`.
+    description: |-
+      Nothing in this specification reacts to `agentide.coordination.ContextPinRemoved`.
+      `agentide.coordination.RemoveContextPin` emits it on `removed`, which moves a `agentide.coordination.ContextPin` to `Removed` along `remove`.
+    messages:
+    - $ref: '#/channels/agentide.coordination.ContextPinRemoved/messages/agentide.coordination.ContextPinRemoved'
+  send.agentide.coordination.ContextPinned:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.coordination.ContextPinned'
+    title: Publish ContextPinned
+    summary: Publishes `agentide.coordination.ContextPinned`.
+    description: |-
+      Nothing in this specification reacts to `agentide.coordination.ContextPinned`.
+      `agentide.coordination.PinContext` emits it on `pinned`, which creates a `agentide.coordination.ContextPin` in `Active`. It carries the new instance's identity in `pin_id`.
+    messages:
+    - $ref: '#/channels/agentide.coordination.ContextPinned/messages/agentide.coordination.ContextPinned'
+  send.agentide.coordination.GrantCreated:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.coordination.GrantCreated'
+    title: Publish GrantCreated
+    summary: Publishes `agentide.coordination.GrantCreated`.
+    description: |-
+      Nothing in this specification reacts to `agentide.coordination.GrantCreated`.
+      `agentide.coordination.CreateGrant` emits it on `created`, which creates a `agentide.coordination.AuthorityGrant` in `Active`. It carries the new instance's identity in `grant_id`.
+    messages:
+    - $ref: '#/channels/agentide.coordination.GrantCreated/messages/agentide.coordination.GrantCreated'
+  send.agentide.coordination.GrantRevoked:
+    action: send
+    channel:
+      $ref: '#/channels/agentide.coordination.GrantRevoked'
+    title: Publish GrantRevoked
+    summary: Publishes `agentide.coordination.GrantRevoked`.
+    description: |-
+      Nothing in this specification reacts to `agentide.coordination.GrantRevoked`.
+      `agentide.coordination.RevokeGrant` emits it on `revoked`, which moves a `agentide.coordination.AuthorityGrant` to `Revoked` along `revoke`.
+    messages:
+    - $ref: '#/channels/agentide.coordination.GrantRevoked/messages/agentide.coordination.GrantRevoked'
   send.agentide.session.SessionClosed:
     action: send
     channel:
@@ -262,6 +395,48 @@ components:
       contentType: application/json
       payload:
         $ref: '#/components/schemas/event.agentide.coding.IntentRefused'
+    agentide.coordination.ApprovalCheckpointApproved:
+      name: agentide.coordination.ApprovalCheckpointApproved
+      title: ApprovalCheckpointApproved
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.coordination.ApprovalCheckpointApproved'
+    agentide.coordination.ApprovalCheckpointDenied:
+      name: agentide.coordination.ApprovalCheckpointDenied
+      title: ApprovalCheckpointDenied
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.coordination.ApprovalCheckpointDenied'
+    agentide.coordination.ApprovalCheckpointRecorded:
+      name: agentide.coordination.ApprovalCheckpointRecorded
+      title: ApprovalCheckpointRecorded
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.coordination.ApprovalCheckpointRecorded'
+    agentide.coordination.ContextPinRemoved:
+      name: agentide.coordination.ContextPinRemoved
+      title: ContextPinRemoved
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.coordination.ContextPinRemoved'
+    agentide.coordination.ContextPinned:
+      name: agentide.coordination.ContextPinned
+      title: ContextPinned
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.coordination.ContextPinned'
+    agentide.coordination.GrantCreated:
+      name: agentide.coordination.GrantCreated
+      title: GrantCreated
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.coordination.GrantCreated'
+    agentide.coordination.GrantRevoked:
+      name: agentide.coordination.GrantRevoked
+      title: GrantRevoked
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/event.agentide.coordination.GrantRevoked'
     agentide.session.SessionClosed:
       name: agentide.session.SessionClosed
       title: SessionClosed
@@ -359,6 +534,147 @@ components:
       - session_id
       - request_id
       - code
+      additionalProperties: false
+    event.agentide.coordination.ApprovalCheckpointApproved:
+      title: ApprovalCheckpointApproved payload
+      x-ess-name: agentide.coordination.ApprovalCheckpointApproved
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        checkpoint_id:
+          $ref: '#/components/schemas/type.agentide.coordination.CheckpointId'
+      required:
+      - session_id
+      - checkpoint_id
+      additionalProperties: false
+    event.agentide.coordination.ApprovalCheckpointDenied:
+      title: ApprovalCheckpointDenied payload
+      x-ess-name: agentide.coordination.ApprovalCheckpointDenied
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        checkpoint_id:
+          $ref: '#/components/schemas/type.agentide.coordination.CheckpointId'
+      required:
+      - session_id
+      - checkpoint_id
+      additionalProperties: false
+    event.agentide.coordination.ApprovalCheckpointRecorded:
+      title: ApprovalCheckpointRecorded payload
+      x-ess-name: agentide.coordination.ApprovalCheckpointRecorded
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        checkpoint_id:
+          $ref: '#/components/schemas/type.agentide.coordination.CheckpointId'
+        attempt_ref:
+          $ref: '#/components/schemas/type.agentide.coordination.OpaqueRef'
+        plan_digest:
+          $ref: '#/components/schemas/type.agentide.coordination.Digest'
+        checkpoint_ref:
+          $ref: '#/components/schemas/type.agentide.coordination.OpaqueRef'
+      required:
+      - session_id
+      - checkpoint_id
+      - attempt_ref
+      - plan_digest
+      - checkpoint_ref
+      additionalProperties: false
+    event.agentide.coordination.ContextPinRemoved:
+      title: ContextPinRemoved payload
+      x-ess-name: agentide.coordination.ContextPinRemoved
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        pin_id:
+          $ref: '#/components/schemas/type.agentide.coordination.ContextPinId'
+      required:
+      - session_id
+      - pin_id
+      additionalProperties: false
+    event.agentide.coordination.ContextPinned:
+      title: ContextPinned payload
+      x-ess-name: agentide.coordination.ContextPinned
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        pin_id:
+          $ref: '#/components/schemas/type.agentide.coordination.ContextPinId'
+        kind:
+          $ref: '#/components/schemas/type.agentide.coordination.ContextKind'
+        reference:
+          $ref: '#/components/schemas/type.agentide.coordination.OpaqueRef'
+        start_line:
+          type: integer
+        end_line:
+          type: integer
+        sha256:
+          $ref: '#/components/schemas/type.agentide.coordination.Digest'
+      required:
+      - session_id
+      - pin_id
+      - kind
+      - reference
+      - sha256
+      additionalProperties: false
+    event.agentide.coordination.GrantCreated:
+      title: GrantCreated payload
+      x-ess-name: agentide.coordination.GrantCreated
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        grant_id:
+          $ref: '#/components/schemas/type.agentide.coordination.GrantId'
+        grantee:
+          $ref: '#/components/schemas/type.agentide.coordination.SubjectRef'
+        allowed_intents:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.coordination.IntentRef'
+        path_prefixes:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.coordination.PathPrefix'
+        maximum_risk:
+          $ref: '#/components/schemas/type.agentide.coordination.GrantRisk'
+        expires_at:
+          type: string
+        revision:
+          type: integer
+      required:
+      - session_id
+      - grant_id
+      - grantee
+      - allowed_intents
+      - path_prefixes
+      - maximum_risk
+      - revision
+      additionalProperties: false
+    event.agentide.coordination.GrantRevoked:
+      title: GrantRevoked payload
+      x-ess-name: agentide.coordination.GrantRevoked
+      x-ess-kind: event-payload
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
+        grant_id:
+          $ref: '#/components/schemas/type.agentide.coordination.GrantId'
+      required:
+      - session_id
+      - grant_id
       additionalProperties: false
     event.agentide.session.SessionClosed:
       title: SessionClosed payload
@@ -543,6 +859,65 @@ components:
     type.agentide.coding.Path:
       title: Path
       x-ess-name: agentide.coding.Path
+      x-ess-kind: newtype
+      type: string
+    type.agentide.coordination.CheckpointId:
+      title: CheckpointId
+      x-ess-name: agentide.coordination.CheckpointId
+      x-ess-kind: newtype
+      type: string
+    type.agentide.coordination.ContextKind:
+      title: ContextKind
+      x-ess-name: agentide.coordination.ContextKind
+      x-ess-kind: enum
+      type: string
+      enum:
+      - Editor
+      - DiffHunk
+      - Terminal
+      - Process
+      - Evidence
+    type.agentide.coordination.ContextPinId:
+      title: ContextPinId
+      x-ess-name: agentide.coordination.ContextPinId
+      x-ess-kind: newtype
+      type: string
+    type.agentide.coordination.Digest:
+      title: Digest
+      x-ess-name: agentide.coordination.Digest
+      x-ess-kind: newtype
+      type: string
+    type.agentide.coordination.GrantId:
+      title: GrantId
+      x-ess-name: agentide.coordination.GrantId
+      x-ess-kind: newtype
+      type: string
+    type.agentide.coordination.GrantRisk:
+      title: GrantRisk
+      x-ess-name: agentide.coordination.GrantRisk
+      x-ess-kind: enum
+      type: string
+      enum:
+      - Low
+      - Medium
+    type.agentide.coordination.IntentRef:
+      title: IntentRef
+      x-ess-name: agentide.coordination.IntentRef
+      x-ess-kind: newtype
+      type: string
+    type.agentide.coordination.OpaqueRef:
+      title: OpaqueRef
+      x-ess-name: agentide.coordination.OpaqueRef
+      x-ess-kind: newtype
+      type: string
+    type.agentide.coordination.PathPrefix:
+      title: PathPrefix
+      x-ess-name: agentide.coordination.PathPrefix
+      x-ess-kind: newtype
+      type: string
+    type.agentide.coordination.SubjectRef:
+      title: SubjectRef
+      x-ess-name: agentide.coordination.SubjectRef
       x-ess-kind: newtype
       type: string
     type.agentide.session.ManifestDigest:

@@ -755,6 +755,7 @@ fn stop_label(stop: &LoopStop) -> &'static str {
         LoopStop::Cancelled { .. } => "cancelled",
         LoopStop::ProviderIncomplete { .. } => "provider incomplete",
         LoopStop::Unstructured { .. } => "unstructured",
+        LoopStop::AwaitingApproval { .. } => "awaiting approval",
     }
 }
 

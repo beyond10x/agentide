@@ -410,6 +410,10 @@ impl<P: IntentPort, A: PlanApprover> ApprovalPort for IntentApprovals<P, A> {
                     return ApprovalDecision::denied(error.to_string());
                 }
             }
+            ApprovalDecision::Deferred { .. } => {
+                // Harness owns the durable checkpoint. Keep the exact prepared AgentIDE plan
+                // untouched so a fresh host can resume only after the checkpoint decision.
+            }
         }
         decision
     }

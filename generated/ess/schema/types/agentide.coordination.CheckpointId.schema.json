@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.coordination.CheckpointId",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6",
+    "contract_digest": "3741230fe59eb6992000f32adc792c2b58ac264ea8253eb24a7ac468eeaa1a14",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coordination.CheckpointId": {
+      "title": "CheckpointId",
+      "x-ess-name": "agentide.coordination.CheckpointId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

@@ -2,13 +2,20 @@ components:
   - component: agentide-engine
     summary: Validates intents, plans effects, obtains authority, journals, dispatches, and projects sessions.
     owns:
-      domains: [agentide.session, agentide.coding, agentide.surface]
+      domains: [agentide.session, agentide.coordination, agentide.coding, agentide.surface]
     accepts:
       commands:
         - agentide.session.StartSession
         - agentide.session.CloseSession
         - agentide.session.SnapshotSession
         - agentide.session.ReadEvents
+        - agentide.coordination.CreateGrant
+        - agentide.coordination.RevokeGrant
+        - agentide.coordination.PinContext
+        - agentide.coordination.RemoveContextPin
+        - agentide.coordination.RecordApprovalCheckpoint
+        - agentide.coordination.ApproveCheckpoint
+        - agentide.coordination.DenyCheckpoint
         - agentide.coding.SearchCode
         - agentide.coding.ReadCode
         - agentide.coding.ObserveChanges
@@ -50,6 +57,13 @@ components:
         - agentide.session.SessionStarted
         - agentide.session.SessionClosed
         - agentide.session.SessionObserved
+        - agentide.coordination.GrantCreated
+        - agentide.coordination.GrantRevoked
+        - agentide.coordination.ContextPinned
+        - agentide.coordination.ContextPinRemoved
+        - agentide.coordination.ApprovalCheckpointRecorded
+        - agentide.coordination.ApprovalCheckpointApproved
+        - agentide.coordination.ApprovalCheckpointDenied
         - agentide.coding.IntentCompleted
         - agentide.coding.IntentRefused
         - agentide.surface.FileOpened

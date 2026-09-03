@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.coordination.ContextPin.State",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6",
+    "contract_digest": "6252fb106db475b6b6986f2f733f07ef8d4f55c7aa2705f78c216cce740e8ca7",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coordination.ContextPin.State": {
+      "title": "State",
+      "x-ess-name": "agentide.coordination.ContextPin.State",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Active",
+        "Removed"
+      ]
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pin context reference input",
+  "x-ess-name": "agentide.coordination.PinContext",
+  "x-ess-kind": "command-input",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "request_id": {
+      "$ref": "#/$defs/agentide.session.RequestId"
+    },
+    "kind": {
+      "$ref": "#/$defs/agentide.coordination.ContextKind"
+    },
+    "reference": {
+      "$ref": "#/$defs/agentide.coordination.OpaqueRef"
+    },
+    "start_line": {
+      "type": "integer"
+    },
+    "end_line": {
+      "type": "integer"
+    },
+    "sha256": {
+      "$ref": "#/$defs/agentide.coordination.Digest"
+    }
+  },
+  "required": [
+    "session_id",
+    "request_id",
+    "kind",
+    "reference",
+    "sha256"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6",
+    "contract_digest": "4b1d0716b384989ec19fcf04339045acc0ffef4ece865c95d7cc5ca4a1589f05",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coordination.ContextKind": {
+      "title": "ContextKind",
+      "x-ess-name": "agentide.coordination.ContextKind",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Editor",
+        "DiffHunk",
+        "Terminal",
+        "Process",
+        "Evidence"
+      ]
+    },
+    "agentide.coordination.Digest": {
+      "title": "Digest",
+      "x-ess-name": "agentide.coordination.Digest",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coordination.OpaqueRef": {
+      "title": "OpaqueRef",
+      "x-ess-name": "agentide.coordination.OpaqueRef",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.RequestId": {
+      "title": "RequestId",
+      "x-ess-name": "agentide.session.RequestId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

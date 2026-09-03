@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CoordinationRefusal payload",
+  "description": "The durable coordination mutation was refused.",
+  "x-ess-name": "agentide.coordination.CoordinationRefusal",
+  "x-ess-kind": "error-payload",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "retryable": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "retryable"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6",
+    "contract_digest": "71001cdfbf34c368887d736d9cd54f6fc8f24d90401041061872c2a8bbeabb49",
+    "regenerate": "ess generate"
+  }
+}

@@ -24,8 +24,17 @@ fn main() -> Result<()> {
         println!("{}", target.display());
         return Ok(());
     }
+    if command == "generate-service" {
+        let package = service_builder::package::ServicePackage::read(&root.join("service.yaml"))
+            .context("loading the AgentIDE Service SDK package")?;
+        let build = service_builder::build_package(&package)
+            .context("building the AgentIDE Service SDK package")?;
+        build.artifacts.write(&root.join("generated/service"))?;
+        println!("generated/service");
+        return Ok(());
+    }
     if command != "gate" {
-        bail!("usage: cargo xtask <gate|generate-surface-profile>");
+        bail!("usage: cargo xtask <gate|generate-service|generate-surface-profile>");
     }
 
     validate_contracts(root)?;

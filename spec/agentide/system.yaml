@@ -8,5 +8,6 @@ summary: >-
 
 domains:
   - agentide.session
+  - agentide.coordination
   - agentide.coding
   - agentide.surface

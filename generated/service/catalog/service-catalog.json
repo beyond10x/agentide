@@ -2198,6 +2198,676 @@
       },
       {
         "behavior": {
+          "contract": "given `agentide.coordination.ApproveCheckpoint` input, decide and enact exactly one outcome — `approved` otherwise, takes `approve` of `agentide.coordination.ApprovalCheckpoint`, emits `agentide.coordination.ApprovalCheckpointApproved`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`",
+          "disposition": "obligation",
+          "why": "decided outside the system: durable state is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Approve exact checkpoint",
+        "domain": "agentide.coordination",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "checkpoint_id",
+            "optional": false,
+            "spelling": "agentide.coordination.CheckpointId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.CheckpointId"
+            },
+            "wire": "checkpoint_id"
+          }
+        ],
+        "name": "agentide.coordination.ApproveCheckpoint",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": {
+              "effect": {
+                "from": [
+                  "Pending"
+                ],
+                "kind": "moves",
+                "to": "Approved",
+                "transition": "approve"
+              },
+              "entity": "agentide.coordination.ApprovalCheckpoint"
+            },
+            "name": "approved",
+            "publishes": [
+              "agentide.coordination.ApprovalCheckpointApproved"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "from a state no declared move starts in",
+            "error": "agentide.coordination.CoordinationStateConflict",
+            "moves": null,
+            "name": "wrong-state",
+            "publishes": [],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (durable state is unavailable)",
+            "error": "agentide.coordination.CoordinationRefusal",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coordination.CreateGrant` input, decide and enact exactly one outcome — `created` otherwise, creates `agentide.coordination.AuthorityGrant`, emits `agentide.coordination.GrantCreated`; `refused` externally decided (authority or durable state is unavailable), error `agentide.coordination.CoordinationRefusal`",
+          "disposition": "obligation",
+          "why": "decided outside the system: authority or durable state is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Create authority grant",
+        "domain": "agentide.coordination",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "grantee",
+            "optional": false,
+            "spelling": "agentide.coordination.SubjectRef",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.SubjectRef"
+            },
+            "wire": "grantee"
+          },
+          {
+            "name": "allowed_intents",
+            "optional": false,
+            "spelling": "List<agentide.coordination.IntentRef>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coordination.IntentRef"
+              }
+            },
+            "wire": "allowed_intents"
+          },
+          {
+            "name": "path_prefixes",
+            "optional": false,
+            "spelling": "List<agentide.coordination.PathPrefix>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coordination.PathPrefix"
+              }
+            },
+            "wire": "path_prefixes"
+          },
+          {
+            "name": "maximum_risk",
+            "optional": false,
+            "spelling": "agentide.coordination.GrantRisk",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.GrantRisk"
+            },
+            "wire": "maximum_risk"
+          },
+          {
+            "name": "expires_at",
+            "optional": true,
+            "spelling": "Optional<String>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "string"
+              }
+            },
+            "wire": "expires_at"
+          },
+          {
+            "name": "revision",
+            "optional": false,
+            "spelling": "Integer",
+            "type": {
+              "kind": "primitive",
+              "name": "integer"
+            },
+            "wire": "revision"
+          }
+        ],
+        "name": "agentide.coordination.CreateGrant",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": {
+              "effect": {
+                "kind": "creates"
+              },
+              "entity": "agentide.coordination.AuthorityGrant"
+            },
+            "name": "created",
+            "publishes": [
+              "agentide.coordination.GrantCreated"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (authority or durable state is unavailable)",
+            "error": "agentide.coordination.CoordinationRefusal",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coordination.DenyCheckpoint` input, decide and enact exactly one outcome — `denied` otherwise, takes `deny` of `agentide.coordination.ApprovalCheckpoint`, emits `agentide.coordination.ApprovalCheckpointDenied`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`",
+          "disposition": "obligation",
+          "why": "decided outside the system: durable state is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Deny exact checkpoint",
+        "domain": "agentide.coordination",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "checkpoint_id",
+            "optional": false,
+            "spelling": "agentide.coordination.CheckpointId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.CheckpointId"
+            },
+            "wire": "checkpoint_id"
+          }
+        ],
+        "name": "agentide.coordination.DenyCheckpoint",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": {
+              "effect": {
+                "from": [
+                  "Pending"
+                ],
+                "kind": "moves",
+                "to": "Denied",
+                "transition": "deny"
+              },
+              "entity": "agentide.coordination.ApprovalCheckpoint"
+            },
+            "name": "denied",
+            "publishes": [
+              "agentide.coordination.ApprovalCheckpointDenied"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "from a state no declared move starts in",
+            "error": "agentide.coordination.CoordinationStateConflict",
+            "moves": null,
+            "name": "wrong-state",
+            "publishes": [],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (durable state is unavailable)",
+            "error": "agentide.coordination.CoordinationRefusal",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coordination.PinContext` input, decide and enact exactly one outcome — `pinned` otherwise, creates `agentide.coordination.ContextPin`, emits `agentide.coordination.ContextPinned`; `refused` externally decided (the reference cannot be admitted or durable state is unavailable), error `agentide.coordination.CoordinationRefusal`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the reference cannot be admitted or durable state is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Pin context reference",
+        "domain": "agentide.coordination",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "kind",
+            "optional": false,
+            "spelling": "agentide.coordination.ContextKind",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.ContextKind"
+            },
+            "wire": "kind"
+          },
+          {
+            "name": "reference",
+            "optional": false,
+            "spelling": "agentide.coordination.OpaqueRef",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.OpaqueRef"
+            },
+            "wire": "reference"
+          },
+          {
+            "name": "start_line",
+            "optional": true,
+            "spelling": "Optional<Integer>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "integer"
+              }
+            },
+            "wire": "start_line"
+          },
+          {
+            "name": "end_line",
+            "optional": true,
+            "spelling": "Optional<Integer>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "integer"
+              }
+            },
+            "wire": "end_line"
+          },
+          {
+            "name": "sha256",
+            "optional": false,
+            "spelling": "agentide.coordination.Digest",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.Digest"
+            },
+            "wire": "sha256"
+          }
+        ],
+        "name": "agentide.coordination.PinContext",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": {
+              "effect": {
+                "kind": "creates"
+              },
+              "entity": "agentide.coordination.ContextPin"
+            },
+            "name": "pinned",
+            "publishes": [
+              "agentide.coordination.ContextPinned"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the reference cannot be admitted or durable state is unavailable)",
+            "error": "agentide.coordination.CoordinationRefusal",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coordination.RecordApprovalCheckpoint` input, decide and enact exactly one outcome — `recorded` otherwise, creates `agentide.coordination.ApprovalCheckpoint`, emits `agentide.coordination.ApprovalCheckpointRecorded`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`",
+          "disposition": "obligation",
+          "why": "decided outside the system: durable state is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Record approval checkpoint",
+        "domain": "agentide.coordination",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "checkpoint_id",
+            "optional": false,
+            "spelling": "agentide.coordination.CheckpointId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.CheckpointId"
+            },
+            "wire": "checkpoint_id"
+          },
+          {
+            "name": "attempt_ref",
+            "optional": false,
+            "spelling": "agentide.coordination.OpaqueRef",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.OpaqueRef"
+            },
+            "wire": "attempt_ref"
+          },
+          {
+            "name": "plan_digest",
+            "optional": false,
+            "spelling": "agentide.coordination.Digest",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.Digest"
+            },
+            "wire": "plan_digest"
+          },
+          {
+            "name": "checkpoint_ref",
+            "optional": false,
+            "spelling": "agentide.coordination.OpaqueRef",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.OpaqueRef"
+            },
+            "wire": "checkpoint_ref"
+          }
+        ],
+        "name": "agentide.coordination.RecordApprovalCheckpoint",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": {
+              "effect": {
+                "kind": "creates"
+              },
+              "entity": "agentide.coordination.ApprovalCheckpoint"
+            },
+            "name": "recorded",
+            "publishes": [
+              "agentide.coordination.ApprovalCheckpointRecorded"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (durable state is unavailable)",
+            "error": "agentide.coordination.CoordinationRefusal",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coordination.RemoveContextPin` input, decide and enact exactly one outcome — `removed` otherwise, takes `remove` of `agentide.coordination.ContextPin`, emits `agentide.coordination.ContextPinRemoved`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`",
+          "disposition": "obligation",
+          "why": "decided outside the system: durable state is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Remove context pin",
+        "domain": "agentide.coordination",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "pin_id",
+            "optional": false,
+            "spelling": "agentide.coordination.ContextPinId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.ContextPinId"
+            },
+            "wire": "pin_id"
+          }
+        ],
+        "name": "agentide.coordination.RemoveContextPin",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": {
+              "effect": {
+                "from": [
+                  "Active"
+                ],
+                "kind": "moves",
+                "to": "Removed",
+                "transition": "remove"
+              },
+              "entity": "agentide.coordination.ContextPin"
+            },
+            "name": "removed",
+            "publishes": [
+              "agentide.coordination.ContextPinRemoved"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "from a state no declared move starts in",
+            "error": "agentide.coordination.CoordinationStateConflict",
+            "moves": null,
+            "name": "wrong-state",
+            "publishes": [],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (durable state is unavailable)",
+            "error": "agentide.coordination.CoordinationRefusal",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coordination.RevokeGrant` input, decide and enact exactly one outcome — `revoked` otherwise, takes `revoke` of `agentide.coordination.AuthorityGrant`, emits `agentide.coordination.GrantRevoked`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`",
+          "disposition": "obligation",
+          "why": "decided outside the system: durable state is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Revoke authority grant",
+        "domain": "agentide.coordination",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "grant_id",
+            "optional": false,
+            "spelling": "agentide.coordination.GrantId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.GrantId"
+            },
+            "wire": "grant_id"
+          }
+        ],
+        "name": "agentide.coordination.RevokeGrant",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": {
+              "effect": {
+                "from": [
+                  "Active"
+                ],
+                "kind": "moves",
+                "to": "Revoked",
+                "transition": "revoke"
+              },
+              "entity": "agentide.coordination.AuthorityGrant"
+            },
+            "name": "revoked",
+            "publishes": [
+              "agentide.coordination.GrantRevoked"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "from a state no declared move starts in",
+            "error": "agentide.coordination.CoordinationStateConflict",
+            "moves": null,
+            "name": "wrong-state",
+            "publishes": [],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (durable state is unavailable)",
+            "error": "agentide.coordination.CoordinationRefusal",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
           "contract": "given `agentide.session.CloseSession` input, decide and enact exactly one outcome — `closed` otherwise, takes `close` of `agentide.session.CodingSession`, emits `agentide.session.SessionClosed`; `wrong-state` from a state no declared move starts in, error `agentide.session.SessionStateConflict`; `refused` externally decided (durable state cannot be updated), error `agentide.session.SessionRefusal`",
           "disposition": "obligation",
           "why": "decided outside the system: durable state cannot be updated"
@@ -3162,6 +3832,13 @@
           "agentide.coding.VerifyCode",
           "agentide.coding.WaitAgent",
           "agentide.coding.WaitProcess",
+          "agentide.coordination.ApproveCheckpoint",
+          "agentide.coordination.CreateGrant",
+          "agentide.coordination.DenyCheckpoint",
+          "agentide.coordination.PinContext",
+          "agentide.coordination.RecordApprovalCheckpoint",
+          "agentide.coordination.RemoveContextPin",
+          "agentide.coordination.RevokeGrant",
           "agentide.session.CloseSession",
           "agentide.session.ReadEvents",
           "agentide.session.SnapshotSession",
@@ -3180,6 +3857,13 @@
         "publishes": [
           "agentide.coding.IntentCompleted",
           "agentide.coding.IntentRefused",
+          "agentide.coordination.ApprovalCheckpointApproved",
+          "agentide.coordination.ApprovalCheckpointDenied",
+          "agentide.coordination.ApprovalCheckpointRecorded",
+          "agentide.coordination.ContextPinRemoved",
+          "agentide.coordination.ContextPinned",
+          "agentide.coordination.GrantCreated",
+          "agentide.coordination.GrantRevoked",
           "agentide.session.SessionClosed",
           "agentide.session.SessionObserved",
           "agentide.session.SessionStarted",
@@ -3198,6 +3882,374 @@
     "conversions": [],
     "display": "agentide",
     "entities": [
+      {
+        "display": "ApprovalCheckpoint",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "attempt_ref",
+            "optional": false,
+            "spelling": "agentide.coordination.OpaqueRef",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.OpaqueRef"
+            },
+            "wire": "attempt_ref"
+          },
+          {
+            "name": "plan_digest",
+            "optional": false,
+            "spelling": "agentide.coordination.Digest",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.Digest"
+            },
+            "wire": "plan_digest"
+          },
+          {
+            "name": "checkpoint_ref",
+            "optional": false,
+            "spelling": "agentide.coordination.OpaqueRef",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.OpaqueRef"
+            },
+            "wire": "checkpoint_ref"
+          },
+          {
+            "name": "owner",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "owner"
+          },
+          {
+            "name": "scopes",
+            "optional": false,
+            "spelling": "agentide.session.SessionScopes",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionScopes"
+            },
+            "wire": "scopes"
+          }
+        ],
+        "identity": {
+          "name": "checkpoint_id",
+          "optional": false,
+          "spelling": "agentide.coordination.CheckpointId",
+          "type": {
+            "kind": "declared",
+            "name": "agentide.coordination.CheckpointId"
+          },
+          "wire": "checkpoint_id"
+        },
+        "initial": "Pending",
+        "invariants": [],
+        "name": "agentide.coordination.ApprovalCheckpoint",
+        "states": [
+          "Approved",
+          "Denied",
+          "Pending"
+        ],
+        "summary": null,
+        "terminal": [
+          "Approved",
+          "Denied"
+        ],
+        "transitions": [
+          {
+            "from": [
+              "Pending"
+            ],
+            "name": "approve",
+            "to": "Approved"
+          },
+          {
+            "from": [
+              "Pending"
+            ],
+            "name": "deny",
+            "to": "Denied"
+          }
+        ],
+        "views": [
+          "agentide.coordination.ApprovalCheckpointSnapshot"
+        ]
+      },
+      {
+        "display": "AuthorityGrant",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "grantee",
+            "optional": false,
+            "spelling": "agentide.coordination.SubjectRef",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.SubjectRef"
+            },
+            "wire": "grantee"
+          },
+          {
+            "name": "allowed_intents",
+            "optional": false,
+            "spelling": "List<agentide.coordination.IntentRef>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coordination.IntentRef"
+              }
+            },
+            "wire": "allowed_intents"
+          },
+          {
+            "name": "path_prefixes",
+            "optional": false,
+            "spelling": "List<agentide.coordination.PathPrefix>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coordination.PathPrefix"
+              }
+            },
+            "wire": "path_prefixes"
+          },
+          {
+            "name": "maximum_risk",
+            "optional": false,
+            "spelling": "agentide.coordination.GrantRisk",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.GrantRisk"
+            },
+            "wire": "maximum_risk"
+          },
+          {
+            "name": "expires_at",
+            "optional": true,
+            "spelling": "Optional<String>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "string"
+              }
+            },
+            "wire": "expires_at"
+          },
+          {
+            "name": "revision",
+            "optional": false,
+            "spelling": "Integer",
+            "type": {
+              "kind": "primitive",
+              "name": "integer"
+            },
+            "wire": "revision"
+          },
+          {
+            "name": "owner",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "owner"
+          },
+          {
+            "name": "scopes",
+            "optional": false,
+            "spelling": "agentide.session.SessionScopes",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionScopes"
+            },
+            "wire": "scopes"
+          }
+        ],
+        "identity": {
+          "name": "grant_id",
+          "optional": false,
+          "spelling": "agentide.coordination.GrantId",
+          "type": {
+            "kind": "declared",
+            "name": "agentide.coordination.GrantId"
+          },
+          "wire": "grant_id"
+        },
+        "initial": "Active",
+        "invariants": [],
+        "name": "agentide.coordination.AuthorityGrant",
+        "states": [
+          "Active",
+          "Revoked"
+        ],
+        "summary": null,
+        "terminal": [
+          "Revoked"
+        ],
+        "transitions": [
+          {
+            "from": [
+              "Active"
+            ],
+            "name": "revoke",
+            "to": "Revoked"
+          }
+        ],
+        "views": [
+          "agentide.coordination.GrantSnapshot"
+        ]
+      },
+      {
+        "display": "ContextPin",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "kind",
+            "optional": false,
+            "spelling": "agentide.coordination.ContextKind",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.ContextKind"
+            },
+            "wire": "kind"
+          },
+          {
+            "name": "reference",
+            "optional": false,
+            "spelling": "agentide.coordination.OpaqueRef",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.OpaqueRef"
+            },
+            "wire": "reference"
+          },
+          {
+            "name": "start_line",
+            "optional": true,
+            "spelling": "Optional<Integer>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "integer"
+              }
+            },
+            "wire": "start_line"
+          },
+          {
+            "name": "end_line",
+            "optional": true,
+            "spelling": "Optional<Integer>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "integer"
+              }
+            },
+            "wire": "end_line"
+          },
+          {
+            "name": "sha256",
+            "optional": false,
+            "spelling": "agentide.coordination.Digest",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.Digest"
+            },
+            "wire": "sha256"
+          },
+          {
+            "name": "owner",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "owner"
+          },
+          {
+            "name": "scopes",
+            "optional": false,
+            "spelling": "agentide.session.SessionScopes",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionScopes"
+            },
+            "wire": "scopes"
+          }
+        ],
+        "identity": {
+          "name": "pin_id",
+          "optional": false,
+          "spelling": "agentide.coordination.ContextPinId",
+          "type": {
+            "kind": "declared",
+            "name": "agentide.coordination.ContextPinId"
+          },
+          "wire": "pin_id"
+        },
+        "initial": "Active",
+        "invariants": [],
+        "name": "agentide.coordination.ContextPin",
+        "states": [
+          "Active",
+          "Removed"
+        ],
+        "summary": null,
+        "terminal": [
+          "Removed"
+        ],
+        "transitions": [
+          {
+            "from": [
+              "Active"
+            ],
+            "name": "remove",
+            "to": "Removed"
+          }
+        ],
+        "views": [
+          "agentide.coordination.ContextPinSnapshot"
+        ]
+      },
       {
         "display": "CodingSession",
         "fields": [
@@ -3467,6 +4519,58 @@
             "wire": "retryable"
           }
         ],
+        "name": "agentide.coordination.CoordinationRefusal",
+        "summary": "The durable coordination mutation was refused."
+      },
+      {
+        "fields": [
+          {
+            "name": "state",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "state"
+          }
+        ],
+        "name": "agentide.coordination.CoordinationStateConflict",
+        "summary": "The selected record is no longer in the required lifecycle state."
+      },
+      {
+        "fields": [
+          {
+            "name": "code",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "code"
+          },
+          {
+            "name": "message",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "message"
+          },
+          {
+            "name": "retryable",
+            "optional": false,
+            "spelling": "Boolean",
+            "type": {
+              "kind": "primitive",
+              "name": "boolean"
+            },
+            "wire": "retryable"
+          }
+        ],
         "name": "agentide.session.SessionRefusal",
         "summary": "The session operation was not admitted or could not be observed exactly."
       },
@@ -3586,6 +4690,350 @@
           }
         ],
         "name": "agentide.coding.IntentRefused",
+        "summary": null
+      },
+      {
+        "display": "ApprovalCheckpointApproved",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "checkpoint_id",
+            "optional": false,
+            "spelling": "agentide.coordination.CheckpointId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.CheckpointId"
+            },
+            "wire": "checkpoint_id"
+          }
+        ],
+        "name": "agentide.coordination.ApprovalCheckpointApproved",
+        "summary": null
+      },
+      {
+        "display": "ApprovalCheckpointDenied",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "checkpoint_id",
+            "optional": false,
+            "spelling": "agentide.coordination.CheckpointId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.CheckpointId"
+            },
+            "wire": "checkpoint_id"
+          }
+        ],
+        "name": "agentide.coordination.ApprovalCheckpointDenied",
+        "summary": null
+      },
+      {
+        "display": "ApprovalCheckpointRecorded",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "checkpoint_id",
+            "optional": false,
+            "spelling": "agentide.coordination.CheckpointId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.CheckpointId"
+            },
+            "wire": "checkpoint_id"
+          },
+          {
+            "name": "attempt_ref",
+            "optional": false,
+            "spelling": "agentide.coordination.OpaqueRef",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.OpaqueRef"
+            },
+            "wire": "attempt_ref"
+          },
+          {
+            "name": "plan_digest",
+            "optional": false,
+            "spelling": "agentide.coordination.Digest",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.Digest"
+            },
+            "wire": "plan_digest"
+          },
+          {
+            "name": "checkpoint_ref",
+            "optional": false,
+            "spelling": "agentide.coordination.OpaqueRef",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.OpaqueRef"
+            },
+            "wire": "checkpoint_ref"
+          }
+        ],
+        "name": "agentide.coordination.ApprovalCheckpointRecorded",
+        "summary": null
+      },
+      {
+        "display": "ContextPinRemoved",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "pin_id",
+            "optional": false,
+            "spelling": "agentide.coordination.ContextPinId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.ContextPinId"
+            },
+            "wire": "pin_id"
+          }
+        ],
+        "name": "agentide.coordination.ContextPinRemoved",
+        "summary": null
+      },
+      {
+        "display": "ContextPinned",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "pin_id",
+            "optional": false,
+            "spelling": "agentide.coordination.ContextPinId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.ContextPinId"
+            },
+            "wire": "pin_id"
+          },
+          {
+            "name": "kind",
+            "optional": false,
+            "spelling": "agentide.coordination.ContextKind",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.ContextKind"
+            },
+            "wire": "kind"
+          },
+          {
+            "name": "reference",
+            "optional": false,
+            "spelling": "agentide.coordination.OpaqueRef",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.OpaqueRef"
+            },
+            "wire": "reference"
+          },
+          {
+            "name": "start_line",
+            "optional": true,
+            "spelling": "Optional<Integer>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "integer"
+              }
+            },
+            "wire": "start_line"
+          },
+          {
+            "name": "end_line",
+            "optional": true,
+            "spelling": "Optional<Integer>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "integer"
+              }
+            },
+            "wire": "end_line"
+          },
+          {
+            "name": "sha256",
+            "optional": false,
+            "spelling": "agentide.coordination.Digest",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.Digest"
+            },
+            "wire": "sha256"
+          }
+        ],
+        "name": "agentide.coordination.ContextPinned",
+        "summary": null
+      },
+      {
+        "display": "GrantCreated",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "grant_id",
+            "optional": false,
+            "spelling": "agentide.coordination.GrantId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.GrantId"
+            },
+            "wire": "grant_id"
+          },
+          {
+            "name": "grantee",
+            "optional": false,
+            "spelling": "agentide.coordination.SubjectRef",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.SubjectRef"
+            },
+            "wire": "grantee"
+          },
+          {
+            "name": "allowed_intents",
+            "optional": false,
+            "spelling": "List<agentide.coordination.IntentRef>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coordination.IntentRef"
+              }
+            },
+            "wire": "allowed_intents"
+          },
+          {
+            "name": "path_prefixes",
+            "optional": false,
+            "spelling": "List<agentide.coordination.PathPrefix>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coordination.PathPrefix"
+              }
+            },
+            "wire": "path_prefixes"
+          },
+          {
+            "name": "maximum_risk",
+            "optional": false,
+            "spelling": "agentide.coordination.GrantRisk",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.GrantRisk"
+            },
+            "wire": "maximum_risk"
+          },
+          {
+            "name": "expires_at",
+            "optional": true,
+            "spelling": "Optional<String>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "string"
+              }
+            },
+            "wire": "expires_at"
+          },
+          {
+            "name": "revision",
+            "optional": false,
+            "spelling": "Integer",
+            "type": {
+              "kind": "primitive",
+              "name": "integer"
+            },
+            "wire": "revision"
+          }
+        ],
+        "name": "agentide.coordination.GrantCreated",
+        "summary": null
+      },
+      {
+        "display": "GrantRevoked",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "grant_id",
+            "optional": false,
+            "spelling": "agentide.coordination.GrantId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.GrantId"
+            },
+            "wire": "grant_id"
+          }
+        ],
+        "name": "agentide.coordination.GrantRevoked",
         "summary": null
       },
       {
@@ -4000,13 +5448,13 @@
     ],
     "format": "ess-browser-catalog/1",
     "plan": {
-      "generated": 90,
-      "obligations": 42,
-      "refused": 4
+      "generated": 125,
+      "obligations": 52,
+      "refused": 7
     },
     "provenance": {
-      "contract_digest": "dd678f8103754dc8a9fbfe5fe0fc15ed859a78be562212dc996affb84ba723b7",
-      "source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+      "contract_digest": "e350fe759363d3f1cee42987942a896a324c986766bfb6314fc0f625dfce3474",
+      "source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6",
       "specification_version": "v1",
       "system": "agentide"
     },
@@ -4120,6 +5568,130 @@
           "Full",
           "Release"
         ]
+      },
+      "agentide.coordination.ApprovalCheckpoint.State": {
+        "display": "State",
+        "kind": "enum",
+        "variants": [
+          "Approved",
+          "Denied",
+          "Pending"
+        ]
+      },
+      "agentide.coordination.AuthorityGrant.State": {
+        "display": "State",
+        "kind": "enum",
+        "variants": [
+          "Active",
+          "Revoked"
+        ]
+      },
+      "agentide.coordination.CheckpointId": {
+        "display": "CheckpointId",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.coordination.ContextKind": {
+        "display": "ContextKind",
+        "kind": "enum",
+        "variants": [
+          "Editor",
+          "DiffHunk",
+          "Terminal",
+          "Process",
+          "Evidence"
+        ]
+      },
+      "agentide.coordination.ContextPin.State": {
+        "display": "State",
+        "kind": "enum",
+        "variants": [
+          "Active",
+          "Removed"
+        ]
+      },
+      "agentide.coordination.ContextPinId": {
+        "display": "ContextPinId",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.coordination.Digest": {
+        "display": "Digest",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.coordination.GrantId": {
+        "display": "GrantId",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.coordination.GrantRisk": {
+        "display": "GrantRisk",
+        "kind": "enum",
+        "variants": [
+          "Low",
+          "Medium"
+        ]
+      },
+      "agentide.coordination.IntentRef": {
+        "display": "IntentRef",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.coordination.OpaqueRef": {
+        "display": "OpaqueRef",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.coordination.PathPrefix": {
+        "display": "PathPrefix",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.coordination.SubjectRef": {
+        "display": "SubjectRef",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
       },
       "agentide.session.CodingSession.State": {
         "display": "State",
@@ -4385,6 +5957,359 @@
       {
         "component": "agentide-engine",
         "consistency": "read_your_writes",
+        "display": "ApprovalCheckpointSnapshot",
+        "entity": "agentide.coordination.ApprovalCheckpoint",
+        "fields": [
+          {
+            "name": "checkpoint_id",
+            "optional": false,
+            "spelling": "agentide.coordination.CheckpointId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.CheckpointId"
+            },
+            "wire": "checkpoint_id"
+          },
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "attempt_ref",
+            "optional": false,
+            "spelling": "agentide.coordination.OpaqueRef",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.OpaqueRef"
+            },
+            "wire": "attempt_ref"
+          },
+          {
+            "name": "plan_digest",
+            "optional": false,
+            "spelling": "agentide.coordination.Digest",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.Digest"
+            },
+            "wire": "plan_digest"
+          },
+          {
+            "name": "checkpoint_ref",
+            "optional": false,
+            "spelling": "agentide.coordination.OpaqueRef",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.OpaqueRef"
+            },
+            "wire": "checkpoint_ref"
+          },
+          {
+            "name": "owner",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "owner"
+          },
+          {
+            "name": "scopes",
+            "optional": false,
+            "spelling": "agentide.session.SessionScopes",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionScopes"
+            },
+            "wire": "scopes"
+          },
+          {
+            "name": "state",
+            "optional": false,
+            "spelling": "agentide.coordination.ApprovalCheckpoint.State",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.ApprovalCheckpoint.State"
+            },
+            "wire": "state"
+          }
+        ],
+        "filter": null,
+        "name": "agentide.coordination.ApprovalCheckpointSnapshot",
+        "served": {
+          "contract": "a query answering `agentide.coordination.ApprovalCheckpointSnapshot` with rows projected from `agentide.coordination.ApprovalCheckpoint` at `read_your_writes` consistency",
+          "disposition": "obligation",
+          "why": "how the projection is kept current is a storage decision"
+        },
+        "summary": null
+      },
+      {
+        "component": "agentide-engine",
+        "consistency": "read_your_writes",
+        "display": "ContextPinSnapshot",
+        "entity": "agentide.coordination.ContextPin",
+        "fields": [
+          {
+            "name": "pin_id",
+            "optional": false,
+            "spelling": "agentide.coordination.ContextPinId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.ContextPinId"
+            },
+            "wire": "pin_id"
+          },
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "kind",
+            "optional": false,
+            "spelling": "agentide.coordination.ContextKind",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.ContextKind"
+            },
+            "wire": "kind"
+          },
+          {
+            "name": "reference",
+            "optional": false,
+            "spelling": "agentide.coordination.OpaqueRef",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.OpaqueRef"
+            },
+            "wire": "reference"
+          },
+          {
+            "name": "start_line",
+            "optional": true,
+            "spelling": "Optional<Integer>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "integer"
+              }
+            },
+            "wire": "start_line"
+          },
+          {
+            "name": "end_line",
+            "optional": true,
+            "spelling": "Optional<Integer>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "integer"
+              }
+            },
+            "wire": "end_line"
+          },
+          {
+            "name": "sha256",
+            "optional": false,
+            "spelling": "agentide.coordination.Digest",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.Digest"
+            },
+            "wire": "sha256"
+          },
+          {
+            "name": "owner",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "owner"
+          },
+          {
+            "name": "scopes",
+            "optional": false,
+            "spelling": "agentide.session.SessionScopes",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionScopes"
+            },
+            "wire": "scopes"
+          },
+          {
+            "name": "state",
+            "optional": false,
+            "spelling": "agentide.coordination.ContextPin.State",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.ContextPin.State"
+            },
+            "wire": "state"
+          }
+        ],
+        "filter": null,
+        "name": "agentide.coordination.ContextPinSnapshot",
+        "served": {
+          "contract": "a query answering `agentide.coordination.ContextPinSnapshot` with rows projected from `agentide.coordination.ContextPin` at `read_your_writes` consistency",
+          "disposition": "obligation",
+          "why": "how the projection is kept current is a storage decision"
+        },
+        "summary": null
+      },
+      {
+        "component": "agentide-engine",
+        "consistency": "read_your_writes",
+        "display": "GrantSnapshot",
+        "entity": "agentide.coordination.AuthorityGrant",
+        "fields": [
+          {
+            "name": "grant_id",
+            "optional": false,
+            "spelling": "agentide.coordination.GrantId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.GrantId"
+            },
+            "wire": "grant_id"
+          },
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "grantee",
+            "optional": false,
+            "spelling": "agentide.coordination.SubjectRef",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.SubjectRef"
+            },
+            "wire": "grantee"
+          },
+          {
+            "name": "allowed_intents",
+            "optional": false,
+            "spelling": "List<agentide.coordination.IntentRef>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coordination.IntentRef"
+              }
+            },
+            "wire": "allowed_intents"
+          },
+          {
+            "name": "path_prefixes",
+            "optional": false,
+            "spelling": "List<agentide.coordination.PathPrefix>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coordination.PathPrefix"
+              }
+            },
+            "wire": "path_prefixes"
+          },
+          {
+            "name": "maximum_risk",
+            "optional": false,
+            "spelling": "agentide.coordination.GrantRisk",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.GrantRisk"
+            },
+            "wire": "maximum_risk"
+          },
+          {
+            "name": "expires_at",
+            "optional": true,
+            "spelling": "Optional<String>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "string"
+              }
+            },
+            "wire": "expires_at"
+          },
+          {
+            "name": "revision",
+            "optional": false,
+            "spelling": "Integer",
+            "type": {
+              "kind": "primitive",
+              "name": "integer"
+            },
+            "wire": "revision"
+          },
+          {
+            "name": "owner",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "owner"
+          },
+          {
+            "name": "scopes",
+            "optional": false,
+            "spelling": "agentide.session.SessionScopes",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionScopes"
+            },
+            "wire": "scopes"
+          },
+          {
+            "name": "state",
+            "optional": false,
+            "spelling": "agentide.coordination.AuthorityGrant.State",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coordination.AuthorityGrant.State"
+            },
+            "wire": "state"
+          }
+        ],
+        "filter": null,
+        "name": "agentide.coordination.GrantSnapshot",
+        "served": {
+          "contract": "a query answering `agentide.coordination.GrantSnapshot` with rows projected from `agentide.coordination.AuthorityGrant` at `read_your_writes` consistency",
+          "disposition": "obligation",
+          "why": "how the projection is kept current is a storage decision"
+        },
+        "summary": null
+      },
+      {
+        "component": "agentide-engine",
+        "consistency": "read_your_writes",
         "display": "Session snapshot",
         "entity": "agentide.session.CodingSession",
         "fields": [
@@ -4573,6 +6498,68 @@
   },
   "operations": [
     {
+      "name": "approve_checkpoint",
+      "operation_ref": "agentide.approve_checkpoint",
+      "semantic_ref": "agentide.coordination.ApproveCheckpoint",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "checkpoint_id": {
+            "title": "agentide.coordination.CheckpointId"
+          },
+          "expected_version": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "request_id": {
+            "title": "agentide.session.RequestId"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "checkpoint_id",
+          "expected_version",
+          "idempotency_key",
+          "request_id",
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    },
+    {
       "name": "close_session",
       "operation_ref": "agentide.close_session",
       "semantic_ref": "agentide.session.CloseSession",
@@ -4597,6 +6584,149 @@
           }
         },
         "required": [
+          "expected_version",
+          "idempotency_key",
+          "request_id",
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "create_grant",
+      "operation_ref": "agentide.create_grant",
+      "semantic_ref": "agentide.coordination.CreateGrant",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "allowed_intents": {
+            "title": "List<agentide.coordination.IntentRef>"
+          },
+          "expected_version": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "expires_at": {
+            "title": "Optional<String>"
+          },
+          "grantee": {
+            "title": "agentide.coordination.SubjectRef"
+          },
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "maximum_risk": {
+            "title": "agentide.coordination.GrantRisk"
+          },
+          "path_prefixes": {
+            "title": "List<agentide.coordination.PathPrefix>"
+          },
+          "request_id": {
+            "title": "agentide.session.RequestId"
+          },
+          "revision": {
+            "title": "Integer"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "allowed_intents",
+          "expected_version",
+          "grantee",
+          "idempotency_key",
+          "maximum_risk",
+          "path_prefixes",
+          "request_id",
+          "revision",
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "deny_checkpoint",
+      "operation_ref": "agentide.deny_checkpoint",
+      "semantic_ref": "agentide.coordination.DenyCheckpoint",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "checkpoint_id": {
+            "title": "agentide.coordination.CheckpointId"
+          },
+          "expected_version": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "request_id": {
+            "title": "agentide.session.RequestId"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "checkpoint_id",
           "expected_version",
           "idempotency_key",
           "request_id",
@@ -4728,6 +6858,301 @@
       }
     },
     {
+      "name": "list_approval_checkpoints",
+      "operation_ref": "agentide.list_approval_checkpoints",
+      "semantic_ref": "agentide.coordination.ApprovalCheckpointSnapshot",
+      "kind": "query",
+      "effect": "read",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "$page": {
+            "additionalProperties": false,
+            "properties": {
+              "cursor": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "limit": {
+                "maximum": 1000,
+                "minimum": 1,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "limit"
+            ],
+            "type": "object"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "anyOf": [
+          {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "attempt_ref": {},
+                "checkpoint_id": {},
+                "checkpoint_ref": {},
+                "owner": {},
+                "plan_digest": {},
+                "scopes": {},
+                "session_id": {},
+                "state": {}
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "items": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "attempt_ref": {},
+                    "checkpoint_id": {},
+                    "checkpoint_ref": {},
+                    "owner": {},
+                    "plan_digest": {},
+                    "scopes": {},
+                    "session_id": {},
+                    "state": {}
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "next_cursor": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "partial": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "items",
+              "next_cursor",
+              "partial"
+            ],
+            "type": "object"
+          }
+        ]
+      }
+    },
+    {
+      "name": "list_context_pins",
+      "operation_ref": "agentide.list_context_pins",
+      "semantic_ref": "agentide.coordination.ContextPinSnapshot",
+      "kind": "query",
+      "effect": "read",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "$page": {
+            "additionalProperties": false,
+            "properties": {
+              "cursor": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "limit": {
+                "maximum": 1000,
+                "minimum": 1,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "limit"
+            ],
+            "type": "object"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "anyOf": [
+          {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "end_line": {},
+                "kind": {},
+                "owner": {},
+                "pin_id": {},
+                "reference": {},
+                "scopes": {},
+                "session_id": {},
+                "sha256": {},
+                "start_line": {},
+                "state": {}
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "items": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "end_line": {},
+                    "kind": {},
+                    "owner": {},
+                    "pin_id": {},
+                    "reference": {},
+                    "scopes": {},
+                    "session_id": {},
+                    "sha256": {},
+                    "start_line": {},
+                    "state": {}
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "next_cursor": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "partial": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "items",
+              "next_cursor",
+              "partial"
+            ],
+            "type": "object"
+          }
+        ]
+      }
+    },
+    {
+      "name": "list_grants",
+      "operation_ref": "agentide.list_grants",
+      "semantic_ref": "agentide.coordination.GrantSnapshot",
+      "kind": "query",
+      "effect": "read",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "$page": {
+            "additionalProperties": false,
+            "properties": {
+              "cursor": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "limit": {
+                "maximum": 1000,
+                "minimum": 1,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "limit"
+            ],
+            "type": "object"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "anyOf": [
+          {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "allowed_intents": {},
+                "expires_at": {},
+                "grant_id": {},
+                "grantee": {},
+                "maximum_risk": {},
+                "owner": {},
+                "path_prefixes": {},
+                "revision": {},
+                "scopes": {},
+                "session_id": {},
+                "state": {}
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "items": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "allowed_intents": {},
+                    "expires_at": {},
+                    "grant_id": {},
+                    "grantee": {},
+                    "maximum_risk": {},
+                    "owner": {},
+                    "path_prefixes": {},
+                    "revision": {},
+                    "scopes": {},
+                    "session_id": {},
+                    "state": {}
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "next_cursor": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "partial": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "items",
+              "next_cursor",
+              "partial"
+            ],
+            "type": "object"
+          }
+        ]
+      }
+    },
+    {
       "name": "list_sessions",
       "operation_ref": "agentide.list_sessions",
       "semantic_ref": "agentide.session.SessionSnapshot",
@@ -4817,6 +7242,280 @@
             "type": "object"
           }
         ]
+      }
+    },
+    {
+      "name": "pin_context",
+      "operation_ref": "agentide.pin_context",
+      "semantic_ref": "agentide.coordination.PinContext",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "end_line": {
+            "title": "Optional<Integer>"
+          },
+          "expected_version": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "kind": {
+            "title": "agentide.coordination.ContextKind"
+          },
+          "reference": {
+            "title": "agentide.coordination.OpaqueRef"
+          },
+          "request_id": {
+            "title": "agentide.session.RequestId"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          },
+          "sha256": {
+            "title": "agentide.coordination.Digest"
+          },
+          "start_line": {
+            "title": "Optional<Integer>"
+          }
+        },
+        "required": [
+          "expected_version",
+          "idempotency_key",
+          "kind",
+          "reference",
+          "request_id",
+          "session_id",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "record_approval_checkpoint",
+      "operation_ref": "agentide.record_approval_checkpoint",
+      "semantic_ref": "agentide.coordination.RecordApprovalCheckpoint",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "attempt_ref": {
+            "title": "agentide.coordination.OpaqueRef"
+          },
+          "checkpoint_id": {
+            "title": "agentide.coordination.CheckpointId"
+          },
+          "checkpoint_ref": {
+            "title": "agentide.coordination.OpaqueRef"
+          },
+          "expected_version": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "plan_digest": {
+            "title": "agentide.coordination.Digest"
+          },
+          "request_id": {
+            "title": "agentide.session.RequestId"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "attempt_ref",
+          "checkpoint_id",
+          "checkpoint_ref",
+          "expected_version",
+          "idempotency_key",
+          "plan_digest",
+          "request_id",
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "remove_context_pin",
+      "operation_ref": "agentide.remove_context_pin",
+      "semantic_ref": "agentide.coordination.RemoveContextPin",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "expected_version": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "pin_id": {
+            "title": "agentide.coordination.ContextPinId"
+          },
+          "request_id": {
+            "title": "agentide.session.RequestId"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "expected_version",
+          "idempotency_key",
+          "pin_id",
+          "request_id",
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "revoke_grant",
+      "operation_ref": "agentide.revoke_grant",
+      "semantic_ref": "agentide.coordination.RevokeGrant",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "expected_version": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "grant_id": {
+            "title": "agentide.coordination.GrantId"
+          },
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "request_id": {
+            "title": "agentide.session.RequestId"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "expected_version",
+          "grant_id",
+          "idempotency_key",
+          "request_id",
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
       }
     },
     {

@@ -51,6 +51,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "agentide-generated-service"
+version = "0.1.0"
+dependencies = [
+ "service-catalog",
+ "service-conformance",
+ "service-connectors",
+ "service-engine",
+ "tokio",
+]
+
+[[package]]
 name = "agentide-harness"
 version = "0.1.1"
 dependencies = [
@@ -264,7 +275,7 @@ dependencies = [
 [[package]]
 name = "b10x-harness-credential"
 version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec#c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec"
+source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
 dependencies = [
  "b10x-harness-http",
  "b10x-harness-wire",
@@ -275,7 +286,7 @@ dependencies = [
 [[package]]
 name = "b10x-harness-http"
 version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec#c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec"
+source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
 dependencies = [
  "b10x-harness-wire",
  "reqwest",
@@ -286,7 +297,7 @@ dependencies = [
 [[package]]
 name = "b10x-harness-loop"
 version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec#c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec"
+source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
 dependencies = [
  "b10x-harness-wire",
  "jsonschema",
@@ -299,7 +310,7 @@ dependencies = [
 [[package]]
 name = "b10x-harness-messages"
 version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec#c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec"
+source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
 dependencies = [
  "b10x-harness-http",
  "b10x-harness-wire",
@@ -310,7 +321,7 @@ dependencies = [
 [[package]]
 name = "b10x-harness-responses"
 version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec#c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec"
+source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
 dependencies = [
  "b10x-harness-http",
  "b10x-harness-wire",
@@ -321,7 +332,7 @@ dependencies = [
 [[package]]
 name = "b10x-harness-substrate"
 version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec#c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec"
+source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
 dependencies = [
  "b10x-harness-toolchain",
  "b10x-harness-tools",
@@ -338,7 +349,7 @@ dependencies = [
 [[package]]
 name = "b10x-harness-toolchain"
 version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec#c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec"
+source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
 dependencies = [
  "regex",
  "serde",
@@ -350,7 +361,7 @@ dependencies = [
 [[package]]
 name = "b10x-harness-tools"
 version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec#c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec"
+source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
 dependencies = [
  "b10x-harness-toolchain",
  "b10x-harness-wire",
@@ -364,7 +375,7 @@ dependencies = [
 [[package]]
 name = "b10x-harness-wire"
 version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec#c24d17e4cc62e57f99778b421dc1d5f8b6ced6ec"
+source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
 dependencies = [
  "httpdate",
  "serde",
@@ -1011,7 +1022,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
 dependencies = [
  "libc",
- "windows-sys 0.61.2",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -1088,6 +1099,30 @@ dependencies = [
  "time",
  "uuid",
 ]
+
+[[package]]
+name = "eventlog-sqlite"
+version = "0.1.0-dev.1"
+source = "git+https://github.com/beyond10x/eventlog.git?rev=b7e8f0d87b01c403415546d311952cb155caf16f#b7e8f0d87b01c403415546d311952cb155caf16f"
+dependencies = [
+ "eventlog-core",
+ "rusqlite",
+ "serde_json",
+ "time",
+ "tokio",
+]
+
+[[package]]
+name = "fallible-iterator"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2acce4a10f12dc2fb14a218589d4f1f62ef011b2d0cc4b3cb1bba8e94da14649"
+
+[[package]]
+name = "fallible-streaming-iterator"
+version = "0.1.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7360491ce676a36bf9bb3c56c1aa791658183a54d2744120f27285738d90465a"
 
 [[package]]
 name = "fancy-regex"
@@ -1303,6 +1338,15 @@ dependencies = [
  "allocator-api2",
  "equivalent",
  "foldhash 0.2.0",
+]
+
+[[package]]
+name = "hashlink"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7382cf6263419f2d8df38c55d7da83da5c18aef87fc7a7fc1fb1e344edfe14c1"
+dependencies = [
+ "hashbrown 0.15.5",
 ]
 
 [[package]]
@@ -1694,6 +1738,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3eaf3ede3fee6db1a4c2ee091bf8a8b4dccdc6d17f656fb07896ee72867612f2"
 
 [[package]]
+name = "libsqlite3-sys"
+version = "0.35.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "133c182a6a2c87864fe97778797e46c7e999672690dc9fa3ee8e241aa4a9c13f"
+dependencies = [
+ "cc",
+ "pkg-config",
+ "vcpkg",
+]
+
+[[package]]
 name = "linux-raw-sys"
 version = "0.4.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1957,6 +2012,12 @@ dependencies = [
  "der",
  "spki",
 ]
+
+[[package]]
+name = "pkg-config"
+version = "0.3.34"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f6b464fbc74e149a392436b17d523f769e057cb6877f6a5c4618bc6f11800548"
 
 [[package]]
 name = "potential_utf"
@@ -2258,6 +2319,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "rusqlite"
+version = "0.37.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "165ca6e57b20e1351573e3729b958bc62f0e48025386970b6e4d29e7a7e71f3f"
+dependencies = [
+ "bitflags",
+ "fallible-iterator",
+ "fallible-streaming-iterator",
+ "hashlink",
+ "libsqlite3-sys",
+ "smallvec",
+]
+
+[[package]]
 name = "rust-embed"
 version = "8.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2330,7 +2405,7 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys 0.12.1",
- "windows-sys 0.61.2",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -2619,6 +2694,24 @@ dependencies = [
  "serde_json",
  "service",
  "sha2 0.11.0",
+ "thiserror",
+]
+
+[[package]]
+name = "service-conformance"
+version = "0.3.1"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=141c06ee3733e154f6d350276675a8bf08008233#141c06ee3733e154f6d350276675a8bf08008233"
+dependencies = [
+ "async-trait",
+ "eventlog-sqlite",
+ "protocol",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "service",
+ "service-builder",
+ "service-connectors",
+ "service-runtime-ir",
  "thiserror",
 ]
 
@@ -2934,10 +3027,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
 dependencies = [
  "fastrand",
- "getrandom 0.4.3",
+ "getrandom 0.3.4",
  "once_cell",
  "rustix 1.1.4",
- "windows-sys 0.61.2",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -3247,6 +3340,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "vcpkg"
+version = "0.2.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "accd4ea62f7bb7a82fe23066fb0957d48ef677f6eeb8215f372f52e48bb32426"
+
+[[package]]
 name = "version_check"
 version = "0.9.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3398,7 +3497,7 @@ version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
 dependencies = [
- "windows-sys 0.61.2",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]

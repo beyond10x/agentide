@@ -10,6 +10,7 @@ semantic:
     - system.yaml
     - components.yaml
     - domains/session.yaml
+    - domains/coordination.yaml
     - domains/coding.yaml
     - domains/surface.yaml
 runtime: service/runtime.yaml

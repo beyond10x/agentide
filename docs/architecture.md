@@ -33,8 +33,9 @@ Eventlog/PostgreSQL; a local composition may bind the same factory to Eventlog/S
 
 Service SDK owns coordination persistence and delivery mechanics: session aggregates, optimistic
 versions, idempotency, event streams, authenticated projections, and effect-journal recovery.
-AgentIDE records opaque project, workspace-session, materialization, process, approval, and evidence
-references. It never stores project file bytes.
+AgentIDE records opaque project, workspace-session, materialization, context-pin, grant, approval,
+process, and evidence references. Context pins carry a Workspace selector and complete-content
+digest, not a copied source buffer. It never stores project file bytes.
 
 Workspace remains the single project/source authority already used by DevCenter's `/projects`
 feature. It resolves Connector authority, pins an exact GitLab revision, and owns bounded tree/file

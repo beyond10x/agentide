@@ -1,0 +1,338 @@
+domain: agentide.coordination
+summary: Durable hosted collaboration references stored by Service SDK without project file bytes.
+naming: {wire: coordination, display: Session coordination}
+
+types:
+  - {name: agentide.coordination.GrantId, kind: newtype, of: String}
+  - {name: agentide.coordination.ContextPinId, kind: newtype, of: String}
+  - {name: agentide.coordination.CheckpointId, kind: newtype, of: String}
+  - {name: agentide.coordination.SubjectRef, kind: newtype, of: String}
+  - {name: agentide.coordination.IntentRef, kind: newtype, of: String}
+  - {name: agentide.coordination.PathPrefix, kind: newtype, of: String}
+  - {name: agentide.coordination.Digest, kind: newtype, of: String}
+  - {name: agentide.coordination.OpaqueRef, kind: newtype, of: String}
+  - name: agentide.coordination.GrantRisk
+    kind: enum
+    variants: [Low, Medium]
+  - name: agentide.coordination.ContextKind
+    kind: enum
+    variants: [Editor, DiffHunk, Terminal, Process, Evidence]
+
+entities:
+  - name: agentide.coordination.AuthorityGrant
+    identity: {name: grant_id, type: agentide.coordination.GrantId}
+    fields:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: grantee, type: agentide.coordination.SubjectRef}
+      - {name: allowed_intents, type: List<agentide.coordination.IntentRef>}
+      - {name: path_prefixes, type: List<agentide.coordination.PathPrefix>}
+      - {name: maximum_risk, type: agentide.coordination.GrantRisk}
+      - {name: expires_at, type: Optional<String>}
+      - {name: revision, type: Integer}
+      - {name: owner, type: String}
+      - {name: scopes, type: agentide.session.SessionScopes}
+    lifecycle:
+      initial: Active
+      states: [Active, Revoked]
+      terminal: [Revoked]
+      transitions:
+        - {name: revoke, from: [Active], to: Revoked}
+
+  - name: agentide.coordination.ContextPin
+    identity: {name: pin_id, type: agentide.coordination.ContextPinId}
+    fields:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: kind, type: agentide.coordination.ContextKind}
+      - {name: reference, type: agentide.coordination.OpaqueRef}
+      - {name: start_line, type: Optional<Integer>}
+      - {name: end_line, type: Optional<Integer>}
+      - {name: sha256, type: agentide.coordination.Digest}
+      - {name: owner, type: String}
+      - {name: scopes, type: agentide.session.SessionScopes}
+    lifecycle:
+      initial: Active
+      states: [Active, Removed]
+      terminal: [Removed]
+      transitions:
+        - {name: remove, from: [Active], to: Removed}
+
+  - name: agentide.coordination.ApprovalCheckpoint
+    identity: {name: checkpoint_id, type: agentide.coordination.CheckpointId}
+    fields:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: attempt_ref, type: agentide.coordination.OpaqueRef}
+      - {name: plan_digest, type: agentide.coordination.Digest}
+      - {name: checkpoint_ref, type: agentide.coordination.OpaqueRef}
+      - {name: owner, type: String}
+      - {name: scopes, type: agentide.session.SessionScopes}
+    lifecycle:
+      initial: Pending
+      states: [Pending, Approved, Denied]
+      terminal: [Approved, Denied]
+      transitions:
+        - {name: approve, from: [Pending], to: Approved}
+        - {name: deny, from: [Pending], to: Denied}
+
+actors:
+  - name: agentide.coordination.SessionOwner
+    may:
+      - agentide.coordination.CreateGrant
+      - agentide.coordination.RevokeGrant
+      - agentide.coordination.PinContext
+      - agentide.coordination.RemoveContextPin
+      - agentide.coordination.ApproveCheckpoint
+      - agentide.coordination.DenyCheckpoint
+    naming: {display: Session owner}
+  - name: agentide.coordination.SessionExecutor
+    may: [agentide.coordination.PinContext, agentide.coordination.RemoveContextPin]
+    naming: {display: Delegated session executor}
+  - name: agentide.coordination.TaskAuthority
+    may: [agentide.coordination.RecordApprovalCheckpoint]
+    naming: {display: Task authority}
+
+errors:
+  - name: agentide.coordination.CoordinationRefusal
+    summary: The durable coordination mutation was refused.
+    fields:
+      - {name: code, type: String}
+      - {name: message, type: String}
+      - {name: retryable, type: Boolean}
+  - name: agentide.coordination.CoordinationStateConflict
+    summary: The selected record is no longer in the required lifecycle state.
+    fields:
+      - {name: state, type: String}
+
+commands:
+  - name: agentide.coordination.CreateGrant
+    naming: {wire: grant-create, display: Create authority grant}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: grantee, type: agentide.coordination.SubjectRef}
+      - {name: allowed_intents, type: List<agentide.coordination.IntentRef>}
+      - {name: path_prefixes, type: List<agentide.coordination.PathPrefix>}
+      - {name: maximum_risk, type: agentide.coordination.GrantRisk}
+      - {name: expires_at, type: Optional<String>}
+      - {name: revision, type: Integer}
+    outcomes:
+      - name: created
+        creates: agentide.coordination.AuthorityGrant
+        instance: grant_id
+        emits: [agentide.coordination.GrantCreated]
+        payload:
+          agentide.coordination.GrantCreated:
+            session_id: input.session_id
+            grantee: input.grantee
+            allowed_intents: input.allowed_intents
+            path_prefixes: input.path_prefixes
+            maximum_risk: input.maximum_risk
+            expires_at: input.expires_at
+            revision: input.revision
+      - {name: refused, external: authority or durable state is unavailable, error: agentide.coordination.CoordinationRefusal}
+
+  - name: agentide.coordination.RevokeGrant
+    naming: {wire: grant-revoke, display: Revoke authority grant}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: grant_id, type: agentide.coordination.GrantId}
+    outcomes:
+      - name: revoked
+        moves: agentide.coordination.AuthorityGrant.revoke
+        instance: grant_id
+        emits: [agentide.coordination.GrantRevoked]
+        payload:
+          agentide.coordination.GrantRevoked:
+            session_id: input.session_id
+            grant_id: input.grant_id
+      - {name: wrong-state, wrong_state: true, error: agentide.coordination.CoordinationStateConflict}
+      - {name: refused, external: durable state is unavailable, error: agentide.coordination.CoordinationRefusal}
+
+  - name: agentide.coordination.PinContext
+    naming: {wire: context-pin, display: Pin context reference}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: kind, type: agentide.coordination.ContextKind}
+      - {name: reference, type: agentide.coordination.OpaqueRef}
+      - {name: start_line, type: Optional<Integer>}
+      - {name: end_line, type: Optional<Integer>}
+      - {name: sha256, type: agentide.coordination.Digest}
+    outcomes:
+      - name: pinned
+        creates: agentide.coordination.ContextPin
+        instance: pin_id
+        emits: [agentide.coordination.ContextPinned]
+        payload:
+          agentide.coordination.ContextPinned:
+            session_id: input.session_id
+            kind: input.kind
+            reference: input.reference
+            start_line: input.start_line
+            end_line: input.end_line
+            sha256: input.sha256
+      - {name: refused, external: the reference cannot be admitted or durable state is unavailable, error: agentide.coordination.CoordinationRefusal}
+
+  - name: agentide.coordination.RemoveContextPin
+    naming: {wire: context-unpin, display: Remove context pin}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: pin_id, type: agentide.coordination.ContextPinId}
+    outcomes:
+      - name: removed
+        moves: agentide.coordination.ContextPin.remove
+        instance: pin_id
+        emits: [agentide.coordination.ContextPinRemoved]
+        payload:
+          agentide.coordination.ContextPinRemoved:
+            session_id: input.session_id
+            pin_id: input.pin_id
+      - {name: wrong-state, wrong_state: true, error: agentide.coordination.CoordinationStateConflict}
+      - {name: refused, external: durable state is unavailable, error: agentide.coordination.CoordinationRefusal}
+
+  - name: agentide.coordination.RecordApprovalCheckpoint
+    naming: {wire: approval-checkpoint-record, display: Record approval checkpoint}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: checkpoint_id, type: agentide.coordination.CheckpointId}
+      - {name: attempt_ref, type: agentide.coordination.OpaqueRef}
+      - {name: plan_digest, type: agentide.coordination.Digest}
+      - {name: checkpoint_ref, type: agentide.coordination.OpaqueRef}
+    outcomes:
+      - name: recorded
+        creates: agentide.coordination.ApprovalCheckpoint
+        instance: checkpoint_id
+        emits: [agentide.coordination.ApprovalCheckpointRecorded]
+        payload:
+          agentide.coordination.ApprovalCheckpointRecorded:
+            session_id: input.session_id
+            checkpoint_id: input.checkpoint_id
+            attempt_ref: input.attempt_ref
+            plan_digest: input.plan_digest
+            checkpoint_ref: input.checkpoint_ref
+      - {name: refused, external: durable state is unavailable, error: agentide.coordination.CoordinationRefusal}
+
+  - name: agentide.coordination.ApproveCheckpoint
+    naming: {wire: approval-checkpoint-approve, display: Approve exact checkpoint}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: checkpoint_id, type: agentide.coordination.CheckpointId}
+    outcomes:
+      - name: approved
+        moves: agentide.coordination.ApprovalCheckpoint.approve
+        instance: checkpoint_id
+        emits: [agentide.coordination.ApprovalCheckpointApproved]
+        payload:
+          agentide.coordination.ApprovalCheckpointApproved:
+            session_id: input.session_id
+            checkpoint_id: input.checkpoint_id
+      - {name: wrong-state, wrong_state: true, error: agentide.coordination.CoordinationStateConflict}
+      - {name: refused, external: durable state is unavailable, error: agentide.coordination.CoordinationRefusal}
+
+  - name: agentide.coordination.DenyCheckpoint
+    naming: {wire: approval-checkpoint-deny, display: Deny exact checkpoint}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: checkpoint_id, type: agentide.coordination.CheckpointId}
+    outcomes:
+      - name: denied
+        moves: agentide.coordination.ApprovalCheckpoint.deny
+        instance: checkpoint_id
+        emits: [agentide.coordination.ApprovalCheckpointDenied]
+        payload:
+          agentide.coordination.ApprovalCheckpointDenied:
+            session_id: input.session_id
+            checkpoint_id: input.checkpoint_id
+      - {name: wrong-state, wrong_state: true, error: agentide.coordination.CoordinationStateConflict}
+      - {name: refused, external: durable state is unavailable, error: agentide.coordination.CoordinationRefusal}
+
+events:
+  - name: agentide.coordination.GrantCreated
+    fields:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: grant_id, type: agentide.coordination.GrantId}
+      - {name: grantee, type: agentide.coordination.SubjectRef}
+      - {name: allowed_intents, type: List<agentide.coordination.IntentRef>}
+      - {name: path_prefixes, type: List<agentide.coordination.PathPrefix>}
+      - {name: maximum_risk, type: agentide.coordination.GrantRisk}
+      - {name: expires_at, type: Optional<String>}
+      - {name: revision, type: Integer}
+  - name: agentide.coordination.GrantRevoked
+    fields:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: grant_id, type: agentide.coordination.GrantId}
+  - name: agentide.coordination.ContextPinned
+    fields:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: pin_id, type: agentide.coordination.ContextPinId}
+      - {name: kind, type: agentide.coordination.ContextKind}
+      - {name: reference, type: agentide.coordination.OpaqueRef}
+      - {name: start_line, type: Optional<Integer>}
+      - {name: end_line, type: Optional<Integer>}
+      - {name: sha256, type: agentide.coordination.Digest}
+  - name: agentide.coordination.ContextPinRemoved
+    fields:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: pin_id, type: agentide.coordination.ContextPinId}
+  - name: agentide.coordination.ApprovalCheckpointRecorded
+    fields:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: checkpoint_id, type: agentide.coordination.CheckpointId}
+      - {name: attempt_ref, type: agentide.coordination.OpaqueRef}
+      - {name: plan_digest, type: agentide.coordination.Digest}
+      - {name: checkpoint_ref, type: agentide.coordination.OpaqueRef}
+  - name: agentide.coordination.ApprovalCheckpointApproved
+    fields:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: checkpoint_id, type: agentide.coordination.CheckpointId}
+  - name: agentide.coordination.ApprovalCheckpointDenied
+    fields:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: checkpoint_id, type: agentide.coordination.CheckpointId}
+
+views:
+  - name: agentide.coordination.GrantSnapshot
+    source: agentide.coordination.AuthorityGrant
+    consistency: read_your_writes
+    fields:
+      - {name: grant_id, type: agentide.coordination.GrantId}
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: grantee, type: agentide.coordination.SubjectRef}
+      - {name: allowed_intents, type: List<agentide.coordination.IntentRef>}
+      - {name: path_prefixes, type: List<agentide.coordination.PathPrefix>}
+      - {name: maximum_risk, type: agentide.coordination.GrantRisk}
+      - {name: expires_at, type: Optional<String>}
+      - {name: revision, type: Integer}
+      - {name: owner, type: String}
+      - {name: scopes, type: agentide.session.SessionScopes}
+      - {name: state, type: agentide.coordination.AuthorityGrant.State}
+  - name: agentide.coordination.ContextPinSnapshot
+    source: agentide.coordination.ContextPin
+    consistency: read_your_writes
+    fields:
+      - {name: pin_id, type: agentide.coordination.ContextPinId}
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: kind, type: agentide.coordination.ContextKind}
+      - {name: reference, type: agentide.coordination.OpaqueRef}
+      - {name: start_line, type: Optional<Integer>}
+      - {name: end_line, type: Optional<Integer>}
+      - {name: sha256, type: agentide.coordination.Digest}
+      - {name: owner, type: String}
+      - {name: scopes, type: agentide.session.SessionScopes}
+      - {name: state, type: agentide.coordination.ContextPin.State}
+  - name: agentide.coordination.ApprovalCheckpointSnapshot
+    source: agentide.coordination.ApprovalCheckpoint
+    consistency: read_your_writes
+    fields:
+      - {name: checkpoint_id, type: agentide.coordination.CheckpointId}
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: attempt_ref, type: agentide.coordination.OpaqueRef}
+      - {name: plan_digest, type: agentide.coordination.Digest}
+      - {name: checkpoint_ref, type: agentide.coordination.OpaqueRef}
+      - {name: owner, type: String}
+      - {name: scopes, type: agentide.session.SessionScopes}
+      - {name: state, type: agentide.coordination.ApprovalCheckpoint.State}

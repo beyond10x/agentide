@@ -1,14 +1,138 @@
 {
   "format": "service-connector-contribution/1",
   "service": "agentide",
-  "ess_source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+  "ess_source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6",
   "operations": [
+    {
+      "operation": "approve_checkpoint",
+      "semantic_ref": "agentide.coordination.ApproveCheckpoint",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "checkpoint_id",
+          "type_ref": "agentide.coordination.CheckpointId",
+          "optional": false
+        },
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
     {
       "operation": "close_session",
       "semantic_ref": "agentide.session.CloseSession",
       "kind": "intent",
       "effect": "write",
       "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "operation": "create_grant",
+      "semantic_ref": "agentide.coordination.CreateGrant",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "allowed_intents",
+          "type_ref": "List<agentide.coordination.IntentRef>",
+          "optional": false
+        },
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "expires_at",
+          "type_ref": "Optional<String>",
+          "optional": true
+        },
+        {
+          "name": "grantee",
+          "type_ref": "agentide.coordination.SubjectRef",
+          "optional": false
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "maximum_risk",
+          "type_ref": "agentide.coordination.GrantRisk",
+          "optional": false
+        },
+        {
+          "name": "path_prefixes",
+          "type_ref": "List<agentide.coordination.PathPrefix>",
+          "optional": false
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false
+        },
+        {
+          "name": "revision",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "operation": "deny_checkpoint",
+      "semantic_ref": "agentide.coordination.DenyCheckpoint",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "checkpoint_id",
+          "type_ref": "agentide.coordination.CheckpointId",
+          "optional": false
+        },
         {
           "name": "expected_version",
           "type_ref": "Integer",
@@ -45,10 +169,216 @@
       ]
     },
     {
+      "operation": "list_approval_checkpoints",
+      "semantic_ref": "agentide.coordination.ApprovalCheckpointSnapshot",
+      "kind": "query",
+      "effect": "read",
+      "inputs": [
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "operation": "list_context_pins",
+      "semantic_ref": "agentide.coordination.ContextPinSnapshot",
+      "kind": "query",
+      "effect": "read",
+      "inputs": [
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "operation": "list_grants",
+      "semantic_ref": "agentide.coordination.GrantSnapshot",
+      "kind": "query",
+      "effect": "read",
+      "inputs": [
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
       "operation": "list_sessions",
       "semantic_ref": "agentide.session.SessionSnapshot",
       "kind": "query",
       "effect": "read"
+    },
+    {
+      "operation": "pin_context",
+      "semantic_ref": "agentide.coordination.PinContext",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "end_line",
+          "type_ref": "Optional<Integer>",
+          "optional": true
+        },
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "kind",
+          "type_ref": "agentide.coordination.ContextKind",
+          "optional": false
+        },
+        {
+          "name": "reference",
+          "type_ref": "agentide.coordination.OpaqueRef",
+          "optional": false
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        },
+        {
+          "name": "sha256",
+          "type_ref": "agentide.coordination.Digest",
+          "optional": false
+        },
+        {
+          "name": "start_line",
+          "type_ref": "Optional<Integer>",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "operation": "record_approval_checkpoint",
+      "semantic_ref": "agentide.coordination.RecordApprovalCheckpoint",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "attempt_ref",
+          "type_ref": "agentide.coordination.OpaqueRef",
+          "optional": false
+        },
+        {
+          "name": "checkpoint_id",
+          "type_ref": "agentide.coordination.CheckpointId",
+          "optional": false
+        },
+        {
+          "name": "checkpoint_ref",
+          "type_ref": "agentide.coordination.OpaqueRef",
+          "optional": false
+        },
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "plan_digest",
+          "type_ref": "agentide.coordination.Digest",
+          "optional": false
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "operation": "remove_context_pin",
+      "semantic_ref": "agentide.coordination.RemoveContextPin",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "pin_id",
+          "type_ref": "agentide.coordination.ContextPinId",
+          "optional": false
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "operation": "revoke_grant",
+      "semantic_ref": "agentide.coordination.RevokeGrant",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "grant_id",
+          "type_ref": "agentide.coordination.GrantId",
+          "optional": false
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
     },
     {
       "operation": "start_session",

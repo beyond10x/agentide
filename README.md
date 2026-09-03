@@ -114,6 +114,11 @@ Run the complete gate with:
 cargo xtask gate
 ```
 
+After a handwritten ESS or Service SDK definition change, regenerate the exclusively owned hosted
+package with `cargo xtask generate-service`. The generated Rust crate is a workspace member, so the
+normal locked workspace build compiles the exact Connector factory and Eventlog service used by a
+hosted composition; there is no parallel handwritten service implementation.
+
 The gate validates AEP, compiles ESS through the pinned compiler, checks ESS and Service SDK output
 drift, compiles and tests the generated service, validates actor/profile/binding coverage, runs Rust
 tests and Clippy, type-checks the browser, checks built asset drift, and scans replay fixtures for

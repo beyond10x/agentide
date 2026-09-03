@@ -14,6 +14,13 @@ intents:
   - {name: session_close, command: agentide.session.CloseSession, audiences: [human], port: session, effect: state, risk: low, approval: never, subjects: [session]}
   - {name: session_snapshot, command: agentide.session.SnapshotSession, audiences: [human, agent, automation], port: session, effect: observe, risk: none, approval: never, subjects: [session]}
   - {name: event_read, command: agentide.session.ReadEvents, audiences: [human, agent, automation], port: session, effect: observe, risk: none, approval: never, subjects: [session]}
+  - {name: grant_create, command: agentide.coordination.CreateGrant, audiences: [human], port: coordination, effect: state, risk: medium, approval: never, subjects: [session, grant]}
+  - {name: grant_revoke, command: agentide.coordination.RevokeGrant, audiences: [human], port: coordination, effect: state, risk: medium, approval: never, subjects: [session, grant]}
+  - {name: context_pin, command: agentide.coordination.PinContext, audiences: [human, agent], port: coordination, effect: state, risk: low, approval: never, subjects: [session, context_reference]}
+  - {name: context_unpin, command: agentide.coordination.RemoveContextPin, audiences: [human, agent], port: coordination, effect: state, risk: low, approval: never, subjects: [session, context_reference]}
+  - {name: approval_checkpoint_record, command: agentide.coordination.RecordApprovalCheckpoint, audiences: [automation], port: coordination, effect: state, risk: low, approval: never, subjects: [session, approval]}
+  - {name: approval_checkpoint_approve, command: agentide.coordination.ApproveCheckpoint, audiences: [human], port: coordination, effect: state, risk: high, approval: never, subjects: [session, approval]}
+  - {name: approval_checkpoint_deny, command: agentide.coordination.DenyCheckpoint, audiences: [human], port: coordination, effect: state, risk: high, approval: never, subjects: [session, approval]}
   - {name: code_search, command: agentide.coding.SearchCode, audiences: [human, agent, automation], port: workspace, effect: observe, risk: none, approval: never, subjects: [workspace, paths]}
   - {name: code_read, command: agentide.coding.ReadCode, audiences: [human, agent, automation], port: workspace, effect: observe, risk: none, approval: never, subjects: [workspace, path]}
   - {name: code_changes, command: agentide.coding.ObserveChanges, audiences: [human, agent, automation], port: diff, effect: observe, risk: none, approval: never, subjects: [workspace, selector]}

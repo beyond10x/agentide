@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CoordinationStateConflict payload",
+  "description": "The selected record is no longer in the required lifecycle state.",
+  "x-ess-name": "agentide.coordination.CoordinationStateConflict",
+  "x-ess-kind": "error-payload",
+  "type": "object",
+  "properties": {
+    "state": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "state"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6",
+    "contract_digest": "f5e7317bb074ca075c05defe611b17032cb81ce9d88f0195711a740a4c2d02e6",
+    "regenerate": "ess generate"
+  }
+}

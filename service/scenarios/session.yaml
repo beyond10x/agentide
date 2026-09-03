@@ -8,7 +8,7 @@ scenarios:
         realm: null
         authority: person-a
         user: person-a
-        facts: {principals: [person-a], projects: [project-a]}
+        facts: {principals: [person-a, agent-a], projects: [project-a]}
     when:
       - intent: start_session
         input:
@@ -20,8 +20,23 @@ scenarios:
           manifest_digest: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
           scopes: {principal: person-a, team: null, project: project-a}
           idempotency_key: create-agentide-session-a
+      - intent: create_grant
+        input:
+          session_id: $start_session.session_id
+          request_id: request-grant-a
+          grantee: agent-a
+          allowed_intents: [code_edit, code_create, code_delete, code_rename]
+          path_prefixes: [src]
+          maximum_risk: Medium
+          expires_at: null
+          revision: 1
+          expected_version: 1
+          idempotency_key: create-agentide-grant-a
     then:
       - query: get_session
+        input: {session_id: $start_session.session_id}
+        count: 1
+      - query: list_grants
         input: {session_id: $start_session.session_id}
         count: 1
 

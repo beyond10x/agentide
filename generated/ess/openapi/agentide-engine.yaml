@@ -1,6 +1,6 @@
 # generated from agentide v1
-# model digest 667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7
-# contract digest c688c8a0e0f06c9be6203a79028072e03354e9aecc4ff27467331da1ba6a17ed
+# model digest 560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6
+# contract digest e19c82375779ee7857130f7c219b8bca0c62dced3a2da27746b74b4787a40452
 # do not edit: regenerate with `ess generate`
 openapi: 3.1.0
 info:
@@ -16,12 +16,14 @@ info:
   x-ess-provenance:
     system: agentide
     specification_version: v1
-    source_digest: 667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7
-    contract_digest: c688c8a0e0f06c9be6203a79028072e03354e9aecc4ff27467331da1ba6a17ed
+    source_digest: 560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6
+    contract_digest: e19c82375779ee7857130f7c219b8bca0c62dced3a2da27746b74b4787a40452
   x-ess-reached-by: network
 tags:
 - name: coding
   description: Semantic observation, change, execution, collaboration, evidence, and delivery intents.
+- name: coordination
+  description: Durable hosted collaboration references stored by Service SDK without project file bytes.
 - name: sessions
   description: The durable identity and observable projection of one coding session.
 - name: surface
@@ -811,6 +813,270 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/agentide.coding.ObserveWorktree.refused.Response'
+  /coordination/commands/approval-checkpoint-approve:
+    post:
+      operationId: agentide.coordination.ApproveCheckpoint
+      summary: Approve exact checkpoint
+      tags:
+      - coordination
+      x-ess-may-invoke:
+      - agentide.coordination.SessionOwner
+      requestBody:
+        description: The input `agentide.coordination.ApproveCheckpoint` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coordination.ApproveCheckpoint.Input'
+      responses:
+        '202':
+          description: 'Outcome `approved`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.ApproveCheckpoint.approved.Response'
+        '409':
+          description: 'Outcome `wrong-state`: the input was acceptable and the subject is in a state this command does not act from. Resending the same request changes nothing until something else moves it.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.ApproveCheckpoint.wrong-state.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.ApproveCheckpoint.refused.Response'
+  /coordination/commands/approval-checkpoint-deny:
+    post:
+      operationId: agentide.coordination.DenyCheckpoint
+      summary: Deny exact checkpoint
+      tags:
+      - coordination
+      x-ess-may-invoke:
+      - agentide.coordination.SessionOwner
+      requestBody:
+        description: The input `agentide.coordination.DenyCheckpoint` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coordination.DenyCheckpoint.Input'
+      responses:
+        '202':
+          description: 'Outcome `denied`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.DenyCheckpoint.denied.Response'
+        '409':
+          description: 'Outcome `wrong-state`: the input was acceptable and the subject is in a state this command does not act from. Resending the same request changes nothing until something else moves it.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.DenyCheckpoint.wrong-state.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.DenyCheckpoint.refused.Response'
+  /coordination/commands/approval-checkpoint-record:
+    post:
+      operationId: agentide.coordination.RecordApprovalCheckpoint
+      summary: Record approval checkpoint
+      tags:
+      - coordination
+      x-ess-may-invoke:
+      - agentide.coordination.TaskAuthority
+      requestBody:
+        description: The input `agentide.coordination.RecordApprovalCheckpoint` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coordination.RecordApprovalCheckpoint.Input'
+      responses:
+        '202':
+          description: 'Outcome `recorded`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.RecordApprovalCheckpoint.recorded.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.RecordApprovalCheckpoint.refused.Response'
+  /coordination/commands/context-pin:
+    post:
+      operationId: agentide.coordination.PinContext
+      summary: Pin context reference
+      tags:
+      - coordination
+      x-ess-may-invoke:
+      - agentide.coordination.SessionExecutor
+      - agentide.coordination.SessionOwner
+      requestBody:
+        description: The input `agentide.coordination.PinContext` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coordination.PinContext.Input'
+      responses:
+        '202':
+          description: 'Outcome `pinned`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.PinContext.pinned.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.PinContext.refused.Response'
+  /coordination/commands/context-unpin:
+    post:
+      operationId: agentide.coordination.RemoveContextPin
+      summary: Remove context pin
+      tags:
+      - coordination
+      x-ess-may-invoke:
+      - agentide.coordination.SessionExecutor
+      - agentide.coordination.SessionOwner
+      requestBody:
+        description: The input `agentide.coordination.RemoveContextPin` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coordination.RemoveContextPin.Input'
+      responses:
+        '202':
+          description: 'Outcome `removed`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.RemoveContextPin.removed.Response'
+        '409':
+          description: 'Outcome `wrong-state`: the input was acceptable and the subject is in a state this command does not act from. Resending the same request changes nothing until something else moves it.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.RemoveContextPin.wrong-state.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.RemoveContextPin.refused.Response'
+  /coordination/commands/grant-create:
+    post:
+      operationId: agentide.coordination.CreateGrant
+      summary: Create authority grant
+      tags:
+      - coordination
+      x-ess-may-invoke:
+      - agentide.coordination.SessionOwner
+      requestBody:
+        description: The input `agentide.coordination.CreateGrant` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coordination.CreateGrant.Input'
+      responses:
+        '202':
+          description: 'Outcome `created`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.CreateGrant.created.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.CreateGrant.refused.Response'
+  /coordination/commands/grant-revoke:
+    post:
+      operationId: agentide.coordination.RevokeGrant
+      summary: Revoke authority grant
+      tags:
+      - coordination
+      x-ess-may-invoke:
+      - agentide.coordination.SessionOwner
+      requestBody:
+        description: The input `agentide.coordination.RevokeGrant` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.coordination.RevokeGrant.Input'
+      responses:
+        '202':
+          description: 'Outcome `revoked`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.RevokeGrant.revoked.Response'
+        '409':
+          description: 'Outcome `wrong-state`: the input was acceptable and the subject is in a state this command does not act from. Resending the same request changes nothing until something else moves it.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.RevokeGrant.wrong-state.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.RevokeGrant.refused.Response'
+  /coordination/views/ApprovalCheckpointSnapshot:
+    get:
+      operationId: agentide.coordination.ApprovalCheckpointSnapshot
+      summary: ApprovalCheckpointSnapshot
+      tags:
+      - coordination
+      x-ess-consistency: read_your_writes
+      responses:
+        '200':
+          description: 'Every row of `agentide.coordination.ApprovalCheckpointSnapshot`, a projection of `agentide.coordination.ApprovalCheckpoint`. Contains every instance. Read-your-writes: a caller that has just issued a command sees its effect here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.ApprovalCheckpointSnapshot.Response'
+  /coordination/views/ContextPinSnapshot:
+    get:
+      operationId: agentide.coordination.ContextPinSnapshot
+      summary: ContextPinSnapshot
+      tags:
+      - coordination
+      x-ess-consistency: read_your_writes
+      responses:
+        '200':
+          description: 'Every row of `agentide.coordination.ContextPinSnapshot`, a projection of `agentide.coordination.ContextPin`. Contains every instance. Read-your-writes: a caller that has just issued a command sees its effect here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.ContextPinSnapshot.Response'
+  /coordination/views/GrantSnapshot:
+    get:
+      operationId: agentide.coordination.GrantSnapshot
+      summary: GrantSnapshot
+      tags:
+      - coordination
+      x-ess-consistency: read_your_writes
+      responses:
+        '200':
+          description: 'Every row of `agentide.coordination.GrantSnapshot`, a projection of `agentide.coordination.AuthorityGrant`. Contains every instance. Read-your-writes: a caller that has just issued a command sees its effect here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.coordination.GrantSnapshot.Response'
   /sessions/commands/event-read:
     post:
       operationId: agentide.session.ReadEvents
@@ -2641,6 +2907,692 @@ components:
       - error
       - payload
       type: object
+    agentide.coordination.ApprovalCheckpoint.State:
+      title: State
+      x-ess-name: agentide.coordination.ApprovalCheckpoint.State
+      x-ess-kind: enum
+      type: string
+      enum:
+      - Approved
+      - Denied
+      - Pending
+    agentide.coordination.ApprovalCheckpointSnapshot.Response:
+      additionalProperties: false
+      description: The rows of `agentide.coordination.ApprovalCheckpointSnapshot`.
+      properties:
+        rows:
+          description: Every row the projection holds, in the order it holds them.
+          items:
+            $ref: '#/components/schemas/agentide.coordination.ApprovalCheckpointSnapshot.Row'
+          type: array
+      required:
+      - rows
+      type: object
+    agentide.coordination.ApprovalCheckpointSnapshot.Row:
+      title: ApprovalCheckpointSnapshot row
+      x-ess-name: agentide.coordination.ApprovalCheckpointSnapshot
+      x-ess-kind: view-row
+      type: object
+      properties:
+        checkpoint_id:
+          $ref: '#/components/schemas/agentide.coordination.CheckpointId'
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        attempt_ref:
+          $ref: '#/components/schemas/agentide.coordination.OpaqueRef'
+        plan_digest:
+          $ref: '#/components/schemas/agentide.coordination.Digest'
+        checkpoint_ref:
+          $ref: '#/components/schemas/agentide.coordination.OpaqueRef'
+        owner:
+          type: string
+        scopes:
+          $ref: '#/components/schemas/agentide.session.SessionScopes'
+        state:
+          $ref: '#/components/schemas/agentide.coordination.ApprovalCheckpoint.State'
+      required:
+      - checkpoint_id
+      - session_id
+      - attempt_ref
+      - plan_digest
+      - checkpoint_ref
+      - owner
+      - scopes
+      - state
+      additionalProperties: false
+    agentide.coordination.ApproveCheckpoint.Input:
+      title: Approve exact checkpoint input
+      x-ess-name: agentide.coordination.ApproveCheckpoint
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        checkpoint_id:
+          $ref: '#/components/schemas/agentide.coordination.CheckpointId'
+      required:
+      - session_id
+      - request_id
+      - checkpoint_id
+      additionalProperties: false
+    agentide.coordination.ApproveCheckpoint.approved.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. A `agentide.coordination.ApprovalCheckpoint` has moved to `Approved`, along `approve`. The instance is the one `checkpoint_id` names. Emits `ApprovalCheckpointApproved`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: approved
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coordination.ApproveCheckpoint.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: durable state is unavailable.'
+      properties:
+        error:
+          const: agentide.coordination.CoordinationRefusal
+          description: The durable coordination mutation was refused.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coordination.CoordinationRefusal.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coordination.ApproveCheckpoint.wrong-state.Response:
+      additionalProperties: false
+      description: Taken when the subject is in a state none of this command's declared moves start from. Which states those are is the lifecycle's answer, not this command's.
+      properties:
+        error:
+          const: agentide.coordination.CoordinationStateConflict
+          description: The selected record is no longer in the required lifecycle state.
+          type: string
+        outcome:
+          const: wrong-state
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coordination.CoordinationStateConflict.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coordination.AuthorityGrant.State:
+      title: State
+      x-ess-name: agentide.coordination.AuthorityGrant.State
+      x-ess-kind: enum
+      type: string
+      enum:
+      - Active
+      - Revoked
+    agentide.coordination.CheckpointId:
+      title: CheckpointId
+      x-ess-name: agentide.coordination.CheckpointId
+      x-ess-kind: newtype
+      type: string
+    agentide.coordination.ContextKind:
+      title: ContextKind
+      x-ess-name: agentide.coordination.ContextKind
+      x-ess-kind: enum
+      type: string
+      enum:
+      - Editor
+      - DiffHunk
+      - Terminal
+      - Process
+      - Evidence
+    agentide.coordination.ContextPin.State:
+      title: State
+      x-ess-name: agentide.coordination.ContextPin.State
+      x-ess-kind: enum
+      type: string
+      enum:
+      - Active
+      - Removed
+    agentide.coordination.ContextPinId:
+      title: ContextPinId
+      x-ess-name: agentide.coordination.ContextPinId
+      x-ess-kind: newtype
+      type: string
+    agentide.coordination.ContextPinSnapshot.Response:
+      additionalProperties: false
+      description: The rows of `agentide.coordination.ContextPinSnapshot`.
+      properties:
+        rows:
+          description: Every row the projection holds, in the order it holds them.
+          items:
+            $ref: '#/components/schemas/agentide.coordination.ContextPinSnapshot.Row'
+          type: array
+      required:
+      - rows
+      type: object
+    agentide.coordination.ContextPinSnapshot.Row:
+      title: ContextPinSnapshot row
+      x-ess-name: agentide.coordination.ContextPinSnapshot
+      x-ess-kind: view-row
+      type: object
+      properties:
+        pin_id:
+          $ref: '#/components/schemas/agentide.coordination.ContextPinId'
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        kind:
+          $ref: '#/components/schemas/agentide.coordination.ContextKind'
+        reference:
+          $ref: '#/components/schemas/agentide.coordination.OpaqueRef'
+        start_line:
+          type: integer
+        end_line:
+          type: integer
+        sha256:
+          $ref: '#/components/schemas/agentide.coordination.Digest'
+        owner:
+          type: string
+        scopes:
+          $ref: '#/components/schemas/agentide.session.SessionScopes'
+        state:
+          $ref: '#/components/schemas/agentide.coordination.ContextPin.State'
+      required:
+      - pin_id
+      - session_id
+      - kind
+      - reference
+      - sha256
+      - owner
+      - scopes
+      - state
+      additionalProperties: false
+    agentide.coordination.CoordinationRefusal.Error:
+      title: CoordinationRefusal payload
+      description: The durable coordination mutation was refused.
+      x-ess-name: agentide.coordination.CoordinationRefusal
+      x-ess-kind: error-payload
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        retryable:
+          type: boolean
+      required:
+      - code
+      - message
+      - retryable
+      additionalProperties: false
+    agentide.coordination.CoordinationStateConflict.Error:
+      title: CoordinationStateConflict payload
+      description: The selected record is no longer in the required lifecycle state.
+      x-ess-name: agentide.coordination.CoordinationStateConflict
+      x-ess-kind: error-payload
+      type: object
+      properties:
+        state:
+          type: string
+      required:
+      - state
+      additionalProperties: false
+    agentide.coordination.CreateGrant.Input:
+      title: Create authority grant input
+      x-ess-name: agentide.coordination.CreateGrant
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        grantee:
+          $ref: '#/components/schemas/agentide.coordination.SubjectRef'
+        allowed_intents:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.coordination.IntentRef'
+        path_prefixes:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.coordination.PathPrefix'
+        maximum_risk:
+          $ref: '#/components/schemas/agentide.coordination.GrantRisk'
+        expires_at:
+          type: string
+        revision:
+          type: integer
+      required:
+      - session_id
+      - request_id
+      - grantee
+      - allowed_intents
+      - path_prefixes
+      - maximum_risk
+      - revision
+      additionalProperties: false
+    agentide.coordination.CreateGrant.created.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. A `agentide.coordination.AuthorityGrant` now exists, in `Active`. Its identity is published as `grant_id` on `agentide.coordination.GrantCreated`. Emits `GrantCreated`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: created
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coordination.CreateGrant.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: authority or durable state is unavailable.'
+      properties:
+        error:
+          const: agentide.coordination.CoordinationRefusal
+          description: The durable coordination mutation was refused.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coordination.CoordinationRefusal.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coordination.DenyCheckpoint.Input:
+      title: Deny exact checkpoint input
+      x-ess-name: agentide.coordination.DenyCheckpoint
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        checkpoint_id:
+          $ref: '#/components/schemas/agentide.coordination.CheckpointId'
+      required:
+      - session_id
+      - request_id
+      - checkpoint_id
+      additionalProperties: false
+    agentide.coordination.DenyCheckpoint.denied.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. A `agentide.coordination.ApprovalCheckpoint` has moved to `Denied`, along `deny`. The instance is the one `checkpoint_id` names. Emits `ApprovalCheckpointDenied`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: denied
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coordination.DenyCheckpoint.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: durable state is unavailable.'
+      properties:
+        error:
+          const: agentide.coordination.CoordinationRefusal
+          description: The durable coordination mutation was refused.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coordination.CoordinationRefusal.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coordination.DenyCheckpoint.wrong-state.Response:
+      additionalProperties: false
+      description: Taken when the subject is in a state none of this command's declared moves start from. Which states those are is the lifecycle's answer, not this command's.
+      properties:
+        error:
+          const: agentide.coordination.CoordinationStateConflict
+          description: The selected record is no longer in the required lifecycle state.
+          type: string
+        outcome:
+          const: wrong-state
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coordination.CoordinationStateConflict.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coordination.Digest:
+      title: Digest
+      x-ess-name: agentide.coordination.Digest
+      x-ess-kind: newtype
+      type: string
+    agentide.coordination.GrantId:
+      title: GrantId
+      x-ess-name: agentide.coordination.GrantId
+      x-ess-kind: newtype
+      type: string
+    agentide.coordination.GrantRisk:
+      title: GrantRisk
+      x-ess-name: agentide.coordination.GrantRisk
+      x-ess-kind: enum
+      type: string
+      enum:
+      - Low
+      - Medium
+    agentide.coordination.GrantSnapshot.Response:
+      additionalProperties: false
+      description: The rows of `agentide.coordination.GrantSnapshot`.
+      properties:
+        rows:
+          description: Every row the projection holds, in the order it holds them.
+          items:
+            $ref: '#/components/schemas/agentide.coordination.GrantSnapshot.Row'
+          type: array
+      required:
+      - rows
+      type: object
+    agentide.coordination.GrantSnapshot.Row:
+      title: GrantSnapshot row
+      x-ess-name: agentide.coordination.GrantSnapshot
+      x-ess-kind: view-row
+      type: object
+      properties:
+        grant_id:
+          $ref: '#/components/schemas/agentide.coordination.GrantId'
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        grantee:
+          $ref: '#/components/schemas/agentide.coordination.SubjectRef'
+        allowed_intents:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.coordination.IntentRef'
+        path_prefixes:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.coordination.PathPrefix'
+        maximum_risk:
+          $ref: '#/components/schemas/agentide.coordination.GrantRisk'
+        expires_at:
+          type: string
+        revision:
+          type: integer
+        owner:
+          type: string
+        scopes:
+          $ref: '#/components/schemas/agentide.session.SessionScopes'
+        state:
+          $ref: '#/components/schemas/agentide.coordination.AuthorityGrant.State'
+      required:
+      - grant_id
+      - session_id
+      - grantee
+      - allowed_intents
+      - path_prefixes
+      - maximum_risk
+      - revision
+      - owner
+      - scopes
+      - state
+      additionalProperties: false
+    agentide.coordination.IntentRef:
+      title: IntentRef
+      x-ess-name: agentide.coordination.IntentRef
+      x-ess-kind: newtype
+      type: string
+    agentide.coordination.OpaqueRef:
+      title: OpaqueRef
+      x-ess-name: agentide.coordination.OpaqueRef
+      x-ess-kind: newtype
+      type: string
+    agentide.coordination.PathPrefix:
+      title: PathPrefix
+      x-ess-name: agentide.coordination.PathPrefix
+      x-ess-kind: newtype
+      type: string
+    agentide.coordination.PinContext.Input:
+      title: Pin context reference input
+      x-ess-name: agentide.coordination.PinContext
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        kind:
+          $ref: '#/components/schemas/agentide.coordination.ContextKind'
+        reference:
+          $ref: '#/components/schemas/agentide.coordination.OpaqueRef'
+        start_line:
+          type: integer
+        end_line:
+          type: integer
+        sha256:
+          $ref: '#/components/schemas/agentide.coordination.Digest'
+      required:
+      - session_id
+      - request_id
+      - kind
+      - reference
+      - sha256
+      additionalProperties: false
+    agentide.coordination.PinContext.pinned.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. A `agentide.coordination.ContextPin` now exists, in `Active`. Its identity is published as `pin_id` on `agentide.coordination.ContextPinned`. Emits `ContextPinned`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: pinned
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coordination.PinContext.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the reference cannot be admitted or durable state is unavailable.'
+      properties:
+        error:
+          const: agentide.coordination.CoordinationRefusal
+          description: The durable coordination mutation was refused.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coordination.CoordinationRefusal.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coordination.RecordApprovalCheckpoint.Input:
+      title: Record approval checkpoint input
+      x-ess-name: agentide.coordination.RecordApprovalCheckpoint
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        checkpoint_id:
+          $ref: '#/components/schemas/agentide.coordination.CheckpointId'
+        attempt_ref:
+          $ref: '#/components/schemas/agentide.coordination.OpaqueRef'
+        plan_digest:
+          $ref: '#/components/schemas/agentide.coordination.Digest'
+        checkpoint_ref:
+          $ref: '#/components/schemas/agentide.coordination.OpaqueRef'
+      required:
+      - session_id
+      - request_id
+      - checkpoint_id
+      - attempt_ref
+      - plan_digest
+      - checkpoint_ref
+      additionalProperties: false
+    agentide.coordination.RecordApprovalCheckpoint.recorded.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. A `agentide.coordination.ApprovalCheckpoint` now exists, in `Pending`. Its identity is published as `checkpoint_id` on `agentide.coordination.ApprovalCheckpointRecorded`. Emits `ApprovalCheckpointRecorded`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: recorded
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coordination.RecordApprovalCheckpoint.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: durable state is unavailable.'
+      properties:
+        error:
+          const: agentide.coordination.CoordinationRefusal
+          description: The durable coordination mutation was refused.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coordination.CoordinationRefusal.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coordination.RemoveContextPin.Input:
+      title: Remove context pin input
+      x-ess-name: agentide.coordination.RemoveContextPin
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        pin_id:
+          $ref: '#/components/schemas/agentide.coordination.ContextPinId'
+      required:
+      - session_id
+      - request_id
+      - pin_id
+      additionalProperties: false
+    agentide.coordination.RemoveContextPin.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: durable state is unavailable.'
+      properties:
+        error:
+          const: agentide.coordination.CoordinationRefusal
+          description: The durable coordination mutation was refused.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coordination.CoordinationRefusal.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coordination.RemoveContextPin.removed.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. A `agentide.coordination.ContextPin` has moved to `Removed`, along `remove`. The instance is the one `pin_id` names. Emits `ContextPinRemoved`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: removed
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coordination.RemoveContextPin.wrong-state.Response:
+      additionalProperties: false
+      description: Taken when the subject is in a state none of this command's declared moves start from. Which states those are is the lifecycle's answer, not this command's.
+      properties:
+        error:
+          const: agentide.coordination.CoordinationStateConflict
+          description: The selected record is no longer in the required lifecycle state.
+          type: string
+        outcome:
+          const: wrong-state
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coordination.CoordinationStateConflict.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coordination.RevokeGrant.Input:
+      title: Revoke authority grant input
+      x-ess-name: agentide.coordination.RevokeGrant
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        request_id:
+          $ref: '#/components/schemas/agentide.session.RequestId'
+        grant_id:
+          $ref: '#/components/schemas/agentide.coordination.GrantId'
+      required:
+      - session_id
+      - request_id
+      - grant_id
+      additionalProperties: false
+    agentide.coordination.RevokeGrant.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: durable state is unavailable.'
+      properties:
+        error:
+          const: agentide.coordination.CoordinationRefusal
+          description: The durable coordination mutation was refused.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coordination.CoordinationRefusal.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coordination.RevokeGrant.revoked.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. A `agentide.coordination.AuthorityGrant` has moved to `Revoked`, along `revoke`. The instance is the one `grant_id` names. Emits `GrantRevoked`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: revoked
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
+    agentide.coordination.RevokeGrant.wrong-state.Response:
+      additionalProperties: false
+      description: Taken when the subject is in a state none of this command's declared moves start from. Which states those are is the lifecycle's answer, not this command's.
+      properties:
+        error:
+          const: agentide.coordination.CoordinationStateConflict
+          description: The selected record is no longer in the required lifecycle state.
+          type: string
+        outcome:
+          const: wrong-state
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.coordination.CoordinationStateConflict.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.coordination.SubjectRef:
+      title: SubjectRef
+      x-ess-name: agentide.coordination.SubjectRef
+      x-ess-kind: newtype
+      type: string
     agentide.session.CloseSession.Input:
       title: Close session input
       x-ess-name: agentide.session.CloseSession

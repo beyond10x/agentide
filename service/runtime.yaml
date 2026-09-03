@@ -35,6 +35,81 @@ obligations:
     bindings: {owner: owner, scopes: scopes}
     description: Partition session projections by authenticated tenant, exact realm, owner and scopes.
 
+  - name: validate_grantee_partition
+    provider: sdk.auth.same-partition-owner-transfer/v1
+    bindings:
+      owner: agentide.session.CodingSession.owner
+      new_owner: grantee
+    description: Admit grants only for a subject resolved inside the same authenticated partition.
+
+  - name: nested_grant
+    provider: sdk.aggregate.nested-entity/v1
+    bindings:
+      parent: agentide.session.CodingSession
+      child: agentide.coordination.AuthorityGrant
+      parent_identity: session_id
+      child_identity: grant_id
+    description: Resolve a grant only inside its parent coding-session stream.
+
+  - name: nested_context_pin
+    provider: sdk.aggregate.nested-entity/v1
+    bindings:
+      parent: agentide.session.CodingSession
+      child: agentide.coordination.ContextPin
+      parent_identity: session_id
+      child_identity: pin_id
+    description: Resolve a context pin only inside its parent coding-session stream.
+
+  - name: nested_approval_checkpoint
+    provider: sdk.aggregate.nested-entity/v1
+    bindings:
+      parent: agentide.session.CodingSession
+      child: agentide.coordination.ApprovalCheckpoint
+      parent_identity: session_id
+      child_identity: checkpoint_id
+    description: Resolve an approval checkpoint only inside its parent coding-session stream.
+
+  - name: inherit_grant_authority
+    provider: sdk.derive.inherit-parent-authority/v1
+    bindings:
+      parent: agentide.session.CodingSession
+      child: agentide.coordination.AuthorityGrant
+      parent_owner: agentide.session.CodingSession.owner
+      parent_scopes: agentide.session.CodingSession.scopes
+      child_owner: agentide.coordination.AuthorityGrant.owner
+      child_scopes: agentide.coordination.AuthorityGrant.scopes
+    description: Derive grant visibility from the session; callers cannot supply owner or scope.
+
+  - name: inherit_context_pin_authority
+    provider: sdk.derive.inherit-parent-authority/v1
+    bindings:
+      parent: agentide.session.CodingSession
+      child: agentide.coordination.ContextPin
+      parent_owner: agentide.session.CodingSession.owner
+      parent_scopes: agentide.session.CodingSession.scopes
+      child_owner: agentide.coordination.ContextPin.owner
+      child_scopes: agentide.coordination.ContextPin.scopes
+    description: Derive context-pin visibility from the session; callers cannot supply owner or scope.
+
+  - name: inherit_checkpoint_authority
+    provider: sdk.derive.inherit-parent-authority/v1
+    bindings:
+      parent: agentide.session.CodingSession
+      child: agentide.coordination.ApprovalCheckpoint
+      parent_owner: agentide.session.CodingSession.owner
+      parent_scopes: agentide.session.CodingSession.scopes
+      child_owner: agentide.coordination.ApprovalCheckpoint.owner
+      child_scopes: agentide.coordination.ApprovalCheckpoint.scopes
+    description: Derive checkpoint visibility from the session; callers cannot supply owner or scope.
+
+  - name: hide_closed_session_children
+    provider: sdk.projection.hide-terminal-parent/v1
+    bindings:
+      parent: agentide.session.CodingSession
+      parent_identity: session_id
+      terminal_states: Closed
+    description: Hide child coordination projections once their session is closed.
+
   - name: filter_visible_sessions
     provider: sdk.auth.owner-and-conjunctive-scopes/v1
     bindings: {owner: owner, scopes: scopes}
@@ -45,6 +120,21 @@ projections:
     view: agentide.session.SessionSnapshot
     delivery: inline_transactional
     obligations: [partition_session_projection]
+
+  - name: grant_snapshot_projection
+    view: agentide.coordination.GrantSnapshot
+    delivery: inline_transactional
+    obligations: [partition_session_projection, inherit_grant_authority, hide_closed_session_children]
+
+  - name: context_pin_snapshot_projection
+    view: agentide.coordination.ContextPinSnapshot
+    delivery: inline_transactional
+    obligations: [partition_session_projection, inherit_context_pin_authority, hide_closed_session_children]
+
+  - name: approval_checkpoint_snapshot_projection
+    view: agentide.coordination.ApprovalCheckpointSnapshot
+    delivery: inline_transactional
+    obligations: [partition_session_projection, inherit_checkpoint_authority, hide_closed_session_children]
 
 intents:
   - name: start_session
@@ -80,6 +170,70 @@ intents:
           - {kind: command_field, field: session_id}
     projections: [session_snapshot_projection]
     obligations: [bind_session_stream, authorize_session_owner, require_active_session]
+
+  - name: create_grant
+    command: agentide.coordination.CreateGrant
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: operation_field, field: expected_version}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    event_bindings:
+      - event: agentide.coordination.GrantCreated
+        field: grant_id
+        source: {kind: generated_uuid_v7}
+    projections: [grant_snapshot_projection]
+    obligations: [bind_session_stream, authorize_session_owner, require_active_session, validate_grantee_partition, inherit_grant_authority]
+
+  - name: revoke_grant
+    command: agentide.coordination.RevokeGrant
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: operation_field, field: expected_version}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    projections: [grant_snapshot_projection]
+    obligations: [bind_session_stream, authorize_session_owner, require_active_session, nested_grant]
+
+  - name: pin_context
+    command: agentide.coordination.PinContext
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: operation_field, field: expected_version}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    event_bindings:
+      - event: agentide.coordination.ContextPinned
+        field: pin_id
+        source: {kind: generated_uuid_v7}
+    projections: [context_pin_snapshot_projection]
+    obligations: [bind_session_stream, authorize_session_owner, require_active_session, inherit_context_pin_authority]
+
+  - name: remove_context_pin
+    command: agentide.coordination.RemoveContextPin
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: operation_field, field: expected_version}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    projections: [context_pin_snapshot_projection]
+    obligations: [bind_session_stream, authorize_session_owner, require_active_session, nested_context_pin]
+
+  - name: record_approval_checkpoint
+    command: agentide.coordination.RecordApprovalCheckpoint
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: operation_field, field: expected_version}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    projections: [approval_checkpoint_snapshot_projection]
+    obligations: [bind_session_stream, authorize_session_owner, require_active_session, inherit_checkpoint_authority]
+
+  - name: approve_checkpoint
+    command: agentide.coordination.ApproveCheckpoint
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: operation_field, field: expected_version}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    projections: [approval_checkpoint_snapshot_projection]
+    obligations: [bind_session_stream, authorize_session_owner, require_active_session, nested_approval_checkpoint]
+
+  - name: deny_checkpoint
+    command: agentide.coordination.DenyCheckpoint
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: operation_field, field: expected_version}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    projections: [approval_checkpoint_snapshot_projection]
+    obligations: [bind_session_stream, authorize_session_owner, require_active_session, nested_approval_checkpoint]
 
 queries:
   - name: get_session
@@ -120,3 +274,57 @@ queries:
       - {view_field: session_id, direction: ascending}
     delivery: read_your_writes
     obligations: [partition_session_projection, filter_visible_sessions]
+
+  - name: list_grants
+    view: agentide.coordination.GrantSnapshot
+    projection: grant_snapshot_projection
+    selectors:
+      - {parameter: session_id, view_field: session_id}
+    guards:
+      - name: grants_are_visible
+        refusal_code: session_not_visible
+        reads:
+          - {kind: view_field, field: owner}
+          - {kind: view_field, field: scopes}
+          - {kind: context, value: current_authority}
+          - {kind: context, value: executor_optional}
+    sort:
+      - {view_field: grant_id, direction: ascending}
+    delivery: read_your_writes
+    obligations: [partition_session_projection, filter_visible_sessions, hide_closed_session_children]
+
+  - name: list_context_pins
+    view: agentide.coordination.ContextPinSnapshot
+    projection: context_pin_snapshot_projection
+    selectors:
+      - {parameter: session_id, view_field: session_id}
+    guards:
+      - name: context_pins_are_visible
+        refusal_code: session_not_visible
+        reads:
+          - {kind: view_field, field: owner}
+          - {kind: view_field, field: scopes}
+          - {kind: context, value: current_authority}
+          - {kind: context, value: executor_optional}
+    sort:
+      - {view_field: pin_id, direction: ascending}
+    delivery: read_your_writes
+    obligations: [partition_session_projection, filter_visible_sessions, hide_closed_session_children]
+
+  - name: list_approval_checkpoints
+    view: agentide.coordination.ApprovalCheckpointSnapshot
+    projection: approval_checkpoint_snapshot_projection
+    selectors:
+      - {parameter: session_id, view_field: session_id}
+    guards:
+      - name: checkpoints_are_visible
+        refusal_code: session_not_visible
+        reads:
+          - {kind: view_field, field: owner}
+          - {kind: view_field, field: scopes}
+          - {kind: context, value: current_authority}
+          - {kind: context, value: executor_optional}
+    sort:
+      - {view_field: checkpoint_id, direction: ascending}
+    delivery: read_your_writes
+    obligations: [partition_session_projection, filter_visible_sessions, hide_closed_session_children]
