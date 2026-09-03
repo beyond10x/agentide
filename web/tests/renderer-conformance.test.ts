@@ -1,4 +1,4 @@
-import { nextTick } from "vue";
+import { createApp, h, nextTick } from "vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   rendererActionFormat,
@@ -9,7 +9,7 @@ import {
   type RendererTarget,
 } from "../src/renderer/protocol";
 import { vanillaRenderer } from "../src/renderer/vanilla";
-import { vueRenderer } from "../src/renderer/vue";
+import { AgentIdeVueWorkbench, vueRenderer } from "../src/renderer/vue";
 
 const targets: RendererTarget[] = [vanillaRenderer, vueRenderer];
 
@@ -97,6 +97,44 @@ describe.each(targets)("$manifest.id renderer target", (target) => {
     expect(container.childElementCount).toBe(0);
     container.remove();
   });
+});
+
+it("composes host-owned views without acquiring transport authority", async () => {
+  const container = document.createElement("div");
+  document.body.append(container);
+  const app = createApp({
+    render: () =>
+      h(
+        AgentIdeVueWorkbench,
+        { bottomOpen: true, bottomHeight: 280 },
+        {
+          titlebar: () => "Hosted session",
+          explorer: () => h("button", { type: "button" }, "README.md"),
+          center: () => h("article", "Host-owned Monaco projection"),
+          inspector: () => h("dl", [h("dt", "Actor"), h("dd", "server-derived")]),
+          bottom: () => h("div", "Host-owned terminal renderer"),
+          overlay: () => h("dialog", "Exact-plan approval"),
+        },
+      ),
+  });
+  app.mount(container);
+  await nextTick();
+
+  const shell = container.querySelector<HTMLElement>("[data-agentide-renderer='vue']");
+  expect(shell?.dataset.agentideRendererProtocol).toBe(rendererProtocolFormat);
+  expect(container.querySelector(".workbench-grid")?.classList).not.toContain(
+    "terminal-collapsed",
+  );
+  expect(
+    container
+      .querySelector<HTMLElement>(".workbench-grid")
+      ?.style.getPropertyValue("--terminal-height"),
+  ).toBe("280px");
+  expect(container.textContent).toContain("Host-owned Monaco projection");
+  expect(container.textContent).toContain("Host-owned terminal renderer");
+
+  app.unmount();
+  container.remove();
 });
 
 it("keeps renderer targets free of transport and persistence APIs", async () => {

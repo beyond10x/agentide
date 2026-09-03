@@ -3,6 +3,7 @@ import {
   defineComponent,
   h,
   shallowRef,
+  type CSSProperties,
   type PropType,
   type VNode,
 } from "vue";
@@ -20,6 +21,75 @@ import {
   type RendererTarget,
 } from "./protocol";
 import { focusedPane, glyph, installTheme, paneObservation } from "./shared";
+
+/**
+ * Pure Vue composition shell for hosts that provide richer workspace projections.
+ *
+ * The shell owns only layout and accessibility landmarks. All observations, effects,
+ * transport, persistence, and authorization remain the responsibility of the host.
+ */
+export const AgentIdeVueWorkbench = defineComponent({
+  name: "AgentIdeVueWorkbench",
+  props: {
+    bottomOpen: { type: Boolean, default: false },
+    bottomHeight: { type: Number, default: 320 },
+    explorerLabel: { type: String, default: "Workspace explorer" },
+    inspectorLabel: { type: String, default: "Workspace inspector" },
+    centerLabel: { type: String, default: "Workspace canvas" },
+    bottomLabel: { type: String, default: "Workspace bottom panel" },
+  },
+  setup(props, { slots }) {
+    return () => {
+      const style = {
+        "--terminal-height": props.bottomOpen
+          ? `${String(Math.max(0, props.bottomHeight))}px`
+          : "2.45rem",
+      } as CSSProperties;
+      return h(
+        "main",
+        {
+          class: "agentide-vue-workbench",
+          "data-agentide-renderer": "vue",
+          "data-agentide-renderer-protocol": rendererProtocolFormat,
+        },
+        [
+          h("header", { class: "workbench-titlebar" }, slots.titlebar?.()),
+          slots.notices?.(),
+          h(
+            "div",
+            {
+              class: ["workbench-grid", { "terminal-collapsed": !props.bottomOpen }],
+              style,
+            },
+            [
+              h(
+                "aside",
+                { class: "workbench-explorer", "aria-label": props.explorerLabel },
+                slots.explorer?.(),
+              ),
+              h(
+                "section",
+                { class: "workbench-center", "aria-label": props.centerLabel },
+                slots.center?.(),
+              ),
+              h(
+                "aside",
+                { class: "workbench-inspector", "aria-label": props.inspectorLabel },
+                slots.inspector?.(),
+              ),
+              h(
+                "section",
+                { class: "workbench-terminal", "aria-label": props.bottomLabel },
+                slots.bottom?.(),
+              ),
+            ],
+          ),
+          slots.overlay?.(),
+        ],
+      );
+    };
+  },
+});
 
 const AgentIdeVueSurface = defineComponent({
   name: "AgentIdeVueSurface",

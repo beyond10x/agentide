@@ -79,7 +79,9 @@ The browser is loopback-only. Start `agentide serve --session <id>`, then open
 The root uses the compatibility Vanilla DOM renderer. The same live session can be compared through
 `/renderers/vanilla/` and `/renderers/vue/`. Both targets accept the released renderer frame and
 event contracts and emit typed semantic actions; HTTP, polling, routing, authentication, storage,
-and sockets remain in the browser host.
+and sockets remain in the browser host. The Vue target also exports an
+`AgentIdeVueWorkbench` composition shell with named regions for host-owned editors, diffs,
+terminals, and inspectors. It owns layout and landmarks without acquiring access to a host API.
 
 ## Install the latest source with Cargo
 
