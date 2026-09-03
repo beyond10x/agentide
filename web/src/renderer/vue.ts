@@ -79,7 +79,10 @@ export const AgentIdeVueWorkbench = defineComponent({
               ),
               h(
                 "section",
-                { class: "workbench-terminal", "aria-label": props.bottomLabel },
+                {
+                  class: ["workbench-terminal", { collapsed: !props.bottomOpen }],
+                  "aria-label": props.bottomLabel,
+                },
                 slots.bottom?.(),
               ),
             ],
