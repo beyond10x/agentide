@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Promote the published `0.1.4` Linux archive and its exact SHA-256 digest into the standalone
+  realization declaration.
+
 ## 0.1.4 - 2026-09-03
 
 - Promote the published `0.1.3` Linux archive and its exact SHA-256 digest into the standalone
