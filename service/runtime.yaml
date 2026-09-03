@@ -152,6 +152,18 @@ intents:
     projections: [session_snapshot_projection]
     obligations: [bind_session_stream, authorize_requested_session_scopes]
 
+  - name: ensure_hosted_session
+    command: agentide.session.EnsureHostedSession
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: no_stream}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    event_bindings:
+      - event: agentide.session.SessionStarted
+        field: owner
+        source: {kind: context, value: current_authority}
+    projections: [session_snapshot_projection]
+    obligations: [bind_session_stream, authorize_requested_session_scopes]
+
   - name: close_session
     command: agentide.session.CloseSession
     stream_id: {kind: command_field, field: session_id}

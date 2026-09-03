@@ -2940,6 +2940,125 @@
       },
       {
         "behavior": {
+          "contract": "given `agentide.session.EnsureHostedSession` input, decide and enact exactly one outcome — `started` otherwise, creates `agentide.session.CodingSession`, emits `agentide.session.SessionStarted`; `refused` externally decided (the hosted workspace or durable coordination binding is unavailable), error `agentide.session.SessionRefusal`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the hosted workspace or durable coordination binding is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Ensure hosted session",
+        "domain": "agentide.session",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "workspace_root",
+            "optional": false,
+            "spelling": "agentide.session.WorkspaceRoot",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.WorkspaceRoot"
+            },
+            "wire": "workspace_root"
+          },
+          {
+            "name": "objective",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "objective"
+          },
+          {
+            "name": "project_id",
+            "optional": false,
+            "spelling": "agentide.session.ProjectId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.ProjectId"
+            },
+            "wire": "project_id"
+          },
+          {
+            "name": "source_revision",
+            "optional": false,
+            "spelling": "agentide.session.SourceRevision",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SourceRevision"
+            },
+            "wire": "source_revision"
+          },
+          {
+            "name": "workspace_session_id",
+            "optional": false,
+            "spelling": "agentide.session.WorkspaceSessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.WorkspaceSessionId"
+            },
+            "wire": "workspace_session_id"
+          },
+          {
+            "name": "manifest_digest",
+            "optional": false,
+            "spelling": "agentide.session.ManifestDigest",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.ManifestDigest"
+            },
+            "wire": "manifest_digest"
+          },
+          {
+            "name": "scopes",
+            "optional": false,
+            "spelling": "agentide.session.SessionScopes",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionScopes"
+            },
+            "wire": "scopes"
+          }
+        ],
+        "name": "agentide.session.EnsureHostedSession",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": {
+              "effect": {
+                "kind": "creates"
+              },
+              "entity": "agentide.session.CodingSession"
+            },
+            "name": "started",
+            "publishes": [
+              "agentide.session.SessionStarted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the hosted workspace or durable coordination binding is unavailable)",
+            "error": "agentide.session.SessionRefusal",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
           "contract": "given `agentide.session.ReadEvents` input, decide and enact exactly one outcome — `observed` otherwise, emits `agentide.session.SessionObserved`; `refused` externally decided (the requested event window cannot be represented), error `agentide.session.SessionRefusal`",
           "disposition": "obligation",
           "why": "decided outside the system: the requested event window cannot be represented"
@@ -3840,6 +3959,7 @@
           "agentide.coordination.RemoveContextPin",
           "agentide.coordination.RevokeGrant",
           "agentide.session.CloseSession",
+          "agentide.session.EnsureHostedSession",
           "agentide.session.ReadEvents",
           "agentide.session.SnapshotSession",
           "agentide.session.StartSession",
@@ -5448,13 +5568,13 @@
     ],
     "format": "ess-browser-catalog/1",
     "plan": {
-      "generated": 125,
-      "obligations": 52,
+      "generated": 126,
+      "obligations": 53,
       "refused": 7
     },
     "provenance": {
-      "contract_digest": "f1c2495df22f205934254ade5d845a2b65f2cbf16c4e9dfa1e863a24ed2d3b17",
-      "source_digest": "6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4",
+      "contract_digest": "90e1687e023e28f77eca4934db634944dcaf13a22a2075c642452ec5a97822b4",
+      "source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
       "specification_version": "v1",
       "system": "agentide"
     },
@@ -6771,6 +6891,133 @@
       }
     },
     {
+      "name": "ensure_hosted_session",
+      "operation_ref": "agentide.ensure_hosted_session",
+      "semantic_ref": "agentide.session.EnsureHostedSession",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "manifest_digest": {
+            "title": "agentide.session.ManifestDigest"
+          },
+          "objective": {
+            "title": "String"
+          },
+          "project_id": {
+            "title": "agentide.session.ProjectId"
+          },
+          "scopes": {
+            "additionalProperties": false,
+            "description": "Optional conjunctive visibility scopes; an empty object is private to the owner.",
+            "properties": {
+              "extension": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "kind": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "value": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "value"
+                    ],
+                    "type": "object"
+                  }
+                ]
+              },
+              "principal": {
+                "minLength": 1,
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "project": {
+                "minLength": 1,
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "team": {
+                "minLength": 1,
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "type": "object"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          },
+          "source_revision": {
+            "title": "agentide.session.SourceRevision"
+          },
+          "workspace_root": {
+            "title": "agentide.session.WorkspaceRoot"
+          },
+          "workspace_session_id": {
+            "title": "agentide.session.WorkspaceSessionId"
+          }
+        },
+        "required": [
+          "idempotency_key",
+          "manifest_digest",
+          "objective",
+          "project_id",
+          "scopes",
+          "session_id",
+          "source_revision",
+          "workspace_root",
+          "workspace_session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    },
+    {
       "name": "get_session",
       "operation_ref": "agentide.get_session",
       "semantic_ref": "agentide.session.SessionSnapshot",
@@ -6857,10 +7104,18 @@
               },
               "partial": {
                 "type": "boolean"
+              },
+              "through_version": {
+                "minimum": 1,
+                "type": [
+                  "integer",
+                  "null"
+                ]
               }
             },
             "required": [
               "items",
+              "through_version",
               "next_cursor",
               "partial"
             ],
@@ -6952,10 +7207,18 @@
               },
               "partial": {
                 "type": "boolean"
+              },
+              "through_version": {
+                "minimum": 1,
+                "type": [
+                  "integer",
+                  "null"
+                ]
               }
             },
             "required": [
               "items",
+              "through_version",
               "next_cursor",
               "partial"
             ],
@@ -7051,10 +7314,18 @@
               },
               "partial": {
                 "type": "boolean"
+              },
+              "through_version": {
+                "minimum": 1,
+                "type": [
+                  "integer",
+                  "null"
+                ]
               }
             },
             "required": [
               "items",
+              "through_version",
               "next_cursor",
               "partial"
             ],
@@ -7152,10 +7423,18 @@
               },
               "partial": {
                 "type": "boolean"
+              },
+              "through_version": {
+                "minimum": 1,
+                "type": [
+                  "integer",
+                  "null"
+                ]
               }
             },
             "required": [
               "items",
+              "through_version",
               "next_cursor",
               "partial"
             ],
@@ -7246,10 +7525,18 @@
               },
               "partial": {
                 "type": "boolean"
+              },
+              "through_version": {
+                "minimum": 1,
+                "type": [
+                  "integer",
+                  "null"
+                ]
               }
             },
             "required": [
               "items",
+              "through_version",
               "next_cursor",
               "partial"
             ],

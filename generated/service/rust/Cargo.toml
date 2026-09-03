@@ -6,10 +6,10 @@ edition = "2024"
 publish = false
 
 [dependencies]
-service-engine = { git = "https://github.com/beyond10x/service-sdk.git", rev = "944d3f1575aab8e3e8801f810777298b8cf9a010" }
-service-connectors = { git = "https://github.com/beyond10x/service-sdk.git", rev = "944d3f1575aab8e3e8801f810777298b8cf9a010" }
-service-catalog = { git = "https://github.com/beyond10x/service-sdk.git", rev = "944d3f1575aab8e3e8801f810777298b8cf9a010" }
+service-engine = { git = "https://github.com/beyond10x/service-sdk.git", rev = "6ff81360eb7ec0a50928ce193c640b4d7c0e9007" }
+service-connectors = { git = "https://github.com/beyond10x/service-sdk.git", rev = "6ff81360eb7ec0a50928ce193c640b4d7c0e9007" }
+service-catalog = { git = "https://github.com/beyond10x/service-sdk.git", rev = "6ff81360eb7ec0a50928ce193c640b4d7c0e9007" }
 
 [dev-dependencies]
-service-conformance = { git = "https://github.com/beyond10x/service-sdk.git", rev = "944d3f1575aab8e3e8801f810777298b8cf9a010" }
+service-conformance = { git = "https://github.com/beyond10x/service-sdk.git", rev = "6ff81360eb7ec0a50928ce193c640b4d7c0e9007" }
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }

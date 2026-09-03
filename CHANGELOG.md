@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add deterministic, retry-safe hosted-session creation keyed by the Workspace session identity.
 - Regenerate the hosted coordination service with Service SDK 0.3.2 and its exact Connectors 0.5.3
   factory contract so downstream composed runtimes use one Connector service trait.
 - Include lifecycle state in the generated session snapshot so Workspace can distinguish active
