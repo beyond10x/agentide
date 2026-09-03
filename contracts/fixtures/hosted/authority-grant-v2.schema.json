@@ -1,0 +1,16 @@
+{
+  "format": "agentide.authority-grant/2",
+  "id": "grant:one",
+  "session_id": "session:one",
+  "grantee": "agent:one",
+  "allowed_intents": [
+    "code_edit"
+  ],
+  "path_prefixes": [
+    "src"
+  ],
+  "maximum_risk": "medium",
+  "expires_at": "2026-09-03T13:00:00Z",
+  "revision": 3,
+  "revoked": false
+}

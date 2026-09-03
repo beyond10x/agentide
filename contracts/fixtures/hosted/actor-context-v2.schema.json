@@ -1,0 +1,8 @@
+{
+  "format": "agentide.actor-context/2",
+  "kind": "human",
+  "subject": "user:example",
+  "agent": null,
+  "attempt": null,
+  "delegation": null
+}

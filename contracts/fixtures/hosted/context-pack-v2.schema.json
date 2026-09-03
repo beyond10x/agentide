@@ -1,0 +1,55 @@
+{
+  "format": "agentide.context-pack/2",
+  "objective": "Review the hosted protocol",
+  "source_revision": "commit:0123456789abcdef",
+  "working_changes": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "pins": [
+    {
+      "format": "agentide.context-selection/1",
+      "id": "selection:one",
+      "kind": "editor",
+      "reference": "src/lib.rs",
+      "start_line": 1,
+      "end_line": 1,
+      "content": "pub fn example() {}\n",
+      "sha256": "bbdb342f0ea09169f1308ee7c6059400d87620df91b83a81c026e8111ea1163c",
+      "provenance": {
+        "format": "agentide.attachment-provenance/1",
+        "actor": {
+          "format": "agentide.actor-context/2",
+          "kind": "human",
+          "subject": "user:example",
+          "agent": null,
+          "attempt": null,
+          "delegation": null
+        },
+        "source": "workspace",
+        "source_revision": "commit:0123456789abcdef",
+        "observed_at": "2026-09-03T12:00:00Z"
+      },
+      "truncated": false
+    }
+  ],
+  "focused_selections": [],
+  "open_files": [],
+  "active_diff": {
+    "kind": "workspace"
+  },
+  "terminals": [],
+  "processes": [],
+  "agent_lanes": [],
+  "approvals": [],
+  "evidence": [
+    {
+      "id": "evidence:one",
+      "kind": "test_result",
+      "state": "passed",
+      "summary": "Hosted protocol conformance passed",
+      "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "observed_at": "2026-09-03T12:00:00Z"
+    }
+  ],
+  "recent_activity": [],
+  "revision": 7,
+  "digest": "5c5a5037b8ebcd0b623c6509cdfe7d79e65727d69849c8c1ab9060afb4d1c8ce"
+}

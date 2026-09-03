@@ -1,0 +1,20 @@
+{
+  "format": "agentide.terminal-session/2",
+  "id": "terminal:one",
+  "session_id": "session:one",
+  "profile": "review",
+  "actor": {
+    "format": "agentide.actor-context/2",
+    "kind": "human",
+    "subject": "user:example",
+    "agent": null,
+    "attempt": null,
+    "delegation": null
+  },
+  "process_id": "process:one",
+  "working_directory": "",
+  "network": "none",
+  "state": "running",
+  "output_sequence": 2,
+  "exit_code": null
+}

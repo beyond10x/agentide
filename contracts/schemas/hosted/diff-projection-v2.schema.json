@@ -1,0 +1,419 @@
+{
+  "$defs": {
+    "ChangeSelector": {
+      "description": "Authoritative source selector for one canonical diff.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "description": "Writable materialization against its immutable base.",
+          "properties": {
+            "kind": {
+              "const": "workspace",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Exact pending or approved plan.",
+          "properties": {
+            "digest": {
+              "description": "Exact plan digest.",
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "kind": {
+              "const": "plan",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "digest"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "One Agent Platform attempt.",
+          "properties": {
+            "attempt_id": {
+              "description": "Agent Platform attempt reference.",
+              "type": "string"
+            },
+            "kind": {
+              "const": "agent_attempt",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "attempt_id"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "One publication projection.",
+          "properties": {
+            "kind": {
+              "const": "publication",
+              "type": "string"
+            },
+            "publication_id": {
+              "description": "Publication record reference.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "publication_id"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Explicit immutable revision pair.",
+          "properties": {
+            "kind": {
+              "const": "revision_pair",
+              "type": "string"
+            },
+            "new": {
+              "description": "New immutable revision.",
+              "type": "string"
+            },
+            "old": {
+              "description": "Old immutable revision.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "old",
+            "new"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "DiffFile": {
+      "additionalProperties": false,
+      "description": "One changed file in a canonical projection.",
+      "properties": {
+        "additions": {
+          "description": "Text additions when representable.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "attribution": {
+          "description": "Actors or operations attributed by the server.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "deletions": {
+          "description": "Text deletions when representable.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "hunks": {
+          "description": "Hunks in patch mode.",
+          "items": {
+            "$ref": "#/$defs/DiffHunk"
+          },
+          "type": "array"
+        },
+        "new_path": {
+          "description": "Workspace-relative new path.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "new_sha256": {
+          "description": "Complete new file digest.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "old_path": {
+          "description": "Workspace-relative old path.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "old_sha256": {
+          "description": "Complete old file digest.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "$ref": "#/$defs/DiffFileStatus",
+          "description": "Added, modified, deleted, renamed, mode-changed, or binary."
+        }
+      },
+      "required": [
+        "status",
+        "hunks",
+        "attribution"
+      ],
+      "type": "object"
+    },
+    "DiffFileStatus": {
+      "description": "Canonical status of one changed file.",
+      "oneOf": [
+        {
+          "const": "added",
+          "description": "File exists only on the new side.",
+          "type": "string"
+        },
+        {
+          "const": "modified",
+          "description": "File content changed in place.",
+          "type": "string"
+        },
+        {
+          "const": "deleted",
+          "description": "File exists only on the old side.",
+          "type": "string"
+        },
+        {
+          "const": "renamed",
+          "description": "File path changed.",
+          "type": "string"
+        },
+        {
+          "const": "mode_changed",
+          "description": "Executable or another supported mode changed.",
+          "type": "string"
+        },
+        {
+          "const": "binary",
+          "description": "Binary content changed without text statistics.",
+          "type": "string"
+        }
+      ]
+    },
+    "DiffHunk": {
+      "additionalProperties": false,
+      "description": "One structured canonical diff hunk.",
+      "properties": {
+        "heading": {
+          "description": "Optional function or section heading.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "id": {
+          "description": "Stable hunk digest.",
+          "type": "string"
+        },
+        "lines": {
+          "description": "Ordered structured lines.",
+          "items": {
+            "$ref": "#/$defs/DiffLine"
+          },
+          "type": "array"
+        },
+        "new": {
+          "$ref": "#/$defs/DiffRange",
+          "description": "New-side range."
+        },
+        "old": {
+          "$ref": "#/$defs/DiffRange",
+          "description": "Old-side range."
+        }
+      },
+      "required": [
+        "id",
+        "old",
+        "new",
+        "lines"
+      ],
+      "type": "object"
+    },
+    "DiffLine": {
+      "additionalProperties": false,
+      "description": "One structured canonical diff line.",
+      "properties": {
+        "content": {
+          "description": "UTF-8 line content.",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/DiffLineKind",
+          "description": "Context, addition, deletion, or no-newline marker."
+        },
+        "new_line": {
+          "description": "New-side line number.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "old_line": {
+          "description": "Old-side line number.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "content"
+      ],
+      "type": "object"
+    },
+    "DiffLineKind": {
+      "description": "Semantic kind of one canonical diff line.",
+      "oneOf": [
+        {
+          "const": "context",
+          "description": "Unchanged context.",
+          "type": "string"
+        },
+        {
+          "const": "addition",
+          "description": "New-side addition.",
+          "type": "string"
+        },
+        {
+          "const": "deletion",
+          "description": "Old-side deletion.",
+          "type": "string"
+        },
+        {
+          "const": "no_newline",
+          "description": "Canonical no-newline marker.",
+          "type": "string"
+        }
+      ]
+    },
+    "DiffMode": {
+      "description": "Requested canonical diff detail.",
+      "oneOf": [
+        {
+          "const": "patch",
+          "description": "Structured hunks and lines.",
+          "type": "string"
+        },
+        {
+          "const": "stat",
+          "description": "Per-file statistics.",
+          "type": "string"
+        },
+        {
+          "const": "files_only",
+          "description": "File names and statuses only.",
+          "type": "string"
+        }
+      ]
+    },
+    "DiffRange": {
+      "additionalProperties": false,
+      "description": "One old or new hunk range.",
+      "properties": {
+        "lines": {
+          "description": "Number of represented lines.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "start": {
+          "description": "One-based start line.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "start",
+        "lines"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://beyond10x.github.io/agentide/contracts/hosted/diff-projection-v2.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One server-resolved authoritative diff.",
+  "properties": {
+    "additions": {
+      "description": "Total text additions.",
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "deletions": {
+      "description": "Total text deletions.",
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "digest": {
+      "description": "SHA-256 of the complete canonical projection.",
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "file_count": {
+      "description": "Total changed files before client filtering.",
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "files": {
+      "description": "Ordered changed files.",
+      "items": {
+        "$ref": "#/$defs/DiffFile"
+      },
+      "type": "array"
+    },
+    "format": {
+      "const": "agentide.diff-projection/2",
+      "type": "string"
+    },
+    "mode": {
+      "$ref": "#/$defs/DiffMode",
+      "description": "Returned detail mode."
+    },
+    "selector": {
+      "$ref": "#/$defs/ChangeSelector",
+      "description": "Exact resolved selector."
+    }
+  },
+  "required": [
+    "format",
+    "selector",
+    "mode",
+    "file_count",
+    "additions",
+    "deletions",
+    "files"
+  ],
+  "title": "DiffProjection",
+  "type": "object"
+}

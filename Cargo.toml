@@ -11,7 +11,7 @@ members = [
 resolver = "2"
 
 [workspace.package]
-version = "0.1.4"
+version = "0.2.0"
 edition = "2024"
 rust-version = "1.98"
 license = "Apache-2.0"
@@ -26,22 +26,24 @@ agentide-substrate = { path = "crates/agentide-substrate" }
 anyhow = "1"
 async-trait = "0.1"
 axum = { version = "0.8", features = ["json", "tokio"] }
-b10x-harness-credential = { git = "https://github.com/beyond10x/harness", rev = "c86bec0977fbb5078a0be3942db78dbc2c79a0ef", version = "=0.11.0" }
-b10x-harness-loop = { git = "https://github.com/beyond10x/harness", rev = "c86bec0977fbb5078a0be3942db78dbc2c79a0ef", version = "=0.11.0" }
-b10x-harness-messages = { git = "https://github.com/beyond10x/harness", rev = "c86bec0977fbb5078a0be3942db78dbc2c79a0ef", version = "=0.11.0" }
-b10x-harness-responses = { git = "https://github.com/beyond10x/harness", rev = "c86bec0977fbb5078a0be3942db78dbc2c79a0ef", version = "=0.11.0" }
-b10x-harness-substrate = { git = "https://github.com/beyond10x/harness", rev = "c86bec0977fbb5078a0be3942db78dbc2c79a0ef", version = "=0.11.0" }
-b10x-harness-toolchain = { git = "https://github.com/beyond10x/harness", rev = "c86bec0977fbb5078a0be3942db78dbc2c79a0ef", version = "=0.11.0" }
-b10x-harness-wire = { git = "https://github.com/beyond10x/harness", rev = "c86bec0977fbb5078a0be3942db78dbc2c79a0ef", version = "=0.11.0" }
+b10x-harness-credential = { git = "https://github.com/beyond10x/harness", rev = "0f2edfef9f6dc3333b9377a730dfb40aeff14351", version = "=0.11.1" }
+b10x-harness-loop = { git = "https://github.com/beyond10x/harness", rev = "0f2edfef9f6dc3333b9377a730dfb40aeff14351", version = "=0.11.1" }
+b10x-harness-messages = { git = "https://github.com/beyond10x/harness", rev = "0f2edfef9f6dc3333b9377a730dfb40aeff14351", version = "=0.11.1" }
+b10x-harness-responses = { git = "https://github.com/beyond10x/harness", rev = "0f2edfef9f6dc3333b9377a730dfb40aeff14351", version = "=0.11.1" }
+b10x-harness-substrate = { git = "https://github.com/beyond10x/harness", rev = "0f2edfef9f6dc3333b9377a730dfb40aeff14351", version = "=0.11.1" }
+b10x-harness-toolchain = { git = "https://github.com/beyond10x/harness", rev = "0f2edfef9f6dc3333b9377a730dfb40aeff14351", version = "=0.11.1" }
+b10x-harness-wire = { git = "https://github.com/beyond10x/harness", rev = "0f2edfef9f6dc3333b9377a730dfb40aeff14351", version = "=0.11.1" }
 chrono = { version = "0.4", default-features = false, features = ["clock", "serde", "std"] }
 clap = { version = "4", features = ["derive", "env"] }
 crossterm = "0.29"
+jsonschema = { version = "0.52.1", default-features = false }
 mime_guess = "2"
 ratatui = "0.29"
 rust-embed = "8"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 serde_yaml_ng = "0.10"
+schemars = "1.2.2"
 service-builder = { git = "https://github.com/beyond10x/service-sdk.git", rev = "a57d5a0f4b4cf7a98bf9bd38bd8cacbe94ae7e5b", version = "=0.3.4" }
 sha2 = "0.11.0"
 tempfile = "3.23"

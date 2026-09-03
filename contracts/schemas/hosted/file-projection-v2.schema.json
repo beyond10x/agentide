@@ -1,0 +1,110 @@
+{
+  "$defs": {
+    "FileModificationState": {
+      "description": "Workspace modification state for one complete file revision.",
+      "oneOf": [
+        {
+          "const": "unchanged",
+          "description": "Matches the immutable base.",
+          "type": "string"
+        },
+        {
+          "const": "added",
+          "description": "Exists only in the writable materialization.",
+          "type": "string"
+        },
+        {
+          "const": "modified",
+          "description": "Differs from the immutable base.",
+          "type": "string"
+        },
+        {
+          "const": "deleted",
+          "description": "Deleted from the writable materialization.",
+          "type": "string"
+        }
+      ]
+    },
+    "FileRevision": {
+      "additionalProperties": false,
+      "description": "Complete-file revision metadata returned with every bounded read.",
+      "properties": {
+        "complete": {
+          "description": "Whether the returned content is complete.",
+          "type": "boolean"
+        },
+        "format": {
+          "description": "Contract discriminator.",
+          "type": "string"
+        },
+        "language": {
+          "description": "Language id inferred from path.",
+          "type": "string"
+        },
+        "path": {
+          "description": "Workspace-relative path.",
+          "type": "string"
+        },
+        "sha256": {
+          "description": "SHA-256 of the complete file.",
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "size": {
+          "description": "Complete file size.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "state": {
+          "$ref": "#/$defs/FileModificationState",
+          "description": "Unchanged, added, modified, or deleted."
+        }
+      },
+      "required": [
+        "format",
+        "path",
+        "sha256",
+        "size",
+        "language",
+        "state",
+        "complete"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://beyond10x.github.io/agentide/contracts/hosted/file-projection-v2.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Bounded editor read with explicit binary and completeness state.",
+  "properties": {
+    "content": {
+      "description": "UTF-8 content when editable.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "read_only": {
+      "description": "Whether the file is binary or unsupported for editing.",
+      "type": "boolean"
+    },
+    "reason": {
+      "description": "Stable refusal or partial reason when content is absent or incomplete.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "revision": {
+      "$ref": "#/$defs/FileRevision",
+      "description": "Complete-file metadata."
+    }
+  },
+  "required": [
+    "revision",
+    "read_only"
+  ],
+  "title": "FileProjection",
+  "type": "object"
+}

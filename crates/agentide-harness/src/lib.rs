@@ -213,7 +213,7 @@ pub enum AdapterError {
 /// this adapter instead of reconstructing either vocabulary, then let Harness verify that every
 /// refreshed specification is an exact subset of the attached invocation port.
 pub fn inventory_specs(inventory: &IntentInventory) -> Result<Vec<ToolSpec>, AdapterError> {
-    if inventory.format != "agentide.intent-inventory/1" || inventory.revision == 0 {
+    if inventory.format != "agentide.intent-inventory/2" || inventory.revision == 0 {
         return Err(AdapterError::InventoryInvalid(
             "the format or revision is invalid".into(),
         ));

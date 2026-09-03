@@ -1,0 +1,15 @@
+{
+  "format": "agentide.terminal-server-frame/1",
+  "request_id": "request:one",
+  "replay": {
+    "requested_after": 0,
+    "available_after": 0,
+    "latest": 2,
+    "complete": true
+  },
+  "event": {
+    "kind": "attached",
+    "terminal_id": "terminal:one",
+    "after": 0
+  }
+}

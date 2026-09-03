@@ -1,0 +1,622 @@
+{
+  "$defs": {
+    "ActorContext": {
+      "additionalProperties": false,
+      "description": "Server-derived identity and delegation coordinates for one request.",
+      "properties": {
+        "agent": {
+          "description": "Verified Agent Platform agent reference.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "attempt": {
+          "description": "Verified Agent Platform attempt reference.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "delegation": {
+          "description": "Verified delegation reference.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "format": {
+          "description": "Contract discriminator.",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/ActorKind",
+          "description": "Authenticated actor class."
+        },
+        "subject": {
+          "description": "Stable authenticated subject.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "format",
+        "kind",
+        "subject"
+      ],
+      "type": "object"
+    },
+    "ActorKind": {
+      "description": "Authenticated class of one session actor.",
+      "oneOf": [
+        {
+          "const": "human",
+          "description": "A person using an interactive client.",
+          "type": "string"
+        },
+        {
+          "const": "agent",
+          "description": "A model-backed coding agent.",
+          "type": "string"
+        },
+        {
+          "const": "automation",
+          "description": "A non-interactive service principal.",
+          "type": "string"
+        }
+      ]
+    },
+    "AttachmentProvenance": {
+      "additionalProperties": false,
+      "description": "Server-derived provenance for deliberately shared context bytes.",
+      "properties": {
+        "actor": {
+          "$ref": "#/$defs/ActorContext",
+          "description": "Authenticated actor who attached the bytes."
+        },
+        "format": {
+          "description": "Contract discriminator.",
+          "type": "string"
+        },
+        "observed_at": {
+          "description": "RFC 3339 server observation time.",
+          "type": "string"
+        },
+        "source": {
+          "description": "Workspace, diff, terminal, process, or evidence authority that supplied them.",
+          "type": "string"
+        },
+        "source_revision": {
+          "description": "Immutable source revision, event id, or output sequence bound.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "format",
+        "actor",
+        "source",
+        "source_revision",
+        "observed_at"
+      ],
+      "type": "object"
+    },
+    "ChangeSelector": {
+      "description": "Authoritative source selector for one canonical diff.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "description": "Writable materialization against its immutable base.",
+          "properties": {
+            "kind": {
+              "const": "workspace",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Exact pending or approved plan.",
+          "properties": {
+            "digest": {
+              "description": "Exact plan digest.",
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "kind": {
+              "const": "plan",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "digest"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "One Agent Platform attempt.",
+          "properties": {
+            "attempt_id": {
+              "description": "Agent Platform attempt reference.",
+              "type": "string"
+            },
+            "kind": {
+              "const": "agent_attempt",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "attempt_id"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "One publication projection.",
+          "properties": {
+            "kind": {
+              "const": "publication",
+              "type": "string"
+            },
+            "publication_id": {
+              "description": "Publication record reference.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "publication_id"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Explicit immutable revision pair.",
+          "properties": {
+            "kind": {
+              "const": "revision_pair",
+              "type": "string"
+            },
+            "new": {
+              "description": "New immutable revision.",
+              "type": "string"
+            },
+            "old": {
+              "description": "Old immutable revision.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "old",
+            "new"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ContextRecord": {
+      "additionalProperties": false,
+      "description": "Bounded reference to a durable process, agent, approval, evidence, or activity record.",
+      "properties": {
+        "id": {
+          "description": "Durable record identity.",
+          "type": "string"
+        },
+        "kind": {
+          "description": "Stable record kind.",
+          "type": "string"
+        },
+        "observed_at": {
+          "description": "RFC 3339 event or observation time when available.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sha256": {
+          "description": "Digest of the complete referred payload when available.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "state": {
+          "description": "Optional lifecycle state.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "summary": {
+          "description": "Secret-free human summary.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "summary"
+      ],
+      "type": "object"
+    },
+    "ContextSelection": {
+      "additionalProperties": false,
+      "description": "One complete, bounded selection deliberately shared with the session.",
+      "properties": {
+        "content": {
+          "description": "Complete selected UTF-8 content.",
+          "type": "string"
+        },
+        "end_line": {
+          "description": "Optional one-based end line.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "format": {
+          "description": "Contract discriminator.",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable selection reference.",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/SelectionKind",
+          "description": "Selection source."
+        },
+        "provenance": {
+          "$ref": "#/$defs/AttachmentProvenance",
+          "description": "Server-derived source and actor provenance."
+        },
+        "reference": {
+          "description": "Workspace path or durable record reference.",
+          "type": "string"
+        },
+        "sha256": {
+          "description": "SHA-256 of the complete content.",
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "start_line": {
+          "description": "Optional one-based start line.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "truncated": {
+          "description": "Incomplete selections are visible to humans but refused for model injection.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "format",
+        "id",
+        "kind",
+        "reference",
+        "content",
+        "sha256",
+        "provenance",
+        "truncated"
+      ],
+      "type": "object"
+    },
+    "CursorPosition": {
+      "additionalProperties": false,
+      "description": "One-based line and column in an actor-private editor.",
+      "properties": {
+        "column": {
+          "description": "One-based column.",
+          "format": "uint64",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "line": {
+          "description": "One-based line.",
+          "format": "uint64",
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "line",
+        "column"
+      ],
+      "type": "object"
+    },
+    "OpenFileReference": {
+      "additionalProperties": false,
+      "description": "Metadata for an open file whose bytes were not injected.",
+      "properties": {
+        "cursor": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CursorPosition"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Actor-private cursor."
+        },
+        "dirty": {
+          "description": "Whether the actor has a client-local unsaved buffer.",
+          "type": "boolean"
+        },
+        "path": {
+          "description": "Workspace-relative path.",
+          "type": "string"
+        },
+        "sha256": {
+          "description": "Complete current file digest.",
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "sha256",
+        "dirty"
+      ],
+      "type": "object"
+    },
+    "SelectionKind": {
+      "description": "Source of one deliberately attached context selection.",
+      "oneOf": [
+        {
+          "const": "editor",
+          "description": "Saved editor range.",
+          "type": "string"
+        },
+        {
+          "const": "diff_hunk",
+          "description": "Canonical server-resolved diff hunk.",
+          "type": "string"
+        },
+        {
+          "const": "terminal",
+          "description": "Explicit terminal selection.",
+          "type": "string"
+        },
+        {
+          "const": "process",
+          "description": "Structured process result.",
+          "type": "string"
+        },
+        {
+          "const": "evidence",
+          "description": "Durable evidence record.",
+          "type": "string"
+        }
+      ]
+    },
+    "TerminalSession": {
+      "additionalProperties": false,
+      "description": "Durable Substrate PTY identity and confinement metadata; scrollback is absent.",
+      "properties": {
+        "actor": {
+          "$ref": "#/$defs/ActorContext",
+          "description": "Server-derived creator."
+        },
+        "exit_code": {
+          "description": "Exit code once known.",
+          "format": "int32",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "format": {
+          "description": "Contract discriminator.",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable terminal identity.",
+          "type": "string"
+        },
+        "network": {
+          "description": "Declared network posture.",
+          "type": "string"
+        },
+        "output_sequence": {
+          "description": "Last observed replay sequence.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "process_id": {
+          "description": "Substrate process/session identity.",
+          "type": "string"
+        },
+        "profile": {
+          "description": "Deployment terminal profile.",
+          "type": "string"
+        },
+        "session_id": {
+          "description": "Parent coding session.",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/TerminalState",
+          "description": "Lifecycle state."
+        },
+        "working_directory": {
+          "description": "Current workspace-relative directory.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "format",
+        "id",
+        "session_id",
+        "profile",
+        "actor",
+        "process_id",
+        "working_directory",
+        "network",
+        "state",
+        "output_sequence"
+      ],
+      "type": "object"
+    },
+    "TerminalState": {
+      "description": "Durable terminal lifecycle state.",
+      "oneOf": [
+        {
+          "const": "running",
+          "description": "PTY is running and attachable.",
+          "type": "string"
+        },
+        {
+          "const": "exited",
+          "description": "PTY exited naturally.",
+          "type": "string"
+        },
+        {
+          "const": "terminated",
+          "description": "An authorized explicit termination completed.",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "$id": "https://beyond10x.github.io/agentide/contracts/hosted/context-pack-v2.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Shared session context assembled immediately before a model turn.",
+  "properties": {
+    "active_diff": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ChangeSelector"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Active canonical diff selector."
+    },
+    "agent_lanes": {
+      "description": "Agent lane observations.",
+      "items": {
+        "$ref": "#/$defs/ContextRecord"
+      },
+      "type": "array"
+    },
+    "approvals": {
+      "description": "Pending exact decisions and checkpoints.",
+      "items": {
+        "$ref": "#/$defs/ContextRecord"
+      },
+      "type": "array"
+    },
+    "digest": {
+      "description": "SHA-256 of this complete pack with this field omitted.",
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "evidence": {
+      "description": "Durable evidence records.",
+      "items": {
+        "$ref": "#/$defs/ContextRecord"
+      },
+      "type": "array"
+    },
+    "focused_selections": {
+      "description": "Deliberately attached selections for the next turn.",
+      "items": {
+        "$ref": "#/$defs/ContextSelection"
+      },
+      "type": "array"
+    },
+    "format": {
+      "const": "agentide.context-pack/2",
+      "type": "string"
+    },
+    "objective": {
+      "description": "Session objective.",
+      "type": "string"
+    },
+    "open_files": {
+      "description": "Other open files represented without source bytes.",
+      "items": {
+        "$ref": "#/$defs/OpenFileReference"
+      },
+      "type": "array"
+    },
+    "pins": {
+      "description": "Deliberately shared pinned selections.",
+      "items": {
+        "$ref": "#/$defs/ContextSelection"
+      },
+      "type": "array"
+    },
+    "processes": {
+      "description": "Structured process observations.",
+      "items": {
+        "$ref": "#/$defs/ContextRecord"
+      },
+      "type": "array"
+    },
+    "recent_activity": {
+      "description": "Recent secret-free activity.",
+      "items": {
+        "$ref": "#/$defs/ContextRecord"
+      },
+      "type": "array"
+    },
+    "revision": {
+      "description": "Monotonic context revision.",
+      "format": "uint64",
+      "minimum": 1,
+      "type": "integer"
+    },
+    "source_revision": {
+      "description": "Exact pinned source revision.",
+      "type": "string"
+    },
+    "terminals": {
+      "description": "Durable terminal metadata without raw scrollback.",
+      "items": {
+        "$ref": "#/$defs/TerminalSession"
+      },
+      "type": "array"
+    },
+    "working_changes": {
+      "description": "Canonical current working-diff digest.",
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "format",
+    "objective",
+    "source_revision",
+    "pins",
+    "focused_selections",
+    "open_files",
+    "terminals",
+    "processes",
+    "agent_lanes",
+    "approvals",
+    "evidence",
+    "recent_activity",
+    "revision"
+  ],
+  "title": "ContextPack",
+  "type": "object"
+}

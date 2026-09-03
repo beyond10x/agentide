@@ -1,0 +1,162 @@
+{
+  "$defs": {
+    "TerminalControl": {
+      "description": "One browser-to-BFF JSON terminal control. Stdin remains a binary frame.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "description": "Request replay strictly after a previously observed output sequence.",
+          "properties": {
+            "after": {
+              "description": "Last fully observed sequence.",
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "kind": {
+              "const": "replay",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "after"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Resize the Substrate PTY.",
+          "properties": {
+            "columns": {
+              "description": "Non-zero terminal columns.",
+              "format": "uint16",
+              "maximum": 65535,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "kind": {
+              "const": "resize",
+              "type": "string"
+            },
+            "rows": {
+              "description": "Non-zero terminal rows.",
+              "format": "uint16",
+              "maximum": 65535,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "kind",
+            "columns",
+            "rows"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Detach this browser without terminating the PTY.",
+          "properties": {
+            "kind": {
+              "const": "detach",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Explicitly terminate the PTY.",
+          "properties": {
+            "kind": {
+              "const": "terminate",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Send one admitted process signal.",
+          "properties": {
+            "kind": {
+              "const": "signal",
+              "type": "string"
+            },
+            "signal": {
+              "$ref": "#/$defs/TerminalSignal",
+              "description": "Requested confined signal."
+            }
+          },
+          "required": [
+            "kind",
+            "signal"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "TerminalSignal": {
+      "description": "Signals admitted by the hosted terminal control protocol.",
+      "oneOf": [
+        {
+          "const": "hangup",
+          "description": "Terminal hangup.",
+          "type": "string"
+        },
+        {
+          "const": "interrupt",
+          "description": "Interactive interrupt.",
+          "type": "string"
+        },
+        {
+          "const": "terminate",
+          "description": "Graceful process termination.",
+          "type": "string"
+        },
+        {
+          "const": "kill",
+          "description": "Immediate termination, always a separate explicit action.",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "$id": "https://beyond10x.github.io/agentide/contracts/hosted/terminal-control-v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Versioned client terminal control envelope.",
+  "properties": {
+    "control": {
+      "$ref": "#/$defs/TerminalControl",
+      "description": "Exact requested control."
+    },
+    "format": {
+      "const": "agentide.terminal-control/1",
+      "type": "string"
+    },
+    "request_id": {
+      "description": "Stable request identity for lifecycle/refusal correlation.",
+      "type": "string"
+    },
+    "terminal_id": {
+      "description": "Durable terminal identity.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "format",
+    "request_id",
+    "terminal_id",
+    "control"
+  ],
+  "title": "TerminalControlFrame",
+  "type": "object"
+}

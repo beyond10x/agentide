@@ -2,8 +2,26 @@
 
 ## Unreleased
 
+## 0.2.0 - 2026-09-03
+
 - Promote the published `0.1.4` Linux archive and its exact SHA-256 digest into the standalone
   realization declaration.
+- Publish JSON Schemas and golden vectors for the hosted actor, context, inventory, grant, diff,
+  file, tree, and terminal contracts, and verify their JSON Schema and semantic conformance in the
+  repository gate.
+- Canonically seal context packs, actor-specific intent inventories, and server-resolved diff
+  projections with reproducible SHA-256 digests; reject changed attachment bytes, duplicate tools,
+  inconsistent diff summaries, invalid provenance, and contradictory pagination or lifecycle state
+  with stable refusal codes.
+- Separate coordination, context, and inventory revisions in `ActorView`, bind authority grants to
+  their session at both inventory resolution and dispatch, and validate delegated grant
+  intersections without widening intent, path, risk, or expiry.
+- Define typed terminal control, lifecycle, replay, and server-frame contracts plus the exact
+  eight-byte network-order sequence prefix and 4 MiB replay bound used by hosted PTY transport.
+- Replace renderer-oriented raw JSON records with typed workbench panes, durable context records,
+  file modification state, diff hunks/lines/status, terminal workspace access, and tree entry kinds.
+- Pin Harness 0.11.1 and Service SDK 0.3.4 so hosted consumers use released per-turn environment
+  refresh, restart-safe approval checkpoints, and the current generated service layer.
 
 ## 0.1.4 - 2026-09-03
 

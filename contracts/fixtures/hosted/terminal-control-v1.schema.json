@@ -1,0 +1,10 @@
+{
+  "format": "agentide.terminal-control/1",
+  "request_id": "request:one",
+  "terminal_id": "terminal:one",
+  "control": {
+    "kind": "resize",
+    "columns": 120,
+    "rows": 40
+  }
+}

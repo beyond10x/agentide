@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "agentide-cli"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "agentide-contracts",
  "agentide-core",
@@ -26,9 +26,10 @@ dependencies = [
 
 [[package]]
 name = "agentide-contracts"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "chrono",
+ "schemars 1.2.2",
  "serde",
  "serde_json",
  "serde_yaml_ng",
@@ -38,7 +39,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-core"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "agentide-contracts",
  "chrono",
@@ -63,7 +64,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-harness"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "agentide-contracts",
  "agentide-core",
@@ -80,7 +81,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-substrate"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "agentide-contracts",
  "agentide-core",
@@ -92,13 +93,16 @@ dependencies = [
 
 [[package]]
 name = "agentide-xtask"
-version = "0.1.4"
+version = "0.2.0"
 dependencies = [
  "agentide-contracts",
  "anyhow",
  "ess-compiler 0.9.2",
  "ess-domain 0.9.2",
  "ess-realization",
+ "jsonschema",
+ "schemars 1.2.2",
+ "serde",
  "serde_json",
  "service-builder",
  "tempfile",
@@ -275,8 +279,8 @@ dependencies = [
 
 [[package]]
 name = "b10x-harness-credential"
-version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
+version = "0.11.1"
+source = "git+https://github.com/beyond10x/harness?rev=0f2edfef9f6dc3333b9377a730dfb40aeff14351#0f2edfef9f6dc3333b9377a730dfb40aeff14351"
 dependencies = [
  "b10x-harness-http",
  "b10x-harness-wire",
@@ -286,8 +290,8 @@ dependencies = [
 
 [[package]]
 name = "b10x-harness-http"
-version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
+version = "0.11.1"
+source = "git+https://github.com/beyond10x/harness?rev=0f2edfef9f6dc3333b9377a730dfb40aeff14351#0f2edfef9f6dc3333b9377a730dfb40aeff14351"
 dependencies = [
  "b10x-harness-wire",
  "reqwest",
@@ -297,8 +301,8 @@ dependencies = [
 
 [[package]]
 name = "b10x-harness-loop"
-version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
+version = "0.11.1"
+source = "git+https://github.com/beyond10x/harness?rev=0f2edfef9f6dc3333b9377a730dfb40aeff14351#0f2edfef9f6dc3333b9377a730dfb40aeff14351"
 dependencies = [
  "b10x-harness-wire",
  "jsonschema",
@@ -310,8 +314,8 @@ dependencies = [
 
 [[package]]
 name = "b10x-harness-messages"
-version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
+version = "0.11.1"
+source = "git+https://github.com/beyond10x/harness?rev=0f2edfef9f6dc3333b9377a730dfb40aeff14351#0f2edfef9f6dc3333b9377a730dfb40aeff14351"
 dependencies = [
  "b10x-harness-http",
  "b10x-harness-wire",
@@ -321,8 +325,8 @@ dependencies = [
 
 [[package]]
 name = "b10x-harness-responses"
-version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
+version = "0.11.1"
+source = "git+https://github.com/beyond10x/harness?rev=0f2edfef9f6dc3333b9377a730dfb40aeff14351#0f2edfef9f6dc3333b9377a730dfb40aeff14351"
 dependencies = [
  "b10x-harness-http",
  "b10x-harness-wire",
@@ -332,8 +336,8 @@ dependencies = [
 
 [[package]]
 name = "b10x-harness-substrate"
-version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
+version = "0.11.1"
+source = "git+https://github.com/beyond10x/harness?rev=0f2edfef9f6dc3333b9377a730dfb40aeff14351#0f2edfef9f6dc3333b9377a730dfb40aeff14351"
 dependencies = [
  "b10x-harness-toolchain",
  "b10x-harness-tools",
@@ -349,8 +353,8 @@ dependencies = [
 
 [[package]]
 name = "b10x-harness-toolchain"
-version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
+version = "0.11.1"
+source = "git+https://github.com/beyond10x/harness?rev=0f2edfef9f6dc3333b9377a730dfb40aeff14351#0f2edfef9f6dc3333b9377a730dfb40aeff14351"
 dependencies = [
  "regex",
  "serde",
@@ -361,8 +365,8 @@ dependencies = [
 
 [[package]]
 name = "b10x-harness-tools"
-version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
+version = "0.11.1"
+source = "git+https://github.com/beyond10x/harness?rev=0f2edfef9f6dc3333b9377a730dfb40aeff14351#0f2edfef9f6dc3333b9377a730dfb40aeff14351"
 dependencies = [
  "b10x-harness-toolchain",
  "b10x-harness-wire",
@@ -375,8 +379,8 @@ dependencies = [
 
 [[package]]
 name = "b10x-harness-wire"
-version = "0.11.0"
-source = "git+https://github.com/beyond10x/harness?rev=c86bec0977fbb5078a0be3942db78dbc2c79a0ef#c86bec0977fbb5078a0be3942db78dbc2c79a0ef"
+version = "0.11.1"
+source = "git+https://github.com/beyond10x/harness?rev=0f2edfef9f6dc3333b9377a730dfb40aeff14351#0f2edfef9f6dc3333b9377a730dfb40aeff14351"
 dependencies = [
  "httpdate",
  "serde",

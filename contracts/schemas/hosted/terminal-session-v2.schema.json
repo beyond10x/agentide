@@ -1,0 +1,159 @@
+{
+  "$defs": {
+    "ActorContext": {
+      "additionalProperties": false,
+      "description": "Server-derived identity and delegation coordinates for one request.",
+      "properties": {
+        "agent": {
+          "description": "Verified Agent Platform agent reference.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "attempt": {
+          "description": "Verified Agent Platform attempt reference.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "delegation": {
+          "description": "Verified delegation reference.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "format": {
+          "description": "Contract discriminator.",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/ActorKind",
+          "description": "Authenticated actor class."
+        },
+        "subject": {
+          "description": "Stable authenticated subject.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "format",
+        "kind",
+        "subject"
+      ],
+      "type": "object"
+    },
+    "ActorKind": {
+      "description": "Authenticated class of one session actor.",
+      "oneOf": [
+        {
+          "const": "human",
+          "description": "A person using an interactive client.",
+          "type": "string"
+        },
+        {
+          "const": "agent",
+          "description": "A model-backed coding agent.",
+          "type": "string"
+        },
+        {
+          "const": "automation",
+          "description": "A non-interactive service principal.",
+          "type": "string"
+        }
+      ]
+    },
+    "TerminalState": {
+      "description": "Durable terminal lifecycle state.",
+      "oneOf": [
+        {
+          "const": "running",
+          "description": "PTY is running and attachable.",
+          "type": "string"
+        },
+        {
+          "const": "exited",
+          "description": "PTY exited naturally.",
+          "type": "string"
+        },
+        {
+          "const": "terminated",
+          "description": "An authorized explicit termination completed.",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "$id": "https://beyond10x.github.io/agentide/contracts/hosted/terminal-session-v2.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Durable Substrate PTY identity and confinement metadata; scrollback is absent.",
+  "properties": {
+    "actor": {
+      "$ref": "#/$defs/ActorContext",
+      "description": "Server-derived creator."
+    },
+    "exit_code": {
+      "description": "Exit code once known.",
+      "format": "int32",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "format": {
+      "const": "agentide.terminal-session/2",
+      "type": "string"
+    },
+    "id": {
+      "description": "Stable terminal identity.",
+      "type": "string"
+    },
+    "network": {
+      "description": "Declared network posture.",
+      "type": "string"
+    },
+    "output_sequence": {
+      "description": "Last observed replay sequence.",
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "process_id": {
+      "description": "Substrate process/session identity.",
+      "type": "string"
+    },
+    "profile": {
+      "description": "Deployment terminal profile.",
+      "type": "string"
+    },
+    "session_id": {
+      "description": "Parent coding session.",
+      "type": "string"
+    },
+    "state": {
+      "$ref": "#/$defs/TerminalState",
+      "description": "Lifecycle state."
+    },
+    "working_directory": {
+      "description": "Current workspace-relative directory.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "format",
+    "id",
+    "session_id",
+    "profile",
+    "actor",
+    "process_id",
+    "working_directory",
+    "network",
+    "state",
+    "output_sequence"
+  ],
+  "title": "TerminalSession",
+  "type": "object"
+}

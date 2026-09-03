@@ -4,6 +4,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use thiserror::Error;
@@ -22,7 +23,7 @@ pub const DEFAULT_BINDINGS_YAML: &str = include_str!("../../../contracts/default
 pub const SURFACE_PROFILE_YAML: &str = include_str!("../../../contracts/surface-profile.yaml");
 
 /// A model-visible semantic operation.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct IntentDefinition {
     /// Stable snake-case name used on transports.
@@ -48,7 +49,9 @@ pub struct IntentDefinition {
 }
 
 /// Actor class eligible to receive an intent, subject to current bindings and authority.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[derive(
+    Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, JsonSchema,
+)]
 #[serde(rename_all = "snake_case")]
 pub enum Audience {
     /// An authenticated person using an interactive surface.
@@ -60,7 +63,9 @@ pub enum Audience {
 }
 
 /// Intent visibility.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[derive(
+    Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, JsonSchema,
+)]
 #[serde(rename_all = "snake_case")]
 pub enum Exposure {
     /// Published to a model.
@@ -72,7 +77,7 @@ pub enum Exposure {
 }
 
 /// Observable consequence class.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum Effect {
     /// No mutation.
@@ -90,7 +95,9 @@ pub enum Effect {
 }
 
 /// Consequence tier.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[derive(
+    Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, JsonSchema,
+)]
 #[serde(rename_all = "snake_case")]
 pub enum Risk {
     /// Observational.
@@ -106,7 +113,7 @@ pub enum Risk {
 }
 
 /// Approval requirement.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum Approval {
     /// No human approval is required.

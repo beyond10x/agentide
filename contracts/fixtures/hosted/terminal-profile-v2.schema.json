@@ -1,0 +1,17 @@
+{
+  "format": "agentide.terminal-profile/2",
+  "id": "review",
+  "runtime": "substrate-runtime:review@sha256:example",
+  "shell": [
+    "/bin/sh"
+  ],
+  "working_directory": "",
+  "workspace_access": "read_write",
+  "environment": [
+    "TERM"
+  ],
+  "network": "none",
+  "cpu_millis": 1000,
+  "memory_bytes": 268435456,
+  "process_limit": 128
+}

@@ -1,0 +1,70 @@
+{
+  "$defs": {
+    "ActorKind": {
+      "description": "Authenticated class of one session actor.",
+      "oneOf": [
+        {
+          "const": "human",
+          "description": "A person using an interactive client.",
+          "type": "string"
+        },
+        {
+          "const": "agent",
+          "description": "A model-backed coding agent.",
+          "type": "string"
+        },
+        {
+          "const": "automation",
+          "description": "A non-interactive service principal.",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "$id": "https://beyond10x.github.io/agentide/contracts/hosted/actor-context-v2.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Server-derived identity and delegation coordinates for one request.",
+  "properties": {
+    "agent": {
+      "description": "Verified Agent Platform agent reference.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "attempt": {
+      "description": "Verified Agent Platform attempt reference.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "delegation": {
+      "description": "Verified delegation reference.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "format": {
+      "const": "agentide.actor-context/2",
+      "type": "string"
+    },
+    "kind": {
+      "$ref": "#/$defs/ActorKind",
+      "description": "Authenticated actor class."
+    },
+    "subject": {
+      "description": "Stable authenticated subject.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "format",
+    "kind",
+    "subject"
+  ],
+  "title": "ActorContext",
+  "type": "object"
+}

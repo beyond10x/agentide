@@ -1,0 +1,270 @@
+{
+  "$defs": {
+    "Approval": {
+      "description": "Approval requirement.",
+      "oneOf": [
+        {
+          "const": "never",
+          "description": "No human approval is required.",
+          "type": "string"
+        },
+        {
+          "const": "required",
+          "description": "Approval of the exact plan digest is required.",
+          "type": "string"
+        }
+      ]
+    },
+    "Audience": {
+      "description": "Actor class eligible to receive an intent, subject to current bindings and authority.",
+      "oneOf": [
+        {
+          "const": "human",
+          "description": "An authenticated person using an interactive surface.",
+          "type": "string"
+        },
+        {
+          "const": "agent",
+          "description": "A model-backed coding agent.",
+          "type": "string"
+        },
+        {
+          "const": "automation",
+          "description": "A non-interactive automation principal.",
+          "type": "string"
+        }
+      ]
+    },
+    "AuthorizationPath": {
+      "description": "Authorization route applicable to one current intent.",
+      "oneOf": [
+        {
+          "const": "explicit_human_action",
+          "description": "The authenticated human action authorizes exactly one reversible effect.",
+          "type": "string"
+        },
+        {
+          "const": "bounded_grant",
+          "description": "A current bounded grant covers the effect.",
+          "type": "string"
+        },
+        {
+          "const": "exact_plan_approval",
+          "description": "The exact plan digest requires a separate human decision.",
+          "type": "string"
+        },
+        {
+          "const": "none",
+          "description": "Observation needs no additional grant.",
+          "type": "string"
+        }
+      ]
+    },
+    "AvailableIntent": {
+      "additionalProperties": false,
+      "description": "One intent currently available to an actor.",
+      "properties": {
+        "authorization": {
+          "$ref": "#/$defs/AuthorizationPath",
+          "description": "Current authorization path."
+        },
+        "intent": {
+          "$ref": "#/$defs/IntentDefinition",
+          "description": "Released semantic definition."
+        }
+      },
+      "required": [
+        "intent",
+        "authorization"
+      ],
+      "type": "object"
+    },
+    "Effect": {
+      "description": "Observable consequence class.",
+      "oneOf": [
+        {
+          "const": "observe",
+          "description": "No mutation.",
+          "type": "string"
+        },
+        {
+          "const": "state",
+          "description": "AgentIDE-local state only.",
+          "type": "string"
+        },
+        {
+          "const": "mutate",
+          "description": "Workspace mutation.",
+          "type": "string"
+        },
+        {
+          "const": "execute",
+          "description": "Confined execution.",
+          "type": "string"
+        },
+        {
+          "const": "communicate",
+          "description": "Communication with another subject.",
+          "type": "string"
+        },
+        {
+          "const": "external",
+          "description": "Effect outside the local session.",
+          "type": "string"
+        }
+      ]
+    },
+    "Exposure": {
+      "description": "Intent visibility.",
+      "oneOf": [
+        {
+          "const": "model",
+          "description": "Published to a model.",
+          "type": "string"
+        },
+        {
+          "const": "operator",
+          "description": "Available only to the operator surface.",
+          "type": "string"
+        },
+        {
+          "const": "conditional",
+          "description": "Published only when a binding and policy enable it.",
+          "type": "string"
+        }
+      ]
+    },
+    "IntentDefinition": {
+      "additionalProperties": false,
+      "description": "A model-visible semantic operation.",
+      "properties": {
+        "approval": {
+          "$ref": "#/$defs/Approval",
+          "description": "Authority rule."
+        },
+        "audiences": {
+          "default": [],
+          "description": "Actor classes for which this operation may become available.",
+          "items": {
+            "$ref": "#/$defs/Audience"
+          },
+          "type": "array"
+        },
+        "command": {
+          "description": "Qualified ESS command providing its semantics.",
+          "type": "string"
+        },
+        "effect": {
+          "$ref": "#/$defs/Effect",
+          "description": "Kind of consequence."
+        },
+        "exposure": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Exposure"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Legacy v1 exposure, normalized away by the compatibility loader."
+        },
+        "name": {
+          "description": "Stable snake-case name used on transports.",
+          "type": "string"
+        },
+        "port": {
+          "description": "Abstract implementation port.",
+          "type": "string"
+        },
+        "risk": {
+          "$ref": "#/$defs/Risk",
+          "description": "Human-oriented consequence tier."
+        },
+        "subjects": {
+          "description": "Semantic resources affected or observed, never concrete credentials or destinations.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "command",
+        "port",
+        "effect",
+        "risk",
+        "approval",
+        "subjects"
+      ],
+      "type": "object"
+    },
+    "Risk": {
+      "description": "Consequence tier.",
+      "oneOf": [
+        {
+          "const": "none",
+          "description": "Observational.",
+          "type": "string"
+        },
+        {
+          "const": "low",
+          "description": "Reversible session state.",
+          "type": "string"
+        },
+        {
+          "const": "medium",
+          "description": "Local mutation or execution.",
+          "type": "string"
+        },
+        {
+          "const": "high",
+          "description": "Source-control publication.",
+          "type": "string"
+        },
+        {
+          "const": "critical",
+          "description": "Release or deployment.",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "$id": "https://beyond10x.github.io/agentide/contracts/hosted/intent-inventory-v2.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Exact actor-specific tool catalogue for one revision.",
+  "properties": {
+    "digest": {
+      "description": "SHA-256 of the canonical available catalogue.",
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "format": {
+      "const": "agentide.intent-inventory/2",
+      "type": "string"
+    },
+    "intents": {
+      "description": "Available operations.",
+      "items": {
+        "$ref": "#/$defs/AvailableIntent"
+      },
+      "type": "array"
+    },
+    "revision": {
+      "description": "Monotonic session inventory revision.",
+      "format": "uint64",
+      "minimum": 1,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "format",
+    "revision",
+    "intents",
+    "digest"
+  ],
+  "title": "IntentInventory",
+  "type": "object"
+}

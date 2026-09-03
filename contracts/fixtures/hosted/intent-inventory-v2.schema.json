@@ -1,0 +1,25 @@
+{
+  "format": "agentide.intent-inventory/2",
+  "revision": 5,
+  "intents": [
+    {
+      "intent": {
+        "name": "code_edit",
+        "command": "agentide.coding.EditCode",
+        "audiences": [
+          "human",
+          "agent"
+        ],
+        "port": "workspace",
+        "effect": "mutate",
+        "risk": "medium",
+        "approval": "required",
+        "subjects": [
+          "path"
+        ]
+      },
+      "authorization": "explicit_human_action"
+    }
+  ],
+  "digest": "75739a81e4379336f0457ec95733442f2ff510e57bf7aef353f79918cf1dfa53"
+}

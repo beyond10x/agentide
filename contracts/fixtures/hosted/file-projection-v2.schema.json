@@ -1,0 +1,14 @@
+{
+  "revision": {
+    "format": "agentide.file-revision/2",
+    "path": "src/lib.rs",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0,
+    "language": "rust",
+    "state": "unchanged",
+    "complete": true
+  },
+  "content": "",
+  "read_only": false,
+  "reason": null
+}

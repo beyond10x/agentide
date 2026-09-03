@@ -1,0 +1,53 @@
+{
+  "format": "agentide.diff-projection/2",
+  "selector": {
+    "kind": "workspace"
+  },
+  "mode": "patch",
+  "digest": "d82288ece6cf563b024c4ab81ef85591c0994cad8d40acd8a2618f10647832e2",
+  "file_count": 1,
+  "additions": 1,
+  "deletions": 1,
+  "files": [
+    {
+      "old_path": "src/lib.rs",
+      "new_path": "src/lib.rs",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "old_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "new_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "hunks": [
+        {
+          "id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "old": {
+            "start": 1,
+            "lines": 1
+          },
+          "new": {
+            "start": 1,
+            "lines": 1
+          },
+          "heading": "example",
+          "lines": [
+            {
+              "kind": "deletion",
+              "old_line": 1,
+              "new_line": null,
+              "content": "old"
+            },
+            {
+              "kind": "addition",
+              "old_line": null,
+              "new_line": 1,
+              "content": "new"
+            }
+          ]
+        }
+      ],
+      "attribution": [
+        "operation:edit-one"
+      ]
+    }
+  ]
+}

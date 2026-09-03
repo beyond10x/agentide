@@ -1,0 +1,103 @@
+{
+  "$defs": {
+    "TreeEntry": {
+      "additionalProperties": false,
+      "description": "One bounded project-tree entry.",
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/TreeEntryKind",
+          "description": "File, directory, or unsupported."
+        },
+        "path": {
+          "description": "Workspace-relative path.",
+          "type": "string"
+        },
+        "sha256": {
+          "description": "Complete file digest when applicable.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "size": {
+          "description": "Complete file size when applicable.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "path",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "TreeEntryKind": {
+      "description": "Semantic kind of a bounded project-tree entry.",
+      "oneOf": [
+        {
+          "const": "file",
+          "description": "Complete supported file.",
+          "type": "string"
+        },
+        {
+          "const": "directory",
+          "description": "Directory.",
+          "type": "string"
+        },
+        {
+          "const": "unsupported",
+          "description": "Symlink, submodule, or another explicitly unsupported entry.",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "$id": "https://beyond10x.github.io/agentide/contracts/hosted/tree-projection-v2.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Bounded searchable tree result with explicit omission state.",
+  "properties": {
+    "entries": {
+      "description": "Ordered entries.",
+      "items": {
+        "$ref": "#/$defs/TreeEntry"
+      },
+      "type": "array"
+    },
+    "format": {
+      "const": "agentide.tree-projection/2",
+      "type": "string"
+    },
+    "next_cursor": {
+      "description": "Opaque next cursor.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "omitted": {
+      "description": "Known omitted count.",
+      "format": "uint64",
+      "minimum": 0,
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "truncated": {
+      "description": "Whether more entries exist.",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "format",
+    "entries",
+    "truncated"
+  ],
+  "title": "TreeProjection",
+  "type": "object"
+}

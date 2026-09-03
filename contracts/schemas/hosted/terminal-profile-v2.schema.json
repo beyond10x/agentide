@@ -1,0 +1,96 @@
+{
+  "$defs": {
+    "TerminalWorkspaceAccess": {
+      "description": "Declared terminal access to the writable Workspace materialization.",
+      "oneOf": [
+        {
+          "const": "read_only",
+          "description": "Immutable base and working files are readable only.",
+          "type": "string"
+        },
+        {
+          "const": "read_write",
+          "description": "Working materialization is writable inside Workspace authority.",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "$id": "https://beyond10x.github.io/agentide/contracts/hosted/terminal-profile-v2.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Deployment-declared confined interactive terminal profile.",
+  "properties": {
+    "cpu_millis": {
+      "description": "CPU ceiling in milliseconds.",
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "environment": {
+      "description": "Explicit sanitized environment names.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "format": {
+      "const": "agentide.terminal-profile/2",
+      "type": "string"
+    },
+    "id": {
+      "description": "Stable profile identity.",
+      "type": "string"
+    },
+    "memory_bytes": {
+      "description": "Memory ceiling in bytes.",
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "network": {
+      "description": "`none` or a deployment-named confined egress policy.",
+      "type": "string"
+    },
+    "process_limit": {
+      "description": "Process ceiling.",
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "runtime": {
+      "description": "Immutable Substrate runtime/toolchain reference.",
+      "type": "string"
+    },
+    "shell": {
+      "description": "Fixed shell argv.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "working_directory": {
+      "description": "Initial workspace-relative directory.",
+      "type": "string"
+    },
+    "workspace_access": {
+      "$ref": "#/$defs/TerminalWorkspaceAccess",
+      "description": "Read-only or read-write workspace posture."
+    }
+  },
+  "required": [
+    "format",
+    "id",
+    "runtime",
+    "shell",
+    "working_directory",
+    "workspace_access",
+    "environment",
+    "network",
+    "cpu_millis",
+    "memory_bytes",
+    "process_limit"
+  ],
+  "title": "TerminalProfile",
+  "type": "object"
+}

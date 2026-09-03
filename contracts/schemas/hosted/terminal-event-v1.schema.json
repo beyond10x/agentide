@@ -1,0 +1,356 @@
+{
+  "$defs": {
+    "ActorContext": {
+      "additionalProperties": false,
+      "description": "Server-derived identity and delegation coordinates for one request.",
+      "properties": {
+        "agent": {
+          "description": "Verified Agent Platform agent reference.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "attempt": {
+          "description": "Verified Agent Platform attempt reference.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "delegation": {
+          "description": "Verified delegation reference.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "format": {
+          "description": "Contract discriminator.",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/ActorKind",
+          "description": "Authenticated actor class."
+        },
+        "subject": {
+          "description": "Stable authenticated subject.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "format",
+        "kind",
+        "subject"
+      ],
+      "type": "object"
+    },
+    "ActorKind": {
+      "description": "Authenticated class of one session actor.",
+      "oneOf": [
+        {
+          "const": "human",
+          "description": "A person using an interactive client.",
+          "type": "string"
+        },
+        {
+          "const": "agent",
+          "description": "A model-backed coding agent.",
+          "type": "string"
+        },
+        {
+          "const": "automation",
+          "description": "A non-interactive service principal.",
+          "type": "string"
+        }
+      ]
+    },
+    "TerminalSession": {
+      "additionalProperties": false,
+      "description": "Durable Substrate PTY identity and confinement metadata; scrollback is absent.",
+      "properties": {
+        "actor": {
+          "$ref": "#/$defs/ActorContext",
+          "description": "Server-derived creator."
+        },
+        "exit_code": {
+          "description": "Exit code once known.",
+          "format": "int32",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "format": {
+          "description": "Contract discriminator.",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable terminal identity.",
+          "type": "string"
+        },
+        "network": {
+          "description": "Declared network posture.",
+          "type": "string"
+        },
+        "output_sequence": {
+          "description": "Last observed replay sequence.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "process_id": {
+          "description": "Substrate process/session identity.",
+          "type": "string"
+        },
+        "profile": {
+          "description": "Deployment terminal profile.",
+          "type": "string"
+        },
+        "session_id": {
+          "description": "Parent coding session.",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/TerminalState",
+          "description": "Lifecycle state."
+        },
+        "working_directory": {
+          "description": "Current workspace-relative directory.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "format",
+        "id",
+        "session_id",
+        "profile",
+        "actor",
+        "process_id",
+        "working_directory",
+        "network",
+        "state",
+        "output_sequence"
+      ],
+      "type": "object"
+    },
+    "TerminalState": {
+      "description": "Durable terminal lifecycle state.",
+      "oneOf": [
+        {
+          "const": "running",
+          "description": "PTY is running and attachable.",
+          "type": "string"
+        },
+        {
+          "const": "exited",
+          "description": "PTY exited naturally.",
+          "type": "string"
+        },
+        {
+          "const": "terminated",
+          "description": "An authorized explicit termination completed.",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "$id": "https://beyond10x.github.io/agentide/contracts/hosted/terminal-event-v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Durable terminal control event. Substrate's existing JSON WSS carries PTY data and replay.",
+  "oneOf": [
+    {
+      "additionalProperties": false,
+      "description": "PTY created.",
+      "properties": {
+        "kind": {
+          "const": "created",
+          "type": "string"
+        },
+        "terminal": {
+          "$ref": "#/$defs/TerminalSession",
+          "description": "Created terminal metadata."
+        }
+      },
+      "required": [
+        "kind",
+        "terminal"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "description": "Client attached or reattached after an observed sequence.",
+      "properties": {
+        "after": {
+          "description": "Last sequence already observed by the client.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "kind": {
+          "const": "attached",
+          "type": "string"
+        },
+        "terminal_id": {
+          "description": "Attached terminal.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "terminal_id",
+        "after"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "description": "Client detached without terminating the PTY.",
+      "properties": {
+        "kind": {
+          "const": "detached",
+          "type": "string"
+        },
+        "terminal_id": {
+          "description": "Detached terminal.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "terminal_id"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "description": "PTY dimensions changed.",
+      "properties": {
+        "columns": {
+          "description": "New columns.",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "kind": {
+          "const": "resized",
+          "type": "string"
+        },
+        "rows": {
+          "description": "New rows.",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "terminal_id": {
+          "description": "Resized terminal.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "terminal_id",
+        "columns",
+        "rows"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "description": "Replay could not cover the complete requested window.",
+      "properties": {
+        "available_after": {
+          "description": "Earliest sequence retained by Substrate.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "kind": {
+          "const": "replay_partial",
+          "type": "string"
+        },
+        "requested_after": {
+          "description": "Sequence requested by the client.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "terminal_id": {
+          "description": "Terminal whose replay was partial.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "terminal_id",
+        "requested_after",
+        "available_after"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "description": "PTY exited.",
+      "properties": {
+        "exit_code": {
+          "description": "Process exit code, when available.",
+          "format": "int32",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "kind": {
+          "const": "exited",
+          "type": "string"
+        },
+        "signal": {
+          "description": "Terminating signal, when available.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "terminal_id": {
+          "description": "Exited terminal.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "terminal_id"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "description": "Control request refused without changing the PTY.",
+      "properties": {
+        "code": {
+          "description": "Stable refusal code.",
+          "type": "string"
+        },
+        "kind": {
+          "const": "refused",
+          "type": "string"
+        },
+        "terminal_id": {
+          "description": "Target terminal, when the refusal addressed one.",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "code"
+      ],
+      "type": "object"
+    }
+  ],
+  "title": "TerminalEvent"
+}

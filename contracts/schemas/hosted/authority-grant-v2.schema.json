@@ -1,0 +1,104 @@
+{
+  "$defs": {
+    "Risk": {
+      "description": "Consequence tier.",
+      "oneOf": [
+        {
+          "const": "none",
+          "description": "Observational.",
+          "type": "string"
+        },
+        {
+          "const": "low",
+          "description": "Reversible session state.",
+          "type": "string"
+        },
+        {
+          "const": "medium",
+          "description": "Local mutation or execution.",
+          "type": "string"
+        },
+        {
+          "const": "high",
+          "description": "Source-control publication.",
+          "type": "string"
+        },
+        {
+          "const": "critical",
+          "description": "Release or deployment.",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "$id": "https://beyond10x.github.io/agentide/contracts/hosted/authority-grant-v2.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A revocable bounded authorization for routine operations.",
+  "properties": {
+    "allowed_intents": {
+      "description": "Closed semantic intent set.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "expires_at": {
+      "description": "RFC 3339 expiry; absent means session close.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "format": {
+      "const": "agentide.authority-grant/2",
+      "type": "string"
+    },
+    "grantee": {
+      "description": "Exact actor subject receiving authority.",
+      "type": "string"
+    },
+    "id": {
+      "description": "Stable grant identity.",
+      "type": "string"
+    },
+    "maximum_risk": {
+      "$ref": "#/$defs/Risk",
+      "description": "Highest admitted consequence tier."
+    },
+    "path_prefixes": {
+      "description": "Normalized workspace-relative path prefixes.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "revision": {
+      "description": "Monotonic revision used by dispatch and revocation.",
+      "format": "uint64",
+      "minimum": 1,
+      "type": "integer"
+    },
+    "revoked": {
+      "description": "Whether the grant is revoked.",
+      "type": "boolean"
+    },
+    "session_id": {
+      "description": "Parent session.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "format",
+    "id",
+    "session_id",
+    "grantee",
+    "allowed_intents",
+    "path_prefixes",
+    "maximum_risk",
+    "revision",
+    "revoked"
+  ],
+  "title": "AuthorityGrant",
+  "type": "object"
+}
