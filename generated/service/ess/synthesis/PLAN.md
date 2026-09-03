@@ -1,7 +1,7 @@
 <!--
   generated from agentide v1
-  model digest 560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6
-  contract digest e350fe759363d3f1cee42987942a896a324c986766bfb6314fc0f625dfce3474
+  model digest 6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4
+  contract digest f1c2495df22f205934254ade5d845a2b65f2cbf16c4e9dfa1e863a24ed2d3b17
   do not edit: regenerate with `ess synthesize`
 -->
 # Synthesis plan — agentide v1

@@ -1,5 +1,5 @@
 # generated from agentide v1
-# model digest 560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6
+# model digest 6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4
 # contract digest e19c82375779ee7857130f7c219b8bca0c62dced3a2da27746b74b4787a40452
 # do not edit: regenerate with `ess generate`
 openapi: 3.1.0
@@ -16,7 +16,7 @@ info:
   x-ess-provenance:
     system: agentide
     specification_version: v1
-    source_digest: 560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6
+    source_digest: 6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4
     contract_digest: e19c82375779ee7857130f7c219b8bca0c62dced3a2da27746b74b4787a40452
   x-ess-reached-by: network
 tags:
@@ -3805,12 +3805,15 @@ components:
           type: string
         scopes:
           $ref: '#/components/schemas/agentide.session.SessionScopes'
+        state:
+          $ref: '#/components/schemas/agentide.session.CodingSession.State'
       required:
       - session_id
       - workspace_root
       - objective
       - owner
       - scopes
+      - state
       additionalProperties: false
     agentide.session.SessionStateConflict.Error:
       title: SessionStateConflict payload

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Include lifecycle state in the generated session snapshot so Workspace can distinguish active
+  coding sessions from closed sessions when deriving terminal and agent authority.
 - Let hosted runtimes convert a digest-sealed, actor-specific `IntentInventory` through the
   AgentIDE-owned Harness adapter, preserving generated command schemas, consequence envelopes, and
   bounded-grant versus exact-plan approval posture without reconstructing the catalogue downstream.

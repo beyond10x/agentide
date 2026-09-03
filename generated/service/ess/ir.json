@@ -6597,6 +6597,14 @@
             "name": "agentide.session.SessionScopes"
           },
           "naming": {}
+        },
+        {
+          "name": "state",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.CodingSession.State"
+          },
+          "naming": {}
         }
       ],
       "consistency": "read_your_writes",

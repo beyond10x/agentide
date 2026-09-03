@@ -3,11 +3,11 @@
   "ess": {
     "system": "agentide",
     "version": "v1",
-    "source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6"
+    "source_digest": "6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4"
   },
   "synthesis": {
     "profile": "component-skeletons",
-    "digest": "609fbc711e068cea5a05521bd26d1eee90ad467d9d5ee82ab2e29aae6824f763",
+    "digest": "e33a9895b13bc9f8b34d3770ce7df494b6ddd231ca7d941559610fb5350693e9",
     "capabilities": 184
   },
   "obligation_catalog": {
@@ -1318,6 +1318,7 @@
         "scopes": "agentide.session.SessionScopes",
         "session_id": "agentide.session.SessionId",
         "source_revision": "Optional<agentide.session.SourceRevision>",
+        "state": "agentide.session.CodingSession.State",
         "workspace_root": "agentide.session.WorkspaceRoot",
         "workspace_session_id": "Optional<agentide.session.WorkspaceSessionId>"
       },
@@ -1344,6 +1345,7 @@
         "scopes": "agentide.session.SessionScopes",
         "session_id": "agentide.session.SessionId",
         "source_revision": "Optional<agentide.session.SourceRevision>",
+        "state": "agentide.session.CodingSession.State",
         "workspace_root": "agentide.session.WorkspaceRoot",
         "workspace_session_id": "Optional<agentide.session.WorkspaceSessionId>"
       },
@@ -1458,6 +1460,7 @@
         "scopes": "agentide.session.SessionScopes",
         "session_id": "agentide.session.SessionId",
         "source_revision": "Optional<agentide.session.SourceRevision>",
+        "state": "agentide.session.CodingSession.State",
         "workspace_root": "agentide.session.WorkspaceRoot",
         "workspace_session_id": "Optional<agentide.session.WorkspaceSessionId>"
       },

@@ -2,7 +2,7 @@
   "format": "service-realization-plan/1",
   "service": "agentide",
   "realm": "optional",
-  "ess_source_digest": "560c8473dd2ad7c3693592698794da4686cb1b62c13c98b041d35dde05f86af6",
+  "ess_source_digest": "6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4",
   "obligation_catalog_digest": "a81885ebb75473d43f9ccbcee29b5d3147a24bebf0632a9582df0f3f3c3c305e",
   "content": {},
   "intents": {
@@ -1796,7 +1796,8 @@
         "workspace_session_id",
         "manifest_digest",
         "owner",
-        "scopes"
+        "scopes",
+        "state"
       ],
       "obligations": [
         {

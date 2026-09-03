@@ -185,4 +185,5 @@ views:
       - {name: manifest_digest, type: Optional<agentide.session.ManifestDigest>}
       - {name: owner, type: String}
       - {name: scopes, type: agentide.session.SessionScopes}
+      - {name: state, type: agentide.session.CodingSession.State}
     naming: {wire: snapshot, display: Session snapshot}
