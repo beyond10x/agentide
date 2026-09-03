@@ -42,7 +42,7 @@ rust-embed = "8"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 serde_yaml_ng = "0.10"
-service-builder = { git = "https://github.com/beyond10x/service-sdk.git", rev = "141c06ee3733e154f6d350276675a8bf08008233", version = "=0.3.1" }
+service-builder = { git = "https://github.com/beyond10x/service-sdk.git", rev = "944d3f1575aab8e3e8801f810777298b8cf9a010", version = "=0.3.2" }
 sha2 = "0.11.0"
 tempfile = "3.23"
 thiserror = "2"

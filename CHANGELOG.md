@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Regenerate the hosted coordination service with Service SDK 0.3.2 and its exact Connectors 0.5.3
+  factory contract so downstream composed runtimes use one Connector service trait.
 - Include lifecycle state in the generated session snapshot so Workspace can distinguish active
   coding sessions from closed sessions when deriving terminal and agent authority.
 - Let hosted runtimes convert a digest-sealed, actor-specific `IntentInventory` through the
