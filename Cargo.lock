@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "agentide-cli"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "agentide-contracts",
  "agentide-core",
@@ -26,7 +26,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-contracts"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "chrono",
  "serde",
@@ -38,7 +38,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-core"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "agentide-contracts",
  "chrono",
@@ -63,7 +63,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-harness"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "agentide-contracts",
  "agentide-core",
@@ -80,7 +80,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-substrate"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "agentide-contracts",
  "agentide-core",
@@ -92,12 +92,12 @@ dependencies = [
 
 [[package]]
 name = "agentide-xtask"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "agentide-contracts",
  "anyhow",
- "ess-compiler 0.8.0",
- "ess-domain 0.8.0",
+ "ess-compiler 0.9.2",
+ "ess-domain 0.9.2",
  "ess-realization",
  "serde_json",
  "service-builder",
@@ -1040,11 +1040,11 @@ dependencies = [
 
 [[package]]
 name = "ess-compiler"
-version = "0.8.0"
-source = "git+https://github.com/beyond10x/ess?rev=d9bace2383f96365341d5af2c5d3036541cbfe9d#d9bace2383f96365341d5af2c5d3036541cbfe9d"
+version = "0.9.2"
+source = "git+https://github.com/beyond10x/ess?tag=0.9.2#6ef4af76b99a8d2cd861a3cc76140c88c1361129"
 dependencies = [
- "ess-domain 0.8.0",
- "ess-primitives 0.8.0",
+ "ess-domain 0.9.2",
+ "ess-primitives 0.9.2",
  "serde",
  "serde_json",
  "sha2 0.11.0",
@@ -1065,10 +1065,10 @@ dependencies = [
 
 [[package]]
 name = "ess-domain"
-version = "0.8.0"
-source = "git+https://github.com/beyond10x/ess?rev=d9bace2383f96365341d5af2c5d3036541cbfe9d#d9bace2383f96365341d5af2c5d3036541cbfe9d"
+version = "0.9.2"
+source = "git+https://github.com/beyond10x/ess?tag=0.9.2#6ef4af76b99a8d2cd861a3cc76140c88c1361129"
 dependencies = [
- "ess-primitives 0.8.0",
+ "ess-primitives 0.9.2",
  "schemars 0.8.22",
  "serde",
  "serde_json",
@@ -1103,8 +1103,8 @@ dependencies = [
 
 [[package]]
 name = "ess-primitives"
-version = "0.8.0"
-source = "git+https://github.com/beyond10x/ess?rev=d9bace2383f96365341d5af2c5d3036541cbfe9d#d9bace2383f96365341d5af2c5d3036541cbfe9d"
+version = "0.9.2"
+source = "git+https://github.com/beyond10x/ess?tag=0.9.2#6ef4af76b99a8d2cd861a3cc76140c88c1361129"
 dependencies = [
  "schemars 0.8.22",
  "serde",
@@ -1114,11 +1114,11 @@ dependencies = [
 
 [[package]]
 name = "ess-realization"
-version = "0.8.0"
-source = "git+https://github.com/beyond10x/ess?rev=d9bace2383f96365341d5af2c5d3036541cbfe9d#d9bace2383f96365341d5af2c5d3036541cbfe9d"
+version = "0.9.2"
+source = "git+https://github.com/beyond10x/ess?tag=0.9.2#6ef4af76b99a8d2cd861a3cc76140c88c1361129"
 dependencies = [
- "ess-compiler 0.8.0",
- "ess-domain 0.8.0",
+ "ess-compiler 0.9.2",
+ "ess-domain 0.9.2",
  "serde",
  "serde_json",
  "serde_yaml",

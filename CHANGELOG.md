@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## 0.1.2 - 2026-09-03
+
+- Consume the ESS realization compiler and CI tool from the published `0.9.2` tag.
 - Declare the standalone Linux and hosted DevCenter realizations as typed ESS Realization IR,
   validate them against the exact compiled AgentIDE specification, and generate the running-mode
   reference from those declarations.

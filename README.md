@@ -50,7 +50,7 @@ Service SDK dependency used to generate the hosted package, so cloning the publi
 is not a complete build path.
 
 ```bash
-version=0.1.1
+version=0.1.2
 target=x86_64-unknown-linux-gnu
 archive="agentide-${version}-${target}.tar.gz"
 base="https://github.com/beyond10x/agentide/releases/download/${version}"
@@ -66,12 +66,13 @@ cp "agentide-${version}-${target}/agentide" ./agentide
 Expected verification output:
 
 ```shell-session
-agentide-0.1.1-x86_64-unknown-linux-gnu.tar.gz: OK
-agentide 0.1.1
+agentide-0.1.2-x86_64-unknown-linux-gnu.tar.gz: OK
+agentide 0.1.2
 ```
 
-The checksum for that archive is also locked into the standalone ESS realization. AgentIDE
-currently targets Linux because process execution relies on Linux Substrate confinement.
+Release checksums are published in `SHA256SUMS`; the standalone ESS realization separately locks
+the exact digest of each promoted binary archive. AgentIDE currently targets Linux because process
+execution relies on Linux Substrate confinement.
 
 ## Quickstart: model-backed local TUI
 
