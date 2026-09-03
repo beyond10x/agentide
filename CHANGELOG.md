@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.1.3 - 2026-09-03
+
+- Add deterministic, retry-safe hosted-session creation keyed by the Workspace session identity.
+
 ## 0.1.2 - 2026-09-03
 
 - Consume the ESS realization compiler and CI tool from the published `0.9.2` tag.

@@ -1,7 +1,7 @@
 {
   "format": "service-client-plan/1",
   "service": "agentide",
-  "ess_source_digest": "6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4",
+  "ess_source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
   "realm_policy": "optional",
   "authentication": "session",
   "operations": [
@@ -246,6 +246,91 @@
         "kind": "intent",
         "emitted_events": [
           "agentide.coordination.ApprovalCheckpointDenied"
+        ]
+      }
+    },
+    {
+      "operation": "ensure_hosted_session",
+      "semantic_ref": "agentide.session.EnsureHostedSession",
+      "kind": "intent",
+      "inputs": [
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "manifest_digest",
+          "type_ref": "agentide.session.ManifestDigest",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "objective",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "project_id",
+          "type_ref": "agentide.session.ProjectId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "scopes",
+          "type_ref": "agentide.session.SessionScopes",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "source_revision",
+          "type_ref": "agentide.session.SourceRevision",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "workspace_root",
+          "type_ref": "agentide.session.WorkspaceRoot",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "workspace_session_id",
+          "type_ref": "agentide.session.WorkspaceSessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "result": {
+        "kind": "intent",
+        "emitted_events": [
+          "agentide.session.SessionStarted"
         ]
       }
     },

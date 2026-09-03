@@ -600,6 +600,10 @@ command_schemas!(
         "../../../generated/ess/schema/commands/agentide.session.StartSession.schema.json"
     ),
     (
+        "agentide.session.EnsureHostedSession",
+        "../../../generated/ess/schema/commands/agentide.session.EnsureHostedSession.schema.json"
+    ),
+    (
         "agentide.session.CloseSession",
         "../../../generated/ess/schema/commands/agentide.session.CloseSession.schema.json"
     ),

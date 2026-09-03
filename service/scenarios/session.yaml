@@ -10,8 +10,9 @@ scenarios:
         user: person-a
         facts: {principals: [person-a, agent-a], projects: [project-a]}
     when:
-      - intent: start_session
+      - intent: ensure_hosted_session
         input:
+          session_id: workspace-session-a
           workspace_root: workspace-session/materialization-a
           objective: Repair the service
           project_id: project-a
@@ -22,7 +23,7 @@ scenarios:
           idempotency_key: create-agentide-session-a
       - intent: create_grant
         input:
-          session_id: $start_session.session_id
+          session_id: workspace-session-a
           request_id: request-grant-a
           grantee: agent-a
           allowed_intents: [code_edit, code_create, code_delete, code_rename]
@@ -34,10 +35,10 @@ scenarios:
           idempotency_key: create-agentide-grant-a
     then:
       - query: get_session
-        input: {session_id: $start_session.session_id}
+        input: {session_id: workspace-session-a}
         count: 1
       - query: list_grants
-        input: {session_id: $start_session.session_id}
+        input: {session_id: workspace-session-a}
         count: 1
 
   - name: absent_realm_is_not_default_realm

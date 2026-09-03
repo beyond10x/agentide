@@ -3,12 +3,12 @@
   "ess": {
     "system": "agentide",
     "version": "v1",
-    "source_digest": "6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4"
+    "source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3"
   },
   "synthesis": {
     "profile": "component-skeletons",
-    "digest": "e33a9895b13bc9f8b34d3770ce7df494b6ddd231ca7d941559610fb5350693e9",
-    "capabilities": 184
+    "digest": "8a28459e7f04c157bcf71ea474042b5e7d81c8bf6538d6111ae26b34de72acc9",
+    "capabilities": 186
   },
   "obligation_catalog": {
     "digest": "a81885ebb75473d43f9ccbcee29b5d3147a24bebf0632a9582df0f3f3c3c305e",
@@ -58,6 +58,40 @@
               "kind": "stream_id"
             }
           },
+          {
+            "event": "agentide.session.SessionStarted",
+            "field": "owner",
+            "source": {
+              "kind": "context",
+              "value": "current_authority"
+            }
+          }
+        ],
+        "projections": [
+          "session_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_session_stream",
+          "authorize_requested_session_scopes"
+        ]
+      },
+      {
+        "name": "ensure_hosted_session",
+        "command": "agentide.session.EnsureHostedSession",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "no_stream"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [
           {
             "event": "agentide.session.SessionStarted",
             "field": "owner",
@@ -1037,6 +1071,45 @@
         "disposition": "obligation",
         "reason": "decided outside the system: durable state is unavailable",
         "contract": "given `agentide.coordination.DenyCheckpoint` input, decide and enact exactly one outcome — `denied` otherwise, takes `deny` of `agentide.coordination.ApprovalCheckpoint`, emits `agentide.coordination.ApprovalCheckpointDenied`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
+    "ensure_hosted_session": {
+      "command": "agentide.session.EnsureHostedSession",
+      "input_fields": {
+        "manifest_digest": "agentide.session.ManifestDigest",
+        "objective": "String",
+        "project_id": "agentide.session.ProjectId",
+        "scopes": "agentide.session.SessionScopes",
+        "session_id": "agentide.session.SessionId",
+        "source_revision": "agentide.session.SourceRevision",
+        "workspace_root": "agentide.session.WorkspaceRoot",
+        "workspace_session_id": "agentide.session.WorkspaceSessionId"
+      },
+      "emitted_events": [
+        "agentide.session.SessionStarted"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: the hosted workspace or durable coordination binding is unavailable",
+        "contract": "given `agentide.session.EnsureHostedSession` input, decide and enact exactly one outcome — `started` otherwise, creates `agentide.session.CodingSession`, emits `agentide.session.SessionStarted`; `refused` externally decided (the hosted workspace or durable coordination binding is unavailable), error `agentide.session.SessionRefusal`"
       },
       "pipeline": [
         "resolve_idempotency",

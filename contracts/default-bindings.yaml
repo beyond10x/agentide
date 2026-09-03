@@ -35,6 +35,7 @@ bindings:
   surface_snapshot: {driver: core, operation: surface}
 unbound:
   - session_start
+  - session_ensure_hosted
   - grant_create
   - grant_revoke
   - context_pin

@@ -1,7 +1,7 @@
 {
   "format": "service-connector-contribution/1",
   "service": "agentide",
-  "ess_source_digest": "6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4",
+  "ess_source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
   "operations": [
     {
       "operation": "approve_checkpoint",
@@ -151,6 +151,59 @@
         {
           "name": "session_id",
           "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "operation": "ensure_hosted_session",
+      "semantic_ref": "agentide.session.EnsureHostedSession",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "manifest_digest",
+          "type_ref": "agentide.session.ManifestDigest",
+          "optional": false
+        },
+        {
+          "name": "objective",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "project_id",
+          "type_ref": "agentide.session.ProjectId",
+          "optional": false
+        },
+        {
+          "name": "scopes",
+          "type_ref": "agentide.session.SessionScopes",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        },
+        {
+          "name": "source_revision",
+          "type_ref": "agentide.session.SourceRevision",
+          "optional": false
+        },
+        {
+          "name": "workspace_root",
+          "type_ref": "agentide.session.WorkspaceRoot",
+          "optional": false
+        },
+        {
+          "name": "workspace_session_id",
+          "type_ref": "agentide.session.WorkspaceSessionId",
           "optional": false
         }
       ]
