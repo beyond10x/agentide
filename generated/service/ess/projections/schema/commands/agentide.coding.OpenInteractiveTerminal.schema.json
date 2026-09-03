@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Open interactive terminal input",
+  "x-ess-name": "agentide.coding.OpenInteractiveTerminal",
+  "x-ess-kind": "command-input",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "request_id": {
+      "$ref": "#/$defs/agentide.session.RequestId"
+    },
+    "operation_id": {
+      "$ref": "#/$defs/agentide.coding.OperationId"
+    },
+    "profile": {
+      "$ref": "#/$defs/agentide.coding.TerminalProfile"
+    },
+    "working_directory": {
+      "$ref": "#/$defs/agentide.coding.Path"
+    }
+  },
+  "required": [
+    "session_id",
+    "request_id",
+    "operation_id",
+    "profile",
+    "working_directory"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+    "contract_digest": "07babb87d672f1ee5d19192f5450d9c43f4d894020bfafc56886b1460f46ce43",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coding.OperationId": {
+      "title": "OperationId",
+      "x-ess-name": "agentide.coding.OperationId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coding.Path": {
+      "title": "Path",
+      "x-ess-name": "agentide.coding.Path",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coding.TerminalProfile": {
+      "title": "TerminalProfile",
+      "x-ess-name": "agentide.coding.TerminalProfile",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.RequestId": {
+      "title": "RequestId",
+      "x-ess-name": "agentide.session.RequestId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

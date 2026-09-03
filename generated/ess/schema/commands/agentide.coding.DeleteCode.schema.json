@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Delete code input",
+  "x-ess-name": "agentide.coding.DeleteCode",
+  "x-ess-kind": "command-input",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "request_id": {
+      "$ref": "#/$defs/agentide.session.RequestId"
+    },
+    "operation_id": {
+      "$ref": "#/$defs/agentide.coding.OperationId"
+    },
+    "path": {
+      "$ref": "#/$defs/agentide.coding.Path"
+    },
+    "expected_sha256": {
+      "$ref": "#/$defs/agentide.coding.ExpectedDigest"
+    }
+  },
+  "required": [
+    "session_id",
+    "request_id",
+    "operation_id",
+    "path",
+    "expected_sha256"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+    "contract_digest": "aae0ea31b81fca649c8bb0caddb603c9afe31d6964b2c81e0d1130f8e3cdee71",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coding.ExpectedDigest": {
+      "title": "ExpectedDigest",
+      "x-ess-name": "agentide.coding.ExpectedDigest",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coding.OperationId": {
+      "title": "OperationId",
+      "x-ess-name": "agentide.coding.OperationId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coding.Path": {
+      "title": "Path",
+      "x-ess-name": "agentide.coding.Path",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.RequestId": {
+      "title": "RequestId",
+      "x-ess-name": "agentide.session.RequestId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

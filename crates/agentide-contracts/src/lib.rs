@@ -8,8 +8,14 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use thiserror::Error;
 
-/// The released v1 intent catalogue.
-pub const INTENT_PROFILE_YAML: &str = include_str!("../../../contracts/intent-profile.yaml");
+mod hosted;
+
+pub use hosted::*;
+
+/// The immutable v1 intent catalogue retained for compatibility loading.
+pub const INTENT_PROFILE_V1_YAML: &str = include_str!("../../../contracts/intent-profile.yaml");
+/// The current actor-aware intent catalogue.
+pub const INTENT_PROFILE_YAML: &str = include_str!("../../../contracts/intent-profile-v2.yaml");
 /// Standalone bindings shipped with the binary.
 pub const DEFAULT_BINDINGS_YAML: &str = include_str!("../../../contracts/default-bindings.yaml");
 /// Renderer-neutral interaction and presentation profile shipped with every surface.
@@ -23,8 +29,12 @@ pub struct IntentDefinition {
     pub name: String,
     /// Qualified ESS command providing its semantics.
     pub command: String,
-    /// Whether this operation is model, operator, or conditionally visible.
-    pub exposure: Exposure,
+    /// Actor classes for which this operation may become available.
+    #[serde(default)]
+    pub audiences: Vec<Audience>,
+    /// Legacy v1 exposure, normalized away by the compatibility loader.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub exposure: Option<Exposure>,
     /// Abstract implementation port.
     pub port: String,
     /// Kind of consequence.
@@ -37,8 +47,20 @@ pub struct IntentDefinition {
     pub subjects: Vec<String>,
 }
 
+/// Actor class eligible to receive an intent, subject to current bindings and authority.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Audience {
+    /// An authenticated person using an interactive surface.
+    Human,
+    /// A model-backed coding agent.
+    Agent,
+    /// A non-interactive automation principal.
+    Automation,
+}
+
 /// Intent visibility.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum Exposure {
     /// Published to a model.
@@ -68,7 +90,7 @@ pub enum Effect {
 }
 
 /// Consequence tier.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum Risk {
     /// Observational.
@@ -287,16 +309,46 @@ impl IntentProfile {
 
     /// Parses and validates one profile.
     pub fn from_yaml(yaml: &str) -> Result<Self, ContractError> {
-        let profile: Self = serde_yaml_ng::from_str(yaml)?;
-        if profile.format != "agentide.intent-profile/1" {
+        let mut profile: Self = serde_yaml_ng::from_str(yaml)?;
+        if !matches!(
+            profile.format.as_str(),
+            "agentide.intent-profile/1" | "agentide.intent-profile/2"
+        ) {
             return Err(ContractError::Invalid(format!(
                 "unsupported profile `{}`",
                 profile.format
             )));
         }
+        let legacy = profile.format == "agentide.intent-profile/1";
         let mut names = BTreeSet::new();
         let mut commands = BTreeSet::new();
-        for intent in &profile.intents {
+        for intent in &mut profile.intents {
+            if legacy {
+                intent.audiences = match intent.exposure {
+                    Some(Exposure::Model) => vec![Audience::Agent, Audience::Automation],
+                    Some(Exposure::Operator) => vec![Audience::Human],
+                    Some(Exposure::Conditional) => {
+                        vec![Audience::Human, Audience::Agent, Audience::Automation]
+                    }
+                    None => {
+                        return Err(ContractError::Invalid(format!(
+                            "legacy intent `{}` has no exposure",
+                            intent.name
+                        )));
+                    }
+                };
+                intent.exposure = None;
+            } else if intent.audiences.is_empty() {
+                return Err(ContractError::Invalid(format!(
+                    "intent `{}` has no audience",
+                    intent.name
+                )));
+            } else if intent.exposure.is_some() {
+                return Err(ContractError::Invalid(format!(
+                    "v2 intent `{}` uses legacy exposure",
+                    intent.name
+                )));
+            }
             if !names.insert(intent.name.as_str()) {
                 return Err(ContractError::Invalid(format!(
                     "duplicate intent `{}`",
@@ -310,6 +362,7 @@ impl IntentProfile {
                 )));
             }
         }
+        profile.format = "agentide.intent-profile/2".into();
         Ok(profile)
     }
 
@@ -353,7 +406,7 @@ impl BindingConfig {
     /// Confirms every released intent is bound or explicitly withheld.
     pub fn validate_against(&self, profile: &IntentProfile) -> Result<(), ContractError> {
         for intent in &profile.intents {
-            if matches!(intent.exposure, Exposure::Operator) {
+            if intent.audiences == [Audience::Human] {
                 continue;
             }
             if !self.bindings.contains_key(&intent.name) && !self.unbound.contains(&intent.name) {
@@ -666,13 +719,39 @@ fn invalid(message: impl Into<String>) -> ContractError {
 
 #[cfg(test)]
 mod tests {
-    use super::{BindingConfig, IntentProfile, SURFACE_PROFILE_YAML, SurfaceProfile};
+    use super::{
+        Audience, BindingConfig, INTENT_PROFILE_V1_YAML, IntentProfile, SURFACE_PROFILE_YAML,
+        SurfaceProfile,
+    };
 
     #[test]
     fn released_profile_and_bindings_agree() {
         let profile = IntentProfile::embedded().expect("profile");
         let bindings = BindingConfig::embedded().expect("bindings");
         bindings.validate_against(&profile).expect("agreement");
+    }
+
+    #[test]
+    fn v1_exposure_is_normalized_to_v2_audiences() {
+        let profile = IntentProfile::from_yaml(INTENT_PROFILE_V1_YAML).expect("v1 profile");
+        assert_eq!(profile.format, "agentide.intent-profile/2");
+        assert_eq!(
+            profile
+                .find("session_start")
+                .expect("session start")
+                .audiences,
+            [Audience::Human]
+        );
+        assert_eq!(
+            profile.find("code_read").expect("code read").audiences,
+            [Audience::Agent, Audience::Automation]
+        );
+        assert!(
+            profile
+                .intents
+                .iter()
+                .all(|intent| intent.exposure.is_none())
+        );
     }
 
     #[test]

@@ -1,0 +1,33 @@
+format: service-scenarios/1
+service: agentide
+scenarios:
+  - name: exact_workspace_session_lifecycle
+    given:
+      auth:
+        tenant: tenant-a
+        realm: null
+        authority: person-a
+        user: person-a
+        facts: {principals: [person-a], projects: [project-a]}
+    when:
+      - intent: start_session
+        input:
+          workspace_root: workspace-session/materialization-a
+          objective: Repair the service
+          project_id: project-a
+          source_revision: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          workspace_session_id: workspace-session-a
+          manifest_digest: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+          scopes: {principal: person-a, team: null, project: project-a}
+          idempotency_key: create-agentide-session-a
+    then:
+      - query: get_session
+        input: {session_id: $start_session.session_id}
+        count: 1
+
+  - name: absent_realm_is_not_default_realm
+    given:
+      auth: {tenant: tenant-a, realm: null, authority: person-a, user: person-a}
+      other_auth: {tenant: tenant-a, realm: default, authority: person-a, user: person-a}
+    then:
+      - partitions_are_distinct: [auth, other_auth]

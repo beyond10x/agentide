@@ -1,0 +1,4942 @@
+{
+  "format": "service-catalog/1",
+  "service_ref": "service:agentide",
+  "display_name": "agentide",
+  "description": "Generated agentide service",
+  "semantic_catalog": {
+    "bindings": [],
+    "commands": [
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.ApplyDeployment` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Apply deployment",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "environment",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "environment"
+          },
+          {
+            "name": "revision",
+            "optional": false,
+            "spelling": "agentide.coding.ExpectedDigest",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.ExpectedDigest"
+            },
+            "wire": "revision"
+          }
+        ],
+        "name": "agentide.coding.ApplyDeployment",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.CancelProcess` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Cancel process",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "process_id",
+            "optional": false,
+            "spelling": "agentide.coding.ProcessId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.ProcessId"
+            },
+            "wire": "process_id"
+          },
+          {
+            "name": "signal",
+            "optional": false,
+            "spelling": "agentide.coding.Signal",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.Signal"
+            },
+            "wire": "signal"
+          }
+        ],
+        "name": "agentide.coding.CancelProcess",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.CreateCode` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Create code",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "path",
+            "optional": false,
+            "spelling": "agentide.coding.Path",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            },
+            "wire": "path"
+          },
+          {
+            "name": "content",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "content"
+          },
+          {
+            "name": "expected_absent",
+            "optional": false,
+            "spelling": "Boolean",
+            "type": {
+              "kind": "primitive",
+              "name": "boolean"
+            },
+            "wire": "expected_absent"
+          }
+        ],
+        "name": "agentide.coding.CreateCode",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.CreateWorktree` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Create worktree",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "purpose",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "purpose"
+          },
+          {
+            "name": "base",
+            "optional": true,
+            "spelling": "Optional<String>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "string"
+              }
+            },
+            "wire": "base"
+          }
+        ],
+        "name": "agentide.coding.CreateWorktree",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.CutRelease` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Cut release",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "version",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "version"
+          },
+          {
+            "name": "expected_head",
+            "optional": false,
+            "spelling": "agentide.coding.ExpectedDigest",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.ExpectedDigest"
+            },
+            "wire": "expected_head"
+          }
+        ],
+        "name": "agentide.coding.CutRelease",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.DelegateAgent` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Delegate to agent",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "task",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "task"
+          }
+        ],
+        "name": "agentide.coding.DelegateAgent",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.DeleteCode` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Delete code",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "path",
+            "optional": false,
+            "spelling": "agentide.coding.Path",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            },
+            "wire": "path"
+          },
+          {
+            "name": "expected_sha256",
+            "optional": false,
+            "spelling": "agentide.coding.ExpectedDigest",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.ExpectedDigest"
+            },
+            "wire": "expected_sha256"
+          }
+        ],
+        "name": "agentide.coding.DeleteCode",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.EditCode` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Edit code",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "path",
+            "optional": false,
+            "spelling": "agentide.coding.Path",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            },
+            "wire": "path"
+          },
+          {
+            "name": "content",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "content"
+          },
+          {
+            "name": "expected_sha256",
+            "optional": true,
+            "spelling": "Optional<agentide.coding.ExpectedDigest>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.ExpectedDigest"
+              }
+            },
+            "wire": "expected_sha256"
+          }
+        ],
+        "name": "agentide.coding.EditCode",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.FinishWorktree` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Finish worktree",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          }
+        ],
+        "name": "agentide.coding.FinishWorktree",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.InputProcess` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Write process input",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "process_id",
+            "optional": false,
+            "spelling": "agentide.coding.ProcessId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.ProcessId"
+            },
+            "wire": "process_id"
+          },
+          {
+            "name": "content",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "content"
+          }
+        ],
+        "name": "agentide.coding.InputProcess",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.ListTerminals` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "List terminals",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          }
+        ],
+        "name": "agentide.coding.ListTerminals",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.MessageAgent` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Message agent",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "agent_id",
+            "optional": false,
+            "spelling": "agentide.coding.AgentId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.AgentId"
+            },
+            "wire": "agent_id"
+          },
+          {
+            "name": "message",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "message"
+          }
+        ],
+        "name": "agentide.coding.MessageAgent",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.ObserveAgents` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Observe agents",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          }
+        ],
+        "name": "agentide.coding.ObserveAgents",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.ObserveChanges` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Observe code changes",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          }
+        ],
+        "name": "agentide.coding.ObserveChanges",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.ObserveDeployment` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Observe deployment",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "environment",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "environment"
+          }
+        ],
+        "name": "agentide.coding.ObserveDeployment",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.ObserveProcess` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Observe process",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "process_id",
+            "optional": false,
+            "spelling": "agentide.coding.ProcessId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.ProcessId"
+            },
+            "wire": "process_id"
+          }
+        ],
+        "name": "agentide.coding.ObserveProcess",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.ObserveWorktree` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Observe worktree",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          }
+        ],
+        "name": "agentide.coding.ObserveWorktree",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.OpenInteractiveTerminal` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Open interactive terminal",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "profile",
+            "optional": false,
+            "spelling": "agentide.coding.TerminalProfile",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.TerminalProfile"
+            },
+            "wire": "profile"
+          },
+          {
+            "name": "working_directory",
+            "optional": false,
+            "spelling": "agentide.coding.Path",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            },
+            "wire": "working_directory"
+          }
+        ],
+        "name": "agentide.coding.OpenInteractiveTerminal",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.PublishCode` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Publish code",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "expected_head",
+            "optional": false,
+            "spelling": "agentide.coding.ExpectedDigest",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.ExpectedDigest"
+            },
+            "wire": "expected_head"
+          },
+          {
+            "name": "summary",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "summary"
+          },
+          {
+            "name": "evidence",
+            "optional": false,
+            "spelling": "List<String>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "primitive",
+                "name": "string"
+              }
+            },
+            "wire": "evidence"
+          }
+        ],
+        "name": "agentide.coding.PublishCode",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.ReadCode` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Read code",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "path",
+            "optional": false,
+            "spelling": "agentide.coding.Path",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            },
+            "wire": "path"
+          },
+          {
+            "name": "offset",
+            "optional": false,
+            "spelling": "Integer",
+            "type": {
+              "kind": "primitive",
+              "name": "integer"
+            },
+            "wire": "offset"
+          },
+          {
+            "name": "limit_bytes",
+            "optional": false,
+            "spelling": "Integer",
+            "type": {
+              "kind": "primitive",
+              "name": "integer"
+            },
+            "wire": "limit_bytes"
+          }
+        ],
+        "name": "agentide.coding.ReadCode",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.RecordEvidence` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Record evidence",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "subject",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "subject"
+          },
+          {
+            "name": "kind",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "kind"
+          },
+          {
+            "name": "source",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "source"
+          },
+          {
+            "name": "reference",
+            "optional": true,
+            "spelling": "Optional<String>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "string"
+              }
+            },
+            "wire": "reference"
+          }
+        ],
+        "name": "agentide.coding.RecordEvidence",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.RenameCode` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Rename code",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "path",
+            "optional": false,
+            "spelling": "agentide.coding.Path",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            },
+            "wire": "path"
+          },
+          {
+            "name": "destination",
+            "optional": false,
+            "spelling": "agentide.coding.Path",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            },
+            "wire": "destination"
+          },
+          {
+            "name": "expected_sha256",
+            "optional": false,
+            "spelling": "agentide.coding.ExpectedDigest",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.ExpectedDigest"
+            },
+            "wire": "expected_sha256"
+          },
+          {
+            "name": "destination_expected_absent",
+            "optional": false,
+            "spelling": "Boolean",
+            "type": {
+              "kind": "primitive",
+              "name": "boolean"
+            },
+            "wire": "destination_expected_absent"
+          }
+        ],
+        "name": "agentide.coding.RenameCode",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.SearchCode` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Search code",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "pattern",
+            "optional": false,
+            "spelling": "agentide.coding.Pattern",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.Pattern"
+            },
+            "wire": "pattern"
+          },
+          {
+            "name": "paths",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "paths"
+          }
+        ],
+        "name": "agentide.coding.SearchCode",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.StartProcess` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Start process",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "profile",
+            "optional": false,
+            "spelling": "agentide.coding.ProcessProfile",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.ProcessProfile"
+            },
+            "wire": "profile"
+          }
+        ],
+        "name": "agentide.coding.StartProcess",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.TerminateTerminal` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Terminate terminal",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "terminal_id",
+            "optional": false,
+            "spelling": "agentide.coding.TerminalId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.TerminalId"
+            },
+            "wire": "terminal_id"
+          },
+          {
+            "name": "signal",
+            "optional": false,
+            "spelling": "agentide.coding.Signal",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.Signal"
+            },
+            "wire": "signal"
+          }
+        ],
+        "name": "agentide.coding.TerminateTerminal",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.VerifyCode` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Verify code",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "operation_id",
+            "optional": false,
+            "spelling": "agentide.coding.OperationId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.OperationId"
+            },
+            "wire": "operation_id"
+          },
+          {
+            "name": "level",
+            "optional": false,
+            "spelling": "agentide.coding.VerificationLevel",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.VerificationLevel"
+            },
+            "wire": "level"
+          }
+        ],
+        "name": "agentide.coding.VerifyCode",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.WaitAgent` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Wait for agents",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "agent_ids",
+            "optional": false,
+            "spelling": "List<agentide.coding.AgentId>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.AgentId"
+              }
+            },
+            "wire": "agent_ids"
+          }
+        ],
+        "name": "agentide.coding.WaitAgent",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.coding.WaitProcess` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the selected implementation cannot admit or complete the intent"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Wait for process",
+        "domain": "agentide.coding",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "process_id",
+            "optional": false,
+            "spelling": "agentide.coding.ProcessId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.ProcessId"
+            },
+            "wire": "process_id"
+          },
+          {
+            "name": "timeout_ms",
+            "optional": false,
+            "spelling": "Integer",
+            "type": {
+              "kind": "primitive",
+              "name": "integer"
+            },
+            "wire": "timeout_ms"
+          }
+        ],
+        "name": "agentide.coding.WaitProcess",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.coding.IntentCompleted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the selected implementation cannot admit or complete the intent)",
+            "error": "agentide.coding.IntentFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.session.CloseSession` input, decide and enact exactly one outcome — `closed` otherwise, takes `close` of `agentide.session.CodingSession`, emits `agentide.session.SessionClosed`; `wrong-state` from a state no declared move starts in, error `agentide.session.SessionStateConflict`; `refused` externally decided (durable state cannot be updated), error `agentide.session.SessionRefusal`",
+          "disposition": "obligation",
+          "why": "decided outside the system: durable state cannot be updated"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Close session",
+        "domain": "agentide.session",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          }
+        ],
+        "name": "agentide.session.CloseSession",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": {
+              "effect": {
+                "from": [
+                  "Active"
+                ],
+                "kind": "moves",
+                "to": "Closed",
+                "transition": "close"
+              },
+              "entity": "agentide.session.CodingSession"
+            },
+            "name": "closed",
+            "publishes": [
+              "agentide.session.SessionClosed"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "from a state no declared move starts in",
+            "error": "agentide.session.SessionStateConflict",
+            "moves": null,
+            "name": "wrong-state",
+            "publishes": [],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (durable state cannot be updated)",
+            "error": "agentide.session.SessionRefusal",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.session.ReadEvents` input, decide and enact exactly one outcome — `observed` otherwise, emits `agentide.session.SessionObserved`; `refused` externally decided (the requested event window cannot be represented), error `agentide.session.SessionRefusal`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the requested event window cannot be represented"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Read session events",
+        "domain": "agentide.session",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "after",
+            "optional": true,
+            "spelling": "Optional<agentide.session.Cursor>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.Cursor"
+              }
+            },
+            "wire": "after"
+          },
+          {
+            "name": "limit",
+            "optional": false,
+            "spelling": "agentide.session.EventLimit",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.EventLimit"
+            },
+            "wire": "limit"
+          }
+        ],
+        "name": "agentide.session.ReadEvents",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "observed",
+            "publishes": [
+              "agentide.session.SessionObserved"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the requested event window cannot be represented)",
+            "error": "agentide.session.SessionRefusal",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.session.SnapshotSession` input, decide and enact exactly one outcome — `observed` otherwise, emits `agentide.session.SessionObserved`; `refused` externally decided (the durable session cannot be read exactly), error `agentide.session.SessionRefusal`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the durable session cannot be read exactly"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Snapshot session",
+        "domain": "agentide.session",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          }
+        ],
+        "name": "agentide.session.SnapshotSession",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "observed",
+            "publishes": [
+              "agentide.session.SessionObserved"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the durable session cannot be read exactly)",
+            "error": "agentide.session.SessionRefusal",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.session.StartSession` input, decide and enact exactly one outcome — `started` otherwise, creates `agentide.session.CodingSession`, emits `agentide.session.SessionStarted`; `refused` externally decided (the workspace or standalone binding is unavailable), error `agentide.session.SessionRefusal`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the workspace or standalone binding is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Start session",
+        "domain": "agentide.session",
+        "input": [
+          {
+            "name": "workspace_root",
+            "optional": false,
+            "spelling": "agentide.session.WorkspaceRoot",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.WorkspaceRoot"
+            },
+            "wire": "workspace_root"
+          },
+          {
+            "name": "objective",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "objective"
+          },
+          {
+            "name": "project_id",
+            "optional": true,
+            "spelling": "Optional<agentide.session.ProjectId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.ProjectId"
+              }
+            },
+            "wire": "project_id"
+          },
+          {
+            "name": "source_revision",
+            "optional": true,
+            "spelling": "Optional<agentide.session.SourceRevision>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.SourceRevision"
+              }
+            },
+            "wire": "source_revision"
+          },
+          {
+            "name": "workspace_session_id",
+            "optional": true,
+            "spelling": "Optional<agentide.session.WorkspaceSessionId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.WorkspaceSessionId"
+              }
+            },
+            "wire": "workspace_session_id"
+          },
+          {
+            "name": "manifest_digest",
+            "optional": true,
+            "spelling": "Optional<agentide.session.ManifestDigest>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.ManifestDigest"
+              }
+            },
+            "wire": "manifest_digest"
+          },
+          {
+            "name": "scopes",
+            "optional": false,
+            "spelling": "agentide.session.SessionScopes",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionScopes"
+            },
+            "wire": "scopes"
+          }
+        ],
+        "name": "agentide.session.StartSession",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": {
+              "effect": {
+                "kind": "creates"
+              },
+              "entity": "agentide.session.CodingSession"
+            },
+            "name": "started",
+            "publishes": [
+              "agentide.session.SessionStarted"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the workspace or standalone binding is unavailable)",
+            "error": "agentide.session.SessionRefusal",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.surface.CloseFile` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the requested surface state is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Close file",
+        "domain": "agentide.surface",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "path",
+            "optional": false,
+            "spelling": "agentide.coding.Path",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            },
+            "wire": "path"
+          }
+        ],
+        "name": "agentide.surface.CloseFile",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.surface.SurfaceObserved"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the requested surface state is unavailable)",
+            "error": "agentide.surface.SurfaceFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.surface.ClosePane` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the requested surface state is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Close pane",
+        "domain": "agentide.surface",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "pane_id",
+            "optional": false,
+            "spelling": "agentide.surface.PaneId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            },
+            "wire": "pane_id"
+          }
+        ],
+        "name": "agentide.surface.ClosePane",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.surface.SurfaceObserved"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the requested surface state is unavailable)",
+            "error": "agentide.surface.SurfaceFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.surface.FocusPane` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the requested surface state is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Focus pane",
+        "domain": "agentide.surface",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "pane_id",
+            "optional": false,
+            "spelling": "agentide.surface.PaneId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            },
+            "wire": "pane_id"
+          }
+        ],
+        "name": "agentide.surface.FocusPane",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.surface.SurfaceObserved"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the requested surface state is unavailable)",
+            "error": "agentide.surface.SurfaceFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.surface.MoveCursor` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the requested surface state is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Move editor cursor",
+        "domain": "agentide.surface",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "pane_id",
+            "optional": false,
+            "spelling": "agentide.surface.PaneId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            },
+            "wire": "pane_id"
+          },
+          {
+            "name": "path",
+            "optional": false,
+            "spelling": "agentide.coding.Path",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            },
+            "wire": "path"
+          },
+          {
+            "name": "line",
+            "optional": false,
+            "spelling": "Integer",
+            "type": {
+              "kind": "primitive",
+              "name": "integer"
+            },
+            "wire": "line"
+          },
+          {
+            "name": "column",
+            "optional": false,
+            "spelling": "Integer",
+            "type": {
+              "kind": "primitive",
+              "name": "integer"
+            },
+            "wire": "column"
+          }
+        ],
+        "name": "agentide.surface.MoveCursor",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.surface.SurfaceObserved"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the requested surface state is unavailable)",
+            "error": "agentide.surface.SurfaceFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.surface.OpenFile` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the requested surface state is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Open file",
+        "domain": "agentide.surface",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "path",
+            "optional": false,
+            "spelling": "agentide.coding.Path",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            },
+            "wire": "path"
+          },
+          {
+            "name": "line",
+            "optional": true,
+            "spelling": "Optional<Integer>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "integer"
+              }
+            },
+            "wire": "line"
+          },
+          {
+            "name": "pane_id",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "pane_id"
+          }
+        ],
+        "name": "agentide.surface.OpenFile",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.surface.SurfaceObserved"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the requested surface state is unavailable)",
+            "error": "agentide.surface.SurfaceFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.surface.OpenPane` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the requested surface state is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Open pane",
+        "domain": "agentide.surface",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "pane_id",
+            "optional": false,
+            "spelling": "agentide.surface.PaneId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            },
+            "wire": "pane_id"
+          },
+          {
+            "name": "kind",
+            "optional": false,
+            "spelling": "agentide.surface.PaneKind",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneKind"
+            },
+            "wire": "kind"
+          },
+          {
+            "name": "split",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.SplitDirection>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.SplitDirection"
+              }
+            },
+            "wire": "split"
+          }
+        ],
+        "name": "agentide.surface.OpenPane",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.surface.SurfaceObserved"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the requested surface state is unavailable)",
+            "error": "agentide.surface.SurfaceFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.surface.ShowDiff` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the requested surface state is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Show diff",
+        "domain": "agentide.surface",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "pane_id",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "pane_id"
+          },
+          {
+            "name": "path",
+            "optional": true,
+            "spelling": "Optional<agentide.coding.Path>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "path"
+          },
+          {
+            "name": "base",
+            "optional": true,
+            "spelling": "Optional<String>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "string"
+              }
+            },
+            "wire": "base"
+          }
+        ],
+        "name": "agentide.surface.ShowDiff",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.surface.SurfaceObserved"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the requested surface state is unavailable)",
+            "error": "agentide.surface.SurfaceFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      },
+      {
+        "behavior": {
+          "contract": "given `agentide.surface.SnapshotSurface` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
+          "disposition": "obligation",
+          "why": "decided outside the system: the requested surface state is unavailable"
+        },
+        "component": "agentide-engine",
+        "dispatchable": true,
+        "display": "Snapshot workspace surface",
+        "domain": "agentide.surface",
+        "input": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          }
+        ],
+        "name": "agentide.surface.SnapshotSurface",
+        "outcomes": [
+          {
+            "condition": "otherwise",
+            "error": null,
+            "moves": null,
+            "name": "completed",
+            "publishes": [
+              "agentide.surface.SurfaceObserved"
+            ],
+            "summary": null
+          },
+          {
+            "condition": "externally decided (the requested surface state is unavailable)",
+            "error": "agentide.surface.SurfaceFailure",
+            "moves": null,
+            "name": "refused",
+            "publishes": [],
+            "summary": null
+          }
+        ]
+      }
+    ],
+    "components": [
+      {
+        "accepts": [
+          "agentide.coding.ApplyDeployment",
+          "agentide.coding.CancelProcess",
+          "agentide.coding.CreateCode",
+          "agentide.coding.CreateWorktree",
+          "agentide.coding.CutRelease",
+          "agentide.coding.DelegateAgent",
+          "agentide.coding.DeleteCode",
+          "agentide.coding.EditCode",
+          "agentide.coding.FinishWorktree",
+          "agentide.coding.InputProcess",
+          "agentide.coding.ListTerminals",
+          "agentide.coding.MessageAgent",
+          "agentide.coding.ObserveAgents",
+          "agentide.coding.ObserveChanges",
+          "agentide.coding.ObserveDeployment",
+          "agentide.coding.ObserveProcess",
+          "agentide.coding.ObserveWorktree",
+          "agentide.coding.OpenInteractiveTerminal",
+          "agentide.coding.PublishCode",
+          "agentide.coding.ReadCode",
+          "agentide.coding.RecordEvidence",
+          "agentide.coding.RenameCode",
+          "agentide.coding.SearchCode",
+          "agentide.coding.StartProcess",
+          "agentide.coding.TerminateTerminal",
+          "agentide.coding.VerifyCode",
+          "agentide.coding.WaitAgent",
+          "agentide.coding.WaitProcess",
+          "agentide.session.CloseSession",
+          "agentide.session.ReadEvents",
+          "agentide.session.SnapshotSession",
+          "agentide.session.StartSession",
+          "agentide.surface.CloseFile",
+          "agentide.surface.ClosePane",
+          "agentide.surface.FocusPane",
+          "agentide.surface.MoveCursor",
+          "agentide.surface.OpenFile",
+          "agentide.surface.OpenPane",
+          "agentide.surface.ShowDiff",
+          "agentide.surface.SnapshotSurface"
+        ],
+        "display": "agentide-engine",
+        "name": "agentide-engine",
+        "publishes": [
+          "agentide.coding.IntentCompleted",
+          "agentide.coding.IntentRefused",
+          "agentide.session.SessionClosed",
+          "agentide.session.SessionObserved",
+          "agentide.session.SessionStarted",
+          "agentide.surface.CursorMoved",
+          "agentide.surface.DiffShown",
+          "agentide.surface.FileClosed",
+          "agentide.surface.FileOpened",
+          "agentide.surface.PaneClosed",
+          "agentide.surface.PaneFocused",
+          "agentide.surface.PaneOpened",
+          "agentide.surface.SurfaceObserved"
+        ],
+        "summary": "Validates intents, plans effects, obtains authority, journals, dispatches, and projects sessions."
+      }
+    ],
+    "conversions": [],
+    "display": "agentide",
+    "entities": [
+      {
+        "display": "CodingSession",
+        "fields": [
+          {
+            "name": "workspace_root",
+            "optional": false,
+            "spelling": "agentide.session.WorkspaceRoot",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.WorkspaceRoot"
+            },
+            "wire": "workspace_root"
+          },
+          {
+            "name": "objective",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "objective"
+          },
+          {
+            "name": "project_id",
+            "optional": true,
+            "spelling": "Optional<agentide.session.ProjectId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.ProjectId"
+              }
+            },
+            "wire": "project_id"
+          },
+          {
+            "name": "source_revision",
+            "optional": true,
+            "spelling": "Optional<agentide.session.SourceRevision>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.SourceRevision"
+              }
+            },
+            "wire": "source_revision"
+          },
+          {
+            "name": "workspace_session_id",
+            "optional": true,
+            "spelling": "Optional<agentide.session.WorkspaceSessionId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.WorkspaceSessionId"
+              }
+            },
+            "wire": "workspace_session_id"
+          },
+          {
+            "name": "manifest_digest",
+            "optional": true,
+            "spelling": "Optional<agentide.session.ManifestDigest>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.ManifestDigest"
+              }
+            },
+            "wire": "manifest_digest"
+          },
+          {
+            "name": "owner",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "owner"
+          },
+          {
+            "name": "scopes",
+            "optional": false,
+            "spelling": "agentide.session.SessionScopes",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionScopes"
+            },
+            "wire": "scopes"
+          }
+        ],
+        "identity": {
+          "name": "session_id",
+          "optional": false,
+          "spelling": "agentide.session.SessionId",
+          "type": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "wire": "session_id"
+        },
+        "initial": "Active",
+        "invariants": [],
+        "name": "agentide.session.CodingSession",
+        "states": [
+          "Active",
+          "Closed"
+        ],
+        "summary": null,
+        "terminal": [
+          "Closed"
+        ],
+        "transitions": [
+          {
+            "from": [
+              "Active"
+            ],
+            "name": "close",
+            "to": "Closed"
+          }
+        ],
+        "views": [
+          "agentide.session.SessionSnapshot"
+        ]
+      },
+      {
+        "display": "Workbench",
+        "fields": [
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
+          }
+        ],
+        "identity": {
+          "name": "session_id",
+          "optional": false,
+          "spelling": "agentide.session.SessionId",
+          "type": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "wire": "session_id"
+        },
+        "initial": "Active",
+        "invariants": [],
+        "name": "agentide.surface.Workbench",
+        "states": [
+          "Active"
+        ],
+        "summary": null,
+        "terminal": [
+          "Active"
+        ],
+        "transitions": [],
+        "views": [
+          "agentide.surface.WorkbenchSnapshot"
+        ]
+      }
+    ],
+    "errors": [
+      {
+        "fields": [
+          {
+            "name": "code",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "code"
+          },
+          {
+            "name": "message",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "message"
+          },
+          {
+            "name": "retryable",
+            "optional": false,
+            "spelling": "Boolean",
+            "type": {
+              "kind": "primitive",
+              "name": "boolean"
+            },
+            "wire": "retryable"
+          }
+        ],
+        "name": "agentide.coding.IntentFailure",
+        "summary": "The intent was refused or failed without claiming the requested effect happened."
+      },
+      {
+        "fields": [
+          {
+            "name": "code",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "code"
+          },
+          {
+            "name": "message",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "message"
+          },
+          {
+            "name": "retryable",
+            "optional": false,
+            "spelling": "Boolean",
+            "type": {
+              "kind": "primitive",
+              "name": "boolean"
+            },
+            "wire": "retryable"
+          }
+        ],
+        "name": "agentide.session.SessionRefusal",
+        "summary": "The session operation was not admitted or could not be observed exactly."
+      },
+      {
+        "fields": [
+          {
+            "name": "state",
+            "optional": false,
+            "spelling": "agentide.session.CodingSession.State",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.CodingSession.State"
+            },
+            "wire": "state"
+          }
+        ],
+        "name": "agentide.session.SessionStateConflict",
+        "summary": "The session is not in a state this command acts from."
+      },
+      {
+        "fields": [
+          {
+            "name": "code",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "code"
+          },
+          {
+            "name": "message",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "message"
+          },
+          {
+            "name": "retryable",
+            "optional": false,
+            "spelling": "Boolean",
+            "type": {
+              "kind": "primitive",
+              "name": "boolean"
+            },
+            "wire": "retryable"
+          }
+        ],
+        "name": "agentide.surface.SurfaceFailure",
+        "summary": "The requested virtual-surface transition was refused or could not be projected."
+      }
+    ],
+    "events": [
+      {
+        "display": "IntentCompleted",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          }
+        ],
+        "name": "agentide.coding.IntentCompleted",
+        "summary": null
+      },
+      {
+        "display": "IntentRefused",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          },
+          {
+            "name": "code",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "code"
+          }
+        ],
+        "name": "agentide.coding.IntentRefused",
+        "summary": null
+      },
+      {
+        "display": "SessionClosed",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          }
+        ],
+        "name": "agentide.session.SessionClosed",
+        "summary": null
+      },
+      {
+        "display": "SessionObserved",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          }
+        ],
+        "name": "agentide.session.SessionObserved",
+        "summary": null
+      },
+      {
+        "display": "SessionStarted",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "workspace_root",
+            "optional": false,
+            "spelling": "agentide.session.WorkspaceRoot",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.WorkspaceRoot"
+            },
+            "wire": "workspace_root"
+          },
+          {
+            "name": "objective",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "objective"
+          },
+          {
+            "name": "project_id",
+            "optional": true,
+            "spelling": "Optional<agentide.session.ProjectId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.ProjectId"
+              }
+            },
+            "wire": "project_id"
+          },
+          {
+            "name": "source_revision",
+            "optional": true,
+            "spelling": "Optional<agentide.session.SourceRevision>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.SourceRevision"
+              }
+            },
+            "wire": "source_revision"
+          },
+          {
+            "name": "workspace_session_id",
+            "optional": true,
+            "spelling": "Optional<agentide.session.WorkspaceSessionId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.WorkspaceSessionId"
+              }
+            },
+            "wire": "workspace_session_id"
+          },
+          {
+            "name": "manifest_digest",
+            "optional": true,
+            "spelling": "Optional<agentide.session.ManifestDigest>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.ManifestDigest"
+              }
+            },
+            "wire": "manifest_digest"
+          },
+          {
+            "name": "owner",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "owner"
+          },
+          {
+            "name": "scopes",
+            "optional": false,
+            "spelling": "agentide.session.SessionScopes",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionScopes"
+            },
+            "wire": "scopes"
+          }
+        ],
+        "name": "agentide.session.SessionStarted",
+        "summary": null
+      },
+      {
+        "display": "CursorMoved",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "pane_id",
+            "optional": false,
+            "spelling": "agentide.surface.PaneId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            },
+            "wire": "pane_id"
+          },
+          {
+            "name": "line",
+            "optional": false,
+            "spelling": "Integer",
+            "type": {
+              "kind": "primitive",
+              "name": "integer"
+            },
+            "wire": "line"
+          },
+          {
+            "name": "column",
+            "optional": false,
+            "spelling": "Integer",
+            "type": {
+              "kind": "primitive",
+              "name": "integer"
+            },
+            "wire": "column"
+          }
+        ],
+        "name": "agentide.surface.CursorMoved",
+        "summary": null
+      },
+      {
+        "display": "DiffShown",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "pane_id",
+            "optional": false,
+            "spelling": "agentide.surface.PaneId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            },
+            "wire": "pane_id"
+          }
+        ],
+        "name": "agentide.surface.DiffShown",
+        "summary": null
+      },
+      {
+        "display": "FileClosed",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "path",
+            "optional": false,
+            "spelling": "agentide.coding.Path",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            },
+            "wire": "path"
+          }
+        ],
+        "name": "agentide.surface.FileClosed",
+        "summary": null
+      },
+      {
+        "display": "FileOpened",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "path",
+            "optional": false,
+            "spelling": "agentide.coding.Path",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            },
+            "wire": "path"
+          },
+          {
+            "name": "pane_id",
+            "optional": false,
+            "spelling": "agentide.surface.PaneId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            },
+            "wire": "pane_id"
+          }
+        ],
+        "name": "agentide.surface.FileOpened",
+        "summary": null
+      },
+      {
+        "display": "PaneClosed",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "pane_id",
+            "optional": false,
+            "spelling": "agentide.surface.PaneId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            },
+            "wire": "pane_id"
+          }
+        ],
+        "name": "agentide.surface.PaneClosed",
+        "summary": null
+      },
+      {
+        "display": "PaneFocused",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "pane_id",
+            "optional": false,
+            "spelling": "agentide.surface.PaneId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            },
+            "wire": "pane_id"
+          }
+        ],
+        "name": "agentide.surface.PaneFocused",
+        "summary": null
+      },
+      {
+        "display": "PaneOpened",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "pane_id",
+            "optional": false,
+            "spelling": "agentide.surface.PaneId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            },
+            "wire": "pane_id"
+          },
+          {
+            "name": "kind",
+            "optional": false,
+            "spelling": "agentide.surface.PaneKind",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneKind"
+            },
+            "wire": "kind"
+          }
+        ],
+        "name": "agentide.surface.PaneOpened",
+        "summary": null
+      },
+      {
+        "display": "SurfaceObserved",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "request_id",
+            "optional": false,
+            "spelling": "agentide.session.RequestId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.RequestId"
+            },
+            "wire": "request_id"
+          }
+        ],
+        "name": "agentide.surface.SurfaceObserved",
+        "summary": null
+      }
+    ],
+    "format": "ess-browser-catalog/1",
+    "plan": {
+      "generated": 90,
+      "obligations": 42,
+      "refused": 4
+    },
+    "provenance": {
+      "contract_digest": "dd678f8103754dc8a9fbfe5fe0fc15ed859a78be562212dc996affb84ba723b7",
+      "source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+      "specification_version": "v1",
+      "system": "agentide"
+    },
+    "summary": "A coding-session interface in which agents invoke stable semantic intents while deployments bind those intents to guarded implementations and humans observe the same durable event projection.",
+    "system": "agentide",
+    "types": {
+      "agentide.coding.AgentId": {
+        "display": "AgentId",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.coding.ExpectedDigest": {
+        "display": "ExpectedDigest",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.coding.OperationId": {
+        "display": "OperationId",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.coding.Path": {
+        "display": "Path",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.coding.Pattern": {
+        "display": "Pattern",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.coding.ProcessId": {
+        "display": "ProcessId",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.coding.ProcessProfile": {
+        "display": "ProcessProfile",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.coding.Signal": {
+        "display": "Signal",
+        "kind": "enum",
+        "variants": [
+          "Interrupt",
+          "Terminate",
+          "Kill"
+        ]
+      },
+      "agentide.coding.TerminalId": {
+        "display": "TerminalId",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.coding.TerminalProfile": {
+        "display": "TerminalProfile",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.coding.VerificationLevel": {
+        "display": "VerificationLevel",
+        "kind": "enum",
+        "variants": [
+          "Focused",
+          "Full",
+          "Release"
+        ]
+      },
+      "agentide.session.CodingSession.State": {
+        "display": "State",
+        "kind": "enum",
+        "variants": [
+          "Active",
+          "Closed"
+        ]
+      },
+      "agentide.session.Cursor": {
+        "display": "Cursor",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "integer"
+        },
+        "spelling": "Integer"
+      },
+      "agentide.session.EventLimit": {
+        "display": "EventLimit",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "integer"
+        },
+        "spelling": "Integer"
+      },
+      "agentide.session.ManifestDigest": {
+        "display": "ManifestDigest",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.session.ProjectId": {
+        "display": "ProjectId",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.session.RequestId": {
+        "display": "RequestId",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.session.SessionId": {
+        "display": "SessionId",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.session.SessionScopes": {
+        "display": "SessionScopes",
+        "fields": [
+          {
+            "name": "principal",
+            "optional": true,
+            "spelling": "Optional<String>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "string"
+              }
+            },
+            "wire": "principal"
+          },
+          {
+            "name": "team",
+            "optional": true,
+            "spelling": "Optional<String>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "string"
+              }
+            },
+            "wire": "team"
+          },
+          {
+            "name": "project",
+            "optional": true,
+            "spelling": "Optional<String>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "string"
+              }
+            },
+            "wire": "project"
+          }
+        ],
+        "invariants": [],
+        "kind": "struct"
+      },
+      "agentide.session.SourceRevision": {
+        "display": "SourceRevision",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.session.WorkspaceRoot": {
+        "display": "WorkspaceRoot",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.session.WorkspaceSessionId": {
+        "display": "WorkspaceSessionId",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.surface.PaneId": {
+        "display": "PaneId",
+        "invariants": [],
+        "kind": "newtype",
+        "of": {
+          "kind": "primitive",
+          "name": "string"
+        },
+        "spelling": "String"
+      },
+      "agentide.surface.PaneKind": {
+        "display": "PaneKind",
+        "kind": "enum",
+        "variants": [
+          "Editor",
+          "Diff",
+          "Terminal",
+          "Timeline",
+          "Agents",
+          "Approvals",
+          "Evidence"
+        ]
+      },
+      "agentide.surface.PaneSnapshot": {
+        "display": "PaneSnapshot",
+        "fields": [
+          {
+            "name": "id",
+            "optional": false,
+            "spelling": "agentide.surface.PaneId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            },
+            "wire": "id"
+          },
+          {
+            "name": "kind",
+            "optional": false,
+            "spelling": "agentide.surface.PaneKind",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneKind"
+            },
+            "wire": "kind"
+          },
+          {
+            "name": "title",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "title"
+          },
+          {
+            "name": "path",
+            "optional": true,
+            "spelling": "Optional<agentide.coding.Path>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "path"
+          },
+          {
+            "name": "line",
+            "optional": true,
+            "spelling": "Optional<Integer>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "integer"
+              }
+            },
+            "wire": "line"
+          },
+          {
+            "name": "column",
+            "optional": true,
+            "spelling": "Optional<Integer>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "primitive",
+                "name": "integer"
+              }
+            },
+            "wire": "column"
+          }
+        ],
+        "invariants": [],
+        "kind": "struct"
+      },
+      "agentide.surface.SplitDirection": {
+        "display": "SplitDirection",
+        "kind": "enum",
+        "variants": [
+          "Horizontal",
+          "Vertical"
+        ]
+      },
+      "agentide.surface.Workbench.State": {
+        "display": "State",
+        "kind": "enum",
+        "variants": [
+          "Active"
+        ]
+      }
+    },
+    "version": "v1",
+    "views": [
+      {
+        "component": "agentide-engine",
+        "consistency": "read_your_writes",
+        "display": "Session snapshot",
+        "entity": "agentide.session.CodingSession",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "workspace_root",
+            "optional": false,
+            "spelling": "agentide.session.WorkspaceRoot",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.WorkspaceRoot"
+            },
+            "wire": "workspace_root"
+          },
+          {
+            "name": "objective",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "objective"
+          },
+          {
+            "name": "project_id",
+            "optional": true,
+            "spelling": "Optional<agentide.session.ProjectId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.ProjectId"
+              }
+            },
+            "wire": "project_id"
+          },
+          {
+            "name": "source_revision",
+            "optional": true,
+            "spelling": "Optional<agentide.session.SourceRevision>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.SourceRevision"
+              }
+            },
+            "wire": "source_revision"
+          },
+          {
+            "name": "workspace_session_id",
+            "optional": true,
+            "spelling": "Optional<agentide.session.WorkspaceSessionId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.WorkspaceSessionId"
+              }
+            },
+            "wire": "workspace_session_id"
+          },
+          {
+            "name": "manifest_digest",
+            "optional": true,
+            "spelling": "Optional<agentide.session.ManifestDigest>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.session.ManifestDigest"
+              }
+            },
+            "wire": "manifest_digest"
+          },
+          {
+            "name": "owner",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "owner"
+          },
+          {
+            "name": "scopes",
+            "optional": false,
+            "spelling": "agentide.session.SessionScopes",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionScopes"
+            },
+            "wire": "scopes"
+          }
+        ],
+        "filter": null,
+        "name": "agentide.session.SessionSnapshot",
+        "served": {
+          "contract": "a query answering `agentide.session.SessionSnapshot` with rows projected from `agentide.session.CodingSession` at `read_your_writes` consistency",
+          "disposition": "obligation",
+          "why": "how the projection is kept current is a storage decision"
+        },
+        "summary": null
+      },
+      {
+        "component": "agentide-engine",
+        "consistency": "read_your_writes",
+        "display": "Workbench snapshot",
+        "entity": "agentide.surface.Workbench",
+        "fields": [
+          {
+            "name": "session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "session_id"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
+          }
+        ],
+        "filter": null,
+        "name": "agentide.surface.WorkbenchSnapshot",
+        "served": {
+          "contract": "a query answering `agentide.surface.WorkbenchSnapshot` with rows projected from `agentide.surface.Workbench` at `read_your_writes` consistency",
+          "disposition": "obligation",
+          "why": "how the projection is kept current is a storage decision"
+        },
+        "summary": null
+      }
+    ]
+  },
+  "authentication": {
+    "source": "session",
+    "realm_policy": "optional"
+  },
+  "operations": [
+    {
+      "name": "close_session",
+      "operation_ref": "agentide.close_session",
+      "semantic_ref": "agentide.session.CloseSession",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "expected_version": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "request_id": {
+            "title": "agentide.session.RequestId"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "expected_version",
+          "idempotency_key",
+          "request_id",
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_session",
+      "operation_ref": "agentide.get_session",
+      "semantic_ref": "agentide.session.SessionSnapshot",
+      "kind": "query",
+      "effect": "read",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "$page": {
+            "additionalProperties": false,
+            "properties": {
+              "cursor": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "limit": {
+                "maximum": 1000,
+                "minimum": 1,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "limit"
+            ],
+            "type": "object"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "anyOf": [
+          {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "manifest_digest": {},
+                "objective": {},
+                "owner": {},
+                "project_id": {},
+                "scopes": {},
+                "session_id": {},
+                "source_revision": {},
+                "workspace_root": {},
+                "workspace_session_id": {}
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "items": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "manifest_digest": {},
+                    "objective": {},
+                    "owner": {},
+                    "project_id": {},
+                    "scopes": {},
+                    "session_id": {},
+                    "source_revision": {},
+                    "workspace_root": {},
+                    "workspace_session_id": {}
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "next_cursor": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "partial": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "items",
+              "next_cursor",
+              "partial"
+            ],
+            "type": "object"
+          }
+        ]
+      }
+    },
+    {
+      "name": "list_sessions",
+      "operation_ref": "agentide.list_sessions",
+      "semantic_ref": "agentide.session.SessionSnapshot",
+      "kind": "query",
+      "effect": "read",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "$page": {
+            "additionalProperties": false,
+            "properties": {
+              "cursor": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "limit": {
+                "maximum": 1000,
+                "minimum": 1,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "limit"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "output_schema": {
+        "anyOf": [
+          {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "manifest_digest": {},
+                "objective": {},
+                "owner": {},
+                "project_id": {},
+                "scopes": {},
+                "session_id": {},
+                "source_revision": {},
+                "workspace_root": {},
+                "workspace_session_id": {}
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "items": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "manifest_digest": {},
+                    "objective": {},
+                    "owner": {},
+                    "project_id": {},
+                    "scopes": {},
+                    "session_id": {},
+                    "source_revision": {},
+                    "workspace_root": {},
+                    "workspace_session_id": {}
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "next_cursor": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "partial": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "items",
+              "next_cursor",
+              "partial"
+            ],
+            "type": "object"
+          }
+        ]
+      }
+    },
+    {
+      "name": "start_session",
+      "operation_ref": "agentide.start_session",
+      "semantic_ref": "agentide.session.StartSession",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "manifest_digest": {
+            "title": "Optional<agentide.session.ManifestDigest>"
+          },
+          "objective": {
+            "title": "String"
+          },
+          "project_id": {
+            "title": "Optional<agentide.session.ProjectId>"
+          },
+          "scopes": {
+            "additionalProperties": false,
+            "description": "Optional conjunctive visibility scopes; an empty object is private to the owner.",
+            "properties": {
+              "extension": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "kind": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "value": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "value"
+                    ],
+                    "type": "object"
+                  }
+                ]
+              },
+              "principal": {
+                "minLength": 1,
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "project": {
+                "minLength": 1,
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "team": {
+                "minLength": 1,
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "type": "object"
+          },
+          "source_revision": {
+            "title": "Optional<agentide.session.SourceRevision>"
+          },
+          "workspace_root": {
+            "title": "agentide.session.WorkspaceRoot"
+          },
+          "workspace_session_id": {
+            "title": "Optional<agentide.session.WorkspaceSessionId>"
+          }
+        },
+        "required": [
+          "idempotency_key",
+          "objective",
+          "scopes",
+          "workspace_root"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    }
+  ]
+}

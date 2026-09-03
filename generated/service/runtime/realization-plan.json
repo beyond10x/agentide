@@ -1,0 +1,391 @@
+{
+  "format": "service-realization-plan/1",
+  "service": "agentide",
+  "realm": "optional",
+  "ess_source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+  "obligation_catalog_digest": "a81885ebb75473d43f9ccbcee29b5d3147a24bebf0632a9582df0f3f3c3c305e",
+  "content": {},
+  "intents": {
+    "close_session": {
+      "command": "agentide.session.CloseSession",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "command_field",
+        "field": "session_id"
+      },
+      "expected_version": {
+        "kind": "operation_field",
+        "field": "expected_version"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.session.CodingSession",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.session.CodingSession.owner",
+            "scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.lifecycle.require-state/v1",
+          "bindings": {
+            "allowed": "Active",
+            "entity": "agentide.session.CodingSession"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "closed",
+        "events": [
+          {
+            "event": "agentide.session.SessionClosed",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "session_snapshot_projection"
+      ]
+    },
+    "start_session": {
+      "command": "agentide.session.StartSession",
+      "inputs": [
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "manifest_digest",
+          "type_ref": "Optional<agentide.session.ManifestDigest>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "objective",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "project_id",
+          "type_ref": "Optional<agentide.session.ProjectId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "scopes",
+          "type_ref": "agentide.session.SessionScopes",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "source_revision",
+          "type_ref": "Optional<agentide.session.SourceRevision>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "workspace_root",
+          "type_ref": "agentide.session.WorkspaceRoot",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "workspace_session_id",
+          "type_ref": "Optional<agentide.session.WorkspaceSessionId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "generated_uuid_v7"
+      },
+      "expected_version": {
+        "kind": "no_stream"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.session.CodingSession",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.requested-scopes/v1",
+          "bindings": {
+            "scopes": "scopes"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "started",
+        "events": [
+          {
+            "event": "agentide.session.SessionStarted",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "stream_id"
+                }
+              },
+              {
+                "name": "workspace_root",
+                "source": {
+                  "kind": "input",
+                  "field": "workspace_root"
+                }
+              },
+              {
+                "name": "objective",
+                "source": {
+                  "kind": "input",
+                  "field": "objective"
+                }
+              },
+              {
+                "name": "project_id",
+                "source": {
+                  "kind": "input",
+                  "field": "project_id"
+                }
+              },
+              {
+                "name": "source_revision",
+                "source": {
+                  "kind": "input",
+                  "field": "source_revision"
+                }
+              },
+              {
+                "name": "workspace_session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "workspace_session_id"
+                }
+              },
+              {
+                "name": "manifest_digest",
+                "source": {
+                  "kind": "input",
+                  "field": "manifest_digest"
+                }
+              },
+              {
+                "name": "owner",
+                "source": {
+                  "kind": "context",
+                  "value": "current_authority"
+                }
+              },
+              {
+                "name": "scopes",
+                "source": {
+                  "kind": "input",
+                  "field": "scopes"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "session_snapshot_projection"
+      ]
+    }
+  },
+  "queries": {
+    "get_session": {
+      "view": "agentide.session.SessionSnapshot",
+      "inputs": [
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "selector",
+            "view_field": "session_id"
+          }
+        }
+      ],
+      "obligations": [
+        {
+          "provider": "sdk.projection.auth-partitioned-visibility/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        }
+      ]
+    },
+    "list_sessions": {
+      "view": "agentide.session.SessionSnapshot",
+      "inputs": [],
+      "obligations": [
+        {
+          "provider": "sdk.projection.auth-partitioned-visibility/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        }
+      ]
+    }
+  },
+  "reducers": {
+    "agentide.session.SessionClosed": {
+      "entity": "agentide.session.CodingSession",
+      "identity_field": "session_id",
+      "effect": {
+        "kind": "move",
+        "from": [
+          "Active"
+        ],
+        "to": "Closed"
+      },
+      "fields": [
+        "workspace_root",
+        "objective",
+        "project_id",
+        "source_revision",
+        "workspace_session_id",
+        "manifest_digest",
+        "owner",
+        "scopes"
+      ]
+    },
+    "agentide.session.SessionStarted": {
+      "entity": "agentide.session.CodingSession",
+      "identity_field": "session_id",
+      "effect": {
+        "kind": "create",
+        "initial_state": "Active"
+      },
+      "fields": [
+        "workspace_root",
+        "objective",
+        "project_id",
+        "source_revision",
+        "workspace_session_id",
+        "manifest_digest",
+        "owner",
+        "scopes"
+      ]
+    }
+  },
+  "views": {
+    "agentide.session.SessionSnapshot": {
+      "source": "agentide.session.CodingSession",
+      "fields": [
+        "session_id",
+        "workspace_root",
+        "objective",
+        "project_id",
+        "source_revision",
+        "workspace_session_id",
+        "manifest_digest",
+        "owner",
+        "scopes"
+      ],
+      "obligations": [
+        {
+          "provider": "sdk.projection.auth-partitioned-visibility/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        }
+      ]
+    }
+  }
+}

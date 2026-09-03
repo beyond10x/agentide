@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.coding.TerminalProfile",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+    "contract_digest": "ec0709083df0c1894c22c19090719ea2002dfa32cb833a831c7f324929d469a9",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coding.TerminalProfile": {
+      "title": "TerminalProfile",
+      "x-ess-name": "agentide.coding.TerminalProfile",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

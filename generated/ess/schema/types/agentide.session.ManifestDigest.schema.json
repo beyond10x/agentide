@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.session.ManifestDigest",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+    "contract_digest": "a1cb0ada029dd0e1c72ee2f9c64c72247064a632fbe50eaa13eb4365944a22f4",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.session.ManifestDigest": {
+      "title": "ManifestDigest",
+      "x-ess-name": "agentide.session.ManifestDigest",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

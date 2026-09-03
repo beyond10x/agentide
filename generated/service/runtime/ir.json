@@ -1,0 +1,511 @@
+{
+  "format": "service-runtime-ir/2",
+  "ess": {
+    "system": "agentide",
+    "version": "v1",
+    "source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7"
+  },
+  "synthesis": {
+    "profile": "component-skeletons",
+    "digest": "4fdd1158e4d68faba1060b3b61daa9cb2de19bfc472d7926ee7686b94190bbaf",
+    "capabilities": 136
+  },
+  "obligation_catalog": {
+    "digest": "a81885ebb75473d43f9ccbcee29b5d3147a24bebf0632a9582df0f3f3c3c305e",
+    "providers": [
+      "sdk.aggregate.event-sourced/v1",
+      "sdk.auth.owner-and-conjunctive-scopes/v1",
+      "sdk.auth.requested-scopes/v1",
+      "sdk.lifecycle.require-state/v1",
+      "sdk.projection.auth-partitioned-visibility/v1"
+    ]
+  },
+  "admission": [
+    "verify_credential",
+    "enforce_realm_policy",
+    "decode_operation",
+    "bind_and_dispatch"
+  ],
+  "definition": {
+    "format": "service-definition/2",
+    "service": "agentide",
+    "realm": "optional",
+    "intents": [
+      {
+        "name": "start_session",
+        "command": "agentide.session.StartSession",
+        "stream_id": {
+          "kind": "generated_uuid_v7"
+        },
+        "expected_version": {
+          "kind": "no_stream"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [
+          {
+            "event": "agentide.session.SessionStarted",
+            "field": "session_id",
+            "source": {
+              "kind": "stream_id"
+            }
+          },
+          {
+            "event": "agentide.session.SessionStarted",
+            "field": "owner",
+            "source": {
+              "kind": "context",
+              "value": "current_authority"
+            }
+          }
+        ],
+        "projections": [
+          "session_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_session_stream",
+          "authorize_requested_session_scopes"
+        ]
+      },
+      {
+        "name": "close_session",
+        "command": "agentide.session.CloseSession",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "operation_field",
+          "field": "expected_version"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [
+          {
+            "name": "may_close_session",
+            "refusal_code": "session_access_forbidden",
+            "reads": [
+              {
+                "kind": "command_field",
+                "field": "session_id"
+              },
+              {
+                "kind": "context",
+                "value": "current_authority"
+              },
+              {
+                "kind": "context",
+                "value": "executor_optional"
+              }
+            ]
+          },
+          {
+            "name": "close_requires_active_session",
+            "refusal_code": "session_not_active",
+            "reads": [
+              {
+                "kind": "command_field",
+                "field": "session_id"
+              }
+            ]
+          }
+        ],
+        "content": [],
+        "event_bindings": [],
+        "projections": [
+          "session_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_session_stream",
+          "authorize_session_owner",
+          "require_active_session"
+        ]
+      }
+    ],
+    "projections": [
+      {
+        "name": "session_snapshot_projection",
+        "view": "agentide.session.SessionSnapshot",
+        "delivery": "inline_transactional",
+        "obligations": [
+          "partition_session_projection"
+        ]
+      }
+    ],
+    "queries": [
+      {
+        "name": "get_session",
+        "view": "agentide.session.SessionSnapshot",
+        "projection": "session_snapshot_projection",
+        "selectors": [
+          {
+            "parameter": "session_id",
+            "view_field": "session_id"
+          }
+        ],
+        "guards": [
+          {
+            "name": "session_is_visible",
+            "refusal_code": "session_not_found",
+            "reads": [
+              {
+                "kind": "view_field",
+                "field": "owner"
+              },
+              {
+                "kind": "view_field",
+                "field": "scopes"
+              },
+              {
+                "kind": "context",
+                "value": "tenant_id"
+              },
+              {
+                "kind": "context",
+                "value": "realm_id_optional"
+              },
+              {
+                "kind": "context",
+                "value": "current_authority"
+              },
+              {
+                "kind": "context",
+                "value": "executor_optional"
+              }
+            ]
+          }
+        ],
+        "sort": [
+          {
+            "view_field": "session_id",
+            "direction": "ascending"
+          }
+        ],
+        "delivery": "read_your_writes",
+        "obligations": [
+          "partition_session_projection",
+          "filter_visible_sessions"
+        ]
+      },
+      {
+        "name": "list_sessions",
+        "view": "agentide.session.SessionSnapshot",
+        "projection": "session_snapshot_projection",
+        "selectors": [],
+        "guards": [
+          {
+            "name": "session_is_visible",
+            "refusal_code": "session_not_visible",
+            "reads": [
+              {
+                "kind": "view_field",
+                "field": "owner"
+              },
+              {
+                "kind": "view_field",
+                "field": "scopes"
+              },
+              {
+                "kind": "context",
+                "value": "tenant_id"
+              },
+              {
+                "kind": "context",
+                "value": "realm_id_optional"
+              },
+              {
+                "kind": "context",
+                "value": "current_authority"
+              },
+              {
+                "kind": "context",
+                "value": "executor_optional"
+              }
+            ]
+          }
+        ],
+        "sort": [
+          {
+            "view_field": "session_id",
+            "direction": "ascending"
+          }
+        ],
+        "delivery": "read_your_writes",
+        "obligations": [
+          "partition_session_projection",
+          "filter_visible_sessions"
+        ]
+      }
+    ],
+    "content": [],
+    "obligations": [
+      {
+        "name": "bind_session_stream",
+        "provider": "sdk.aggregate.event-sourced/v1",
+        "bindings": {
+          "aggregate": "agentide.session.CodingSession",
+          "category": "agentide-session",
+          "identity": "session_id"
+        },
+        "description": "Execute every coordination mutation against one AgentIDE session Eventlog stream."
+      },
+      {
+        "name": "authorize_session_owner",
+        "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+        "bindings": {
+          "owner": "agentide.session.CodingSession.owner",
+          "scopes": "agentide.session.CodingSession.scopes"
+        },
+        "description": "Admit only the verified owner or a currently authorized delegated executor."
+      },
+      {
+        "name": "authorize_requested_session_scopes",
+        "provider": "sdk.auth.requested-scopes/v1",
+        "bindings": {
+          "scopes": "scopes"
+        },
+        "description": "Refuse a session whose requested delegation scopes exceed verified authority."
+      },
+      {
+        "name": "require_active_session",
+        "provider": "sdk.lifecycle.require-state/v1",
+        "bindings": {
+          "allowed": "Active",
+          "entity": "agentide.session.CodingSession"
+        },
+        "description": "Refuse state-changing operations after session close."
+      },
+      {
+        "name": "partition_session_projection",
+        "provider": "sdk.projection.auth-partitioned-visibility/v1",
+        "bindings": {
+          "owner": "owner",
+          "scopes": "scopes"
+        },
+        "description": "Partition session projections by authenticated tenant, exact realm, owner and scopes."
+      },
+      {
+        "name": "filter_visible_sessions",
+        "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+        "bindings": {
+          "owner": "owner",
+          "scopes": "scopes"
+        },
+        "description": "Filter every session query with current verified authority."
+      }
+    ]
+  },
+  "obligations": {
+    "authorize_requested_session_scopes": {
+      "name": "authorize_requested_session_scopes",
+      "provider": "sdk.auth.requested-scopes/v1",
+      "bindings": {
+        "scopes": "scopes"
+      }
+    },
+    "authorize_session_owner": {
+      "name": "authorize_session_owner",
+      "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+      "bindings": {
+        "owner": "agentide.session.CodingSession.owner",
+        "scopes": "agentide.session.CodingSession.scopes"
+      }
+    },
+    "bind_session_stream": {
+      "name": "bind_session_stream",
+      "provider": "sdk.aggregate.event-sourced/v1",
+      "bindings": {
+        "aggregate": "agentide.session.CodingSession",
+        "category": "agentide-session",
+        "identity": "session_id"
+      }
+    },
+    "filter_visible_sessions": {
+      "name": "filter_visible_sessions",
+      "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+      "bindings": {
+        "owner": "owner",
+        "scopes": "scopes"
+      }
+    },
+    "partition_session_projection": {
+      "name": "partition_session_projection",
+      "provider": "sdk.projection.auth-partitioned-visibility/v1",
+      "bindings": {
+        "owner": "owner",
+        "scopes": "scopes"
+      }
+    },
+    "require_active_session": {
+      "name": "require_active_session",
+      "provider": "sdk.lifecycle.require-state/v1",
+      "bindings": {
+        "allowed": "Active",
+        "entity": "agentide.session.CodingSession"
+      }
+    }
+  },
+  "intents": {
+    "close_session": {
+      "command": "agentide.session.CloseSession",
+      "input_fields": {
+        "request_id": "agentide.session.RequestId",
+        "session_id": "agentide.session.SessionId"
+      },
+      "emitted_events": [
+        "agentide.session.SessionClosed"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: durable state cannot be updated",
+        "contract": "given `agentide.session.CloseSession` input, decide and enact exactly one outcome — `closed` otherwise, takes `close` of `agentide.session.CodingSession`, emits `agentide.session.SessionClosed`; `wrong-state` from a state no declared move starts in, error `agentide.session.SessionStateConflict`; `refused` externally decided (durable state cannot be updated), error `agentide.session.SessionRefusal`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
+    "start_session": {
+      "command": "agentide.session.StartSession",
+      "input_fields": {
+        "manifest_digest": "Optional<agentide.session.ManifestDigest>",
+        "objective": "String",
+        "project_id": "Optional<agentide.session.ProjectId>",
+        "scopes": "agentide.session.SessionScopes",
+        "source_revision": "Optional<agentide.session.SourceRevision>",
+        "workspace_root": "agentide.session.WorkspaceRoot",
+        "workspace_session_id": "Optional<agentide.session.WorkspaceSessionId>"
+      },
+      "emitted_events": [
+        "agentide.session.SessionStarted"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: the workspace or standalone binding is unavailable",
+        "contract": "given `agentide.session.StartSession` input, decide and enact exactly one outcome — `started` otherwise, creates `agentide.session.CodingSession`, emits `agentide.session.SessionStarted`; `refused` externally decided (the workspace or standalone binding is unavailable), error `agentide.session.SessionRefusal`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    }
+  },
+  "projections": {
+    "session_snapshot_projection": {
+      "view": "agentide.session.SessionSnapshot",
+      "fields": {
+        "manifest_digest": "Optional<agentide.session.ManifestDigest>",
+        "objective": "String",
+        "owner": "String",
+        "project_id": "Optional<agentide.session.ProjectId>",
+        "scopes": "agentide.session.SessionScopes",
+        "session_id": "agentide.session.SessionId",
+        "source_revision": "Optional<agentide.session.SourceRevision>",
+        "workspace_root": "agentide.session.WorkspaceRoot",
+        "workspace_session_id": "Optional<agentide.session.WorkspaceSessionId>"
+      },
+      "consistency": "read_your_writes",
+      "view_type": {
+        "disposition": "generated"
+      },
+      "view_query": {
+        "disposition": "obligation",
+        "reason": "how the projection is kept current is a storage decision",
+        "contract": "a query answering `agentide.session.SessionSnapshot` with rows projected from `agentide.session.CodingSession` at `read_your_writes` consistency"
+      }
+    }
+  },
+  "queries": {
+    "get_session": {
+      "view": "agentide.session.SessionSnapshot",
+      "projection": "session_snapshot_projection",
+      "fields": {
+        "manifest_digest": "Optional<agentide.session.ManifestDigest>",
+        "objective": "String",
+        "owner": "String",
+        "project_id": "Optional<agentide.session.ProjectId>",
+        "scopes": "agentide.session.SessionScopes",
+        "session_id": "agentide.session.SessionId",
+        "source_revision": "Optional<agentide.session.SourceRevision>",
+        "workspace_root": "agentide.session.WorkspaceRoot",
+        "workspace_session_id": "Optional<agentide.session.WorkspaceSessionId>"
+      },
+      "view_type": {
+        "disposition": "generated"
+      },
+      "view_query": {
+        "disposition": "obligation",
+        "reason": "how the projection is kept current is a storage decision",
+        "contract": "a query answering `agentide.session.SessionSnapshot` with rows projected from `agentide.session.CodingSession` at `read_your_writes` consistency"
+      },
+      "pipeline": [
+        "guards",
+        "bind_selectors",
+        "read_projection"
+      ]
+    },
+    "list_sessions": {
+      "view": "agentide.session.SessionSnapshot",
+      "projection": "session_snapshot_projection",
+      "fields": {
+        "manifest_digest": "Optional<agentide.session.ManifestDigest>",
+        "objective": "String",
+        "owner": "String",
+        "project_id": "Optional<agentide.session.ProjectId>",
+        "scopes": "agentide.session.SessionScopes",
+        "session_id": "agentide.session.SessionId",
+        "source_revision": "Optional<agentide.session.SourceRevision>",
+        "workspace_root": "agentide.session.WorkspaceRoot",
+        "workspace_session_id": "Optional<agentide.session.WorkspaceSessionId>"
+      },
+      "view_type": {
+        "disposition": "generated"
+      },
+      "view_query": {
+        "disposition": "obligation",
+        "reason": "how the projection is kept current is a storage decision",
+        "contract": "a query answering `agentide.session.SessionSnapshot` with rows projected from `agentide.session.CodingSession` at `read_your_writes` consistency"
+      },
+      "pipeline": [
+        "guards",
+        "bind_selectors",
+        "read_projection"
+      ]
+    }
+  },
+  "content": {}
+}

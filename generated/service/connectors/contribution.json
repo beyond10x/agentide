@@ -1,0 +1,102 @@
+{
+  "format": "service-connector-contribution/1",
+  "service": "agentide",
+  "ess_source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+  "operations": [
+    {
+      "operation": "close_session",
+      "semantic_ref": "agentide.session.CloseSession",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "operation": "get_session",
+      "semantic_ref": "agentide.session.SessionSnapshot",
+      "kind": "query",
+      "effect": "read",
+      "inputs": [
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "operation": "list_sessions",
+      "semantic_ref": "agentide.session.SessionSnapshot",
+      "kind": "query",
+      "effect": "read"
+    },
+    {
+      "operation": "start_session",
+      "semantic_ref": "agentide.session.StartSession",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "manifest_digest",
+          "type_ref": "Optional<agentide.session.ManifestDigest>",
+          "optional": true
+        },
+        {
+          "name": "objective",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "project_id",
+          "type_ref": "Optional<agentide.session.ProjectId>",
+          "optional": true
+        },
+        {
+          "name": "scopes",
+          "type_ref": "agentide.session.SessionScopes",
+          "optional": false
+        },
+        {
+          "name": "source_revision",
+          "type_ref": "Optional<agentide.session.SourceRevision>",
+          "optional": true
+        },
+        {
+          "name": "workspace_root",
+          "type_ref": "agentide.session.WorkspaceRoot",
+          "optional": false
+        },
+        {
+          "name": "workspace_session_id",
+          "type_ref": "Optional<agentide.session.WorkspaceSessionId>",
+          "optional": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,8 +1,9 @@
 # AgentIDE
 
-AgentIDE is an agent-first coding-session interface. It gives a model stable semantic intents such
-as `code_read`, `code_verify`, `file_open`, and `code_publish`; an embedding application supplies
-the concrete implementation, arguments, credentials, destinations, and authority policy.
+AgentIDE is an actor-aware coding-session protocol and client. It gives humans, agents, and
+automation stable semantic intents such as `code_read`, `code_verify`, `file_open`, and
+`code_publish`; a composing application supplies the concrete implementation, arguments,
+credentials, destinations, and authority policy.
 
 ```text
 agent / browser / TUI
@@ -24,6 +25,12 @@ The released binary includes three surfaces over that projection:
 Virtual panes, open files, focus, cursor positions, diffs, approvals, processes, agent lanes, and
 evidence are session state rather than UI-private state. They can be replayed and rendered by a
 future Harness-native surface without changing the intent vocabulary.
+
+The hosted form is generated from [`service.yaml`](service.yaml) with Service SDK. Service SDK and
+Eventlog provide its service layer, authenticated projections, event persistence, and deployment
+store selection; AgentIDE does not introduce another PostgreSQL repository or a source-file store.
+DevCenter is the primary hosted human surface, while the CLI, TUI, and local browser remain peer
+clients.
 
 ## Build and run
 
@@ -83,12 +90,16 @@ host effects.
 ## Contracts and embedding
 
 - `spec/agentide/` is the ESS semantic authority.
-- `contracts/intent-profile.yaml` adds model-facing consequence and binding declarations.
+- `contracts/intent-profile-v2.yaml` adds actor audiences, consequence, and authority declarations;
+  the v1 profile remains a compatibility input.
 - `contracts/surface-profile.yaml` defines strict, renderer-neutral presentation and interaction
   rules shared by the browser and console.
 - `contracts/default-bindings.yaml` is the standalone Substrate binding supplied from outside the
   semantic request.
-- `contracts/schemas/` contains immutable v1 transport and configuration schemas.
+- `contracts/schemas/` contains immutable transport and configuration schemas.
+- `service.yaml` and `service/` are the handwritten Service SDK package for hosted coordination;
+  `generated/service/` is its exclusive generated output, including the Connector factory,
+  transport contracts, Rust service package, and conformance scenarios.
 - `agentide_core::IntentPort` is the implementation seam a standalone or Harness host binds.
 - `agentide_harness::ports` publishes the bound ESS schemas through Harness and pairs the tool port
   with the exact-plan approval port used by the TUI.
@@ -103,9 +114,10 @@ Run the complete gate with:
 cargo xtask gate
 ```
 
-The gate validates AEP, compiles ESS through the pinned compiler, checks generated IR drift,
-validates profile/binding coverage, runs Rust tests and Clippy, type-checks the browser, checks built
-asset drift, and scans replay fixtures for sensitive data.
+The gate validates AEP, compiles ESS through the pinned compiler, checks ESS and Service SDK output
+drift, compiles and tests the generated service, validates actor/profile/binding coverage, runs Rust
+tests and Clippy, type-checks the browser, checks built asset drift, and scans replay fixtures for
+sensitive data.
 
 <!-- b10x-docs:start -->
 ## Documentation

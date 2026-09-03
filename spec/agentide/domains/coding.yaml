@@ -10,6 +10,8 @@ types:
   - {name: agentide.coding.ExpectedDigest, kind: newtype, of: String}
   - {name: agentide.coding.OperationId, kind: newtype, of: String}
   - {name: agentide.coding.ProcessProfile, kind: newtype, of: String}
+  - {name: agentide.coding.TerminalId, kind: newtype, of: String}
+  - {name: agentide.coding.TerminalProfile, kind: newtype, of: String}
   - name: agentide.coding.VerificationLevel
     kind: enum
     variants: [Focused, Full, Release]
@@ -24,6 +26,9 @@ actors:
       - agentide.coding.ReadCode
       - agentide.coding.ObserveChanges
       - agentide.coding.EditCode
+      - agentide.coding.CreateCode
+      - agentide.coding.DeleteCode
+      - agentide.coding.RenameCode
       - agentide.coding.VerifyCode
       - agentide.coding.ObserveWorktree
       - agentide.coding.CreateWorktree
@@ -33,6 +38,9 @@ actors:
       - agentide.coding.InputProcess
       - agentide.coding.WaitProcess
       - agentide.coding.CancelProcess
+      - agentide.coding.OpenInteractiveTerminal
+      - agentide.coding.ListTerminals
+      - agentide.coding.TerminateTerminal
       - agentide.coding.ObserveAgents
       - agentide.coding.DelegateAgent
       - agentide.coding.MessageAgent
@@ -86,6 +94,36 @@ commands:
       - {name: path, type: agentide.coding.Path}
       - {name: content, type: String}
       - {name: expected_sha256, type: Optional<agentide.coding.ExpectedDigest>}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.CreateCode
+    naming: {wire: code-create, display: Create code}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: path, type: agentide.coding.Path}
+      - {name: content, type: String}
+      - {name: expected_absent, type: Boolean}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.DeleteCode
+    naming: {wire: code-delete, display: Delete code}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: path, type: agentide.coding.Path}
+      - {name: expected_sha256, type: agentide.coding.ExpectedDigest}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.RenameCode
+    naming: {wire: code-rename, display: Rename code}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: path, type: agentide.coding.Path}
+      - {name: destination, type: agentide.coding.Path}
+      - {name: expected_sha256, type: agentide.coding.ExpectedDigest}
+      - {name: destination_expected_absent, type: Boolean}
     outcomes: *ordinary_outcomes
   - name: agentide.coding.VerifyCode
     naming: {wire: code-verify, display: Verify code}
@@ -154,6 +192,28 @@ commands:
       - {name: request_id, type: agentide.session.RequestId}
       - {name: operation_id, type: agentide.coding.OperationId}
       - {name: process_id, type: agentide.coding.ProcessId}
+      - {name: signal, type: agentide.coding.Signal}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.OpenInteractiveTerminal
+    naming: {wire: interactive-terminal, display: Open interactive terminal}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: profile, type: agentide.coding.TerminalProfile}
+      - {name: working_directory, type: agentide.coding.Path}
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.ListTerminals
+    naming: {wire: terminal-list, display: List terminals}
+    input: *basic_request
+    outcomes: *ordinary_outcomes
+  - name: agentide.coding.TerminateTerminal
+    naming: {wire: terminal-terminate, display: Terminate terminal}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: operation_id, type: agentide.coding.OperationId}
+      - {name: terminal_id, type: agentide.coding.TerminalId}
       - {name: signal, type: agentide.coding.Signal}
     outcomes: *ordinary_outcomes
   - name: agentide.coding.ObserveAgents

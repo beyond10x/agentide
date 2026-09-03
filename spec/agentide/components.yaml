@@ -13,6 +13,9 @@ components:
         - agentide.coding.ReadCode
         - agentide.coding.ObserveChanges
         - agentide.coding.EditCode
+        - agentide.coding.CreateCode
+        - agentide.coding.DeleteCode
+        - agentide.coding.RenameCode
         - agentide.coding.VerifyCode
         - agentide.coding.ObserveWorktree
         - agentide.coding.CreateWorktree
@@ -22,6 +25,9 @@ components:
         - agentide.coding.InputProcess
         - agentide.coding.WaitProcess
         - agentide.coding.CancelProcess
+        - agentide.coding.OpenInteractiveTerminal
+        - agentide.coding.ListTerminals
+        - agentide.coding.TerminateTerminal
         - agentide.coding.ObserveAgents
         - agentide.coding.DelegateAgent
         - agentide.coding.MessageAgent

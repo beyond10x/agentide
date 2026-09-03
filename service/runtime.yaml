@@ -1,0 +1,122 @@
+# Hosted AgentIDE coordination is a generated Service SDK aggregate. Source bytes remain in
+# Workspace/Substrate and forge authority remains in Connectors; neither is duplicated here.
+format: service-definition/2
+service: agentide
+realm: optional
+
+obligations:
+  - name: bind_session_stream
+    provider: sdk.aggregate.event-sourced/v1
+    bindings:
+      aggregate: agentide.session.CodingSession
+      identity: session_id
+      category: agentide-session
+    description: Execute every coordination mutation against one AgentIDE session Eventlog stream.
+
+  - name: authorize_session_owner
+    provider: sdk.auth.owner-and-conjunctive-scopes/v1
+    bindings:
+      owner: agentide.session.CodingSession.owner
+      scopes: agentide.session.CodingSession.scopes
+    description: Admit only the verified owner or a currently authorized delegated executor.
+
+  - name: authorize_requested_session_scopes
+    provider: sdk.auth.requested-scopes/v1
+    bindings: {scopes: scopes}
+    description: Refuse a session whose requested delegation scopes exceed verified authority.
+
+  - name: require_active_session
+    provider: sdk.lifecycle.require-state/v1
+    bindings: {entity: agentide.session.CodingSession, allowed: Active}
+    description: Refuse state-changing operations after session close.
+
+  - name: partition_session_projection
+    provider: sdk.projection.auth-partitioned-visibility/v1
+    bindings: {owner: owner, scopes: scopes}
+    description: Partition session projections by authenticated tenant, exact realm, owner and scopes.
+
+  - name: filter_visible_sessions
+    provider: sdk.auth.owner-and-conjunctive-scopes/v1
+    bindings: {owner: owner, scopes: scopes}
+    description: Filter every session query with current verified authority.
+
+projections:
+  - name: session_snapshot_projection
+    view: agentide.session.SessionSnapshot
+    delivery: inline_transactional
+    obligations: [partition_session_projection]
+
+intents:
+  - name: start_session
+    command: agentide.session.StartSession
+    stream_id: {kind: generated_uuid_v7}
+    expected_version: {kind: no_stream}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    event_bindings:
+      - event: agentide.session.SessionStarted
+        field: session_id
+        source: {kind: stream_id}
+      - event: agentide.session.SessionStarted
+        field: owner
+        source: {kind: context, value: current_authority}
+    projections: [session_snapshot_projection]
+    obligations: [bind_session_stream, authorize_requested_session_scopes]
+
+  - name: close_session
+    command: agentide.session.CloseSession
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: operation_field, field: expected_version}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    guards:
+      - name: may_close_session
+        refusal_code: session_access_forbidden
+        reads:
+          - {kind: command_field, field: session_id}
+          - {kind: context, value: current_authority}
+          - {kind: context, value: executor_optional}
+      - name: close_requires_active_session
+        refusal_code: session_not_active
+        reads:
+          - {kind: command_field, field: session_id}
+    projections: [session_snapshot_projection]
+    obligations: [bind_session_stream, authorize_session_owner, require_active_session]
+
+queries:
+  - name: get_session
+    view: agentide.session.SessionSnapshot
+    projection: session_snapshot_projection
+    selectors:
+      - {parameter: session_id, view_field: session_id}
+    guards:
+      - name: session_is_visible
+        refusal_code: session_not_found
+        reads:
+          - {kind: view_field, field: owner}
+          - {kind: view_field, field: scopes}
+          - {kind: context, value: tenant_id}
+          - {kind: context, value: realm_id_optional}
+          - {kind: context, value: current_authority}
+          - {kind: context, value: executor_optional}
+    sort:
+      - {view_field: session_id, direction: ascending}
+    delivery: read_your_writes
+    obligations: [partition_session_projection, filter_visible_sessions]
+
+  - name: list_sessions
+    view: agentide.session.SessionSnapshot
+    projection: session_snapshot_projection
+    selectors: []
+    guards:
+      - name: session_is_visible
+        refusal_code: session_not_visible
+        reads:
+          - {kind: view_field, field: owner}
+          - {kind: view_field, field: scopes}
+          - {kind: context, value: tenant_id}
+          - {kind: context, value: realm_id_optional}
+          - {kind: context, value: current_authority}
+          - {kind: context, value: executor_optional}
+    sort:
+      - {view_field: session_id, direction: ascending}
+    delivery: read_your_writes
+    obligations: [partition_session_projection, filter_visible_sessions]

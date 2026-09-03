@@ -1,0 +1,17 @@
+# One generated hosted coordination service; Workspace remains the file/materialization authority.
+format: service/1
+service: agentide
+sdk:
+  repository: https://github.com/beyond10x/service-sdk.git
+  revision: 141c06ee3733e154f6d350276675a8bf08008233
+semantic:
+  root: spec/agentide
+  sources:
+    - system.yaml
+    - components.yaml
+    - domains/session.yaml
+    - domains/coding.yaml
+    - domains/surface.yaml
+runtime: service/runtime.yaml
+scenarios:
+  - service/scenarios/session.yaml

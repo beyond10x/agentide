@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Add `agentide.intent-profile/2`, renderer-neutral actor, context, inventory, grant, file, canonical
+  diff, and terminal contracts, plus compatibility normalization for the v1 exposure model.
+- Generate the hosted coordination service from Service SDK instead of adding an AgentIDE-specific
+  database or service repository. The package includes authenticated session projections, Eventlog
+  persistence, a Connector factory, public contracts, and executable conformance scenarios.
+- Add exact create/delete/rename and interactive-terminal semantics, bounded context injection,
+  actor-specific tool inventory resolution, confined path grants, expiry/revocation checks, and
+  delegated-grant intersection.
+
 ## 0.1.1 - 2026-09-02
 
 - Fix the embedded browser workbench asset routing so its stylesheet, JavaScript, and generated

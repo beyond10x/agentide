@@ -11,7 +11,9 @@ provider call. The strict intent profile adds consequence metadata that ESS inte
 model visibility, implementation port, effect class, risk, and approval requirement.
 
 The request body may contain semantic subjects such as a workspace-relative path, search pattern,
-verification level, or process profile. It may not contain:
+verification level, or process profile. The v2 profile declares human, agent, and automation
+audiences; its compatibility loader normalizes the v1 `model` and `operator` exposure vocabulary
+before policy evaluation. Request data may not contain:
 
 - a driver or implementation name;
 - executable paths or arbitrary arguments for a configured operation;
@@ -21,6 +23,40 @@ verification level, or process profile. It may not contain:
 
 Those values enter through `agentide.bindings/1`, supplied by the operator or embedding host.
 
+## Hosted composition and source authority
+
+Hosted AgentIDE is a generated Service SDK package, not a handwritten `agentide-service` and not a
+new file service. [`../service.yaml`](../service.yaml) compiles the ESS session semantics, runtime
+obligations, authenticated projections, Connector contribution, Rust package, transport contracts,
+and conformance scenarios into `generated/service/`. Deployments bind that generated factory to
+Eventlog/PostgreSQL; a local composition may bind the same factory to Eventlog/SQLite.
+
+Service SDK owns coordination persistence and delivery mechanics: session aggregates, optimistic
+versions, idempotency, event streams, authenticated projections, and effect-journal recovery.
+AgentIDE records opaque project, workspace-session, materialization, process, approval, and evidence
+references. It never stores project file bytes.
+
+Workspace remains the single project/source authority already used by DevCenter's `/projects`
+feature. It resolves Connector authority, pins an exact GitLab revision, and owns bounded tree/file
+operations, immutable-base versus working-materialization diffs, and publication preparation.
+Substrate owns the materialized bytes, guarded writes, processes, PTYs, confinement, and replay.
+Connectors owns provider credentials, current GitLab access, grants, and live publication effects.
+DevCenter and AgentIDE therefore use the same Workspace APIs and opaque Substrate references; there
+is no browser-computed authoritative diff and no parallel AgentIDE file repository.
+
+```text
+DevCenter / AgentIDE clients
+          |  session context, events, grants
+          v
+generated AgentIDE Service SDK factory ---- Eventlog (PostgreSQL or SQLite)
+          |
+          | opaque project/session selectors and governed operations
+          v
+Workspace ---- Connectors (GitLab authority/publication)
+    |
+    +---------- Substrate (base + working bytes, process, PTY)
+```
+
 ## Runtime boundary
 
 `agentide-core` owns planning, exact-plan approval, the event journal, and deterministic projection.
@@ -28,7 +64,7 @@ It calls the small `IntentPort` trait only after an intent has a binding and suf
 The port returns either an observation or a named refusal; it cannot silently select a weaker
 implementation.
 
-The standalone `agentide-substrate` port is implemented with `b10x-harness-substrate`, pinned to an
+The standalone/local `agentide-substrate` port is implemented with `b10x-harness-substrate`, pinned to an
 exact Harness revision. It adopts the existing checkout as a guarded Substrate workspace, reads and
 writes only through guarded file operations, and executes argv-only operations only when Substrate
 reports the required confinement facts. No shell command line is assembled.
@@ -77,6 +113,18 @@ semantic theme roles, and fallbacks. It is strict rather than an arbitrary widge
 AEP records the feature story and its evidence; it does not duplicate either semantic or visual
 contracts.
 
+The DevCenter workbench renders the hosted actor view natively. Actor-private pane, tab, cursor,
+editor-buffer, and terminal-selection state does not enter another actor's view. Context pins and
+explicit prompt attachments are shared. Unsaved editor bytes remain client-local. A model turn is
+built from a freshly resolved `ActorView`; at most eight complete selections, 32 KiB each and 64 KiB
+combined, may be injected, further capped at ten percent of the model context window.
+
+Interactive terminals use Substrate's existing JSON WebSocket PTY protocol and deployment-declared
+profiles. AgentIDE does not introduce a host shell or a second binary terminal protocol. Human open
+requires an `interactive_terminal` grant; agents receive structured process intents rather than raw
+keystrokes by default. Terminal metadata is durable, while raw scrollback reaches model context only
+through an explicit bounded selection.
+
 This separation allows a Harness app-server, terminal host, or model-native tool surface to inject
 the projection directly without inheriting the standalone HTTP server or command-line parser.
 
@@ -89,7 +137,8 @@ of reducer state, the durable snapshot, and the validated surface profile.
 
 ## Durable state and sensitive data
 
-Session records are atomically stored outside the target workspace. The journal carries plan
+Standalone session records are atomically stored outside the target workspace. Hosted records use
+the generated Service SDK/Eventlog aggregate and authenticated projection. The journal carries plan
 digests, outcomes, refusals, pane metadata, and evidence references. It must not contain secrets,
 hidden model reasoning, raw model conversations, or copied source contents. Sanitized fixtures are
 checked by the repository gate.

@@ -10,7 +10,7 @@ use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 
 use agentide_contracts::{
-    Approval as IntentApproval, Effect as IntentEffect, Exposure, IntentDefinition,
+    Approval as IntentApproval, Audience, Effect as IntentEffect, IntentDefinition,
     Risk as IntentRisk,
 };
 use agentide_core::{Engine, IntentPort, Plan, Refusal};
@@ -246,7 +246,7 @@ pub fn ports<P: IntentPort, A: PlanApprover>(
     let mut definitions = BTreeMap::new();
     let mut specs = Vec::new();
     for definition in &engine.profile().intents {
-        if matches!(definition.exposure, Exposure::Operator) || !bound.contains(&definition.name) {
+        if !definition.audiences.contains(&Audience::Agent) || !bound.contains(&definition.name) {
             continue;
         }
         let name = ToolName::new(&definition.name).map_err(|error| AdapterError::ToolName {

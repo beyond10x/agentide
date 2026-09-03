@@ -31,6 +31,7 @@ fn main() -> Result<()> {
     validate_contracts(root)?;
     validate_ess(root)?;
     validate_generated_ess(root)?;
+    validate_generated_service(root)?;
     validate_fixtures(root)?;
     run(root, "aep", &["artifact", "validate"])?;
     run(root, "cargo", &["fmt", "--all", "--", "--check"])?;
@@ -230,6 +231,62 @@ fn validate_generated_ess(root: &Path) -> Result<()> {
             })
             .collect();
         bail!("generated ESS drift: missing {missing:?}; stale {stale:?}; changed {changed:?}");
+    }
+    Ok(())
+}
+
+fn validate_generated_service(root: &Path) -> Result<()> {
+    let package = service_builder::package::ServicePackage::read(&root.join("service.yaml"))
+        .context("loading the AgentIDE Service SDK package")?;
+    let build = service_builder::build_package(&package)
+        .context("building the AgentIDE Service SDK package")?;
+    let generated = root.join("generated/service");
+    let drift = build.artifacts.check(&generated)?;
+    if !drift.is_empty() {
+        bail!("generated Service SDK package has drifted; regenerate generated/service: {drift:?}");
+    }
+
+    let temporary = tempfile::tempdir()?;
+    let disposable = temporary.path().join("agentide-generated-service");
+    copy_tree(&generated, &disposable)?;
+    let manifest = disposable.join("rust/Cargo.toml");
+    let target = root.join("target/generated-service");
+    println!("+ cargo test --manifest-path {}", manifest.display());
+    let status = Command::new("cargo")
+        .args(["test", "--manifest-path"])
+        .arg(&manifest)
+        .env("CARGO_TARGET_DIR", target)
+        .status()
+        .context("checking the generated AgentIDE Service SDK package")?;
+    if !status.success() {
+        bail!("generated AgentIDE Service SDK package tests failed with {status}");
+    }
+    Ok(())
+}
+
+fn copy_tree(source: &Path, destination: &Path) -> Result<()> {
+    std::fs::create_dir_all(destination)?;
+    for entry in std::fs::read_dir(source)? {
+        let entry = entry?;
+        let source_path = entry.path();
+        let destination_path = destination.join(entry.file_name());
+        let file_type = entry.file_type()?;
+        if file_type.is_symlink() {
+            bail!(
+                "generated Service SDK package contains symlink {}",
+                source_path.display()
+            );
+        }
+        if file_type.is_dir() {
+            copy_tree(&source_path, &destination_path)?;
+        } else if file_type.is_file() {
+            std::fs::copy(&source_path, &destination_path)?;
+        } else {
+            bail!(
+                "generated Service SDK package contains unsupported entry {}",
+                source_path.display()
+            );
+        }
     }
     Ok(())
 }

@@ -1,0 +1,1185 @@
+{
+  "provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+    "contract_digest": "dd678f8103754dc8a9fbfe5fe0fc15ed859a78be562212dc996affb84ba723b7"
+  },
+  "scope": {
+    "profile": "component-skeletons"
+  },
+  "capabilities": [
+    {
+      "kind": "domain_type",
+      "source": "agentide.coding.AgentId",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coding.ExpectedDigest",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coding.OperationId",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coding.Path",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coding.Pattern",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coding.ProcessId",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coding.ProcessProfile",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coding.Signal",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coding.TerminalId",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coding.TerminalProfile",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.coding.VerificationLevel",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.session.CodingSession.State",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.session.Cursor",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.session.EventLimit",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.session.ManifestDigest",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.session.ProjectId",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.session.RequestId",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.session.SessionId",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.session.SessionScopes",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.session.SourceRevision",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.session.WorkspaceRoot",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.session.WorkspaceSessionId",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.surface.PaneId",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.surface.PaneKind",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.surface.PaneSnapshot",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.surface.SplitDirection",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "domain_type",
+      "source": "agentide.surface.Workbench.State",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "entity_lifecycle",
+      "source": "agentide.session.CodingSession",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "entity_lifecycle",
+      "source": "agentide.surface.Workbench",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.ApplyDeployment",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.ApplyDeployment",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.ApplyDeployment` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.CancelProcess",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.CancelProcess",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.CancelProcess` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.CreateCode",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.CreateCode",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.CreateCode` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.CreateWorktree",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.CreateWorktree",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.CreateWorktree` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.CutRelease",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.CutRelease",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.CutRelease` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.DelegateAgent",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.DelegateAgent",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.DelegateAgent` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.DeleteCode",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.DeleteCode",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.DeleteCode` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.EditCode",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.EditCode",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.EditCode` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.FinishWorktree",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.FinishWorktree",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.FinishWorktree` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.InputProcess",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.InputProcess",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.InputProcess` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.ListTerminals",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.ListTerminals",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.ListTerminals` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.MessageAgent",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.MessageAgent",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.MessageAgent` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.ObserveAgents",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.ObserveAgents",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.ObserveAgents` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.ObserveChanges",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.ObserveChanges",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.ObserveChanges` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.ObserveDeployment",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.ObserveDeployment",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.ObserveDeployment` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.ObserveProcess",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.ObserveProcess",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.ObserveProcess` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.ObserveWorktree",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.ObserveWorktree",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.ObserveWorktree` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.OpenInteractiveTerminal",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.OpenInteractiveTerminal",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.OpenInteractiveTerminal` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.PublishCode",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.PublishCode",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.PublishCode` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.ReadCode",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.ReadCode",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.ReadCode` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.RecordEvidence",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.RecordEvidence",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.RecordEvidence` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.RenameCode",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.RenameCode",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.RenameCode` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.SearchCode",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.SearchCode",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.SearchCode` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.StartProcess",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.StartProcess",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.StartProcess` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.TerminateTerminal",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.TerminateTerminal",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.TerminateTerminal` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.VerifyCode",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.VerifyCode",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.VerifyCode` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.WaitAgent",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.WaitAgent",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.WaitAgent` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.coding.WaitProcess",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.coding.WaitProcess",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the selected implementation cannot admit or complete the intent"
+        },
+        "contract": "given `agentide.coding.WaitProcess` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.coding.IntentCompleted`; `refused` externally decided (the selected implementation cannot admit or complete the intent), error `agentide.coding.IntentFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.session.CloseSession",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.session.CloseSession",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "durable state cannot be updated"
+        },
+        "contract": "given `agentide.session.CloseSession` input, decide and enact exactly one outcome — `closed` otherwise, takes `close` of `agentide.session.CodingSession`, emits `agentide.session.SessionClosed`; `wrong-state` from a state no declared move starts in, error `agentide.session.SessionStateConflict`; `refused` externally decided (durable state cannot be updated), error `agentide.session.SessionRefusal`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.session.ReadEvents",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.session.ReadEvents",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the requested event window cannot be represented"
+        },
+        "contract": "given `agentide.session.ReadEvents` input, decide and enact exactly one outcome — `observed` otherwise, emits `agentide.session.SessionObserved`; `refused` externally decided (the requested event window cannot be represented), error `agentide.session.SessionRefusal`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.session.SnapshotSession",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.session.SnapshotSession",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the durable session cannot be read exactly"
+        },
+        "contract": "given `agentide.session.SnapshotSession` input, decide and enact exactly one outcome — `observed` otherwise, emits `agentide.session.SessionObserved`; `refused` externally decided (the durable session cannot be read exactly), error `agentide.session.SessionRefusal`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.session.StartSession",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.session.StartSession",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the workspace or standalone binding is unavailable"
+        },
+        "contract": "given `agentide.session.StartSession` input, decide and enact exactly one outcome — `started` otherwise, creates `agentide.session.CodingSession`, emits `agentide.session.SessionStarted`; `refused` externally decided (the workspace or standalone binding is unavailable), error `agentide.session.SessionRefusal`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.surface.CloseFile",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.surface.CloseFile",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the requested surface state is unavailable"
+        },
+        "contract": "given `agentide.surface.CloseFile` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.surface.ClosePane",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.surface.ClosePane",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the requested surface state is unavailable"
+        },
+        "contract": "given `agentide.surface.ClosePane` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.surface.FocusPane",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.surface.FocusPane",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the requested surface state is unavailable"
+        },
+        "contract": "given `agentide.surface.FocusPane` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.surface.MoveCursor",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.surface.MoveCursor",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the requested surface state is unavailable"
+        },
+        "contract": "given `agentide.surface.MoveCursor` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.surface.OpenFile",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.surface.OpenFile",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the requested surface state is unavailable"
+        },
+        "contract": "given `agentide.surface.OpenFile` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.surface.OpenPane",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.surface.OpenPane",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the requested surface state is unavailable"
+        },
+        "contract": "given `agentide.surface.OpenPane` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.surface.ShowDiff",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.surface.ShowDiff",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the requested surface state is unavailable"
+        },
+        "contract": "given `agentide.surface.ShowDiff` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+      }
+    },
+    {
+      "kind": "command_contract",
+      "source": "agentide.surface.SnapshotSurface",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.surface.SnapshotSurface",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the requested surface state is unavailable"
+        },
+        "contract": "given `agentide.surface.SnapshotSurface` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.coding.IntentCompleted",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.coding.IntentRefused",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.session.SessionClosed",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.session.SessionObserved",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.session.SessionStarted",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.surface.CursorMoved",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.surface.DiffShown",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.surface.FileClosed",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.surface.FileOpened",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.surface.PaneClosed",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.surface.PaneFocused",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.surface.PaneOpened",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "event_type",
+      "source": "agentide.surface.SurfaceObserved",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "error_type",
+      "source": "agentide.coding.IntentFailure",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "error_type",
+      "source": "agentide.session.SessionRefusal",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "error_type",
+      "source": "agentide.session.SessionStateConflict",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "error_type",
+      "source": "agentide.surface.SurfaceFailure",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "view_type",
+      "source": "agentide.session.SessionSnapshot",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "view_query",
+      "source": "agentide.session.SessionSnapshot",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "projection_maintenance"
+        },
+        "contract": "a query answering `agentide.session.SessionSnapshot` with rows projected from `agentide.session.CodingSession` at `read_your_writes` consistency"
+      }
+    },
+    {
+      "kind": "view_type",
+      "source": "agentide.surface.WorkbenchSnapshot",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "view_query",
+      "source": "agentide.surface.WorkbenchSnapshot",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "projection_maintenance"
+        },
+        "contract": "a query answering `agentide.surface.WorkbenchSnapshot` with rows projected from `agentide.surface.Workbench` at `read_your_writes` consistency"
+      }
+    },
+    {
+      "kind": "actor_grants",
+      "source": "agentide.coding.CodingAgent",
+      "disposition": {
+        "disposition": "refused",
+        "reason": "needs_caller_identity",
+        "stage": "planning",
+        "detail": "may invoke `agentide.coding.ApplyDeployment`, `agentide.coding.CancelProcess`, `agentide.coding.CreateCode`, `agentide.coding.CreateWorktree`, `agentide.coding.CutRelease`, `agentide.coding.DelegateAgent`, `agentide.coding.DeleteCode`, `agentide.coding.EditCode`, `agentide.coding.FinishWorktree`, `agentide.coding.InputProcess`, `agentide.coding.ListTerminals`, `agentide.coding.MessageAgent`, `agentide.coding.ObserveAgents`, `agentide.coding.ObserveChanges`, `agentide.coding.ObserveDeployment`, `agentide.coding.ObserveProcess`, `agentide.coding.ObserveWorktree`, `agentide.coding.OpenInteractiveTerminal`, `agentide.coding.PublishCode`, `agentide.coding.ReadCode`, `agentide.coding.RecordEvidence`, `agentide.coding.RenameCode`, `agentide.coding.SearchCode`, `agentide.coding.StartProcess`, `agentide.coding.TerminateTerminal`, `agentide.coding.VerifyCode`, `agentide.coding.WaitAgent`, `agentide.coding.WaitProcess`; a grant is checked against a caller identity, which types do not carry, and enforcement belongs to the layer that knows who is calling"
+      }
+    },
+    {
+      "kind": "actor_grants",
+      "source": "agentide.session.CodingAgent",
+      "disposition": {
+        "disposition": "refused",
+        "reason": "needs_caller_identity",
+        "stage": "planning",
+        "detail": "may invoke `agentide.session.ReadEvents`, `agentide.session.SnapshotSession`; a grant is checked against a caller identity, which types do not carry, and enforcement belongs to the layer that knows who is calling"
+      }
+    },
+    {
+      "kind": "actor_grants",
+      "source": "agentide.session.Operator",
+      "disposition": {
+        "disposition": "refused",
+        "reason": "needs_caller_identity",
+        "stage": "planning",
+        "detail": "may invoke `agentide.session.CloseSession`, `agentide.session.StartSession`; a grant is checked against a caller identity, which types do not carry, and enforcement belongs to the layer that knows who is calling"
+      }
+    },
+    {
+      "kind": "actor_grants",
+      "source": "agentide.surface.CodingAgent",
+      "disposition": {
+        "disposition": "refused",
+        "reason": "needs_caller_identity",
+        "stage": "planning",
+        "detail": "may invoke `agentide.surface.CloseFile`, `agentide.surface.ClosePane`, `agentide.surface.FocusPane`, `agentide.surface.MoveCursor`, `agentide.surface.OpenFile`, `agentide.surface.OpenPane`, `agentide.surface.ShowDiff`, `agentide.surface.SnapshotSurface`; a grant is checked against a caller identity, which types do not carry, and enforcement belongs to the layer that knows who is calling"
+      }
+    },
+    {
+      "kind": "component_port",
+      "source": "agentide-engine",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "component_transport",
+      "source": "agentide-engine",
+      "disposition": {
+        "disposition": "generated"
+      }
+    }
+  ]
+}

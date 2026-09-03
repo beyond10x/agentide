@@ -34,12 +34,19 @@ bindings:
   diff_show: {driver: core, operation: surface}
   surface_snapshot: {driver: core, operation: surface}
 unbound:
+  - session_start
+  - code_create
+  - code_delete
+  - code_rename
   - worktree_create
   - worktree_finish
   - process_observe
   - process_input
   - process_wait
   - process_cancel
+  - interactive_terminal
+  - terminal_list
+  - terminal_terminate
   - agent_observe
   - agent_delegate
   - agent_message

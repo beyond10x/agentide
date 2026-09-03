@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "List terminals input",
+  "x-ess-name": "agentide.coding.ListTerminals",
+  "x-ess-kind": "command-input",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "request_id": {
+      "$ref": "#/$defs/agentide.session.RequestId"
+    }
+  },
+  "required": [
+    "session_id",
+    "request_id"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+    "contract_digest": "365dcb92c0253ddcde086d97df2b12559075a7baf0176d315c29b195e694362a",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.session.RequestId": {
+      "title": "RequestId",
+      "x-ess-name": "agentide.session.RequestId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

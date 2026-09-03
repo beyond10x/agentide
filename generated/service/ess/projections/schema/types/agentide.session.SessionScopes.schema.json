@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.session.SessionScopes",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+    "contract_digest": "40e1c665e3aa7563681e4f182005defad2bc408fcfaf1225712e429d01e39f83",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.session.SessionScopes": {
+      "title": "SessionScopes",
+      "x-ess-name": "agentide.session.SessionScopes",
+      "x-ess-kind": "struct",
+      "type": "object",
+      "properties": {
+        "principal": {
+          "type": "string"
+        },
+        "team": {
+          "type": "string"
+        },
+        "project": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

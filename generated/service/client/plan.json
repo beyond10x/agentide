@@ -1,0 +1,191 @@
+{
+  "format": "service-client-plan/1",
+  "service": "agentide",
+  "ess_source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+  "realm_policy": "optional",
+  "authentication": "session",
+  "operations": [
+    {
+      "operation": "close_session",
+      "semantic_ref": "agentide.session.CloseSession",
+      "kind": "intent",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "result": {
+        "kind": "intent",
+        "emitted_events": [
+          "agentide.session.SessionClosed"
+        ]
+      }
+    },
+    {
+      "operation": "get_session",
+      "semantic_ref": "agentide.session.SessionSnapshot",
+      "kind": "query",
+      "inputs": [
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "selector",
+            "view_field": "session_id"
+          }
+        }
+      ],
+      "result": {
+        "kind": "query",
+        "fields": {
+          "manifest_digest": "Optional<agentide.session.ManifestDigest>",
+          "objective": "String",
+          "owner": "String",
+          "project_id": "Optional<agentide.session.ProjectId>",
+          "scopes": "agentide.session.SessionScopes",
+          "session_id": "agentide.session.SessionId",
+          "source_revision": "Optional<agentide.session.SourceRevision>",
+          "workspace_root": "agentide.session.WorkspaceRoot",
+          "workspace_session_id": "Optional<agentide.session.WorkspaceSessionId>"
+        }
+      },
+      "pagination": {
+        "envelope": "$page",
+        "maximum_limit": 1000,
+        "opaque_cursor": true
+      }
+    },
+    {
+      "operation": "list_sessions",
+      "semantic_ref": "agentide.session.SessionSnapshot",
+      "kind": "query",
+      "inputs": [],
+      "result": {
+        "kind": "query",
+        "fields": {
+          "manifest_digest": "Optional<agentide.session.ManifestDigest>",
+          "objective": "String",
+          "owner": "String",
+          "project_id": "Optional<agentide.session.ProjectId>",
+          "scopes": "agentide.session.SessionScopes",
+          "session_id": "agentide.session.SessionId",
+          "source_revision": "Optional<agentide.session.SourceRevision>",
+          "workspace_root": "agentide.session.WorkspaceRoot",
+          "workspace_session_id": "Optional<agentide.session.WorkspaceSessionId>"
+        }
+      },
+      "pagination": {
+        "envelope": "$page",
+        "maximum_limit": 1000,
+        "opaque_cursor": true
+      }
+    },
+    {
+      "operation": "start_session",
+      "semantic_ref": "agentide.session.StartSession",
+      "kind": "intent",
+      "inputs": [
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "manifest_digest",
+          "type_ref": "Optional<agentide.session.ManifestDigest>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "objective",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "project_id",
+          "type_ref": "Optional<agentide.session.ProjectId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "scopes",
+          "type_ref": "agentide.session.SessionScopes",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "source_revision",
+          "type_ref": "Optional<agentide.session.SourceRevision>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "workspace_root",
+          "type_ref": "agentide.session.WorkspaceRoot",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "workspace_session_id",
+          "type_ref": "Optional<agentide.session.WorkspaceSessionId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "result": {
+        "kind": "intent",
+        "emitted_events": [
+          "agentide.session.SessionStarted"
+        ]
+      }
+    }
+  ]
+}

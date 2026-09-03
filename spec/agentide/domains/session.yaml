@@ -18,6 +18,16 @@ types:
   - name: agentide.session.EventLimit
     kind: newtype
     of: Integer
+  - {name: agentide.session.ProjectId, kind: newtype, of: String}
+  - {name: agentide.session.SourceRevision, kind: newtype, of: String}
+  - {name: agentide.session.WorkspaceSessionId, kind: newtype, of: String}
+  - {name: agentide.session.ManifestDigest, kind: newtype, of: String}
+  - name: agentide.session.SessionScopes
+    kind: struct
+    fields:
+      - {name: principal, type: Optional<String>}
+      - {name: team, type: Optional<String>}
+      - {name: project, type: Optional<String>}
 
 entities:
   - name: agentide.session.CodingSession
@@ -25,6 +35,12 @@ entities:
     fields:
       - {name: workspace_root, type: agentide.session.WorkspaceRoot}
       - {name: objective, type: String}
+      - {name: project_id, type: Optional<agentide.session.ProjectId>}
+      - {name: source_revision, type: Optional<agentide.session.SourceRevision>}
+      - {name: workspace_session_id, type: Optional<agentide.session.WorkspaceSessionId>}
+      - {name: manifest_digest, type: Optional<agentide.session.ManifestDigest>}
+      - {name: owner, type: String}
+      - {name: scopes, type: agentide.session.SessionScopes}
     lifecycle:
       initial: Active
       states: [Active, Closed]
@@ -58,6 +74,11 @@ commands:
     input:
       - {name: workspace_root, type: agentide.session.WorkspaceRoot}
       - {name: objective, type: String}
+      - {name: project_id, type: Optional<agentide.session.ProjectId>}
+      - {name: source_revision, type: Optional<agentide.session.SourceRevision>}
+      - {name: workspace_session_id, type: Optional<agentide.session.WorkspaceSessionId>}
+      - {name: manifest_digest, type: Optional<agentide.session.ManifestDigest>}
+      - {name: scopes, type: agentide.session.SessionScopes}
     outcomes:
       - name: started
         creates: agentide.session.CodingSession
@@ -67,6 +88,11 @@ commands:
           agentide.session.SessionStarted:
             workspace_root: input.workspace_root
             objective: input.objective
+            project_id: input.project_id
+            source_revision: input.source_revision
+            workspace_session_id: input.workspace_session_id
+            manifest_digest: input.manifest_digest
+            scopes: input.scopes
       - name: refused
         external: the workspace or standalone binding is unavailable
         error: agentide.session.SessionRefusal
@@ -131,6 +157,12 @@ events:
       - {name: session_id, type: agentide.session.SessionId}
       - {name: workspace_root, type: agentide.session.WorkspaceRoot}
       - {name: objective, type: String}
+      - {name: project_id, type: Optional<agentide.session.ProjectId>}
+      - {name: source_revision, type: Optional<agentide.session.SourceRevision>}
+      - {name: workspace_session_id, type: Optional<agentide.session.WorkspaceSessionId>}
+      - {name: manifest_digest, type: Optional<agentide.session.ManifestDigest>}
+      - {name: owner, type: String}
+      - {name: scopes, type: agentide.session.SessionScopes}
   - name: agentide.session.SessionClosed
     fields:
       - {name: session_id, type: agentide.session.SessionId}
@@ -147,4 +179,10 @@ views:
       - {name: session_id, type: agentide.session.SessionId}
       - {name: workspace_root, type: agentide.session.WorkspaceRoot}
       - {name: objective, type: String}
+      - {name: project_id, type: Optional<agentide.session.ProjectId>}
+      - {name: source_revision, type: Optional<agentide.session.SourceRevision>}
+      - {name: workspace_session_id, type: Optional<agentide.session.WorkspaceSessionId>}
+      - {name: manifest_digest, type: Optional<agentide.session.ManifestDigest>}
+      - {name: owner, type: String}
+      - {name: scopes, type: agentide.session.SessionScopes}
     naming: {wire: snapshot, display: Session snapshot}

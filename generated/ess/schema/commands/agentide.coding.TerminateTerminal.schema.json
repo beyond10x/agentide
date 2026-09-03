@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Terminate terminal input",
+  "x-ess-name": "agentide.coding.TerminateTerminal",
+  "x-ess-kind": "command-input",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "request_id": {
+      "$ref": "#/$defs/agentide.session.RequestId"
+    },
+    "operation_id": {
+      "$ref": "#/$defs/agentide.coding.OperationId"
+    },
+    "terminal_id": {
+      "$ref": "#/$defs/agentide.coding.TerminalId"
+    },
+    "signal": {
+      "$ref": "#/$defs/agentide.coding.Signal"
+    }
+  },
+  "required": [
+    "session_id",
+    "request_id",
+    "operation_id",
+    "terminal_id",
+    "signal"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+    "contract_digest": "1fccbb0228ad93305964ed59a4646f7348054e96381bc98241d2bbe1de988fe0",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coding.OperationId": {
+      "title": "OperationId",
+      "x-ess-name": "agentide.coding.OperationId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coding.Signal": {
+      "title": "Signal",
+      "x-ess-name": "agentide.coding.Signal",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Interrupt",
+        "Terminate",
+        "Kill"
+      ]
+    },
+    "agentide.coding.TerminalId": {
+      "title": "TerminalId",
+      "x-ess-name": "agentide.coding.TerminalId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.RequestId": {
+      "title": "RequestId",
+      "x-ess-name": "agentide.session.RequestId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

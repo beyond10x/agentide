@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Create code input",
+  "x-ess-name": "agentide.coding.CreateCode",
+  "x-ess-kind": "command-input",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "request_id": {
+      "$ref": "#/$defs/agentide.session.RequestId"
+    },
+    "operation_id": {
+      "$ref": "#/$defs/agentide.coding.OperationId"
+    },
+    "path": {
+      "$ref": "#/$defs/agentide.coding.Path"
+    },
+    "content": {
+      "type": "string"
+    },
+    "expected_absent": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "session_id",
+    "request_id",
+    "operation_id",
+    "path",
+    "content",
+    "expected_absent"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+    "contract_digest": "6a40930ca84d514ed30e04d9b54baccbd5734b77762c4ce05a26f89f025310f1",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coding.OperationId": {
+      "title": "OperationId",
+      "x-ess-name": "agentide.coding.OperationId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coding.Path": {
+      "title": "Path",
+      "x-ess-name": "agentide.coding.Path",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.RequestId": {
+      "title": "RequestId",
+      "x-ess-name": "agentide.session.RequestId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

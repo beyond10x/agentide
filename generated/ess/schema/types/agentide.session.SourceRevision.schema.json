@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.session.SourceRevision",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+    "contract_digest": "2f1643b92cdb5bbc7a779b803bd8afc7414ad2ce2322f4982e8547bca1041b60",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.session.SourceRevision": {
+      "title": "SourceRevision",
+      "x-ess-name": "agentide.session.SourceRevision",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

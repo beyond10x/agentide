@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/agentide.coding.TerminalId",
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "667a9b9c6763ffeb485a9b6838d7d4de26719ec4d8f02fc62e2c55a6e1d211e7",
+    "contract_digest": "b8f78d1f59182c38945b98ba4da752236d3fd4afdd57232038d905b8ff68e03a",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coding.TerminalId": {
+      "title": "TerminalId",
+      "x-ess-name": "agentide.coding.TerminalId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}
