@@ -1,13 +1,17 @@
 {
-  "format": "service-realization-plan/1",
+  "format": "service-realization-plan/2",
   "service": "agentide",
+  "delivery": {
+    "kind": "composed_connector"
+  },
   "realm": "optional",
   "ess_source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
-  "obligation_catalog_digest": "a81885ebb75473d43f9ccbcee29b5d3147a24bebf0632a9582df0f3f3c3c305e",
+  "obligation_catalog_digest": "12e8b6adb5b214031bd1c101f71e91a666d19674d844683e35f32b67f966ecb3",
   "content": {},
   "intents": {
     "approve_checkpoint": {
       "command": "agentide.coordination.ApproveCheckpoint",
+      "scope": "agentide.manage",
       "inputs": [
         {
           "name": "checkpoint_id",
@@ -125,6 +129,7 @@
     },
     "close_session": {
       "command": "agentide.session.CloseSession",
+      "scope": "agentide.manage",
       "inputs": [
         {
           "name": "expected_version",
@@ -218,6 +223,7 @@
     },
     "create_grant": {
       "command": "agentide.coordination.CreateGrant",
+      "scope": "agentide.manage",
       "inputs": [
         {
           "name": "allowed_intents",
@@ -425,6 +431,7 @@
     },
     "deny_checkpoint": {
       "command": "agentide.coordination.DenyCheckpoint",
+      "scope": "agentide.manage",
       "inputs": [
         {
           "name": "checkpoint_id",
@@ -542,6 +549,7 @@
     },
     "ensure_hosted_session": {
       "command": "agentide.session.EnsureHostedSession",
+      "scope": "agentide.manage",
       "inputs": [
         {
           "name": "idempotency_key",
@@ -722,6 +730,7 @@
     },
     "pin_context": {
       "command": "agentide.coordination.PinContext",
+      "scope": "agentide.manage",
       "inputs": [
         {
           "name": "end_line",
@@ -907,6 +916,7 @@
     },
     "record_approval_checkpoint": {
       "command": "agentide.coordination.RecordApprovalCheckpoint",
+      "scope": "agentide.manage",
       "inputs": [
         {
           "name": "attempt_ref",
@@ -1071,6 +1081,7 @@
     },
     "remove_context_pin": {
       "command": "agentide.coordination.RemoveContextPin",
+      "scope": "agentide.manage",
       "inputs": [
         {
           "name": "expected_version",
@@ -1188,6 +1199,7 @@
     },
     "revoke_grant": {
       "command": "agentide.coordination.RevokeGrant",
+      "scope": "agentide.manage",
       "inputs": [
         {
           "name": "expected_version",
@@ -1305,6 +1317,7 @@
     },
     "start_session": {
       "command": "agentide.session.StartSession",
+      "scope": "agentide.manage",
       "inputs": [
         {
           "name": "idempotency_key",
@@ -1477,6 +1490,7 @@
   "queries": {
     "get_session": {
       "view": "agentide.session.SessionSnapshot",
+      "scope": "agentide.read",
       "inputs": [
         {
           "name": "session_id",
@@ -1507,6 +1521,7 @@
     },
     "list_approval_checkpoints": {
       "view": "agentide.coordination.ApprovalCheckpointSnapshot",
+      "scope": "agentide.read",
       "inputs": [
         {
           "name": "session_id",
@@ -1545,6 +1560,7 @@
     },
     "list_context_pins": {
       "view": "agentide.coordination.ContextPinSnapshot",
+      "scope": "agentide.read",
       "inputs": [
         {
           "name": "session_id",
@@ -1583,6 +1599,7 @@
     },
     "list_grants": {
       "view": "agentide.coordination.GrantSnapshot",
+      "scope": "agentide.read",
       "inputs": [
         {
           "name": "session_id",
@@ -1621,6 +1638,7 @@
     },
     "list_sessions": {
       "view": "agentide.session.SessionSnapshot",
+      "scope": "agentide.read",
       "inputs": [],
       "obligations": [
         {

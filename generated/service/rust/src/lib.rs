@@ -47,3 +47,5 @@ pub fn connector_factory_with_authority(
         authority,
     )
 }
+
+// This service selected composed Connector delivery; no HTTP client is emitted.

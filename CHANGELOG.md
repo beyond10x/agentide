@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.3.1 - 2026-09-03
+
+- Migrate the generated Connector-only hosted service to Service SDK 0.4.2 with explicit operation
+  scopes and the breaking `service-definition/3` contract.
+
 ## 0.3.0 - 2026-09-03
 
 - Add a versioned, transport-neutral browser renderer protocol with immutable frames, transient
@@ -10,7 +15,6 @@
   targets at explicit comparison routes, and refuse transport or persistence APIs inside targets.
 - Add shared renderer conformance tests and reproducible Chromium/build benchmarks so framework
   choices can be based on measured bundle, startup, update, memory, install, and build costs.
-
 ## 0.2.1 - 2026-09-03
 
 - Add an explicit provenance-free `ContextSelectionDraft` contract for interactive renderers and

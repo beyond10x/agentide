@@ -1,8 +1,10 @@
 # Hosted AgentIDE coordination is a generated Service SDK aggregate. Source bytes remain in
 # Workspace/Substrate and forge authority remains in Connectors; neither is duplicated here.
-format: service-definition/2
+format: service-definition/3
 service: agentide
 realm: optional
+delivery:
+  kind: composed_connector
 
 obligations:
   - name: bind_session_stream
@@ -138,6 +140,7 @@ projections:
 
 intents:
   - name: start_session
+    scope: agentide.manage
     command: agentide.session.StartSession
     stream_id: {kind: generated_uuid_v7}
     expected_version: {kind: no_stream}
@@ -153,6 +156,7 @@ intents:
     obligations: [bind_session_stream, authorize_requested_session_scopes]
 
   - name: ensure_hosted_session
+    scope: agentide.manage
     command: agentide.session.EnsureHostedSession
     stream_id: {kind: command_field, field: session_id}
     expected_version: {kind: no_stream}
@@ -165,6 +169,7 @@ intents:
     obligations: [bind_session_stream, authorize_requested_session_scopes]
 
   - name: close_session
+    scope: agentide.manage
     command: agentide.session.CloseSession
     stream_id: {kind: command_field, field: session_id}
     expected_version: {kind: operation_field, field: expected_version}
@@ -184,6 +189,7 @@ intents:
     obligations: [bind_session_stream, authorize_session_owner, require_active_session]
 
   - name: create_grant
+    scope: agentide.manage
     command: agentide.coordination.CreateGrant
     stream_id: {kind: command_field, field: session_id}
     expected_version: {kind: operation_field, field: expected_version}
@@ -196,6 +202,7 @@ intents:
     obligations: [bind_session_stream, authorize_session_owner, require_active_session, validate_grantee_partition, inherit_grant_authority]
 
   - name: revoke_grant
+    scope: agentide.manage
     command: agentide.coordination.RevokeGrant
     stream_id: {kind: command_field, field: session_id}
     expected_version: {kind: operation_field, field: expected_version}
@@ -204,6 +211,7 @@ intents:
     obligations: [bind_session_stream, authorize_session_owner, require_active_session, nested_grant]
 
   - name: pin_context
+    scope: agentide.manage
     command: agentide.coordination.PinContext
     stream_id: {kind: command_field, field: session_id}
     expected_version: {kind: operation_field, field: expected_version}
@@ -216,6 +224,7 @@ intents:
     obligations: [bind_session_stream, authorize_session_owner, require_active_session, inherit_context_pin_authority]
 
   - name: remove_context_pin
+    scope: agentide.manage
     command: agentide.coordination.RemoveContextPin
     stream_id: {kind: command_field, field: session_id}
     expected_version: {kind: operation_field, field: expected_version}
@@ -224,6 +233,7 @@ intents:
     obligations: [bind_session_stream, authorize_session_owner, require_active_session, nested_context_pin]
 
   - name: record_approval_checkpoint
+    scope: agentide.manage
     command: agentide.coordination.RecordApprovalCheckpoint
     stream_id: {kind: command_field, field: session_id}
     expected_version: {kind: operation_field, field: expected_version}
@@ -232,6 +242,7 @@ intents:
     obligations: [bind_session_stream, authorize_session_owner, require_active_session, inherit_checkpoint_authority]
 
   - name: approve_checkpoint
+    scope: agentide.manage
     command: agentide.coordination.ApproveCheckpoint
     stream_id: {kind: command_field, field: session_id}
     expected_version: {kind: operation_field, field: expected_version}
@@ -240,6 +251,7 @@ intents:
     obligations: [bind_session_stream, authorize_session_owner, require_active_session, nested_approval_checkpoint]
 
   - name: deny_checkpoint
+    scope: agentide.manage
     command: agentide.coordination.DenyCheckpoint
     stream_id: {kind: command_field, field: session_id}
     expected_version: {kind: operation_field, field: expected_version}
@@ -249,6 +261,7 @@ intents:
 
 queries:
   - name: get_session
+    scope: agentide.read
     view: agentide.session.SessionSnapshot
     projection: session_snapshot_projection
     selectors:
@@ -269,6 +282,7 @@ queries:
     obligations: [partition_session_projection, filter_visible_sessions]
 
   - name: list_sessions
+    scope: agentide.read
     view: agentide.session.SessionSnapshot
     projection: session_snapshot_projection
     selectors: []
@@ -288,6 +302,7 @@ queries:
     obligations: [partition_session_projection, filter_visible_sessions]
 
   - name: list_grants
+    scope: agentide.read
     view: agentide.coordination.GrantSnapshot
     projection: grant_snapshot_projection
     selectors:
@@ -306,6 +321,7 @@ queries:
     obligations: [partition_session_projection, filter_visible_sessions, hide_closed_session_children]
 
   - name: list_context_pins
+    scope: agentide.read
     view: agentide.coordination.ContextPinSnapshot
     projection: context_pin_snapshot_projection
     selectors:
@@ -324,6 +340,7 @@ queries:
     obligations: [partition_session_projection, filter_visible_sessions, hide_closed_session_children]
 
   - name: list_approval_checkpoints
+    scope: agentide.read
     view: agentide.coordination.ApprovalCheckpointSnapshot
     projection: approval_checkpoint_snapshot_projection
     selectors:

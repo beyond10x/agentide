@@ -1,5 +1,5 @@
 {
-  "format": "service-runtime-ir/2",
+  "format": "service-runtime-ir/3",
   "ess": {
     "system": "agentide",
     "version": "v1",
@@ -11,7 +11,7 @@
     "capabilities": 186
   },
   "obligation_catalog": {
-    "digest": "a81885ebb75473d43f9ccbcee29b5d3147a24bebf0632a9582df0f3f3c3c305e",
+    "digest": "12e8b6adb5b214031bd1c101f71e91a666d19674d844683e35f32b67f966ecb3",
     "providers": [
       "sdk.aggregate.event-sourced/v1",
       "sdk.aggregate.nested-entity/v1",
@@ -31,12 +31,16 @@
     "bind_and_dispatch"
   ],
   "definition": {
-    "format": "service-definition/2",
+    "format": "service-definition/3",
     "service": "agentide",
+    "delivery": {
+      "kind": "composed_connector"
+    },
     "realm": "optional",
     "intents": [
       {
         "name": "start_session",
+        "scope": "agentide.manage",
         "command": "agentide.session.StartSession",
         "stream_id": {
           "kind": "generated_uuid_v7"
@@ -77,6 +81,7 @@
       },
       {
         "name": "ensure_hosted_session",
+        "scope": "agentide.manage",
         "command": "agentide.session.EnsureHostedSession",
         "stream_id": {
           "kind": "command_field",
@@ -111,6 +116,7 @@
       },
       {
         "name": "close_session",
+        "scope": "agentide.manage",
         "command": "agentide.session.CloseSession",
         "stream_id": {
           "kind": "command_field",
@@ -167,6 +173,7 @@
       },
       {
         "name": "create_grant",
+        "scope": "agentide.manage",
         "command": "agentide.coordination.CreateGrant",
         "stream_id": {
           "kind": "command_field",
@@ -204,6 +211,7 @@
       },
       {
         "name": "revoke_grant",
+        "scope": "agentide.manage",
         "command": "agentide.coordination.RevokeGrant",
         "stream_id": {
           "kind": "command_field",
@@ -232,6 +240,7 @@
       },
       {
         "name": "pin_context",
+        "scope": "agentide.manage",
         "command": "agentide.coordination.PinContext",
         "stream_id": {
           "kind": "command_field",
@@ -268,6 +277,7 @@
       },
       {
         "name": "remove_context_pin",
+        "scope": "agentide.manage",
         "command": "agentide.coordination.RemoveContextPin",
         "stream_id": {
           "kind": "command_field",
@@ -296,6 +306,7 @@
       },
       {
         "name": "record_approval_checkpoint",
+        "scope": "agentide.manage",
         "command": "agentide.coordination.RecordApprovalCheckpoint",
         "stream_id": {
           "kind": "command_field",
@@ -324,6 +335,7 @@
       },
       {
         "name": "approve_checkpoint",
+        "scope": "agentide.manage",
         "command": "agentide.coordination.ApproveCheckpoint",
         "stream_id": {
           "kind": "command_field",
@@ -352,6 +364,7 @@
       },
       {
         "name": "deny_checkpoint",
+        "scope": "agentide.manage",
         "command": "agentide.coordination.DenyCheckpoint",
         "stream_id": {
           "kind": "command_field",
@@ -422,6 +435,7 @@
     "queries": [
       {
         "name": "get_session",
+        "scope": "agentide.read",
         "view": "agentide.session.SessionSnapshot",
         "projection": "session_snapshot_projection",
         "selectors": [
@@ -476,6 +490,7 @@
       },
       {
         "name": "list_sessions",
+        "scope": "agentide.read",
         "view": "agentide.session.SessionSnapshot",
         "projection": "session_snapshot_projection",
         "selectors": [],
@@ -525,6 +540,7 @@
       },
       {
         "name": "list_grants",
+        "scope": "agentide.read",
         "view": "agentide.coordination.GrantSnapshot",
         "projection": "grant_snapshot_projection",
         "selectors": [
@@ -572,6 +588,7 @@
       },
       {
         "name": "list_context_pins",
+        "scope": "agentide.read",
         "view": "agentide.coordination.ContextPinSnapshot",
         "projection": "context_pin_snapshot_projection",
         "selectors": [
@@ -619,6 +636,7 @@
       },
       {
         "name": "list_approval_checkpoints",
+        "scope": "agentide.read",
         "view": "agentide.coordination.ApprovalCheckpointSnapshot",
         "projection": "approval_checkpoint_snapshot_projection",
         "selectors": [

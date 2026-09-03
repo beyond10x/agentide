@@ -1,12 +1,16 @@
 {
-  "format": "service-client-plan/1",
+  "format": "service-client-plan/2",
   "service": "agentide",
+  "delivery": {
+    "kind": "composed_connector"
+  },
   "ess_source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
   "realm_policy": "optional",
   "authentication": "session",
   "operations": [
     {
       "operation": "approve_checkpoint",
+      "scope": "agentide.manage",
       "semantic_ref": "agentide.coordination.ApproveCheckpoint",
       "kind": "intent",
       "inputs": [
@@ -60,6 +64,7 @@
     },
     {
       "operation": "close_session",
+      "scope": "agentide.manage",
       "semantic_ref": "agentide.session.CloseSession",
       "kind": "intent",
       "inputs": [
@@ -105,6 +110,7 @@
     },
     {
       "operation": "create_grant",
+      "scope": "agentide.manage",
       "semantic_ref": "agentide.coordination.CreateGrant",
       "kind": "intent",
       "inputs": [
@@ -198,6 +204,7 @@
     },
     {
       "operation": "deny_checkpoint",
+      "scope": "agentide.manage",
       "semantic_ref": "agentide.coordination.DenyCheckpoint",
       "kind": "intent",
       "inputs": [
@@ -251,6 +258,7 @@
     },
     {
       "operation": "ensure_hosted_session",
+      "scope": "agentide.manage",
       "semantic_ref": "agentide.session.EnsureHostedSession",
       "kind": "intent",
       "inputs": [
@@ -336,6 +344,7 @@
     },
     {
       "operation": "get_session",
+      "scope": "agentide.read",
       "semantic_ref": "agentide.session.SessionSnapshot",
       "kind": "query",
       "inputs": [
@@ -372,6 +381,7 @@
     },
     {
       "operation": "list_approval_checkpoints",
+      "scope": "agentide.read",
       "semantic_ref": "agentide.coordination.ApprovalCheckpointSnapshot",
       "kind": "query",
       "inputs": [
@@ -406,6 +416,7 @@
     },
     {
       "operation": "list_context_pins",
+      "scope": "agentide.read",
       "semantic_ref": "agentide.coordination.ContextPinSnapshot",
       "kind": "query",
       "inputs": [
@@ -442,6 +453,7 @@
     },
     {
       "operation": "list_grants",
+      "scope": "agentide.read",
       "semantic_ref": "agentide.coordination.GrantSnapshot",
       "kind": "query",
       "inputs": [
@@ -479,6 +491,7 @@
     },
     {
       "operation": "list_sessions",
+      "scope": "agentide.read",
       "semantic_ref": "agentide.session.SessionSnapshot",
       "kind": "query",
       "inputs": [],
@@ -505,6 +518,7 @@
     },
     {
       "operation": "pin_context",
+      "scope": "agentide.manage",
       "semantic_ref": "agentide.coordination.PinContext",
       "kind": "intent",
       "inputs": [
@@ -590,6 +604,7 @@
     },
     {
       "operation": "record_approval_checkpoint",
+      "scope": "agentide.manage",
       "semantic_ref": "agentide.coordination.RecordApprovalCheckpoint",
       "kind": "intent",
       "inputs": [
@@ -667,6 +682,7 @@
     },
     {
       "operation": "remove_context_pin",
+      "scope": "agentide.manage",
       "semantic_ref": "agentide.coordination.RemoveContextPin",
       "kind": "intent",
       "inputs": [
@@ -720,6 +736,7 @@
     },
     {
       "operation": "revoke_grant",
+      "scope": "agentide.manage",
       "semantic_ref": "agentide.coordination.RevokeGrant",
       "kind": "intent",
       "inputs": [
@@ -773,6 +790,7 @@
     },
     {
       "operation": "start_session",
+      "scope": "agentide.manage",
       "semantic_ref": "agentide.session.StartSession",
       "kind": "intent",
       "inputs": [
