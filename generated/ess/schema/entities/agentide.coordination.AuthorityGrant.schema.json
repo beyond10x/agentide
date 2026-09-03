@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AuthorityGrant",
+  "x-ess-name": "agentide.coordination.AuthorityGrant",
+  "x-ess-kind": "entity",
+  "type": "object",
+  "properties": {
+    "grant_id": {
+      "$ref": "#/$defs/agentide.coordination.GrantId"
+    },
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "grantee": {
+      "$ref": "#/$defs/agentide.coordination.SubjectRef"
+    },
+    "allowed_intents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/agentide.coordination.IntentRef"
+      }
+    },
+    "path_prefixes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/agentide.coordination.PathPrefix"
+      }
+    },
+    "maximum_risk": {
+      "$ref": "#/$defs/agentide.coordination.GrantRisk"
+    },
+    "expires_at": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "owner": {
+      "type": "string"
+    },
+    "scopes": {
+      "$ref": "#/$defs/agentide.session.SessionScopes"
+    },
+    "state": {
+      "$ref": "#/$defs/agentide.coordination.AuthorityGrant.State"
+    }
+  },
+  "required": [
+    "grant_id",
+    "session_id",
+    "grantee",
+    "allowed_intents",
+    "path_prefixes",
+    "maximum_risk",
+    "revision",
+    "owner",
+    "scopes",
+    "state"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4",
+    "contract_digest": "24efed47adc6342531400e4addbf8a450c9798921af84f08ceec8affc352ba42",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coordination.AuthorityGrant.State": {
+      "title": "State",
+      "x-ess-name": "agentide.coordination.AuthorityGrant.State",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Active",
+        "Revoked"
+      ]
+    },
+    "agentide.coordination.GrantId": {
+      "title": "GrantId",
+      "x-ess-name": "agentide.coordination.GrantId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coordination.GrantRisk": {
+      "title": "GrantRisk",
+      "x-ess-name": "agentide.coordination.GrantRisk",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Low",
+        "Medium"
+      ]
+    },
+    "agentide.coordination.IntentRef": {
+      "title": "IntentRef",
+      "x-ess-name": "agentide.coordination.IntentRef",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coordination.PathPrefix": {
+      "title": "PathPrefix",
+      "x-ess-name": "agentide.coordination.PathPrefix",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coordination.SubjectRef": {
+      "title": "SubjectRef",
+      "x-ess-name": "agentide.coordination.SubjectRef",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionScopes": {
+      "title": "SessionScopes",
+      "x-ess-name": "agentide.session.SessionScopes",
+      "x-ess-kind": "struct",
+      "type": "object",
+      "properties": {
+        "principal": {
+          "type": "string"
+        },
+        "team": {
+          "type": "string"
+        },
+        "project": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

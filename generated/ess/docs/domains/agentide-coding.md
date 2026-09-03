@@ -9,7 +9,7 @@ do not edit: regenerate with `ess generate`
 
 Semantic observation, change, execution, collaboration, evidence, and delivery intents.
 
-`agentide.coding` is one of agentide's bounded contexts. [Back to the index](../README.md).
+`agentide.coding` is one of agentide's bounded contexts. [Back to the index](../index.md).
 
 ## Types
 

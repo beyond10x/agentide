@@ -1,3 +1,14 @@
+---
+title: Keyboard interface
+description: Keys shared by the AgentIDE console and browser workbench projections.
+b10x:
+  schema: b10x-doc-page/v1
+  audiences: [adopter, developer]
+  experienceIds: [build-agent-systems]
+  support: preview
+  access: public
+---
+
 # Keyboard interface
 
 The console and browser surfaces share the same conceptual commands. A shortcut changes durable

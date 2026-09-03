@@ -33,12 +33,22 @@ fn main() -> Result<()> {
         println!("generated/service");
         return Ok(());
     }
+    if command == "generate-realizations" {
+        let ir = compile_ess(root)?;
+        let target = root.join("docs/running-modes.md");
+        std::fs::write(&target, render_realizations(root, &ir)?)?;
+        println!("{}", target.display());
+        return Ok(());
+    }
     if command != "gate" {
-        bail!("usage: cargo xtask <gate|generate-service|generate-surface-profile>");
+        bail!(
+            "usage: cargo xtask <gate|generate-realizations|generate-service|generate-surface-profile>"
+        );
     }
 
     validate_contracts(root)?;
-    validate_ess(root)?;
+    let ir = validate_ess(root)?;
+    validate_realizations(root, &ir)?;
     validate_generated_ess(root)?;
     validate_generated_service(root)?;
     validate_fixtures(root)?;
@@ -103,7 +113,7 @@ fn render_web_surface_profile() -> Result<String> {
     ))
 }
 
-fn validate_ess(root: &Path) -> Result<()> {
+fn compile_ess(root: &Path) -> Result<ess_compiler::EssIr> {
     let directory = root.join("spec/agentide");
     let mut pending = vec![directory.clone()];
     let mut files = Vec::new();
@@ -139,6 +149,11 @@ fn validate_ess(root: &Path) -> Result<()> {
         .map_err(|errors| anyhow!("ESS did not validate:\n{errors}"))?;
     let ir = ess_compiler::resolve::compile_locating(&specification, &sources, &labels)
         .map_err(|errors| anyhow!("ESS did not resolve:\n{errors}"))?;
+    Ok(ir)
+}
+
+fn validate_ess(root: &Path) -> Result<ess_compiler::EssIr> {
+    let ir = compile_ess(root)?;
     let profile = agentide_contracts::IntentProfile::embedded()?;
     let semantic_commands: BTreeSet<_> = ir.commands().keys().map(ToString::to_string).collect();
     let profiled_commands: BTreeSet<_> = profile
@@ -157,6 +172,69 @@ fn validate_ess(root: &Path) -> Result<()> {
         .context("reading generated/ess/ir.json; regenerate it with ESS")?;
     if expected != ir.to_canonical_json() {
         bail!("generated/ess/ir.json has drifted; regenerate it with the pinned ESS revision");
+    }
+    Ok(ir)
+}
+
+fn realization_files(root: &Path) -> Result<Vec<std::path::PathBuf>> {
+    let mut files = std::fs::read_dir(root.join("realizations"))?
+        .map(|entry| entry.map(|entry| entry.path()))
+        .collect::<std::io::Result<Vec<_>>>()?;
+    files.retain(|path| {
+        path.extension()
+            .is_some_and(|extension| extension == "yaml")
+    });
+    files.sort();
+    Ok(files)
+}
+
+fn render_realizations(root: &Path, ir: &ess_compiler::EssIr) -> Result<String> {
+    let mut output = String::from(
+        "# Running AgentIDE\n\nThese modes are generated from two `ess-realization/1` declarations bound to the same exact AgentIDE ESS. The declarations, rather than this page, are the authority for implementation artifacts, semantic surfaces, attachment boundaries, availability, and runtime requirements.\n\n",
+    );
+    for path in realization_files(root)? {
+        let text = std::fs::read_to_string(&path)?;
+        let specification = ess_realization::RealizationSpec::from_yaml(&text)
+            .with_context(|| format!("reading realization {}", path.display()))?;
+        let realization = ess_realization::compile(&specification, ir)
+            .map_err(|errors| anyhow!("realization {} was refused:\n{errors}", path.display()))?;
+        let generated = realization.to_markdown();
+        let body = generated
+            .strip_prefix("# Running modes\n\n")
+            .ok_or_else(|| anyhow!("ESS realization Markdown has an unexpected heading"))?;
+        output.push_str("## Realization: `");
+        output.push_str(realization.id().as_str());
+        output.push_str("`\n\n");
+        for line in body.lines() {
+            if let Some(heading) = line.strip_prefix("## ") {
+                output.push_str("### ");
+                output.push_str(heading);
+            } else {
+                output.push_str(line);
+            }
+            output.push('\n');
+        }
+        output.push('\n');
+    }
+    let content_len = output.trim_end().len();
+    output.truncate(content_len);
+    output.push('\n');
+    Ok(output)
+}
+
+fn validate_realizations(root: &Path, ir: &ess_compiler::EssIr) -> Result<()> {
+    let expected = render_realizations(root, ir)?;
+    let path = root.join("docs/running-modes.md");
+    let observed = std::fs::read_to_string(&path).with_context(|| {
+        format!(
+            "reading {}; regenerate it with `cargo xtask generate-realizations`",
+            path.display()
+        )
+    })?;
+    if observed != expected {
+        bail!(
+            "realization documentation has drifted; regenerate it with `cargo xtask generate-realizations`"
+        );
     }
     Ok(())
 }
@@ -203,7 +281,7 @@ fn validate_generated_ess(root: &Path) -> Result<()> {
         .arg(out.join("ir.json"))
         .status()
         .with_context(
-            || "starting the pinned ESS CLI; install revision 01f12c9 or set AGENTIDE_ESS_BIN",
+            || "starting the pinned ESS CLI; install revision d9bace2 or set AGENTIDE_ESS_BIN",
         )?;
     if !compile.success() {
         bail!("ESS canonical IR generation failed with {compile}");

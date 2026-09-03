@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Workbench",
+  "x-ess-name": "agentide.surface.Workbench",
+  "x-ess-kind": "entity",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "panes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/agentide.surface.PaneSnapshot"
+      }
+    },
+    "focused_pane": {
+      "$ref": "#/$defs/agentide.surface.PaneId"
+    },
+    "open_files": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/agentide.coding.Path"
+      }
+    },
+    "state": {
+      "$ref": "#/$defs/agentide.surface.Workbench.State"
+    }
+  },
+  "required": [
+    "session_id",
+    "panes",
+    "open_files",
+    "state"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4",
+    "contract_digest": "5a521b77324e9c5dc1c8f7794487b4ab24d615ce0de8076496410ed017d9922a",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coding.Path": {
+      "title": "Path",
+      "x-ess-name": "agentide.coding.Path",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.surface.PaneId": {
+      "title": "PaneId",
+      "x-ess-name": "agentide.surface.PaneId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.surface.PaneKind": {
+      "title": "PaneKind",
+      "x-ess-name": "agentide.surface.PaneKind",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Editor",
+        "Diff",
+        "Terminal",
+        "Timeline",
+        "Agents",
+        "Approvals",
+        "Evidence"
+      ]
+    },
+    "agentide.surface.PaneSnapshot": {
+      "title": "PaneSnapshot",
+      "x-ess-name": "agentide.surface.PaneSnapshot",
+      "x-ess-kind": "struct",
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/agentide.surface.PaneId"
+        },
+        "kind": {
+          "$ref": "#/$defs/agentide.surface.PaneKind"
+        },
+        "title": {
+          "type": "string"
+        },
+        "path": {
+          "$ref": "#/$defs/agentide.coding.Path"
+        },
+        "line": {
+          "type": "integer"
+        },
+        "column": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "title"
+      ],
+      "additionalProperties": false
+    },
+    "agentide.surface.Workbench.State": {
+      "title": "State",
+      "x-ess-name": "agentide.surface.Workbench.State",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Active"
+      ]
+    }
+  }
+}

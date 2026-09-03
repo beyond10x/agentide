@@ -9,7 +9,7 @@ do not edit: regenerate with `ess generate`
 
 A binding is the only way an event in one context causes a command in another. Each one states how many times the command may run and what happens when it does not, because a binding that can fail quietly is the difference between specifying a system and specifying a demo.
 
-[Back to the index](README.md).
+[Back to the index](index.md).
 
 This system declares no bindings: nothing here reacts to anything.
 

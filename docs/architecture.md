@@ -1,3 +1,14 @@
+---
+title: AgentIDE boundaries
+description: Semantic, hosted, runtime, Harness, surface, and durable-state ownership boundaries.
+b10x:
+  schema: b10x-doc-page/v1
+  audiences: [developer, operator]
+  experienceIds: [evaluate-beyond10x-products, build-agent-systems]
+  support: preview
+  access: public
+---
+
 # AgentIDE boundaries
 
 AgentIDE specifies what an agent needs during a coding session without embedding how a particular

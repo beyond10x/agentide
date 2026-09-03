@@ -62,7 +62,7 @@ jobs:
             --rev 1c4e614829cfa9a35e9b809c44855bd3c8aefd9d \
             --locked --bin aep protocol-cli
           cargo install --git https://github.com/beyond10x/ess \
-            --rev 01f12c9d66cc8c4cb400ba786c1dcf268e0f752d \
+            --rev d9bace2383f96365341d5af2c5d3036541cbfe9d \
             --locked --bin ess ess-cli
 
       - name: Run the one repository gate

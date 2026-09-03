@@ -1,3 +1,14 @@
+---
+title: Harness-native TUI
+description: Run the recommended local AgentIDE surface with a native Harness model loop and exact-plan approvals.
+b10x:
+  schema: b10x-doc-page/v1
+  audiences: [evaluator, adopter, developer]
+  experienceIds: [evaluate-beyond10x-products, build-agent-systems]
+  support: preview
+  access: public
+---
+
 # Harness-native TUI
 
 The Harness mode of `agentide tui` is the first runnable console surface that composes the AgentIDE

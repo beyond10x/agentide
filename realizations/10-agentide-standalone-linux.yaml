@@ -1,0 +1,108 @@
+type: ess-realization/1
+id: agentide-standalone-linux
+specification:
+  system: agentide
+  version: v1
+  source_digest: sha256:6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4
+synthesis:
+  target: rust-linux-x86_64/1
+  generator: agentide/0.1.1
+components: [agentide-engine]
+actors:
+  - agentide.session.Operator
+  - agentide.session.CodingAgent
+  - agentide.coordination.SessionOwner
+  - agentide.coding.CodingAgent
+  - agentide.surface.CodingAgent
+implementations:
+  - id: released-linux-binary
+    components: [agentide-engine]
+    artifact:
+      kind: binary
+      locator: https://github.com/beyond10x/agentide/releases/download/0.1.1/agentide-0.1.1-x86_64-unknown-linux-gnu.tar.gz
+      identity: sha256:2e6d98b3891f7068c46fa55eb56a87e9eaf69603f7f0586f774604d2aa42b1e8
+entrypoints:
+  - id: agent-tui
+    title: Model-backed local TUI
+    summary: Run the recommended interactive terminal workbench with the native Harness model loop.
+    primary: true
+    interaction: agent_loop
+    attachment: in_process
+    availability: public
+    support: preview
+    implementation: released-linux-binary
+    actors: [agentide.coding.CodingAgent]
+    surfaces:
+      - {kind: command, name: agentide.coding.ReadCode}
+      - {kind: command, name: agentide.coding.EditCode}
+      - {kind: command, name: agentide.coding.VerifyCode}
+      - {kind: view, name: agentide.surface.WorkbenchSnapshot}
+    invocation:
+      kind: argv
+      argv: [agentide, tui, --session, "${SESSION_ID}", --base-url, "${AGENTIDE_BASE_URL}", --model, "${AGENTIDE_MODEL}", --api-key-env, MODEL_API_KEY]
+    requires:
+      - {kind: operating_system, name: linux, summary: AgentIDE standalone effects target Linux.}
+      - {kind: environment_variable, name: SESSION_ID, summary: Identifier printed by session start.}
+      - {kind: environment_variable, name: AGENTIDE_BASE_URL, summary: Model API origin and prefix.}
+      - {kind: environment_variable, name: AGENTIDE_MODEL, summary: Exact model identifier.}
+      - {kind: credential, name: MODEL_API_KEY, summary: API key read by name for each request and never journaled.}
+  - id: projection-tui
+    title: Projection-only local TUI
+    summary: Inspect and operate the durable workbench without connecting a model.
+    primary: false
+    interaction: invoke
+    attachment: in_process
+    availability: public
+    support: preview
+    implementation: released-linux-binary
+    actors: [agentide.session.Operator]
+    surfaces:
+      - {kind: view, name: agentide.session.SessionSnapshot}
+      - {kind: view, name: agentide.coordination.ApprovalCheckpointSnapshot}
+      - {kind: view, name: agentide.surface.WorkbenchSnapshot}
+    invocation:
+      kind: argv
+      argv: [agentide, tui, --session, "${SESSION_ID}"]
+    requires:
+      - {kind: operating_system, name: linux, summary: AgentIDE standalone effects target Linux.}
+      - {kind: environment_variable, name: SESSION_ID, summary: Identifier printed by session start.}
+  - id: json-cli
+    title: JSON CLI
+    summary: Invoke semantic intents from scripts or agent tool adapters and receive structured JSON.
+    primary: false
+    interaction: invoke
+    attachment: in_process
+    availability: public
+    support: preview
+    implementation: released-linux-binary
+    actors: [agentide.session.CodingAgent]
+    surfaces:
+      - {kind: command, name: agentide.session.StartSession}
+      - {kind: command, name: agentide.coding.ReadCode}
+      - {kind: view, name: agentide.session.SessionSnapshot}
+    invocation:
+      kind: argv
+      argv: [agentide, snapshot, --session, "${SESSION_ID}"]
+    requires:
+      - {kind: operating_system, name: linux, summary: AgentIDE standalone effects target Linux.}
+      - {kind: environment_variable, name: SESSION_ID, summary: Identifier printed by session start.}
+  - id: local-browser
+    title: Local browser workbench
+    summary: View the same durable projection in the embedded browser interface served on loopback.
+    primary: false
+    interaction: invoke
+    attachment: loopback
+    availability: public
+    support: preview
+    implementation: released-linux-binary
+    actors: [agentide.surface.CodingAgent]
+    surfaces:
+      - {kind: command, name: agentide.surface.OpenFile}
+      - {kind: command, name: agentide.surface.ShowDiff}
+      - {kind: view, name: agentide.surface.WorkbenchSnapshot}
+    invocation:
+      kind: url
+      url: http://127.0.0.1:7788/
+    requires:
+      - {kind: operating_system, name: linux, summary: AgentIDE standalone effects target Linux.}
+      - {kind: network, name: loopback-7788, summary: Start `agentide serve --session SESSION_ID` before opening the URL.}

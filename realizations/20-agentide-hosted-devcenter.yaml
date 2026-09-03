@@ -1,0 +1,47 @@
+type: ess-realization/1
+id: agentide-hosted-devcenter
+specification:
+  system: agentide
+  version: v1
+  source_digest: sha256:6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4
+synthesis:
+  target: service-sdk-devcenter/1
+  generator: service-sdk/0.3.2
+components: [agentide-engine]
+actors:
+  - agentide.session.Operator
+  - agentide.coordination.SessionOwner
+  - agentide.coding.CodingAgent
+  - agentide.surface.CodingAgent
+implementations:
+  - id: devcenter-workbench
+    components: [agentide-engine]
+    artifact:
+      kind: hosted_service
+      locator: https://github.com/beyond10x/devcenter
+      identity: git:457c294b4f36a49b6bfb681867055d2045f8830d
+entrypoints:
+  - id: devcenter-web
+    title: Hosted DevCenter workbench
+    summary: Compose authenticated AgentIDE session projections into DevCenter; no public self-service endpoint is currently offered.
+    primary: true
+    interaction: agent_loop
+    attachment: network
+    availability: approval_required
+    support: preview
+    implementation: devcenter-workbench
+    actors: [agentide.coordination.SessionOwner, agentide.coding.CodingAgent]
+    surfaces:
+      - {kind: command, name: agentide.session.StartSession}
+      - {kind: command, name: agentide.coding.ReadCode}
+      - {kind: command, name: agentide.coding.EditCode}
+      - {kind: command, name: agentide.coordination.ApproveCheckpoint}
+      - {kind: view, name: agentide.session.SessionSnapshot}
+      - {kind: view, name: agentide.surface.WorkbenchSnapshot}
+    invocation:
+      kind: url
+      url: https://${DEV_CENTER_HOST}/workspaces/${WORKSPACE_ID}/agentide
+    requires:
+      - {kind: environment_variable, name: DEV_CENTER_HOST, summary: Operator-provided DevCenter host; there is no public default.}
+      - {kind: environment_variable, name: WORKSPACE_ID, summary: Authenticated workspace identity.}
+      - {kind: credential, name: devcenter-session, summary: Authenticated DevCenter session supplied by the hosting boundary.}

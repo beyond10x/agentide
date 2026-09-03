@@ -18,8 +18,9 @@ workspace = true
 [dependencies]
 agentide-contracts.workspace = true
 anyhow.workspace = true
-ess-compiler = { git = "https://github.com/beyond10x/ess", rev = "01f12c9d66cc8c4cb400ba786c1dcf268e0f752d", version = "=0.3.0" }
-ess-domain = { git = "https://github.com/beyond10x/ess", rev = "01f12c9d66cc8c4cb400ba786c1dcf268e0f752d", version = "=0.3.0" }
+ess-compiler = { git = "https://github.com/beyond10x/ess", rev = "d9bace2383f96365341d5af2c5d3036541cbfe9d", version = "=0.8.0" }
+ess-domain = { git = "https://github.com/beyond10x/ess", rev = "d9bace2383f96365341d5af2c5d3036541cbfe9d", version = "=0.8.0" }
+ess-realization = { git = "https://github.com/beyond10x/ess", rev = "d9bace2383f96365341d5af2c5d3036541cbfe9d", version = "=0.8.0" }
 serde_json.workspace = true
 service-builder.workspace = true
 tempfile.workspace = true

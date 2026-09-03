@@ -9,7 +9,7 @@ do not edit: regenerate with `ess generate`
 
 A renderer-neutral virtual workbench shared by agents, the browser, CLI snapshots, and the console TUI.
 
-`agentide.surface` is one of agentide's bounded contexts. [Back to the index](../README.md).
+`agentide.surface` is one of agentide's bounded contexts. [Back to the index](../index.md).
 
 ## Types
 
@@ -52,6 +52,8 @@ It holds:
 - `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
 - `open_files` — `List<agentide.coding.Path>`
 
+It declares no relation to another entity, and no other entity names it.
+
 No invariant is declared, so nothing here constrains an instance at rest.
 
 Its state is a `agentide.surface.Workbench.State`, one of `Active`. That enum is synthesised from the lifecycle rather than declared beside it, so the states a view's filter compares and the states drawn below cannot disagree.
@@ -88,6 +90,8 @@ It exposes:
 - `panes` — `List<agentide.surface.PaneSnapshot>`
 - `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
 - `open_files` — `List<agentide.coding.Path>`
+
+It declares no order, so the rows come back in whatever order the implementation has, and two reads may disagree.
 
 **Read-your-writes**: it is current the moment the command that changed it returns. A caller that has just created an invoice and cannot see it in here has been told a lie about what it did.
 

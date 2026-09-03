@@ -96,8 +96,9 @@ version = "0.1.1"
 dependencies = [
  "agentide-contracts",
  "anyhow",
- "ess-compiler",
- "ess-domain",
+ "ess-compiler 0.8.0",
+ "ess-domain 0.8.0",
+ "ess-realization",
  "serde_json",
  "service-builder",
  "tempfile",
@@ -1030,8 +1031,20 @@ name = "ess-compiler"
 version = "0.3.0"
 source = "git+https://github.com/beyond10x/ess?rev=01f12c9d66cc8c4cb400ba786c1dcf268e0f752d#01f12c9d66cc8c4cb400ba786c1dcf268e0f752d"
 dependencies = [
- "ess-domain",
- "ess-primitives",
+ "ess-domain 0.3.0",
+ "ess-primitives 0.3.0",
+ "serde",
+ "serde_json",
+ "sha2 0.11.0",
+]
+
+[[package]]
+name = "ess-compiler"
+version = "0.8.0"
+source = "git+https://github.com/beyond10x/ess?rev=d9bace2383f96365341d5af2c5d3036541cbfe9d#d9bace2383f96365341d5af2c5d3036541cbfe9d"
+dependencies = [
+ "ess-domain 0.8.0",
+ "ess-primitives 0.8.0",
  "serde",
  "serde_json",
  "sha2 0.11.0",
@@ -1042,7 +1055,20 @@ name = "ess-domain"
 version = "0.3.0"
 source = "git+https://github.com/beyond10x/ess?rev=01f12c9d66cc8c4cb400ba786c1dcf268e0f752d#01f12c9d66cc8c4cb400ba786c1dcf268e0f752d"
 dependencies = [
- "ess-primitives",
+ "ess-primitives 0.3.0",
+ "schemars 0.8.22",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "thiserror",
+]
+
+[[package]]
+name = "ess-domain"
+version = "0.8.0"
+source = "git+https://github.com/beyond10x/ess?rev=d9bace2383f96365341d5af2c5d3036541cbfe9d#d9bace2383f96365341d5af2c5d3036541cbfe9d"
+dependencies = [
+ "ess-primitives 0.8.0",
  "schemars 0.8.22",
  "serde",
  "serde_json",
@@ -1055,9 +1081,9 @@ name = "ess-gen"
 version = "0.3.0"
 source = "git+https://github.com/beyond10x/ess?rev=01f12c9d66cc8c4cb400ba786c1dcf268e0f752d#01f12c9d66cc8c4cb400ba786c1dcf268e0f752d"
 dependencies = [
- "ess-compiler",
- "ess-domain",
- "ess-primitives",
+ "ess-compiler 0.3.0",
+ "ess-domain 0.3.0",
+ "ess-primitives 0.3.0",
  "serde",
  "serde_json",
  "serde_yaml",
@@ -1076,12 +1102,36 @@ dependencies = [
 ]
 
 [[package]]
+name = "ess-primitives"
+version = "0.8.0"
+source = "git+https://github.com/beyond10x/ess?rev=d9bace2383f96365341d5af2c5d3036541cbfe9d#d9bace2383f96365341d5af2c5d3036541cbfe9d"
+dependencies = [
+ "schemars 0.8.22",
+ "serde",
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
+name = "ess-realization"
+version = "0.8.0"
+source = "git+https://github.com/beyond10x/ess?rev=d9bace2383f96365341d5af2c5d3036541cbfe9d#d9bace2383f96365341d5af2c5d3036541cbfe9d"
+dependencies = [
+ "ess-compiler 0.8.0",
+ "ess-domain 0.8.0",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "sha2 0.11.0",
+]
+
+[[package]]
 name = "ess-synth"
 version = "0.3.0"
 source = "git+https://github.com/beyond10x/ess?rev=01f12c9d66cc8c4cb400ba786c1dcf268e0f752d#01f12c9d66cc8c4cb400ba786c1dcf268e0f752d"
 dependencies = [
- "ess-compiler",
- "ess-domain",
+ "ess-compiler 0.3.0",
+ "ess-domain 0.3.0",
  "ess-gen",
  "serde",
  "serde_json",
@@ -2666,8 +2716,8 @@ source = "git+https://github.com/beyond10x/service-sdk.git?rev=944d3f1575aab8e3e
 dependencies = [
  "anyhow",
  "clap",
- "ess-compiler",
- "ess-domain",
+ "ess-compiler 0.3.0",
+ "ess-domain 0.3.0",
  "ess-gen",
  "ess-synth",
  "serde",
@@ -2739,7 +2789,7 @@ name = "service-definition"
 version = "0.3.2"
 source = "git+https://github.com/beyond10x/service-sdk.git?rev=944d3f1575aab8e3e8801f810777298b8cf9a010#944d3f1575aab8e3e8801f810777298b8cf9a010"
 dependencies = [
- "ess-compiler",
+ "ess-compiler 0.3.0",
  "serde",
  "serde_json",
  "serde_yaml",
@@ -2802,7 +2852,7 @@ name = "service-runtime-ir"
 version = "0.3.2"
 source = "git+https://github.com/beyond10x/service-sdk.git?rev=944d3f1575aab8e3e8801f810777298b8cf9a010#944d3f1575aab8e3e8801f810777298b8cf9a010"
 dependencies = [
- "ess-compiler",
+ "ess-compiler 0.3.0",
  "ess-synth",
  "serde",
  "serde_json",

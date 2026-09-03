@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Declare the standalone Linux and hosted DevCenter realizations as typed ESS Realization IR,
+  validate them against the exact compiled AgentIDE specification, and generate the running-mode
+  reference from those declarations.
+- Rework the public quickstart around the released, checksum-verified Linux binary; lead with the
+  model-backed local TUI, distinguish the projection-only CLI, TUI, and browser surfaces, and state
+  the approval-required hosted boundary and operational prerequisites explicitly.
 - Regenerate the hosted coordination service with Service SDK 0.3.2 and its exact Connectors 0.5.3
   factory contract so downstream composed runtimes use one Connector service trait.
 - Include lifecycle state in the generated session snapshot so Workspace can distinguish active
