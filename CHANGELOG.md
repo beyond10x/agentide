@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Promote the published `0.1.3` Linux archive and its exact SHA-256 digest into the standalone
+  realization declaration.
+
 ## 0.1.3 - 2026-09-03
 
 - Add deterministic, retry-safe hosted-session creation keyed by the Workspace session identity.
