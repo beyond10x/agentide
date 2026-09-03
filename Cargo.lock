@@ -530,8 +530,8 @@ dependencies = [
 
 [[package]]
 name = "catalog"
-version = "0.5.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=9badb8a46b5fd60a82cac4c909dbb584929172e4#9badb8a46b5fd60a82cac4c909dbb584929172e4"
+version = "0.5.3"
+source = "git+https://github.com/beyond10x/connectors.git?rev=03a9f3de1ea2001f057face1ce469a66088bc31b#03a9f3de1ea2001f057face1ce469a66088bc31b"
 dependencies = [
  "catalog-reader",
  "serde",
@@ -540,8 +540,8 @@ dependencies = [
 
 [[package]]
 name = "catalog-reader"
-version = "0.5.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=9badb8a46b5fd60a82cac4c909dbb584929172e4#9badb8a46b5fd60a82cac4c909dbb584929172e4"
+version = "0.5.3"
+source = "git+https://github.com/beyond10x/connectors.git?rev=03a9f3de1ea2001f057face1ce469a66088bc31b#03a9f3de1ea2001f057face1ce469a66088bc31b"
 
 [[package]]
 name = "cc"
@@ -650,16 +650,16 @@ dependencies = [
 
 [[package]]
 name = "connector-address"
-version = "0.5.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=9badb8a46b5fd60a82cac4c909dbb584929172e4#9badb8a46b5fd60a82cac4c909dbb584929172e4"
+version = "0.5.3"
+source = "git+https://github.com/beyond10x/connectors.git?rev=03a9f3de1ea2001f057face1ce469a66088bc31b#03a9f3de1ea2001f057face1ce469a66088bc31b"
 dependencies = [
  "thiserror",
 ]
 
 [[package]]
 name = "connector-resolve"
-version = "0.5.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=9badb8a46b5fd60a82cac4c909dbb584929172e4#9badb8a46b5fd60a82cac4c909dbb584929172e4"
+version = "0.5.3"
+source = "git+https://github.com/beyond10x/connectors.git?rev=03a9f3de1ea2001f057face1ce469a66088bc31b#03a9f3de1ea2001f057face1ce469a66088bc31b"
 dependencies = [
  "catalog",
  "catalog-reader",
@@ -673,8 +673,8 @@ dependencies = [
 
 [[package]]
 name = "connector-secrets"
-version = "0.5.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=9badb8a46b5fd60a82cac4c909dbb584929172e4#9badb8a46b5fd60a82cac4c909dbb584929172e4"
+version = "0.5.3"
+source = "git+https://github.com/beyond10x/connectors.git?rev=03a9f3de1ea2001f057face1ce469a66088bc31b#03a9f3de1ea2001f057face1ce469a66088bc31b"
 dependencies = [
  "async-trait",
  "connector-address",
@@ -687,8 +687,8 @@ dependencies = [
 
 [[package]]
 name = "connector-state"
-version = "0.5.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=9badb8a46b5fd60a82cac4c909dbb584929172e4#9badb8a46b5fd60a82cac4c909dbb584929172e4"
+version = "0.5.3"
+source = "git+https://github.com/beyond10x/connectors.git?rev=03a9f3de1ea2001f057face1ce469a66088bc31b#03a9f3de1ea2001f057face1ce469a66088bc31b"
 dependencies = [
  "thiserror",
 ]
@@ -952,8 +952,8 @@ dependencies = [
 
 [[package]]
 name = "domain"
-version = "0.5.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=9badb8a46b5fd60a82cac4c909dbb584929172e4#9badb8a46b5fd60a82cac4c909dbb584929172e4"
+version = "0.5.3"
+source = "git+https://github.com/beyond10x/connectors.git?rev=03a9f3de1ea2001f057face1ce469a66088bc31b#03a9f3de1ea2001f057face1ce469a66088bc31b"
 dependencies = [
  "async-trait",
  "connector-state",
@@ -1022,7 +1022,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
 dependencies = [
  "libc",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -1838,9 +1838,9 @@ dependencies = [
 
 [[package]]
 name = "mio"
-version = "1.2.2"
+version = "1.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "30d65c71f1ce40ab09135ce117d742b9f8a19ff91a41a8b57ed50bc2de59c427"
+checksum = "4b18443e9c262bfe8fa82f51666e2642c53393f7e5c27b3e1aeab922cff5b9d8"
 dependencies = [
  "libc",
  "log",
@@ -2045,8 +2045,8 @@ dependencies = [
 
 [[package]]
 name = "protocol"
-version = "0.5.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=9badb8a46b5fd60a82cac4c909dbb584929172e4#9badb8a46b5fd60a82cac4c909dbb584929172e4"
+version = "0.5.3"
+source = "git+https://github.com/beyond10x/connectors.git?rev=03a9f3de1ea2001f057face1ce469a66088bc31b#03a9f3de1ea2001f057face1ce469a66088bc31b"
 dependencies = [
  "domain",
  "schemars 1.2.2",
@@ -2109,7 +2109,7 @@ dependencies = [
  "once_cell",
  "socket2",
  "tracing",
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -2405,7 +2405,7 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys 0.12.1",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -2641,8 +2641,8 @@ dependencies = [
 
 [[package]]
 name = "service"
-version = "0.5.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=9badb8a46b5fd60a82cac4c909dbb584929172e4#9badb8a46b5fd60a82cac4c909dbb584929172e4"
+version = "0.5.3"
+source = "git+https://github.com/beyond10x/connectors.git?rev=03a9f3de1ea2001f057face1ce469a66088bc31b#03a9f3de1ea2001f057face1ce469a66088bc31b"
 dependencies = [
  "async-trait",
  "base64 0.22.1",
@@ -2661,8 +2661,8 @@ dependencies = [
 
 [[package]]
 name = "service-builder"
-version = "0.3.1"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=141c06ee3733e154f6d350276675a8bf08008233#141c06ee3733e154f6d350276675a8bf08008233"
+version = "0.3.2"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=944d3f1575aab8e3e8801f810777298b8cf9a010#944d3f1575aab8e3e8801f810777298b8cf9a010"
 dependencies = [
  "anyhow",
  "clap",
@@ -2684,8 +2684,8 @@ dependencies = [
 
 [[package]]
 name = "service-catalog"
-version = "0.3.1"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=141c06ee3733e154f6d350276675a8bf08008233#141c06ee3733e154f6d350276675a8bf08008233"
+version = "0.3.2"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=944d3f1575aab8e3e8801f810777298b8cf9a010#944d3f1575aab8e3e8801f810777298b8cf9a010"
 dependencies = [
  "async-trait",
  "hex",
@@ -2699,8 +2699,8 @@ dependencies = [
 
 [[package]]
 name = "service-conformance"
-version = "0.3.1"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=141c06ee3733e154f6d350276675a8bf08008233#141c06ee3733e154f6d350276675a8bf08008233"
+version = "0.3.2"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=944d3f1575aab8e3e8801f810777298b8cf9a010#944d3f1575aab8e3e8801f810777298b8cf9a010"
 dependencies = [
  "async-trait",
  "eventlog-sqlite",
@@ -2717,8 +2717,8 @@ dependencies = [
 
 [[package]]
 name = "service-connectors"
-version = "0.3.1"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=141c06ee3733e154f6d350276675a8bf08008233#141c06ee3733e154f6d350276675a8bf08008233"
+version = "0.3.2"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=944d3f1575aab8e3e8801f810777298b8cf9a010#944d3f1575aab8e3e8801f810777298b8cf9a010"
 dependencies = [
  "async-trait",
  "eventlog-core",
@@ -2736,8 +2736,8 @@ dependencies = [
 
 [[package]]
 name = "service-definition"
-version = "0.3.1"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=141c06ee3733e154f6d350276675a8bf08008233#141c06ee3733e154f6d350276675a8bf08008233"
+version = "0.3.2"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=944d3f1575aab8e3e8801f810777298b8cf9a010#944d3f1575aab8e3e8801f810777298b8cf9a010"
 dependencies = [
  "ess-compiler",
  "serde",
@@ -2747,8 +2747,8 @@ dependencies = [
 
 [[package]]
 name = "service-engine"
-version = "0.3.1"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=141c06ee3733e154f6d350276675a8bf08008233#141c06ee3733e154f6d350276675a8bf08008233"
+version = "0.3.2"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=944d3f1575aab8e3e8801f810777298b8cf9a010#944d3f1575aab8e3e8801f810777298b8cf9a010"
 dependencies = [
  "serde",
  "serde_json",
@@ -2759,8 +2759,8 @@ dependencies = [
 
 [[package]]
 name = "service-eventlog"
-version = "0.3.1"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=141c06ee3733e154f6d350276675a8bf08008233#141c06ee3733e154f6d350276675a8bf08008233"
+version = "0.3.2"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=944d3f1575aab8e3e8801f810777298b8cf9a010#944d3f1575aab8e3e8801f810777298b8cf9a010"
 dependencies = [
  "eventlog-core",
  "hex",
@@ -2776,8 +2776,8 @@ dependencies = [
 
 [[package]]
 name = "service-obligations"
-version = "0.3.1"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=141c06ee3733e154f6d350276675a8bf08008233#141c06ee3733e154f6d350276675a8bf08008233"
+version = "0.3.2"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=944d3f1575aab8e3e8801f810777298b8cf9a010#944d3f1575aab8e3e8801f810777298b8cf9a010"
 dependencies = [
  "serde",
  "serde_json",
@@ -2788,8 +2788,8 @@ dependencies = [
 
 [[package]]
 name = "service-runtime"
-version = "0.3.1"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=141c06ee3733e154f6d350276675a8bf08008233#141c06ee3733e154f6d350276675a8bf08008233"
+version = "0.3.2"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=944d3f1575aab8e3e8801f810777298b8cf9a010#944d3f1575aab8e3e8801f810777298b8cf9a010"
 dependencies = [
  "serde",
  "serde_json",
@@ -2799,8 +2799,8 @@ dependencies = [
 
 [[package]]
 name = "service-runtime-ir"
-version = "0.3.1"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=141c06ee3733e154f6d350276675a8bf08008233#141c06ee3733e154f6d350276675a8bf08008233"
+version = "0.3.2"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=944d3f1575aab8e3e8801f810777298b8cf9a010#944d3f1575aab8e3e8801f810777298b8cf9a010"
 dependencies = [
  "ess-compiler",
  "ess-synth",
@@ -3027,10 +3027,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
 dependencies = [
  "fastrand",
- "getrandom 0.3.4",
+ "getrandom 0.4.3",
  "once_cell",
  "rustix 1.1.4",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -3497,7 +3497,7 @@ version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
 dependencies = [
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
