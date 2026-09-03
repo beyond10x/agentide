@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.3 - 2026-09-03
+
 - Add deterministic, retry-safe hosted-session creation keyed by the Workspace session identity.
 
 ## 0.1.2 - 2026-09-03
