@@ -1,0 +1,90 @@
+{
+  "$id": "https://beyond10x.github.io/agentide/contracts/renderer/renderer-event-v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Transient host input that does not replace the immutable frame.",
+  "oneOf": [
+    {
+      "additionalProperties": false,
+      "description": "Incremental assistant text.",
+      "properties": {
+        "format": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "text_delta",
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "format",
+        "text"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "description": "Ordered terminal output.",
+      "properties": {
+        "bytes": {
+          "items": {
+            "format": "uint8",
+            "maximum": 255,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "format": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "terminal_output",
+          "type": "string"
+        },
+        "sequence": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "terminal_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "format",
+        "terminal_id",
+        "sequence",
+        "bytes"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "description": "Host-produced status or refusal message.",
+      "properties": {
+        "format": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "notice",
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "format",
+        "message"
+      ],
+      "type": "object"
+    }
+  ],
+  "title": "RendererEvent"
+}

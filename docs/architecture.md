@@ -118,6 +118,18 @@ The browser, JSON CLI, and console TUI are renderers over `agentide.snapshot/1` 
 authoritative list of open files or focused pane privately. Source contents are observations, not
 session state, and are not written to the journal.
 
+The browser has an additional explicit target boundary. A host converts current session state into
+an immutable `agentide.renderer-frame/1`, delivers bounded transient
+`agentide.renderer-event/1` values, and handles `agentide.renderer-action/1` values emitted by the
+target. A target implements only `mount`, `update`, `deliver`, and `destroy`; it cannot know an HTTP
+route, bearer, polling interval, WebSocket, storage key, or deployment. Vanilla DOM and Vue are
+independent realizations of this same contract and can therefore be compared without changing the
+authority or execution path.
+
+The local host owns the loopback API binding. A hosted product such as DevCenter owns its Identity,
+Workspace, Agent Platform, streaming, and terminal adapters. Both may select a renderer target, but
+neither grants that target authority or exposes transport details through the renderer contract.
+
 ESS describes renderer-neutral panes and workbench intentions. The separate, versioned
 `agentide.surface-profile/1` contract describes how a surface makes those semantics reachable:
 regions, adaptive viewport classes, interaction modes, keymaps, local actions, intent references,

@@ -10,10 +10,13 @@ use agentide_contracts::{
     AuthorityGrant, AuthorizationPath, AvailableIntent, ChangeSelector, ContextPack, ContextRecord,
     ContextSelection, ContextSelectionDraft, CoordinationRevision, DiffFile, DiffFileStatus,
     DiffHunk, DiffLine, DiffLineKind, DiffMode, DiffProjection, DiffRange, Effect,
-    FileModificationState, FileProjection, FileRevision, IntentDefinition, IntentInventory, Risk,
-    SelectionKind, TerminalControl, TerminalControlFrame, TerminalEvent, TerminalProfile,
-    TerminalReplayBounds, TerminalServerFrame, TerminalSession, TerminalState,
-    TerminalWorkspaceAccess, TreeEntry, TreeEntryKind, TreeProjection, WorkbenchPane,
+    FileModificationState, FileProjection, FileRevision, IntentDefinition, IntentInventory,
+    RENDERER_ACTION_FORMAT, RENDERER_EVENT_FORMAT, RENDERER_FRAME_FORMAT, RENDERER_TARGET_FORMAT,
+    RendererAction, RendererActivity, RendererApproval, RendererEvent, RendererFrame, RendererPane,
+    RendererSession, RendererTargetManifest, RendererWorkbench, Risk, SelectionKind,
+    TerminalControl, TerminalControlFrame, TerminalEvent, TerminalProfile, TerminalReplayBounds,
+    TerminalServerFrame, TerminalSession, TerminalState, TerminalWorkspaceAccess, TreeEntry,
+    TreeEntryKind, TreeProjection, WorkbenchPane,
 };
 use anyhow::{Context, Result, anyhow, bail};
 use ess_compiler::source::SourceMap;
@@ -42,6 +45,11 @@ fn main() -> Result<()> {
         println!("contracts/schemas/hosted contracts/fixtures/hosted");
         return Ok(());
     }
+    if command == "generate-renderer-contracts" {
+        write_renderer_contracts(root)?;
+        println!("contracts/schemas/renderer contracts/fixtures/renderer");
+        return Ok(());
+    }
     if command == "generate-service" {
         let package = service_builder::package::ServicePackage::read(&root.join("service.yaml"))
             .context("loading the AgentIDE Service SDK package")?;
@@ -60,12 +68,13 @@ fn main() -> Result<()> {
     }
     if command != "gate" {
         bail!(
-            "usage: cargo xtask <gate|generate-hosted-contracts|generate-realizations|generate-service|generate-surface-profile>"
+            "usage: cargo xtask <gate|generate-hosted-contracts|generate-renderer-contracts|generate-realizations|generate-service|generate-surface-profile>"
         );
     }
 
     validate_contracts(root)?;
     validate_hosted_contracts(root)?;
+    validate_renderer_contracts(root)?;
     let ir = validate_ess(root)?;
     validate_realizations(root, &ir)?;
     validate_generated_ess(root)?;
@@ -190,6 +199,133 @@ fn validate_hosted_contracts(root: &Path) -> Result<()> {
         validate_hosted_fixture(&fixture_path, &fixture)?;
     }
     Ok(())
+}
+
+fn write_renderer_contracts(root: &Path) -> Result<()> {
+    let (schemas, fixtures) = renderer_contract_documents()?;
+    write_documents(&root.join("contracts/schemas/renderer"), &schemas)?;
+    write_documents(&root.join("contracts/fixtures/renderer"), &fixtures)?;
+    Ok(())
+}
+
+fn validate_renderer_contracts(root: &Path) -> Result<()> {
+    let (expected_schemas, expected_fixtures) = renderer_contract_documents()?;
+    let observed_schemas = read_tree(&root.join("contracts/schemas/renderer"))?;
+    let observed_fixtures = read_tree(&root.join("contracts/fixtures/renderer"))?;
+    if observed_schemas != expected_schemas || observed_fixtures != expected_fixtures {
+        bail!(
+            "renderer contracts drifted; regenerate with `cargo xtask generate-renderer-contracts`"
+        );
+    }
+    for (path, schema_bytes) in &observed_schemas {
+        let schema: serde_json::Value = serde_json::from_slice(schema_bytes)
+            .with_context(|| format!("parsing renderer schema {}", path.display()))?;
+        jsonschema::meta::validate(&schema)
+            .map_err(|error| anyhow!("invalid renderer schema {}: {error}", path.display()))?;
+        let fixture_path = path.with_extension("json");
+        let fixture: serde_json::Value =
+            serde_json::from_slice(observed_fixtures.get(&fixture_path).ok_or_else(|| {
+                anyhow!("renderer schema {} has no matching fixture", path.display())
+            })?)?;
+        jsonschema::validator_for(&schema)?
+            .validate(&fixture)
+            .map_err(|error| {
+                anyhow!(
+                    "renderer fixture {} does not conform to {}: {error}",
+                    fixture_path.display(),
+                    path.display()
+                )
+            })?;
+    }
+    Ok(())
+}
+
+fn renderer_contract_documents() -> Result<HostedContractDocuments> {
+    let mut schemas = BTreeMap::new();
+    let mut fixtures = BTreeMap::new();
+    macro_rules! contract {
+        ($name:literal, $type:ty, $fixture:expr) => {{
+            let path = PathBuf::from(concat!($name, ".json"));
+            schemas.insert(
+                path.clone(),
+                render_hosted_schema::<$type>(concat!(
+                    "https://beyond10x.github.io/agentide/contracts/renderer/",
+                    $name,
+                    ".json"
+                ))?,
+            );
+            fixtures.insert(path, render_json(&$fixture)?);
+        }};
+    }
+
+    contract!(
+        "renderer-target-v1.schema",
+        RendererTargetManifest,
+        RendererTargetManifest {
+            format: RENDERER_TARGET_FORMAT.into(),
+            id: "vanilla".into(),
+            framework: "vanilla-dom".into(),
+            frame_format: RENDERER_FRAME_FORMAT.into(),
+            event_format: RENDERER_EVENT_FORMAT.into(),
+            action_format: RENDERER_ACTION_FORMAT.into(),
+        }
+    );
+    contract!(
+        "renderer-frame-v1.schema",
+        RendererFrame,
+        RendererFrame {
+            format: RENDERER_FRAME_FORMAT.into(),
+            session: RendererSession {
+                id: "session-renderer-fixture".into(),
+                objective: "Compare browser renderer targets".into(),
+                status: "active".into(),
+                cursor: 7,
+            },
+            workbench: RendererWorkbench {
+                panes: vec![RendererPane {
+                    id: "pane-readme".into(),
+                    kind: "editor".into(),
+                    title: "README.md".into(),
+                    path: Some("README.md".into()),
+                    line: Some(1),
+                    column: Some(1),
+                }],
+                focused_pane: Some("pane-readme".into()),
+                open_files: vec!["README.md".into()],
+            },
+            pending_approvals: vec![RendererApproval {
+                digest: "a".repeat(64),
+                intent: "code_write".into(),
+                risk: Some("workspace_write".into()),
+                approval_required: true,
+            }],
+            activity: vec![RendererActivity {
+                sequence: 7,
+                at: "2026-09-03T12:00:00Z".into(),
+                kind: "intent.completed".into(),
+                intent: Some("code_read".into()),
+            }],
+            observation: Some(serde_json::json!({"path": "README.md"})),
+            notice: None,
+        }
+    );
+    contract!(
+        "renderer-event-v1.schema",
+        RendererEvent,
+        RendererEvent::Notice {
+            format: RENDERER_EVENT_FORMAT.into(),
+            message: "Host observation".into(),
+        }
+    );
+    contract!(
+        "renderer-action-v1.schema",
+        RendererAction,
+        RendererAction::OpenFile {
+            format: RENDERER_ACTION_FORMAT.into(),
+            path: "README.md".into(),
+        }
+    );
+    Ok((schemas, fixtures))
 }
 
 fn hosted_contract_documents() -> Result<HostedContractDocuments> {

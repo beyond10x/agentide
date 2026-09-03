@@ -50,6 +50,8 @@ pub async fn serve(
     let state = AppState { engine, session_id };
     let app = Router::new()
         .route("/", get(index))
+        .route("/renderers/{target}", get(renderer))
+        .route("/renderers/{target}/", get(renderer))
         .route("/assets/{*path}", get(asset))
         .route("/api/snapshot", get(snapshot))
         .route("/api/events", get(events))
@@ -68,6 +70,13 @@ pub async fn serve(
 
 async fn index() -> Response {
     embedded("index.html")
+}
+
+async fn renderer(Path(target): Path<String>) -> Response {
+    match target.as_str() {
+        "vanilla" | "vue" => embedded(&format!("renderers/{target}/index.html")),
+        _ => (StatusCode::NOT_FOUND, "renderer target not found").into_response(),
+    }
 }
 
 async fn asset(Path(path): Path<String>) -> Response {
@@ -185,15 +194,18 @@ mod tests {
 
     #[tokio::test]
     async fn asset_route_preserves_the_embedded_assets_prefix() {
+        assert_eq!(index().await.status(), StatusCode::OK);
         assert_eq!(
-            asset(Path("styles.css".to_owned())).await.status(),
+            renderer(Path("vanilla".to_owned())).await.status(),
             StatusCode::OK
         );
         assert_eq!(
-            asset(Path("generated/surface-profile.js".to_owned()))
-                .await
-                .status(),
+            renderer(Path("vue".to_owned())).await.status(),
             StatusCode::OK
+        );
+        assert_eq!(
+            renderer(Path("unknown".to_owned())).await.status(),
+            StatusCode::NOT_FOUND
         );
     }
 }

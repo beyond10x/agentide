@@ -1,0 +1,232 @@
+{
+  "$defs": {
+    "RendererActivity": {
+      "additionalProperties": false,
+      "description": "One displayable activity entry.",
+      "properties": {
+        "at": {
+          "description": "RFC 3339 observation time.",
+          "type": "string"
+        },
+        "intent": {
+          "description": "Optional semantic intent.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "description": "Event kind.",
+          "type": "string"
+        },
+        "sequence": {
+          "description": "Event sequence.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "sequence",
+        "at",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "RendererApproval": {
+      "additionalProperties": false,
+      "description": "Exact plan awaiting a human decision.",
+      "properties": {
+        "approval_required": {
+          "description": "Whether the exact plan requires a decision.",
+          "type": "boolean"
+        },
+        "digest": {
+          "description": "Exact plan digest.",
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "intent": {
+          "description": "Semantic intent being authorized.",
+          "type": "string"
+        },
+        "risk": {
+          "description": "Optional consequence label.",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "digest",
+        "intent",
+        "approval_required"
+      ],
+      "type": "object"
+    },
+    "RendererPane": {
+      "additionalProperties": false,
+      "description": "Renderer-neutral pane metadata.",
+      "properties": {
+        "column": {
+          "description": "Optional one-based column.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "id": {
+          "description": "Stable pane identity.",
+          "type": "string"
+        },
+        "kind": {
+          "description": "Semantic pane kind.",
+          "type": "string"
+        },
+        "line": {
+          "description": "Optional one-based line.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "path": {
+          "description": "Optional workspace-relative path.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "title": {
+          "description": "Human-readable title.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "title"
+      ],
+      "type": "object"
+    },
+    "RendererSession": {
+      "additionalProperties": false,
+      "description": "Display-only session metadata.",
+      "properties": {
+        "cursor": {
+          "description": "Latest event cursor represented by the frame.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "id": {
+          "description": "Session identity, never a bearer credential.",
+          "type": "string"
+        },
+        "objective": {
+          "description": "Operator-visible objective.",
+          "type": "string"
+        },
+        "status": {
+          "description": "Current lifecycle label.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "objective",
+        "status",
+        "cursor"
+      ],
+      "type": "object"
+    },
+    "RendererWorkbench": {
+      "additionalProperties": false,
+      "description": "Display-only workbench projection.",
+      "properties": {
+        "focused_pane": {
+          "description": "Focused pane identity.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "open_files": {
+          "description": "Ordered open workspace paths.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "panes": {
+          "description": "Ordered panes.",
+          "items": {
+            "$ref": "#/$defs/RendererPane"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "panes",
+        "open_files"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://beyond10x.github.io/agentide/contracts/renderer/renderer-frame-v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Complete immutable state delivered to a renderer target.",
+  "properties": {
+    "activity": {
+      "description": "Recent activity projection.",
+      "items": {
+        "$ref": "#/$defs/RendererActivity"
+      },
+      "type": "array"
+    },
+    "format": {
+      "description": "Contract discriminator.",
+      "type": "string"
+    },
+    "notice": {
+      "description": "Optional host-produced status or refusal message.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "observation": {
+      "description": "Optional bounded observation selected by the host."
+    },
+    "pending_approvals": {
+      "description": "Exact plans waiting for a human decision.",
+      "items": {
+        "$ref": "#/$defs/RendererApproval"
+      },
+      "type": "array"
+    },
+    "session": {
+      "$ref": "#/$defs/RendererSession",
+      "description": "Display-only session metadata."
+    },
+    "workbench": {
+      "$ref": "#/$defs/RendererWorkbench",
+      "description": "Current renderer-neutral workbench projection."
+    }
+  },
+  "required": [
+    "format",
+    "session",
+    "workbench",
+    "pending_approvals",
+    "activity"
+  ],
+  "title": "RendererFrame",
+  "type": "object"
+}

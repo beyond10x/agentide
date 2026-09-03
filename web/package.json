@@ -1,13 +1,24 @@
 {
   "name": "agentide-web",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
-    "build": "tsc --project tsconfig.json",
-    "check": "tsc --project tsconfig.json --noEmit"
+    "build": "vite build",
+    "check": "tsc --project tsconfig.json --noEmit && vitest run",
+    "benchmark": "node scripts/benchmark.mjs"
+  },
+  "dependencies": {
+    "vue": "3.5.42"
   },
   "devDependencies": {
-    "typescript": "5.9.2"
+    "@types/node": "26.4.0",
+    "@vitejs/plugin-vue": "6.0.8",
+    "@vue/test-utils": "2.5.0",
+    "jsdom": "27.0.0",
+    "playwright": "1.62.1",
+    "typescript": "5.9.2",
+    "vite": "8.2.2",
+    "vitest": "4.1.11"
   }
 }

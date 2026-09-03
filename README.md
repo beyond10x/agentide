@@ -76,6 +76,11 @@ agentide intent call --session <id> code_read --input '{"path":"src/lib.rs"}'
 The browser is loopback-only. Start `agentide serve --session <id>`, then open
 `http://127.0.0.1:7788/`. It presents the durable projection but does not run a model loop.
 
+The root uses the compatibility Vanilla DOM renderer. The same live session can be compared through
+`/renderers/vanilla/` and `/renderers/vue/`. Both targets accept the released renderer frame and
+event contracts and emit typed semantic actions; HTTP, polling, routing, authentication, storage,
+and sockets remain in the browser host.
+
 ## Install the latest source with Cargo
 
 If you deliberately want the newest source from `main` and have a Rust toolchain, install directly
