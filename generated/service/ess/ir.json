@@ -152,6 +152,7 @@
       ],
       "commands": [
         "agentide.session.CloseSession",
+        "agentide.session.EnsureHostedSession",
         "agentide.session.ReadEvents",
         "agentide.session.SnapshotSession",
         "agentide.session.StartSession"
@@ -4414,6 +4415,257 @@
         "display": "Close session"
       }
     },
+    "agentide.session.EnsureHostedSession": {
+      "name": "agentide.session.EnsureHostedSession",
+      "domain": "agentide.session",
+      "input": [
+        {
+          "name": "session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "workspace_root",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.WorkspaceRoot"
+          },
+          "naming": {}
+        },
+        {
+          "name": "objective",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "project_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.ProjectId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "source_revision",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SourceRevision"
+          },
+          "naming": {}
+        },
+        {
+          "name": "workspace_session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.WorkspaceSessionId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "manifest_digest",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.ManifestDigest"
+          },
+          "naming": {}
+        },
+        {
+          "name": "scopes",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionScopes"
+          },
+          "naming": {}
+        }
+      ],
+      "outcomes": [
+        {
+          "name": "started",
+          "condition": {
+            "kind": "otherwise"
+          },
+          "subject": {
+            "entity": "agentide.session.CodingSession",
+            "effect": "creates",
+            "instance": {
+              "from": "observed",
+              "event": "agentide.session.SessionStarted",
+              "field": {
+                "name": "session_id",
+                "type_ref": {
+                  "kind": "declared",
+                  "name": "agentide.session.SessionId"
+                },
+                "naming": {}
+              }
+            }
+          },
+          "test_strategy": "default_branch",
+          "emits": [
+            "agentide.session.SessionStarted"
+          ],
+          "payload": [
+            {
+              "event": "agentide.session.SessionStarted",
+              "fields": [
+                {
+                  "target": "session_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.SessionId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "session_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.SessionId"
+                    }
+                  }
+                },
+                {
+                  "target": "workspace_root",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.WorkspaceRoot"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "workspace_root",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.WorkspaceRoot"
+                    }
+                  }
+                },
+                {
+                  "target": "objective",
+                  "target_type": {
+                    "kind": "primitive",
+                    "name": "string"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "objective",
+                    "type_ref": {
+                      "kind": "primitive",
+                      "name": "string"
+                    }
+                  }
+                },
+                {
+                  "target": "project_id",
+                  "target_type": {
+                    "kind": "optional",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.session.ProjectId"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "project_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.ProjectId"
+                    }
+                  }
+                },
+                {
+                  "target": "source_revision",
+                  "target_type": {
+                    "kind": "optional",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.session.SourceRevision"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "source_revision",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.SourceRevision"
+                    }
+                  }
+                },
+                {
+                  "target": "workspace_session_id",
+                  "target_type": {
+                    "kind": "optional",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.session.WorkspaceSessionId"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "workspace_session_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.WorkspaceSessionId"
+                    }
+                  }
+                },
+                {
+                  "target": "manifest_digest",
+                  "target_type": {
+                    "kind": "optional",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.session.ManifestDigest"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "manifest_digest",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.ManifestDigest"
+                    }
+                  }
+                },
+                {
+                  "target": "scopes",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.SessionScopes"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "scopes",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.SessionScopes"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "refused",
+          "condition": {
+            "kind": "external",
+            "cause": "the hosted workspace or durable coordination binding is unavailable"
+          },
+          "test_strategy": "inject_fault",
+          "emits": [],
+          "error": "agentide.session.SessionRefusal"
+        }
+      ],
+      "naming": {
+        "wire": "hosted-session-ensure",
+        "display": "Ensure hosted session"
+      }
+    },
     "agentide.session.ReadEvents": {
       "name": "agentide.session.ReadEvents",
       "domain": "agentide.session",
@@ -6757,6 +7009,7 @@
       "domain": "agentide.session",
       "may": [
         "agentide.session.CloseSession",
+        "agentide.session.EnsureHostedSession",
         "agentide.session.StartSession"
       ],
       "naming": {
@@ -6826,6 +7079,7 @@
         "agentide.coordination.RemoveContextPin",
         "agentide.coordination.RevokeGrant",
         "agentide.session.CloseSession",
+        "agentide.session.EnsureHostedSession",
         "agentide.session.ReadEvents",
         "agentide.session.SnapshotSession",
         "agentide.session.StartSession",

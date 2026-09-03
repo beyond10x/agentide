@@ -11,6 +11,7 @@ rules:
   missing_capability: refuse
 intents:
   - {name: session_start, command: agentide.session.StartSession, audiences: [human, automation], port: session, effect: state, risk: low, approval: never, subjects: [project]}
+  - {name: session_ensure_hosted, command: agentide.session.EnsureHostedSession, audiences: [automation], port: session, effect: state, risk: low, approval: never, subjects: [project, session]}
   - {name: session_close, command: agentide.session.CloseSession, audiences: [human], port: session, effect: state, risk: low, approval: never, subjects: [session]}
   - {name: session_snapshot, command: agentide.session.SnapshotSession, audiences: [human, agent, automation], port: session, effect: observe, risk: none, approval: never, subjects: [session]}
   - {name: event_read, command: agentide.session.ReadEvents, audiences: [human, agent, automation], port: session, effect: observe, risk: none, approval: never, subjects: [session]}

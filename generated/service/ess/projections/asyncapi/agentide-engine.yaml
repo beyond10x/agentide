@@ -1,6 +1,6 @@
 # generated from agentide v1
-# model digest 6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4
-# contract digest 7cfd751a3f4407f5f46cd032b726984c52d4c654760edbd5277e283d1092b198
+# model digest 360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3
+# contract digest 4ac56b2329735879b33e680ccd1e4cf952f7034a5798949936ba074a8415d1ed
 # do not edit: regenerate with `ess generate`
 asyncapi: 3.0.0
 info:
@@ -18,8 +18,8 @@ info:
   x-ess-provenance:
     system: agentide
     specification_version: v1
-    source_digest: 6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4
-    contract_digest: 7cfd751a3f4407f5f46cd032b726984c52d4c654760edbd5277e283d1092b198
+    source_digest: 360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3
+    contract_digest: 4ac56b2329735879b33e680ccd1e4cf952f7034a5798949936ba074a8415d1ed
 defaultContentType: application/json
 channels:
   agentide.coding.IntentCompleted:
@@ -306,6 +306,7 @@ operations:
     summary: Publishes `agentide.session.SessionStarted`.
     description: |-
       Nothing in this specification reacts to `agentide.session.SessionStarted`.
+      `agentide.session.EnsureHostedSession` emits it on `started`, which creates a `agentide.session.CodingSession` in `Active`. It carries the new instance's identity in `session_id`.
       `agentide.session.StartSession` emits it on `started`, which creates a `agentide.session.CodingSession` in `Active`. It carries the new instance's identity in `session_id`.
     messages:
     - $ref: '#/channels/agentide.session.SessionStarted/messages/agentide.session.SessionStarted'

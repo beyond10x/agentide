@@ -6,6 +6,7 @@ components:
     accepts:
       commands:
         - agentide.session.StartSession
+        - agentide.session.EnsureHostedSession
         - agentide.session.CloseSession
         - agentide.session.SnapshotSession
         - agentide.session.ReadEvents

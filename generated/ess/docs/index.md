@@ -1,7 +1,7 @@
 <!--
 generated from agentide v1
-model digest 6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4
-contract digest f1c2495df22f205934254ade5d845a2b65f2cbf16c4e9dfa1e863a24ed2d3b17
+model digest 360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3
+contract digest 90e1687e023e28f77eca4934db634944dcaf13a22a2075c642452ec5a97822b4
 do not edit: regenerate with `ess generate`
 -->
 
@@ -59,17 +59,18 @@ flowchart TB
         cmd33["agentide.coordination.RemoveContextPin"]
         cmd34["agentide.coordination.RevokeGrant"]
         cmd35["agentide.session.CloseSession"]
-        cmd36["agentide.session.ReadEvents"]
-        cmd37["agentide.session.SnapshotSession"]
-        cmd38["agentide.session.StartSession"]
-        cmd39["agentide.surface.CloseFile"]
-        cmd40["agentide.surface.ClosePane"]
-        cmd41["agentide.surface.FocusPane"]
-        cmd42["agentide.surface.MoveCursor"]
-        cmd43["agentide.surface.OpenFile"]
-        cmd44["agentide.surface.OpenPane"]
-        cmd45["agentide.surface.ShowDiff"]
-        cmd46["agentide.surface.SnapshotSurface"]
+        cmd36["agentide.session.EnsureHostedSession"]
+        cmd37["agentide.session.ReadEvents"]
+        cmd38["agentide.session.SnapshotSession"]
+        cmd39["agentide.session.StartSession"]
+        cmd40["agentide.surface.CloseFile"]
+        cmd41["agentide.surface.ClosePane"]
+        cmd42["agentide.surface.FocusPane"]
+        cmd43["agentide.surface.MoveCursor"]
+        cmd44["agentide.surface.OpenFile"]
+        cmd45["agentide.surface.OpenPane"]
+        cmd46["agentide.surface.ShowDiff"]
+        cmd47["agentide.surface.SnapshotSurface"]
         evt0["agentide.coding.IntentCompleted"]
         evt1["agentide.coding.IntentRefused"]
         evt2["agentide.coordination.ApprovalCheckpointApproved"]
@@ -128,11 +129,11 @@ flowchart TB
     who2 -->|"may invoke"| cmd33
     who2 -->|"may invoke"| cmd34
     who3 -->|"may invoke"| cmd32
-    who4 -->|"may invoke"| cmd36
     who4 -->|"may invoke"| cmd37
+    who4 -->|"may invoke"| cmd38
     who5 -->|"may invoke"| cmd35
-    who5 -->|"may invoke"| cmd38
-    who6 -->|"may invoke"| cmd39
+    who5 -->|"may invoke"| cmd36
+    who5 -->|"may invoke"| cmd39
     who6 -->|"may invoke"| cmd40
     who6 -->|"may invoke"| cmd41
     who6 -->|"may invoke"| cmd42
@@ -140,6 +141,7 @@ flowchart TB
     who6 -->|"may invoke"| cmd44
     who6 -->|"may invoke"| cmd45
     who6 -->|"may invoke"| cmd46
+    who6 -->|"may invoke"| cmd47
     cmd0 -->|"completed"| evt0
     cmd1 -->|"completed"| evt0
     cmd2 -->|"completed"| evt0
@@ -176,10 +178,10 @@ flowchart TB
     cmd33 -->|"removed"| evt5
     cmd34 -->|"revoked"| evt8
     cmd35 -->|"closed"| evt9
-    cmd36 -->|"observed"| evt10
+    cmd36 -->|"started"| evt11
     cmd37 -->|"observed"| evt10
-    cmd38 -->|"started"| evt11
-    cmd39 -->|"completed"| evt19
+    cmd38 -->|"observed"| evt10
+    cmd39 -->|"started"| evt11
     cmd40 -->|"completed"| evt19
     cmd41 -->|"completed"| evt19
     cmd42 -->|"completed"| evt19
@@ -187,6 +189,7 @@ flowchart TB
     cmd44 -->|"completed"| evt19
     cmd45 -->|"completed"| evt19
     cmd46 -->|"completed"| evt19
+    cmd47 -->|"completed"| evt19
 ```
 
 A command is accepted by the component that owns its context, emits the events one of its outcomes declares, and a dashed edge is a binding carrying an event into the next command. Design §9 begins one step earlier, at the actor who invokes the first command, and so does this graph: a solid edge out of an actor is a grant, and an actor drawn with no edge at all may invoke nothing — which is something the model says, not an arrow somebody forgot.
@@ -195,14 +198,14 @@ A command is accepted by the component that owns its context, emits the events o
 
 - **[Coding session](domains/agentide-coding.md)** (`agentide.coding`) — Semantic observation, change, execution, collaboration, evidence, and delivery intents. 11 types, no entities, no views, 28 commands, two events, one error and one actor.
 - **[Session coordination](domains/agentide-coordination.md)** (`agentide.coordination`) — Durable hosted collaboration references stored by Service SDK without project file bytes. 10 types, three entities, three views, seven commands, seven events, two errors and three actors.
-- **[Sessions](domains/agentide-session.md)** (`agentide.session`) — The durable identity and observable projection of one coding session. 10 types, one entity, one view, four commands, three events, two errors and two actors.
+- **[Sessions](domains/agentide-session.md)** (`agentide.session`) — The durable identity and observable projection of one coding session. 10 types, one entity, one view, five commands, three events, two errors and two actors.
 - **[Workspace surface](domains/agentide-surface.md)** (`agentide.surface`) — A renderer-neutral virtual workbench shared by agents, the browser, CLI snapshots, and the console TUI. Four types, one entity, one view, eight commands, eight events, one error and one actor.
 
 ## Components
 
 A component is a unit of ownership, not a deployment. How many of each runs, and what each needs, is [the topology](topology.md).
 
-**`agentide-engine`** — Validates intents, plans effects, obtains authority, journals, dispatches, and projects sessions. It owns [`agentide.coding`](domains/agentide-coding.md), [`agentide.coordination`](domains/agentide-coordination.md), [`agentide.session`](domains/agentide-session.md) and [`agentide.surface`](domains/agentide-surface.md). It accepts `agentide.coding.ApplyDeployment`, `agentide.coding.CancelProcess`, `agentide.coding.CreateCode`, `agentide.coding.CreateWorktree`, `agentide.coding.CutRelease`, `agentide.coding.DelegateAgent`, `agentide.coding.DeleteCode`, `agentide.coding.EditCode`, `agentide.coding.FinishWorktree`, `agentide.coding.InputProcess`, `agentide.coding.ListTerminals`, `agentide.coding.MessageAgent`, `agentide.coding.ObserveAgents`, `agentide.coding.ObserveChanges`, `agentide.coding.ObserveDeployment`, `agentide.coding.ObserveProcess`, `agentide.coding.ObserveWorktree`, `agentide.coding.OpenInteractiveTerminal`, `agentide.coding.PublishCode`, `agentide.coding.ReadCode`, `agentide.coding.RecordEvidence`, `agentide.coding.RenameCode`, `agentide.coding.SearchCode`, `agentide.coding.StartProcess`, `agentide.coding.TerminateTerminal`, `agentide.coding.VerifyCode`, `agentide.coding.WaitAgent`, `agentide.coding.WaitProcess`, `agentide.coordination.ApproveCheckpoint`, `agentide.coordination.CreateGrant`, `agentide.coordination.DenyCheckpoint`, `agentide.coordination.PinContext`, `agentide.coordination.RecordApprovalCheckpoint`, `agentide.coordination.RemoveContextPin`, `agentide.coordination.RevokeGrant`, `agentide.session.CloseSession`, `agentide.session.ReadEvents`, `agentide.session.SnapshotSession`, `agentide.session.StartSession`, `agentide.surface.CloseFile`, `agentide.surface.ClosePane`, `agentide.surface.FocusPane`, `agentide.surface.MoveCursor`, `agentide.surface.OpenFile`, `agentide.surface.OpenPane`, `agentide.surface.ShowDiff` and `agentide.surface.SnapshotSurface`. It publishes `agentide.coding.IntentCompleted`, `agentide.coding.IntentRefused`, `agentide.coordination.ApprovalCheckpointApproved`, `agentide.coordination.ApprovalCheckpointDenied`, `agentide.coordination.ApprovalCheckpointRecorded`, `agentide.coordination.ContextPinRemoved`, `agentide.coordination.ContextPinned`, `agentide.coordination.GrantCreated`, `agentide.coordination.GrantRevoked`, `agentide.session.SessionClosed`, `agentide.session.SessionObserved`, `agentide.session.SessionStarted`, `agentide.surface.CursorMoved`, `agentide.surface.DiffShown`, `agentide.surface.FileClosed`, `agentide.surface.FileOpened`, `agentide.surface.PaneClosed`, `agentide.surface.PaneFocused`, `agentide.surface.PaneOpened` and `agentide.surface.SurfaceObserved`.
+**`agentide-engine`** — Validates intents, plans effects, obtains authority, journals, dispatches, and projects sessions. It owns [`agentide.coding`](domains/agentide-coding.md), [`agentide.coordination`](domains/agentide-coordination.md), [`agentide.session`](domains/agentide-session.md) and [`agentide.surface`](domains/agentide-surface.md). It accepts `agentide.coding.ApplyDeployment`, `agentide.coding.CancelProcess`, `agentide.coding.CreateCode`, `agentide.coding.CreateWorktree`, `agentide.coding.CutRelease`, `agentide.coding.DelegateAgent`, `agentide.coding.DeleteCode`, `agentide.coding.EditCode`, `agentide.coding.FinishWorktree`, `agentide.coding.InputProcess`, `agentide.coding.ListTerminals`, `agentide.coding.MessageAgent`, `agentide.coding.ObserveAgents`, `agentide.coding.ObserveChanges`, `agentide.coding.ObserveDeployment`, `agentide.coding.ObserveProcess`, `agentide.coding.ObserveWorktree`, `agentide.coding.OpenInteractiveTerminal`, `agentide.coding.PublishCode`, `agentide.coding.ReadCode`, `agentide.coding.RecordEvidence`, `agentide.coding.RenameCode`, `agentide.coding.SearchCode`, `agentide.coding.StartProcess`, `agentide.coding.TerminateTerminal`, `agentide.coding.VerifyCode`, `agentide.coding.WaitAgent`, `agentide.coding.WaitProcess`, `agentide.coordination.ApproveCheckpoint`, `agentide.coordination.CreateGrant`, `agentide.coordination.DenyCheckpoint`, `agentide.coordination.PinContext`, `agentide.coordination.RecordApprovalCheckpoint`, `agentide.coordination.RemoveContextPin`, `agentide.coordination.RevokeGrant`, `agentide.session.CloseSession`, `agentide.session.EnsureHostedSession`, `agentide.session.ReadEvents`, `agentide.session.SnapshotSession`, `agentide.session.StartSession`, `agentide.surface.CloseFile`, `agentide.surface.ClosePane`, `agentide.surface.FocusPane`, `agentide.surface.MoveCursor`, `agentide.surface.OpenFile`, `agentide.surface.OpenPane`, `agentide.surface.ShowDiff` and `agentide.surface.SnapshotSurface`. It publishes `agentide.coding.IntentCompleted`, `agentide.coding.IntentRefused`, `agentide.coordination.ApprovalCheckpointApproved`, `agentide.coordination.ApprovalCheckpointDenied`, `agentide.coordination.ApprovalCheckpointRecorded`, `agentide.coordination.ContextPinRemoved`, `agentide.coordination.ContextPinned`, `agentide.coordination.GrantCreated`, `agentide.coordination.GrantRevoked`, `agentide.session.SessionClosed`, `agentide.session.SessionObserved`, `agentide.session.SessionStarted`, `agentide.surface.CursorMoved`, `agentide.surface.DiffShown`, `agentide.surface.FileClosed`, `agentide.surface.FileOpened`, `agentide.surface.PaneClosed`, `agentide.surface.PaneFocused`, `agentide.surface.PaneOpened` and `agentide.surface.SurfaceObserved`.
 
 ## The other pages
 
@@ -219,4 +222,4 @@ A component is a unit of ownership, not a deployment. How many of each runs, and
 
 ---
 
-Generated from agentide v1 · model digest `6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4` · contract digest `f1c2495df22f205934254ade5d845a2b65f2cbf16c4e9dfa1e863a24ed2d3b17`. Do not edit this file; change the specification and regenerate it with `ess generate`.
+Generated from agentide v1 · model digest `360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3` · contract digest `90e1687e023e28f77eca4934db634944dcaf13a22a2075c642452ec5a97822b4`. Do not edit this file; change the specification and regenerate it with `ess generate`.

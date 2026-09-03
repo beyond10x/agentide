@@ -1,6 +1,6 @@
 # generated from agentide v1
-# model digest 6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4
-# contract digest e19c82375779ee7857130f7c219b8bca0c62dced3a2da27746b74b4787a40452
+# model digest 360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3
+# contract digest 26289f0ed3a5b78a46e32fe6615504f8461ee3c9545df7b9e9c23d6d4c7675f6
 # do not edit: regenerate with `ess generate`
 openapi: 3.1.0
 info:
@@ -16,8 +16,8 @@ info:
   x-ess-provenance:
     system: agentide
     specification_version: v1
-    source_digest: 6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4
-    contract_digest: e19c82375779ee7857130f7c219b8bca0c62dced3a2da27746b74b4787a40452
+    source_digest: 360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3
+    contract_digest: 26289f0ed3a5b78a46e32fe6615504f8461ee3c9545df7b9e9c23d6d4c7675f6
   x-ess-reached-by: network
 tags:
 - name: coding
@@ -1105,6 +1105,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/agentide.session.ReadEvents.refused.Response'
+  /sessions/commands/hosted-session-ensure:
+    post:
+      operationId: agentide.session.EnsureHostedSession
+      summary: Ensure hosted session
+      tags:
+      - sessions
+      x-ess-may-invoke:
+      - agentide.session.Operator
+      requestBody:
+        description: The input `agentide.session.EnsureHostedSession` declares.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/agentide.session.EnsureHostedSession.Input'
+      responses:
+        '202':
+          description: 'Outcome `started`: the branch the specification declares for this input. Events this branch emits are published to consumers, not returned here.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.session.EnsureHostedSession.started.Response'
+        '502':
+          description: 'Outcome `refused`: something outside the request refused. The input was acceptable, so the caller has nothing to correct and a retry is meaningful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agentide.session.EnsureHostedSession.refused.Response'
   /sessions/commands/session-close:
     post:
       operationId: agentide.session.CloseSession
@@ -3666,6 +3694,66 @@ components:
       x-ess-name: agentide.session.Cursor
       x-ess-kind: newtype
       type: integer
+    agentide.session.EnsureHostedSession.Input:
+      title: Ensure hosted session input
+      x-ess-name: agentide.session.EnsureHostedSession
+      x-ess-kind: command-input
+      type: object
+      properties:
+        session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
+        workspace_root:
+          $ref: '#/components/schemas/agentide.session.WorkspaceRoot'
+        objective:
+          type: string
+        project_id:
+          $ref: '#/components/schemas/agentide.session.ProjectId'
+        source_revision:
+          $ref: '#/components/schemas/agentide.session.SourceRevision'
+        workspace_session_id:
+          $ref: '#/components/schemas/agentide.session.WorkspaceSessionId'
+        manifest_digest:
+          $ref: '#/components/schemas/agentide.session.ManifestDigest'
+        scopes:
+          $ref: '#/components/schemas/agentide.session.SessionScopes'
+      required:
+      - session_id
+      - workspace_root
+      - objective
+      - project_id
+      - source_revision
+      - workspace_session_id
+      - manifest_digest
+      - scopes
+      additionalProperties: false
+    agentide.session.EnsureHostedSession.refused.Response:
+      additionalProperties: false
+      description: 'Decided outside the request: the hosted workspace or durable coordination binding is unavailable.'
+      properties:
+        error:
+          const: agentide.session.SessionRefusal
+          description: The session operation was not admitted or could not be observed exactly.
+          type: string
+        outcome:
+          const: refused
+          description: Which declared outcome the command took.
+        payload:
+          $ref: '#/components/schemas/agentide.session.SessionRefusal.Error'
+      required:
+      - outcome
+      - error
+      - payload
+      type: object
+    agentide.session.EnsureHostedSession.started.Response:
+      additionalProperties: false
+      description: Taken when no other outcome's condition matched. A `agentide.session.CodingSession` now exists, in `Active`. Its identity is published as `session_id` on `agentide.session.SessionStarted`. Emits `SessionStarted`, published to consumers rather than returned here.
+      properties:
+        outcome:
+          const: started
+          description: Which declared outcome the command took.
+      required:
+      - outcome
+      type: object
     agentide.session.EventLimit:
       title: EventLimit
       x-ess-name: agentide.session.EventLimit

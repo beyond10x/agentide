@@ -50,7 +50,7 @@ entities:
 
 actors:
   - name: agentide.session.Operator
-    may: [agentide.session.StartSession, agentide.session.CloseSession]
+    may: [agentide.session.StartSession, agentide.session.EnsureHostedSession, agentide.session.CloseSession]
     naming: {display: Operator}
   - name: agentide.session.CodingAgent
     may: [agentide.session.SnapshotSession, agentide.session.ReadEvents]
@@ -95,6 +95,36 @@ commands:
             scopes: input.scopes
       - name: refused
         external: the workspace or standalone binding is unavailable
+        error: agentide.session.SessionRefusal
+
+  - name: agentide.session.EnsureHostedSession
+    naming: {wire: hosted-session-ensure, display: Ensure hosted session}
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: workspace_root, type: agentide.session.WorkspaceRoot}
+      - {name: objective, type: String}
+      - {name: project_id, type: agentide.session.ProjectId}
+      - {name: source_revision, type: agentide.session.SourceRevision}
+      - {name: workspace_session_id, type: agentide.session.WorkspaceSessionId}
+      - {name: manifest_digest, type: agentide.session.ManifestDigest}
+      - {name: scopes, type: agentide.session.SessionScopes}
+    outcomes:
+      - name: started
+        creates: agentide.session.CodingSession
+        instance: session_id
+        emits: [agentide.session.SessionStarted]
+        payload:
+          agentide.session.SessionStarted:
+            session_id: input.session_id
+            workspace_root: input.workspace_root
+            objective: input.objective
+            project_id: input.project_id
+            source_revision: input.source_revision
+            workspace_session_id: input.workspace_session_id
+            manifest_digest: input.manifest_digest
+            scopes: input.scopes
+      - name: refused
+        external: the hosted workspace or durable coordination binding is unavailable
         error: agentide.session.SessionRefusal
 
   - name: agentide.session.CloseSession

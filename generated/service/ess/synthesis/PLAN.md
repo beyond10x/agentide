@@ -1,14 +1,14 @@
 <!--
   generated from agentide v1
-  model digest 6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4
-  contract digest f1c2495df22f205934254ade5d845a2b65f2cbf16c4e9dfa1e863a24ed2d3b17
+  model digest 360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3
+  contract digest 90e1687e023e28f77eca4934db634944dcaf13a22a2075c642452ec5a97822b4
   do not edit: regenerate with `ess synthesize`
 -->
 # Synthesis plan — agentide v1
 
 Scope: `component-skeletons`, planned by `ess-synth`. Regenerate with `ess synthesize`.
 
-184 capabilities: **125 generated**, **52 obligations**, **7 refused**. An obligation is yours to implement against its contract; a refusal is a fact about this synthesis scope, not about the specification.
+186 capabilities: **126 generated**, **53 obligations**, **7 refused**. An obligation is yours to implement against its contract; a refusal is a fact about this synthesis scope, not about the specification.
 
 ## Generated
 
@@ -95,6 +95,7 @@ Scope: `component-skeletons`, planned by `ess-synth`. Regenerate with `ess synth
 | command contract | `agentide.coordination.RemoveContextPin` |
 | command contract | `agentide.coordination.RevokeGrant` |
 | command contract | `agentide.session.CloseSession` |
+| command contract | `agentide.session.EnsureHostedSession` |
 | command contract | `agentide.session.ReadEvents` |
 | command contract | `agentide.session.SnapshotSession` |
 | command contract | `agentide.session.StartSession` |
@@ -180,6 +181,7 @@ Scope: `component-skeletons`, planned by `ess-synth`. Regenerate with `ess synth
 | command behaviour | `agentide.coordination.RemoveContextPin` | decided outside the system: durable state is unavailable | given `agentide.coordination.RemoveContextPin` input, decide and enact exactly one outcome — `removed` otherwise, takes `remove` of `agentide.coordination.ContextPin`, emits `agentide.coordination.ContextPinRemoved`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal` |
 | command behaviour | `agentide.coordination.RevokeGrant` | decided outside the system: durable state is unavailable | given `agentide.coordination.RevokeGrant` input, decide and enact exactly one outcome — `revoked` otherwise, takes `revoke` of `agentide.coordination.AuthorityGrant`, emits `agentide.coordination.GrantRevoked`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal` |
 | command behaviour | `agentide.session.CloseSession` | decided outside the system: durable state cannot be updated | given `agentide.session.CloseSession` input, decide and enact exactly one outcome — `closed` otherwise, takes `close` of `agentide.session.CodingSession`, emits `agentide.session.SessionClosed`; `wrong-state` from a state no declared move starts in, error `agentide.session.SessionStateConflict`; `refused` externally decided (durable state cannot be updated), error `agentide.session.SessionRefusal` |
+| command behaviour | `agentide.session.EnsureHostedSession` | decided outside the system: the hosted workspace or durable coordination binding is unavailable | given `agentide.session.EnsureHostedSession` input, decide and enact exactly one outcome — `started` otherwise, creates `agentide.session.CodingSession`, emits `agentide.session.SessionStarted`; `refused` externally decided (the hosted workspace or durable coordination binding is unavailable), error `agentide.session.SessionRefusal` |
 | command behaviour | `agentide.session.ReadEvents` | decided outside the system: the requested event window cannot be represented | given `agentide.session.ReadEvents` input, decide and enact exactly one outcome — `observed` otherwise, emits `agentide.session.SessionObserved`; `refused` externally decided (the requested event window cannot be represented), error `agentide.session.SessionRefusal` |
 | command behaviour | `agentide.session.SnapshotSession` | decided outside the system: the durable session cannot be read exactly | given `agentide.session.SnapshotSession` input, decide and enact exactly one outcome — `observed` otherwise, emits `agentide.session.SessionObserved`; `refused` externally decided (the durable session cannot be read exactly), error `agentide.session.SessionRefusal` |
 | command behaviour | `agentide.session.StartSession` | decided outside the system: the workspace or standalone binding is unavailable | given `agentide.session.StartSession` input, decide and enact exactly one outcome — `started` otherwise, creates `agentide.session.CodingSession`, emits `agentide.session.SessionStarted`; `refused` externally decided (the workspace or standalone binding is unavailable), error `agentide.session.SessionRefusal` |
@@ -206,5 +208,5 @@ Scope: `component-skeletons`, planned by `ess-synth`. Regenerate with `ess synth
 | actor grants | `agentide.coordination.SessionOwner` | planning | may invoke `agentide.coordination.ApproveCheckpoint`, `agentide.coordination.CreateGrant`, `agentide.coordination.DenyCheckpoint`, `agentide.coordination.PinContext`, `agentide.coordination.RemoveContextPin`, `agentide.coordination.RevokeGrant`; a grant is checked against a caller identity, which types do not carry, and enforcement belongs to the layer that knows who is calling |
 | actor grants | `agentide.coordination.TaskAuthority` | planning | may invoke `agentide.coordination.RecordApprovalCheckpoint`; a grant is checked against a caller identity, which types do not carry, and enforcement belongs to the layer that knows who is calling |
 | actor grants | `agentide.session.CodingAgent` | planning | may invoke `agentide.session.ReadEvents`, `agentide.session.SnapshotSession`; a grant is checked against a caller identity, which types do not carry, and enforcement belongs to the layer that knows who is calling |
-| actor grants | `agentide.session.Operator` | planning | may invoke `agentide.session.CloseSession`, `agentide.session.StartSession`; a grant is checked against a caller identity, which types do not carry, and enforcement belongs to the layer that knows who is calling |
+| actor grants | `agentide.session.Operator` | planning | may invoke `agentide.session.CloseSession`, `agentide.session.EnsureHostedSession`, `agentide.session.StartSession`; a grant is checked against a caller identity, which types do not carry, and enforcement belongs to the layer that knows who is calling |
 | actor grants | `agentide.surface.CodingAgent` | planning | may invoke `agentide.surface.CloseFile`, `agentide.surface.ClosePane`, `agentide.surface.FocusPane`, `agentide.surface.MoveCursor`, `agentide.surface.OpenFile`, `agentide.surface.OpenPane`, `agentide.surface.ShowDiff`, `agentide.surface.SnapshotSurface`; a grant is checked against a caller identity, which types do not carry, and enforcement belongs to the layer that knows who is calling |

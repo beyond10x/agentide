@@ -2,8 +2,8 @@
   "provenance": {
     "system": "agentide",
     "specification_version": "v1",
-    "source_digest": "6533259c5264c4a5da367c055615054401fe7a49a71a2a87a3f87bfa2a3dfbe4",
-    "contract_digest": "f1c2495df22f205934254ade5d845a2b65f2cbf16c4e9dfa1e863a24ed2d3b17"
+    "source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
+    "contract_digest": "90e1687e023e28f77eca4934db634944dcaf13a22a2075c642452ec5a97822b4"
   },
   "scope": {
     "profile": "component-skeletons"
@@ -1010,6 +1010,25 @@
     },
     {
       "kind": "command_contract",
+      "source": "agentide.session.EnsureHostedSession",
+      "disposition": {
+        "disposition": "generated"
+      }
+    },
+    {
+      "kind": "command_behavior",
+      "source": "agentide.session.EnsureHostedSession",
+      "disposition": {
+        "disposition": "obligation",
+        "reason": {
+          "class": "external",
+          "cause": "the hosted workspace or durable coordination binding is unavailable"
+        },
+        "contract": "given `agentide.session.EnsureHostedSession` input, decide and enact exactly one outcome — `started` otherwise, creates `agentide.session.CodingSession`, emits `agentide.session.SessionStarted`; `refused` externally decided (the hosted workspace or durable coordination binding is unavailable), error `agentide.session.SessionRefusal`"
+      }
+    },
+    {
+      "kind": "command_contract",
       "source": "agentide.session.ReadEvents",
       "disposition": {
         "disposition": "generated"
@@ -1546,7 +1565,7 @@
         "disposition": "refused",
         "reason": "needs_caller_identity",
         "stage": "planning",
-        "detail": "may invoke `agentide.session.CloseSession`, `agentide.session.StartSession`; a grant is checked against a caller identity, which types do not carry, and enforcement belongs to the layer that knows who is calling"
+        "detail": "may invoke `agentide.session.CloseSession`, `agentide.session.EnsureHostedSession`, `agentide.session.StartSession`; a grant is checked against a caller identity, which types do not carry, and enforcement belongs to the layer that knows who is calling"
       }
     },
     {

@@ -1,10 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Start session input",
-  "x-ess-name": "agentide.session.StartSession",
+  "title": "Ensure hosted session input",
+  "x-ess-name": "agentide.session.EnsureHostedSession",
   "x-ess-kind": "command-input",
   "type": "object",
   "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
     "workspace_root": {
       "$ref": "#/$defs/agentide.session.WorkspaceRoot"
     },
@@ -28,8 +31,13 @@
     }
   },
   "required": [
+    "session_id",
     "workspace_root",
     "objective",
+    "project_id",
+    "source_revision",
+    "workspace_session_id",
+    "manifest_digest",
     "scopes"
   ],
   "additionalProperties": false,
@@ -37,7 +45,7 @@
     "system": "agentide",
     "specification_version": "v1",
     "source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
-    "contract_digest": "79372348566bb26ae02944af719cee5a330929e822edf4cedb608d281e2cb3b5",
+    "contract_digest": "ae117bae07a74bd282dc34a43468aedc3d58fee3763a1f7f9e78be20cd2fbf5b",
     "regenerate": "ess generate"
   },
   "$defs": {
@@ -50,6 +58,12 @@
     "agentide.session.ProjectId": {
       "title": "ProjectId",
       "x-ess-name": "agentide.session.ProjectId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
       "x-ess-kind": "newtype",
       "type": "string"
     },
