@@ -10,8 +10,8 @@ use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 
 use agentide_contracts::{
-    Approval as IntentApproval, Audience, Effect as IntentEffect, IntentDefinition,
-    Risk as IntentRisk,
+    Approval as IntentApproval, Audience, AuthorizationPath, Effect as IntentEffect,
+    IntentDefinition, IntentInventory, Risk as IntentRisk,
 };
 use agentide_core::{Engine, IntentPort, Plan, Refusal};
 use b10x_harness_credential::{NamedSource, SubscriptionToken};
@@ -183,6 +183,9 @@ fn credential(source: &CredentialSource) -> Option<Arc<dyn BearerSource>> {
 /// Adapter construction failures happen before any model request is sent.
 #[derive(Debug, Error)]
 pub enum AdapterError {
+    /// A current actor inventory is malformed or its digest does not seal its contents.
+    #[error("the AgentIDE intent inventory is invalid: {0}")]
+    InventoryInvalid(String),
     /// A generated ESS command schema is absent from this released adapter.
     #[error("no generated ESS schema is embedded for `{0}`")]
     SchemaMissing(String),
@@ -202,6 +205,49 @@ pub enum AdapterError {
         /// Identifier refusal.
         message: String,
     },
+}
+
+/// Converts one current actor inventory into the exact Harness specifications for that turn.
+///
+/// AgentIDE remains the owner of command schemas and consequence envelopes. Hosted embedders use
+/// this adapter instead of reconstructing either vocabulary, then let Harness verify that every
+/// refreshed specification is an exact subset of the attached invocation port.
+pub fn inventory_specs(inventory: &IntentInventory) -> Result<Vec<ToolSpec>, AdapterError> {
+    if inventory.format != "agentide.intent-inventory/1" || inventory.revision == 0 {
+        return Err(AdapterError::InventoryInvalid(
+            "the format or revision is invalid".into(),
+        ));
+    }
+    let resealed = IntentInventory::new(inventory.revision, inventory.intents.clone())
+        .map_err(|error| AdapterError::InventoryInvalid(error.to_string()))?;
+    if resealed.digest != inventory.digest {
+        return Err(AdapterError::InventoryInvalid(
+            "the catalogue digest does not match its contents".into(),
+        ));
+    }
+    let mut names = std::collections::BTreeSet::new();
+    inventory
+        .intents
+        .iter()
+        .map(|available| {
+            if !names.insert(available.intent.name.as_str()) {
+                return Err(AdapterError::InventoryInvalid(format!(
+                    "intent `{}` appears more than once",
+                    available.intent.name
+                )));
+            }
+            if available.authorization == AuthorizationPath::ExplicitHumanAction {
+                return Err(AdapterError::InventoryInvalid(format!(
+                    "human-only authorization was supplied for `{}`",
+                    available.intent.name
+                )));
+            }
+            tool_spec(
+                &available.intent,
+                available.authorization == AuthorizationPath::ExactPlanApproval,
+            )
+        })
+        .collect()
 }
 
 #[derive(Debug, Clone)]
@@ -249,23 +295,10 @@ pub fn ports<P: IntentPort, A: PlanApprover>(
         if !definition.audiences.contains(&Audience::Agent) || !bound.contains(&definition.name) {
             continue;
         }
-        let name = ToolName::new(&definition.name).map_err(|error| AdapterError::ToolName {
-            intent: definition.name.clone(),
-            message: error.to_string(),
-        })?;
-        let schema_text = schema_for(&definition.command)
-            .ok_or_else(|| AdapterError::SchemaMissing(definition.command.clone()))?;
-        let schema = model_schema(&definition.command, schema_text)?;
-        specs.push(ToolSpec {
-            name,
-            description: description(definition, &schema),
-            input_schema: schema,
-            approval: match definition.approval {
-                IntentApproval::Never => b10x_harness_wire::Approval::NotRequired,
-                IntentApproval::Required => b10x_harness_wire::Approval::Required,
-            },
-            envelope: envelope(definition),
-        });
+        specs.push(tool_spec(
+            definition,
+            definition.approval == IntentApproval::Required,
+        )?);
         definitions.insert(definition.name.clone(), definition.clone());
     }
     let shared = Arc::new(Mutex::new(Shared {
@@ -285,6 +318,30 @@ pub fn ports<P: IntentPort, A: PlanApprover>(
             approver,
         },
     ))
+}
+
+fn tool_spec(
+    definition: &IntentDefinition,
+    approval_required: bool,
+) -> Result<ToolSpec, AdapterError> {
+    let name = ToolName::new(&definition.name).map_err(|error| AdapterError::ToolName {
+        intent: definition.name.clone(),
+        message: error.to_string(),
+    })?;
+    let schema_text = schema_for(&definition.command)
+        .ok_or_else(|| AdapterError::SchemaMissing(definition.command.clone()))?;
+    let schema = model_schema(&definition.command, schema_text)?;
+    Ok(ToolSpec {
+        name,
+        description: description(definition, &schema),
+        input_schema: schema,
+        approval: if approval_required {
+            b10x_harness_wire::Approval::Required
+        } else {
+            b10x_harness_wire::Approval::NotRequired
+        },
+        envelope: envelope(definition),
+    })
 }
 
 impl<P: IntentPort> ToolPort for IntentTools<P> {
@@ -571,6 +628,18 @@ command_schemas!(
         "../../../generated/ess/schema/commands/agentide.coding.EditCode.schema.json"
     ),
     (
+        "agentide.coding.CreateCode",
+        "../../../generated/ess/schema/commands/agentide.coding.CreateCode.schema.json"
+    ),
+    (
+        "agentide.coding.DeleteCode",
+        "../../../generated/ess/schema/commands/agentide.coding.DeleteCode.schema.json"
+    ),
+    (
+        "agentide.coding.RenameCode",
+        "../../../generated/ess/schema/commands/agentide.coding.RenameCode.schema.json"
+    ),
+    (
         "agentide.coding.VerifyCode",
         "../../../generated/ess/schema/commands/agentide.coding.VerifyCode.schema.json"
     ),
@@ -605,6 +674,18 @@ command_schemas!(
     (
         "agentide.coding.CancelProcess",
         "../../../generated/ess/schema/commands/agentide.coding.CancelProcess.schema.json"
+    ),
+    (
+        "agentide.coding.OpenInteractiveTerminal",
+        "../../../generated/ess/schema/commands/agentide.coding.OpenInteractiveTerminal.schema.json"
+    ),
+    (
+        "agentide.coding.ListTerminals",
+        "../../../generated/ess/schema/commands/agentide.coding.ListTerminals.schema.json"
+    ),
+    (
+        "agentide.coding.TerminateTerminal",
+        "../../../generated/ess/schema/commands/agentide.coding.TerminateTerminal.schema.json"
     ),
     (
         "agentide.coding.ObserveAgents",
@@ -643,6 +724,34 @@ command_schemas!(
         "../../../generated/ess/schema/commands/agentide.coding.ApplyDeployment.schema.json"
     ),
     (
+        "agentide.coordination.CreateGrant",
+        "../../../generated/ess/schema/commands/agentide.coordination.CreateGrant.schema.json"
+    ),
+    (
+        "agentide.coordination.RevokeGrant",
+        "../../../generated/ess/schema/commands/agentide.coordination.RevokeGrant.schema.json"
+    ),
+    (
+        "agentide.coordination.PinContext",
+        "../../../generated/ess/schema/commands/agentide.coordination.PinContext.schema.json"
+    ),
+    (
+        "agentide.coordination.RemoveContextPin",
+        "../../../generated/ess/schema/commands/agentide.coordination.RemoveContextPin.schema.json"
+    ),
+    (
+        "agentide.coordination.RecordApprovalCheckpoint",
+        "../../../generated/ess/schema/commands/agentide.coordination.RecordApprovalCheckpoint.schema.json"
+    ),
+    (
+        "agentide.coordination.ApproveCheckpoint",
+        "../../../generated/ess/schema/commands/agentide.coordination.ApproveCheckpoint.schema.json"
+    ),
+    (
+        "agentide.coordination.DenyCheckpoint",
+        "../../../generated/ess/schema/commands/agentide.coordination.DenyCheckpoint.schema.json"
+    ),
+    (
         "agentide.surface.OpenFile",
         "../../../generated/ess/schema/commands/agentide.surface.OpenFile.schema.json"
     ),
@@ -679,7 +788,7 @@ command_schemas!(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use agentide_contracts::{Binding, BindingConfig, IntentProfile};
+    use agentide_contracts::{AvailableIntent, Binding, BindingConfig, IntentProfile};
     use agentide_core::StateStore;
     use b10x_harness_loop::{AgentLoop, LoopConfig, VecLoopSink};
     use b10x_harness_wire::{
@@ -856,6 +965,53 @@ mod tests {
                 .iter()
                 .all(|spec| spec.name.as_str() != "code_publish")
         );
+    }
+
+    #[test]
+    fn current_inventory_owns_dynamic_specs_and_authorization_posture() {
+        let profile = IntentProfile::embedded().expect("profile");
+        let definition = |name: &str| {
+            profile
+                .intents
+                .iter()
+                .find(|intent| intent.name == name)
+                .expect("intent")
+                .clone()
+        };
+        let inventory = IntentInventory::new(
+            7,
+            vec![
+                AvailableIntent {
+                    intent: definition("code_edit"),
+                    authorization: AuthorizationPath::BoundedGrant,
+                },
+                AvailableIntent {
+                    intent: definition("code_publish"),
+                    authorization: AuthorizationPath::ExactPlanApproval,
+                },
+            ],
+        )
+        .expect("inventory");
+        let specs = inventory_specs(&inventory).expect("specs");
+        let edit = specs
+            .iter()
+            .find(|spec| spec.name.as_str() == "code_edit")
+            .expect("edit");
+        assert_eq!(edit.approval, b10x_harness_wire::Approval::NotRequired);
+        assert!(edit.input_schema["properties"].get("path").is_some());
+        assert!(edit.input_schema["properties"].get("session_id").is_none());
+        let publish = specs
+            .iter()
+            .find(|spec| spec.name.as_str() == "code_publish")
+            .expect("publish");
+        assert_eq!(publish.approval, b10x_harness_wire::Approval::Required);
+
+        let mut changed = inventory;
+        changed.intents[0].intent.port = "caller-shaped".into();
+        assert!(matches!(
+            inventory_specs(&changed),
+            Err(AdapterError::InventoryInvalid(_))
+        ));
     }
 
     #[test]

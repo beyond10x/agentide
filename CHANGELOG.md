@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Let hosted runtimes convert a digest-sealed, actor-specific `IntentInventory` through the
+  AgentIDE-owned Harness adapter, preserving generated command schemas, consequence envelopes, and
+  bounded-grant versus exact-plan approval posture without reconstructing the catalogue downstream.
 - Add `agentide.intent-profile/2`, renderer-neutral actor, context, inventory, grant, file, canonical
   diff, and terminal contracts, plus compatibility normalization for the v1 exposure model.
 - Generate the hosted coordination service from Service SDK instead of adding an AgentIDE-specific
