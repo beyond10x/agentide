@@ -19,8 +19,8 @@ implementations:
     components: [agentide-engine]
     artifact:
       kind: binary
-      locator: https://github.com/beyond10x/agentide/releases/download/0.1.4/agentide-0.1.4-x86_64-unknown-linux-gnu.tar.gz
-      identity: sha256:26dd3827f812030e7f12810936ced27b2cd19e03be01b5fca4eb2c2e01b5fb7e
+      locator: https://github.com/beyond10x/agentide/releases/download/0.2.1/agentide-0.2.1-x86_64-unknown-linux-gnu.tar.gz
+      identity: sha256:1988ddf3bf9012930b46db7b901e81adb6a5d87722db2f5bff4d152087e95db8
 entrypoints:
   - id: agent-tui
     title: Model-backed local TUI

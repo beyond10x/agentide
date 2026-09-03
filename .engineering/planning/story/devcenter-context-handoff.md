@@ -27,7 +27,13 @@ scope:
   path: crates/agentide-contracts/src/hosted.rs
 - confidence: inferred
   path: crates/agentide-xtask/src/main.rs
-revision: 6
+- confidence: inferred
+  path: docs/running-modes.md
+- confidence: inferred
+  path: generated/service/runtime/realization-plan.json
+- confidence: inferred
+  path: realizations/10-agentide-standalone-linux.yaml
+revision: 7
 ---
 # Seal the DevCenter context handoff
 
