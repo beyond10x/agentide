@@ -39,10 +39,9 @@ entrypoints:
       - {kind: view, name: agentide.surface.WorkbenchSnapshot}
     invocation:
       kind: argv
-      argv: [agentide, tui, --session, "${SESSION_ID}", --base-url, "${AGENTIDE_BASE_URL}", --model, "${AGENTIDE_MODEL}", --api-key-env, MODEL_API_KEY]
+      argv: [agentide, run, --base-url, "${AGENTIDE_BASE_URL}", --model, "${AGENTIDE_MODEL}", --api-key-env, MODEL_API_KEY]
     requires:
       - {kind: operating_system, name: linux, summary: AgentIDE standalone effects target Linux.}
-      - {kind: environment_variable, name: SESSION_ID, summary: Identifier printed by session start.}
       - {kind: environment_variable, name: AGENTIDE_BASE_URL, summary: Model API origin and prefix.}
       - {kind: environment_variable, name: AGENTIDE_MODEL, summary: Exact model identifier.}
       - {kind: credential, name: MODEL_API_KEY, summary: API key read by name for each request and never journaled.}
@@ -62,10 +61,9 @@ entrypoints:
       - {kind: view, name: agentide.surface.WorkbenchSnapshot}
     invocation:
       kind: argv
-      argv: [agentide, tui, --session, "${SESSION_ID}"]
+      argv: [agentide, run]
     requires:
       - {kind: operating_system, name: linux, summary: AgentIDE standalone effects target Linux.}
-      - {kind: environment_variable, name: SESSION_ID, summary: Identifier printed by session start.}
   - id: json-cli
     title: JSON CLI
     summary: Invoke semantic intents from scripts or agent tool adapters and receive structured JSON.

@@ -11,8 +11,9 @@ b10x:
 
 # Harness-native TUI
 
-The Harness mode of `agentide tui` is the first runnable console surface that composes the AgentIDE
-specification with the native Harness agent loop. It keeps four kinds of state separate:
+The Harness mode of `agentide run` is the recommended console surface that composes the AgentIDE
+specification with the native Harness agent loop. The lower-level `agentide tui` command attaches
+the same surface to an existing session. Both keep four kinds of state separate:
 
 ```text
 ESS command schema ──► Harness ToolSpec ──► model turn
@@ -32,15 +33,18 @@ does not implement a third execution path.
 
 ## Start a session
 
-Create an AgentIDE session for an existing workspace, then attach the Harness TUI:
+Create an AgentIDE session for an existing workspace and open the Harness TUI in one command:
 
 ```shell-session
-agentide session start --workspace . --objective "Implement and verify the change"
-agentide tui --session <session-id> \
+agentide run --workspace . --objective "Implement and verify the change" \
   --base-url https://api.example/v1 \
   --model model-id \
   --api-key-env MODEL_API_KEY
 ```
+
+AgentIDE prints the durable session id and a projection-only resume command before opening the TUI
+and again when the TUI exits. To reconnect the model loop later, use `agentide tui --session
+<session-id>` with the same explicit connection and credential-source options.
 
 The default wire is `openai-responses`. Use `--wire anthropic-messages` for a Messages-compatible
 endpoint. The connection has no ambient credential fallback:

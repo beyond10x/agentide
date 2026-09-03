@@ -3,7 +3,7 @@ format: service/1
 service: agentide
 sdk:
   repository: https://github.com/beyond10x/service-sdk.git
-  revision: 38fdee9824894f038e5a6013f7e857dbc0807ebc
+  revision: a57d5a0f4b4cf7a98bf9bd38bd8cacbe94ae7e5b
 semantic:
   root: spec/agentide
   sources:

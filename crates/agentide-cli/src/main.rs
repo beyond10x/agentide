@@ -24,6 +24,7 @@ use serde_json::{Value, json};
 
 #[derive(Debug, Parser)]
 #[command(
+    name = "agentide",
     version,
     about = "Semantic coding-session intents over guarded implementations"
 )]
@@ -40,6 +41,8 @@ struct Cli {
 
 #[derive(Debug, Subcommand)]
 enum Command {
+    /// Create a coding session and open the interactive workbench.
+    Run(RunArgs),
     /// Create, list, and close coding sessions.
     Session {
         #[command(subcommand)]
@@ -98,10 +101,28 @@ struct SessionArg {
 }
 
 #[derive(Debug, Clone, Args)]
+struct RunArgs {
+    /// Existing target workspace.
+    #[arg(long, default_value = ".")]
+    workspace: PathBuf,
+    /// Goal visible on every surface.
+    #[arg(long, default_value = "Coding session")]
+    objective: String,
+    #[command(flatten)]
+    workbench: WorkbenchArgs,
+}
+
+#[derive(Debug, Clone, Args)]
 struct TuiArgs {
     /// Session id.
     #[arg(long)]
     session: String,
+    #[command(flatten)]
+    workbench: WorkbenchArgs,
+}
+
+#[derive(Debug, Clone, Args)]
+struct WorkbenchArgs {
     /// Harness model API origin plus prefix. Omit together with --model for projection-only mode.
     #[arg(long, env = "AGENTIDE_BASE_URL", requires = "model")]
     base_url: Option<String>,
@@ -258,6 +279,23 @@ fn run(cli: Cli) -> Result<Option<Value>> {
         .state_root
         .map_or_else(StateStore::discover, |root| Ok(StateStore::at(root)))?;
     match cli.command {
+        Command::Run(arguments) => {
+            // Opening the port before recording the session prevents an unusable optimistic record.
+            SubstratePort::adopt(&arguments.workspace)?;
+            let session = store.create(&arguments.workspace, arguments.objective)?;
+            println!("Started AgentIDE session {}", session.id);
+            println!("Resume later with: agentide tui --session {}", session.id);
+            let result = run_workbench(
+                store,
+                cli.bindings.as_deref(),
+                &session.id,
+                arguments.workbench,
+            );
+            println!("AgentIDE session {} is preserved.", session.id);
+            println!("Resume with: agentide tui --session {}", session.id);
+            result?;
+            Ok(None)
+        }
         Command::Session {
             command:
                 SessionCommand::Start {
@@ -376,40 +414,55 @@ fn run(cli: Cli) -> Result<Option<Value>> {
             Ok(None)
         }
         Command::Tui(argument) => {
-            if let (Some(base_url), Some(model)) = (argument.base_url, argument.model) {
-                let credential = if let Some(variable) = argument.api_key_env {
-                    CredentialSource::ApiKeyEnvironment(variable)
-                } else if let Some(variable) = argument.oauth_token_env {
-                    CredentialSource::OauthEnvironment(variable)
-                } else if let Some(path) = argument.oauth_token_file {
-                    CredentialSource::OauthFile {
-                        path,
-                        pointer: argument.oauth_token_pointer,
-                    }
-                } else {
-                    CredentialSource::None
-                };
-                harness_tui::run(
-                    store,
-                    cli.bindings.as_deref(),
-                    &argument.session,
-                    ModelConnection {
-                        wire: argument.wire.into(),
-                        base_url,
-                        model,
-                        context_window: argument.context_window,
-                        max_output_tokens: argument.max_output_tokens,
-                        credential,
-                    },
-                    argument.max_turns,
-                )?;
-            } else {
-                let engine = engine(&store, &argument.session, cli.bindings.as_deref())?;
-                tui::run(&engine, &argument.session)?;
-            }
+            run_workbench(
+                store,
+                cli.bindings.as_deref(),
+                &argument.session,
+                argument.workbench,
+            )?;
             Ok(None)
         }
     }
+}
+
+fn run_workbench(
+    store: StateStore,
+    binding_path: Option<&Path>,
+    session_id: &str,
+    arguments: WorkbenchArgs,
+) -> Result<()> {
+    if let (Some(base_url), Some(model)) = (arguments.base_url, arguments.model) {
+        let credential = if let Some(variable) = arguments.api_key_env {
+            CredentialSource::ApiKeyEnvironment(variable)
+        } else if let Some(variable) = arguments.oauth_token_env {
+            CredentialSource::OauthEnvironment(variable)
+        } else if let Some(path) = arguments.oauth_token_file {
+            CredentialSource::OauthFile {
+                path,
+                pointer: arguments.oauth_token_pointer,
+            }
+        } else {
+            CredentialSource::None
+        };
+        harness_tui::run(
+            store,
+            binding_path,
+            session_id,
+            ModelConnection {
+                wire: arguments.wire.into(),
+                base_url,
+                model,
+                context_window: arguments.context_window,
+                max_output_tokens: arguments.max_output_tokens,
+                credential,
+            },
+            arguments.max_turns,
+        )?;
+    } else {
+        let engine = engine(&store, session_id, binding_path)?;
+        tui::run(&engine, session_id)?;
+    }
+    Ok(())
 }
 
 fn engine(
@@ -435,4 +488,67 @@ fn read_input(argument: &str) -> Result<Value> {
         return Err(anyhow!("intent input must be a JSON object"));
     }
     Ok(input)
+}
+
+#[cfg(test)]
+mod tests {
+    use std::path::Path;
+
+    use clap::{CommandFactory, Parser, error::ErrorKind};
+
+    use super::{Cli, Command};
+
+    #[test]
+    fn run_defaults_to_the_current_workspace_and_a_plain_objective() {
+        let cli = Cli::try_parse_from(["agentide", "run"]).expect("parse run defaults");
+        let Command::Run(arguments) = cli.command else {
+            panic!("expected run command");
+        };
+        assert_eq!(arguments.workspace, Path::new("."));
+        assert_eq!(arguments.objective, "Coding session");
+        assert!(arguments.workbench.base_url.is_none());
+        assert!(arguments.workbench.model.is_none());
+    }
+
+    #[test]
+    fn run_accepts_an_explicit_model_connection() {
+        let cli = Cli::try_parse_from([
+            "agentide",
+            "run",
+            "--base-url",
+            "https://model.example/v1",
+            "--model",
+            "model-id",
+            "--api-key-env",
+            "MODEL_API_KEY",
+        ])
+        .expect("parse model-backed run");
+        let Command::Run(arguments) = cli.command else {
+            panic!("expected run command");
+        };
+        assert_eq!(
+            arguments.workbench.base_url.as_deref(),
+            Some("https://model.example/v1")
+        );
+        assert_eq!(arguments.workbench.model.as_deref(), Some("model-id"));
+        assert_eq!(
+            arguments.workbench.api_key_env.as_deref(),
+            Some("MODEL_API_KEY")
+        );
+    }
+
+    #[test]
+    fn run_refuses_a_partial_model_connection() {
+        let error =
+            Cli::try_parse_from(["agentide", "run", "--base-url", "https://model.example/v1"])
+                .expect_err("a model id is required with a base URL");
+        assert_eq!(error.kind(), ErrorKind::MissingRequiredArgument);
+    }
+
+    #[test]
+    fn command_help_includes_the_one_step_entrypoint() {
+        let help = Cli::command().render_help().to_string();
+        assert!(help.contains("run"));
+        assert!(help.contains("Create a coding session and open"));
+    }
 }

@@ -2,8 +2,18 @@
 
 ## Unreleased
 
+## 0.1.4 - 2026-09-03
+
 - Promote the published `0.1.3` Linux archive and its exact SHA-256 digest into the standalone
   realization declaration.
+- Add `agentide run` to create a durable session and open either the model-backed or projection-only
+  TUI in one command while preserving the session and an explicit resume command on exit.
+- Ship a checksum-verifying latest-release installer for Linux x86_64 and document an unpinned
+  Cargo alternative for adopters who intentionally want the latest source from `main`.
+- Consume public Service SDK 0.3.4, remove private dependency credentials from CI and releases, and
+  make anonymous source installation a supported path.
+- Rewrite the README for evaluators and adopters around installation, first run, running modes,
+  ESS-derived safety, and links to deeper architecture and contract references.
 
 ## 0.1.3 - 2026-09-03
 

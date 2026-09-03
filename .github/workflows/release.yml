@@ -32,23 +32,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Token for private sibling dependencies
-        id: app-token
-        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
-        with:
-          app-id: ${{ secrets.B10X_BOT_APP_ID }}
-          private-key: ${{ secrets.B10X_BOT_PRIVATE_KEY }}
-          owner: beyond10x
-          repositories: |
-            connectors
-            eventlog
-            service-sdk
-
-      - name: Authenticate private sibling dependencies
-        env:
-          TOKEN: ${{ steps.app-token.outputs.token }}
-        run: git config --global url."https://x-access-token:${TOKEN}@github.com/beyond10x/".insteadOf "https://github.com/beyond10x/"
-
       - uses: dtolnay/rust-toolchain@4360b52568e2003a75bf9bc1d59f33a8e3fc893c # stable
         with:
           toolchain: 1.98.0
@@ -108,6 +91,9 @@ jobs:
             found { print }
           ' CHANGELOG.md > notes.md
           test -s notes.md
+
+      - name: Add the latest-release installer
+        run: cp scripts/agentide-installer.sh dist/agentide-installer.sh
 
       - name: Token for bot-authored release
         id: app-token

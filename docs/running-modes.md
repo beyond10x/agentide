@@ -8,10 +8,10 @@ Generated from `agentide-standalone-linux` for agentide v1 (`sha256:360a1e3f4110
 
 | Mode | Interaction | Attachment | Availability | Support | Start |
 |---|---|---|---|---|---|
-| Model-backed local TUI (recommended) | Agent loop | In process | Public | Preview | `agentide tui --session ${SESSION_ID} --base-url ${AGENTIDE_BASE_URL} --model ${AGENTIDE_MODEL} --api-key-env MODEL_API_KEY` |
+| Model-backed local TUI (recommended) | Agent loop | In process | Public | Preview | `agentide run --base-url ${AGENTIDE_BASE_URL} --model ${AGENTIDE_MODEL} --api-key-env MODEL_API_KEY` |
 | JSON CLI | Invoke | In process | Public | Preview | `agentide snapshot --session ${SESSION_ID}` |
 | Local browser workbench | Invoke | Loopback | Public | Preview | `http://127.0.0.1:7788/` |
-| Projection-only local TUI | Invoke | In process | Public | Preview | `agentide tui --session ${SESSION_ID}` |
+| Projection-only local TUI | Invoke | In process | Public | Preview | `agentide run` |
 
 ### Model-backed local TUI
 
@@ -19,12 +19,11 @@ Run the recommended interactive terminal workbench with the native Harness model
 
 - Entrypoint: `agent-tui`
 - Implementation: `released-linux-binary`
-- Invocation: `agentide tui --session ${SESSION_ID} --base-url ${AGENTIDE_BASE_URL} --model ${AGENTIDE_MODEL} --api-key-env MODEL_API_KEY`
+- Invocation: `agentide run --base-url ${AGENTIDE_BASE_URL} --model ${AGENTIDE_MODEL} --api-key-env MODEL_API_KEY`
 - Runtime requirements:
   - `OperatingSystem` `linux` — AgentIDE standalone effects target Linux.
   - `EnvironmentVariable` `AGENTIDE_BASE_URL` — Model API origin and prefix.
   - `EnvironmentVariable` `AGENTIDE_MODEL` — Exact model identifier.
-  - `EnvironmentVariable` `SESSION_ID` — Identifier printed by session start.
   - `Credential` `MODEL_API_KEY` — API key read by name for each request and never journaled.
 
 ### JSON CLI
@@ -55,10 +54,9 @@ Inspect and operate the durable workbench without connecting a model.
 
 - Entrypoint: `projection-tui`
 - Implementation: `released-linux-binary`
-- Invocation: `agentide tui --session ${SESSION_ID}`
+- Invocation: `agentide run`
 - Runtime requirements:
   - `OperatingSystem` `linux` — AgentIDE standalone effects target Linux.
-  - `EnvironmentVariable` `SESSION_ID` — Identifier printed by session start.
 
 ## Realization: `agentide-hosted-devcenter`
 

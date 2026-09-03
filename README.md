@@ -1,229 +1,135 @@
 # AgentIDE
 
-AgentIDE is an actor-aware coding-session protocol and client. It gives humans, agents, and
-automation stable semantic intents such as `code_read`, `code_verify`, `file_open`, and
-`code_publish`; a composing application supplies the concrete implementation, arguments,
-credentials, destinations, and authority policy.
-
-```text
-agent / browser / TUI
-          │
-          ▼
- typed semantic intent ──► exact plan ──► authority ──► implementation port
-          │                                      │                │
-          └──────────────── durable event journal ◄────────────────┘
-                                  │
-                     shared session projection
-```
-
-The released binary includes three surfaces over that projection:
-
-- a JSON CLI optimized for agent tool use;
-- an embedded local browser workbench;
-- a keyboard-driven console TUI built on the same Harness/Substrate execution adapter.
-
-Virtual panes, open files, focus, cursor positions, diffs, approvals, processes, agent lanes, and
-evidence are session state rather than UI-private state. They can be replayed and rendered by a
-future Harness-native surface without changing the intent vocabulary.
-
-The hosted form is generated from [`service.yaml`](service.yaml) with Service SDK. Service SDK and
-Eventlog provide its service layer, authenticated projections, event persistence, and deployment
-store selection; AgentIDE does not introduce another PostgreSQL repository or a source-file store.
-DevCenter is the primary hosted human surface, while the CLI, TUI, and local browser remain peer
-clients.
-
-## Choose how to run it
-
-Start with the **model-backed local TUI** if you want to evaluate AgentIDE as an interactive coding
-environment. The same Linux binary also provides a projection-only TUI, a JSON CLI for automation,
-and a loopback browser workbench. A fifth realization composes AgentIDE into DevCenter, but that
-hosted surface is approval-required and has no public self-service endpoint.
-
-The exact distinctions—interaction shape, attachment boundary, support, availability, immutable
-artifact, and ESS surface—are generated from two checked `ess-realization/1` declarations in
-[`docs/running-modes.md`](docs/running-modes.md).
-
-## Install the released Linux binary
-
-The public release is the self-service path. Source builds currently need access to the private
-Service SDK dependency used to generate the hosted package, so cloning the public repository alone
-is not a complete build path.
-
-```bash
-version=0.1.3
-target=x86_64-unknown-linux-gnu
-archive="agentide-${version}-${target}.tar.gz"
-base="https://github.com/beyond10x/agentide/releases/download/${version}"
-
-curl --fail --location --remote-name "${base}/${archive}"
-curl --fail --location --remote-name "${base}/SHA256SUMS"
-grep -F "  ${archive}" SHA256SUMS | sha256sum --check
-tar -xzf "${archive}"
-cp "agentide-${version}-${target}/agentide" ./agentide
-./agentide --version
-```
-
-Expected verification output:
-
-```shell-session
-agentide-0.1.3-x86_64-unknown-linux-gnu.tar.gz: OK
-agentide 0.1.3
-```
-
-Release checksums are published in `SHA256SUMS`; the standalone ESS realization separately locks
-the exact digest of each promoted binary archive. AgentIDE currently targets Linux because process
-execution relies on Linux Substrate confinement.
-
-## Quickstart: model-backed local TUI
-
-Run these commands from an existing workspace. Starting a session adopts that workspace through
-Substrate and stores AgentIDE state outside it.
-
-```bash
-./agentide session start \
-  --workspace . \
-  --objective "Implement and verify the change"
-```
-
-The command returns JSON. Copy the printed `session_id` into `SESSION_ID`:
-
-```json
-{
-  "format": "agentide.session-started/1",
-  "session_id": "<session-id>",
-  "workspace": "<absolute-workspace-path>",
-  "next": "agentide snapshot --session <session-id>"
-}
-```
-
-Configure a model endpoint and name the credential source. The value of `MODEL_API_KEY` is read for
-each request; neither the value nor the model conversation is written to the AgentIDE journal.
-
-```bash
-export SESSION_ID="<session-id>"
-export AGENTIDE_BASE_URL="https://api.example/v1"
-export AGENTIDE_MODEL="model-id"
-export MODEL_API_KEY="<credential>"
-
-./agentide tui \
-  --session "$SESSION_ID" \
-  --api-key-env MODEL_API_KEY
-```
-
-You should see the session objective, transcript and workbench tabs, open files, activity, and any
-plan waiting for approval. Press `i` to prompt the agent. `Ctrl+K` opens the command palette,
-`Ctrl+P` quick-opens a file, `Tab` moves among regions, and `y` or `n` resolves the exact plan shown
-by the approval gate. See the [Harness TUI guide](docs/harness-tui.md) for model wires, credential
-sources, budgets, and the full interaction flow.
-
-## Other local surfaces
-
-Projection-only TUI—same durable workbench, no model connection:
-
-```bash
-./agentide tui --session "$SESSION_ID"
-```
-
-JSON CLI—suited to scripts and agent tool adapters:
-
-```bash
-./agentide snapshot --session "$SESSION_ID"
-./agentide intent call --session "$SESSION_ID" code_read \
-  --input '{"path":"src/lib.rs"}'
-```
-
-Local browser—start the loopback-only server, then open `http://127.0.0.1:7788/`:
-
-```bash
-./agentide serve --session "$SESSION_ID"
-```
-
-The browser server is a local projection and manual interaction surface. It does not run the
-Harness model loop; use the model-backed TUI for that.
+AgentIDE is a local coding workbench where humans and agents share one durable session. Files,
+diffs, terminal activity, model actions, evidence, and approval decisions remain visible and
+replayable instead of disappearing inside a chat transcript.
 
 ![AgentIDE local browser workbench showing a new session, open-file and approval regions, and the durable session timeline](docs/assets/browser-workbench.png)
 
-The browser capture uses a fresh local session with no source files, credentials, or model
-conversation loaded.
+AgentIDE is a developer preview for Linux x86_64. The CLI, model-backed terminal UI,
+projection-only terminal UI, and loopback browser all use the same session record.
 
-A mutating JSON intent is two-phase and bound to one SHA-256 plan:
+## Install AgentIDE
+
+Install the latest stable GitHub Release with the first-party installer:
 
 ```bash
-./agentide intent preview --session "$SESSION_ID" code_edit \
-  --input '{"path":"src/lib.rs","content":"...","expected_sha256":"..."}'
-./agentide approval grant --session "$SESSION_ID" --plan "$PLAN_DIGEST"
-./agentide intent resume --session "$SESSION_ID" --plan "$PLAN_DIGEST" \
-  --input '{"path":"src/lib.rs","content":"...","expected_sha256":"..."}'
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/beyond10x/agentide/releases/latest/download/agentide-installer.sh | sh
 ```
 
-Resume must supply the exact input bytes used for preview; pending plans do not persist the original
-input.
+The installer resolves an immutable release, downloads its Linux x86_64 archive and
+`SHA256SUMS`, verifies exactly one matching checksum, and installs `agentide` into
+`~/.local/bin` without sudo. If that directory is not on `PATH`, it prints the required next step.
 
-## Hosted DevCenter boundary
+```bash
+agentide --version
+```
 
-Hosted AgentIDE is a generated Service SDK package composed into DevCenter with authenticated
-session projections and Eventlog persistence. It is not the loopback browser exposed on a public
-host, and this repository does not publish a self-hosting chart or public hosted URL. The declared
-DevCenter realization is an approval-required preview boundary; its current deployment surface is
-paused. Use the released local binary unless you have been given a DevCenter environment and
-access.
+## Run your first coding session
 
-## Troubleshooting and limits
+Run these commands from the workspace you want AgentIDE to use. The endpoint, exact model, and
+credential source are intentionally explicit; AgentIDE does not choose a provider or search for
+credentials.
 
-- `workspace.unreadable` means `--workspace` does not resolve to an existing accessible directory.
-- `toolchain.unavailable` means the adopted workspace has no supported toolchain facts. Inspect
-  `agentide bindings inspect --session "$SESSION_ID"` after session creation.
-- `substrate.exec_refused` usually means a process intent needs confinement facts the host did not
-  provide. Process verification requires a delegated cgroup v2 subtree selected by
-  `AGENTIDE_CGROUP_ROOT`; AgentIDE does not fall back to an unconfined host process.
-- `binding.profile_unavailable` means the semantic verification or process profile is absent from
-  the operator-owned binding file. A model cannot add an executable or argv to repair it.
-- `harness.approval_missing` means an effectful tool call did not pass through the paired exact-plan
-  approval flow. Retry through the displayed `y`/`n` decision rather than bypassing it.
-- If `tui` starts without a prompt line, both a model base URL and model id were absent; that is the
-  projection-only mode, not a failed agent loop.
+```bash
+export AGENTIDE_BASE_URL="https://api.example/v1"
+export AGENTIDE_MODEL="model-id"
+export MODEL_API_KEY="your-api-key"
 
-Session state lives under `${XDG_STATE_HOME:-$HOME/.local/state}/agentide`, never in the target
+agentide run \
+  --objective "Implement and verify the change" \
+  --api-key-env MODEL_API_KEY
+```
+
+`agentide run` adopts the current directory, creates a durable session, prints its ID and resume
+command, and opens the model-backed TUI. The session remains available after the TUI exits or the
+model loop fails. The key is read from `MODEL_API_KEY` for each request and is never written to the
+session journal.
+
+Inside the TUI, press `i` to prompt the agent, `Ctrl+K` for the command palette, `Ctrl+P` to open a
+file, and `Tab` to move between regions. When an effect needs approval, `y` or `n` resolves the exact
+plan displayed by the gate.
+
+## Choose a running mode
+
+| Mode | Start | Best for |
+| --- | --- | --- |
+| Model-backed TUI | `agentide run --api-key-env MODEL_API_KEY` | Interactive agent-assisted coding |
+| Projection-only TUI | `agentide run` | Inspecting and operating a session without a model |
+| JSON CLI | `agentide session start`, then `agentide intent ...` | Scripts and agent tool adapters |
+| Local browser | `agentide serve --session <id>` | A loopback visual view of the same session |
+| Hosted DevCenter | Environment-provided URL | Authenticated composed deployments; no public self-service endpoint |
+
+For an existing session, attach directly with `agentide tui --session <id>`. Model-backed `run` and
+`tui` require both `AGENTIDE_BASE_URL` and `AGENTIDE_MODEL`; supplying only one is an error. Omitting
+both selects projection-only mode. See the generated [running-mode reference](docs/running-modes.md)
+for the exact implementation, attachment, availability, and ESS surface of every realization.
+
+The JSON workflow remains available when a caller needs structured output:
+
+```bash
+agentide session start --workspace . --objective "Inspect the change"
+agentide snapshot --session <id>
+agentide intent call --session <id> code_read --input '{"path":"src/lib.rs"}'
+```
+
+The browser is loopback-only. Start `agentide serve --session <id>`, then open
+`http://127.0.0.1:7788/`. It presents the durable projection but does not run a model loop.
+
+## Install the latest source with Cargo
+
+If you deliberately want the newest source from `main` and have a Rust toolchain, install directly
+from GitHub:
+
+```bash
+cargo install --git https://github.com/beyond10x/agentide --locked agentide-cli
+```
+
+This command compiles the current `main`, which may be newer than the latest stable GitHub Release.
+It does not select a release tag. AgentIDE is not published to crates.io, so
+`cargo install agentide-cli` is not a supported command. Use the installer above when you want the
+latest stable prebuilt binary.
+
+## Why AgentIDE is built on ESS
+
+[ESS](https://github.com/beyond10x/ess) turns AgentIDE's coding model into validated intermediate
+representation and generated contracts. That matters to a user because:
+
+- an action such as `code_read`, `code_edit`, or `code_verify` keeps the same meaning across CLI,
+  TUI, browser, and hosted surfaces;
+- the model sees typed semantic actions rather than being allowed to invent executables,
+  credentials, destinations, or policy;
+- effectful work is previewed as an exact digest-bound plan before approval;
+- sessions and evidence can be replayed against the same declared behavior;
+- the generated running-mode reference cannot silently disagree with the executable specification.
+
+Harness drives the model loop and Substrate supplies guarded workspace implementations. Service SDK
+and Eventlog provide the generated hosted form without introducing a second AgentIDE-specific
+service or persistence model.
+
+## Safety model
+
+Session state lives under `${XDG_STATE_HOME:-$HOME/.local/state}/agentide`, outside the target
 workspace. A model request cannot select a driver, executable, credential, destination, or policy.
 Missing Substrate facts, bindings, profiles, approvals, or recovery facts produce named refusals;
-AgentIDE never falls back to direct host effects.
+AgentIDE does not fall back to unconfined host effects.
 
-## Contracts and embedding
+Mutating JSON intents use two phases: preview the exact plan, grant its SHA-256 digest, and resume
+with the same input. The TUI presents the same approval boundary interactively. Model conversations
+and credential values are not written to the AgentIDE journal.
 
-- `spec/agentide/` is the ESS semantic authority.
-- `contracts/intent-profile-v2.yaml` adds actor audiences, consequence, and authority declarations;
-  the v1 profile remains a compatibility input.
-- `contracts/surface-profile.yaml` defines strict, renderer-neutral presentation and interaction
-  rules shared by the browser and console.
-- `contracts/default-bindings.yaml` is the standalone Substrate binding supplied from outside the
-  semantic request.
-- `contracts/schemas/` contains immutable transport and configuration schemas.
-- `service.yaml` and `service/` are the handwritten Service SDK package for hosted coordination;
-  `generated/service/` is its exclusive generated output, including the Connector factory,
-  transport contracts, Rust service package, and conformance scenarios.
-- `agentide_core::IntentPort` is the implementation seam a standalone or Harness host binds.
-- `agentide_harness::ports` publishes the bound ESS schemas through Harness and pairs the tool port
-  with the exact-plan approval port used by the TUI.
-- `.engineering/planning/` is the AEP-governed plan and evidence graph.
+## Learn more
 
-See [architecture](docs/architecture.md) for the exact boundaries and [keyboard interface](docs/keyboard-interface.md)
-for the shared surface operations.
+- [Harness TUI guide](docs/harness-tui.md) — model wires, credential sources, budgets, and keys
+- [Running modes](docs/running-modes.md) — generated realization reference
+- [Architecture](docs/architecture.md) — component and ownership boundaries
+- [Keyboard interface](docs/keyboard-interface.md) — shared surface operations
+- [`spec/agentide/`](spec/agentide/) — executable ESS specification
+- [`contracts/`](contracts/) — stable intent, binding, presentation, and wire contracts
 
-Run the complete gate with:
-
-```shell-session
-cargo xtask gate
-```
-
-After a handwritten ESS or Service SDK definition change, regenerate the exclusively owned hosted
-package with `cargo xtask generate-service`. The generated Rust crate is a workspace member, so the
-normal locked workspace build compiles the exact Connector factory and Eventlog service used by a
-hosted composition; there is no parallel handwritten service implementation.
-
-The gate validates AEP, compiles ESS through the pinned compiler, checks ESS and Service SDK output
-drift, compiles and tests the generated service, validates actor/profile/binding coverage, runs Rust
-tests and Clippy, type-checks the browser, checks built asset drift, and scans replay fixtures for
-sensitive data.
+Contributors can run the complete repository gate with `cargo xtask gate`. After changing ESS or
+Service SDK definitions, regenerate only through the repository-owned xtask commands described in
+[AGENTS.md](AGENTS.md).
 
 <!-- b10x-docs:start -->
 ## Documentation
