@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.3.5 - 2026-09-05
+
+- Regenerate the hosted service with Service SDK 0.5.9 so its Connector factory composes through
+  the exact Connectors 0.6.2 Git broker and current authority contract.
+
 ## 0.3.4 - 2026-09-05
 
 - Add a transport-neutral workbench controller and equivalent Vue and Vanilla renderer targets
