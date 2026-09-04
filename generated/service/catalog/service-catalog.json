@@ -3311,7 +3311,7 @@
       },
       {
         "behavior": {
-          "contract": "given `agentide.surface.CloseFile` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
+          "contract": "given `agentide.surface.CloseFile` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.FileClosed`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
           "disposition": "obligation",
           "why": "decided outside the system: the requested surface state is unavailable"
         },
@@ -3349,6 +3349,45 @@
               "name": "agentide.coding.Path"
             },
             "wire": "path"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
           }
         ],
         "name": "agentide.surface.CloseFile",
@@ -3356,10 +3395,15 @@
           {
             "condition": "otherwise",
             "error": null,
-            "moves": null,
+            "moves": {
+              "effect": {
+                "kind": "updates"
+              },
+              "entity": "agentide.surface.Workbench"
+            },
             "name": "completed",
             "publishes": [
-              "agentide.surface.SurfaceObserved"
+              "agentide.surface.FileClosed"
             ],
             "summary": null
           },
@@ -3375,7 +3419,7 @@
       },
       {
         "behavior": {
-          "contract": "given `agentide.surface.ClosePane` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
+          "contract": "given `agentide.surface.ClosePane` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.PaneClosed`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
           "disposition": "obligation",
           "why": "decided outside the system: the requested surface state is unavailable"
         },
@@ -3413,6 +3457,45 @@
               "name": "agentide.surface.PaneId"
             },
             "wire": "pane_id"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
           }
         ],
         "name": "agentide.surface.ClosePane",
@@ -3420,10 +3503,15 @@
           {
             "condition": "otherwise",
             "error": null,
-            "moves": null,
+            "moves": {
+              "effect": {
+                "kind": "updates"
+              },
+              "entity": "agentide.surface.Workbench"
+            },
             "name": "completed",
             "publishes": [
-              "agentide.surface.SurfaceObserved"
+              "agentide.surface.PaneClosed"
             ],
             "summary": null
           },
@@ -3439,7 +3527,7 @@
       },
       {
         "behavior": {
-          "contract": "given `agentide.surface.FocusPane` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
+          "contract": "given `agentide.surface.FocusPane` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.PaneFocused`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
           "disposition": "obligation",
           "why": "decided outside the system: the requested surface state is unavailable"
         },
@@ -3477,6 +3565,45 @@
               "name": "agentide.surface.PaneId"
             },
             "wire": "pane_id"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
           }
         ],
         "name": "agentide.surface.FocusPane",
@@ -3484,10 +3611,15 @@
           {
             "condition": "otherwise",
             "error": null,
-            "moves": null,
+            "moves": {
+              "effect": {
+                "kind": "updates"
+              },
+              "entity": "agentide.surface.Workbench"
+            },
             "name": "completed",
             "publishes": [
-              "agentide.surface.SurfaceObserved"
+              "agentide.surface.PaneFocused"
             ],
             "summary": null
           },
@@ -3503,7 +3635,7 @@
       },
       {
         "behavior": {
-          "contract": "given `agentide.surface.MoveCursor` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
+          "contract": "given `agentide.surface.MoveCursor` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.CursorMoved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
           "disposition": "obligation",
           "why": "decided outside the system: the requested surface state is unavailable"
         },
@@ -3571,6 +3703,45 @@
               "name": "integer"
             },
             "wire": "column"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
           }
         ],
         "name": "agentide.surface.MoveCursor",
@@ -3578,10 +3749,15 @@
           {
             "condition": "otherwise",
             "error": null,
-            "moves": null,
+            "moves": {
+              "effect": {
+                "kind": "updates"
+              },
+              "entity": "agentide.surface.Workbench"
+            },
             "name": "completed",
             "publishes": [
-              "agentide.surface.SurfaceObserved"
+              "agentide.surface.CursorMoved"
             ],
             "summary": null
           },
@@ -3597,7 +3773,7 @@
       },
       {
         "behavior": {
-          "contract": "given `agentide.surface.OpenFile` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
+          "contract": "given `agentide.surface.OpenFile` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.FileOpened`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
           "disposition": "obligation",
           "why": "decided outside the system: the requested surface state is unavailable"
         },
@@ -3661,6 +3837,45 @@
               }
             },
             "wire": "pane_id"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
           }
         ],
         "name": "agentide.surface.OpenFile",
@@ -3668,10 +3883,15 @@
           {
             "condition": "otherwise",
             "error": null,
-            "moves": null,
+            "moves": {
+              "effect": {
+                "kind": "updates"
+              },
+              "entity": "agentide.surface.Workbench"
+            },
             "name": "completed",
             "publishes": [
-              "agentide.surface.SurfaceObserved"
+              "agentide.surface.FileOpened"
             ],
             "summary": null
           },
@@ -3687,7 +3907,7 @@
       },
       {
         "behavior": {
-          "contract": "given `agentide.surface.OpenPane` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
+          "contract": "given `agentide.surface.OpenPane` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.PaneOpened`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
           "disposition": "obligation",
           "why": "decided outside the system: the requested surface state is unavailable"
         },
@@ -3748,6 +3968,45 @@
               }
             },
             "wire": "split"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
           }
         ],
         "name": "agentide.surface.OpenPane",
@@ -3755,10 +4014,15 @@
           {
             "condition": "otherwise",
             "error": null,
-            "moves": null,
+            "moves": {
+              "effect": {
+                "kind": "updates"
+              },
+              "entity": "agentide.surface.Workbench"
+            },
             "name": "completed",
             "publishes": [
-              "agentide.surface.SurfaceObserved"
+              "agentide.surface.PaneOpened"
             ],
             "summary": null
           },
@@ -3774,7 +4038,7 @@
       },
       {
         "behavior": {
-          "contract": "given `agentide.surface.ShowDiff` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
+          "contract": "given `agentide.surface.ShowDiff` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.DiffShown`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
           "disposition": "obligation",
           "why": "decided outside the system: the requested surface state is unavailable"
         },
@@ -3841,6 +4105,45 @@
               }
             },
             "wire": "base"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
           }
         ],
         "name": "agentide.surface.ShowDiff",
@@ -3848,10 +4151,15 @@
           {
             "condition": "otherwise",
             "error": null,
-            "moves": null,
+            "moves": {
+              "effect": {
+                "kind": "updates"
+              },
+              "entity": "agentide.surface.Workbench"
+            },
             "name": "completed",
             "publishes": [
-              "agentide.surface.SurfaceObserved"
+              "agentide.surface.DiffShown"
             ],
             "summary": null
           },
@@ -3867,7 +4175,7 @@
       },
       {
         "behavior": {
-          "contract": "given `agentide.surface.SnapshotSurface` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
+          "contract": "given `agentide.surface.SnapshotSurface` input, decide and enact exactly one outcome — `completed` otherwise, creates `agentide.surface.Workbench`, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`",
           "disposition": "obligation",
           "why": "decided outside the system: the requested surface state is unavailable"
         },
@@ -3895,6 +4203,45 @@
               "name": "agentide.session.RequestId"
             },
             "wire": "request_id"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
           }
         ],
         "name": "agentide.surface.SnapshotSurface",
@@ -3902,7 +4249,12 @@
           {
             "condition": "otherwise",
             "error": null,
-            "moves": null,
+            "moves": {
+              "effect": {
+                "kind": "creates"
+              },
+              "entity": "agentide.surface.Workbench"
+            },
             "name": "completed",
             "publishes": [
               "agentide.surface.SurfaceObserved"
@@ -4504,6 +4856,16 @@
         "display": "Workbench",
         "fields": [
           {
+            "name": "coding_session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "coding_session_id"
+          },
+          {
             "name": "panes",
             "optional": false,
             "spelling": "List<agentide.surface.PaneSnapshot>",
@@ -4541,6 +4903,26 @@
               }
             },
             "wire": "open_files"
+          },
+          {
+            "name": "owner",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "owner"
+          },
+          {
+            "name": "scopes",
+            "optional": false,
+            "spelling": "agentide.session.SessionScopes",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionScopes"
+            },
+            "wire": "scopes"
           }
         ],
         "identity": {
@@ -5351,6 +5733,45 @@
               "name": "integer"
             },
             "wire": "column"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
           }
         ],
         "name": "agentide.surface.CursorMoved",
@@ -5371,13 +5792,55 @@
           },
           {
             "name": "pane_id",
-            "optional": false,
-            "spelling": "agentide.surface.PaneId",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
             "type": {
-              "kind": "declared",
-              "name": "agentide.surface.PaneId"
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
             },
             "wire": "pane_id"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
           }
         ],
         "name": "agentide.surface.DiffShown",
@@ -5405,6 +5868,45 @@
               "name": "agentide.coding.Path"
             },
             "wire": "path"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
           }
         ],
         "name": "agentide.surface.FileClosed",
@@ -5435,13 +5937,55 @@
           },
           {
             "name": "pane_id",
-            "optional": false,
-            "spelling": "agentide.surface.PaneId",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
             "type": {
-              "kind": "declared",
-              "name": "agentide.surface.PaneId"
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
             },
             "wire": "pane_id"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
           }
         ],
         "name": "agentide.surface.FileOpened",
@@ -5469,6 +6013,45 @@
               "name": "agentide.surface.PaneId"
             },
             "wire": "pane_id"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
           }
         ],
         "name": "agentide.surface.PaneClosed",
@@ -5496,6 +6079,45 @@
               "name": "agentide.surface.PaneId"
             },
             "wire": "pane_id"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
           }
         ],
         "name": "agentide.surface.PaneFocused",
@@ -5533,6 +6155,45 @@
               "name": "agentide.surface.PaneKind"
             },
             "wire": "kind"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
           }
         ],
         "name": "agentide.surface.PaneOpened",
@@ -5552,6 +6213,16 @@
             "wire": "session_id"
           },
           {
+            "name": "coding_session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "coding_session_id"
+          },
+          {
             "name": "request_id",
             "optional": false,
             "spelling": "agentide.session.RequestId",
@@ -5560,6 +6231,45 @@
               "name": "agentide.session.RequestId"
             },
             "wire": "request_id"
+          },
+          {
+            "name": "panes",
+            "optional": false,
+            "spelling": "List<agentide.surface.PaneSnapshot>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneSnapshot"
+              }
+            },
+            "wire": "panes"
+          },
+          {
+            "name": "focused_pane",
+            "optional": true,
+            "spelling": "Optional<agentide.surface.PaneId>",
+            "type": {
+              "kind": "optional",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.surface.PaneId"
+              }
+            },
+            "wire": "focused_pane"
+          },
+          {
+            "name": "open_files",
+            "optional": false,
+            "spelling": "List<agentide.coding.Path>",
+            "type": {
+              "kind": "list",
+              "of": {
+                "kind": "declared",
+                "name": "agentide.coding.Path"
+              }
+            },
+            "wire": "open_files"
           }
         ],
         "name": "agentide.surface.SurfaceObserved",
@@ -5573,8 +6283,8 @@
       "refused": 7
     },
     "provenance": {
-      "contract_digest": "90e1687e023e28f77eca4934db634944dcaf13a22a2075c642452ec5a97822b4",
-      "source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
+      "contract_digest": "a4cc516b70da249e7983921de639e15304b617e77b8a493363d888c039bee110",
+      "source_digest": "509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab",
       "specification_version": "v1",
       "system": "agentide"
     },
@@ -5974,6 +6684,7 @@
           "Editor",
           "Diff",
           "Terminal",
+          "Chat",
           "Timeline",
           "Agents",
           "Approvals",
@@ -6572,6 +7283,16 @@
             "wire": "session_id"
           },
           {
+            "name": "coding_session_id",
+            "optional": false,
+            "spelling": "agentide.session.SessionId",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionId"
+            },
+            "wire": "coding_session_id"
+          },
+          {
             "name": "panes",
             "optional": false,
             "spelling": "List<agentide.surface.PaneSnapshot>",
@@ -6609,6 +7330,26 @@
               }
             },
             "wire": "open_files"
+          },
+          {
+            "name": "owner",
+            "optional": false,
+            "spelling": "String",
+            "type": {
+              "kind": "primitive",
+              "name": "string"
+            },
+            "wire": "owner"
+          },
+          {
+            "name": "scopes",
+            "optional": false,
+            "spelling": "agentide.session.SessionScopes",
+            "type": {
+              "kind": "declared",
+              "name": "agentide.session.SessionScopes"
+            },
+            "wire": "scopes"
           }
         ],
         "filter": null,
@@ -6658,6 +7399,152 @@
           "checkpoint_id",
           "expected_version",
           "idempotency_key",
+          "request_id",
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "close_file",
+      "operation_ref": "agentide.close_file",
+      "semantic_ref": "agentide.surface.CloseFile",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "expected_version": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "focused_pane": {
+            "title": "Optional<agentide.surface.PaneId>"
+          },
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "open_files": {
+            "title": "List<agentide.coding.Path>"
+          },
+          "panes": {
+            "title": "List<agentide.surface.PaneSnapshot>"
+          },
+          "path": {
+            "title": "agentide.coding.Path"
+          },
+          "request_id": {
+            "title": "agentide.session.RequestId"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "expected_version",
+          "idempotency_key",
+          "open_files",
+          "panes",
+          "path",
+          "request_id",
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "close_pane",
+      "operation_ref": "agentide.close_pane",
+      "semantic_ref": "agentide.surface.ClosePane",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "expected_version": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "focused_pane": {
+            "title": "Optional<agentide.surface.PaneId>"
+          },
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "open_files": {
+            "title": "List<agentide.coding.Path>"
+          },
+          "pane_id": {
+            "title": "agentide.surface.PaneId"
+          },
+          "panes": {
+            "title": "List<agentide.surface.PaneSnapshot>"
+          },
+          "request_id": {
+            "title": "agentide.session.RequestId"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "expected_version",
+          "idempotency_key",
+          "open_files",
+          "pane_id",
+          "panes",
           "request_id",
           "session_id"
         ],
@@ -7018,6 +7905,79 @@
       }
     },
     {
+      "name": "focus_pane",
+      "operation_ref": "agentide.focus_pane",
+      "semantic_ref": "agentide.surface.FocusPane",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "expected_version": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "focused_pane": {
+            "title": "Optional<agentide.surface.PaneId>"
+          },
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "open_files": {
+            "title": "List<agentide.coding.Path>"
+          },
+          "pane_id": {
+            "title": "agentide.surface.PaneId"
+          },
+          "panes": {
+            "title": "List<agentide.surface.PaneSnapshot>"
+          },
+          "request_id": {
+            "title": "agentide.session.RequestId"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "expected_version",
+          "idempotency_key",
+          "open_files",
+          "pane_id",
+          "panes",
+          "request_id",
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    },
+    {
       "name": "get_session",
       "operation_ref": "agentide.get_session",
       "semantic_ref": "agentide.session.SessionSnapshot",
@@ -7091,6 +8051,107 @@
                     "state": {},
                     "workspace_root": {},
                     "workspace_session_id": {}
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "next_cursor": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "partial": {
+                "type": "boolean"
+              },
+              "through_version": {
+                "minimum": 1,
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "items",
+              "through_version",
+              "next_cursor",
+              "partial"
+            ],
+            "type": "object"
+          }
+        ]
+      }
+    },
+    {
+      "name": "get_workbench",
+      "operation_ref": "agentide.get_workbench",
+      "semantic_ref": "agentide.surface.WorkbenchSnapshot",
+      "kind": "query",
+      "effect": "read",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "$page": {
+            "additionalProperties": false,
+            "properties": {
+              "cursor": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "limit": {
+                "maximum": 1000,
+                "minimum": 1,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "limit"
+            ],
+            "type": "object"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "anyOf": [
+          {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "coding_session_id": {},
+                "focused_pane": {},
+                "open_files": {},
+                "owner": {},
+                "panes": {},
+                "scopes": {},
+                "session_id": {}
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "items": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "coding_session_id": {},
+                    "focused_pane": {},
+                    "open_files": {},
+                    "owner": {},
+                    "panes": {},
+                    "scopes": {},
+                    "session_id": {}
                   },
                   "type": "object"
                 },
@@ -7546,6 +8607,250 @@
       }
     },
     {
+      "name": "move_cursor",
+      "operation_ref": "agentide.move_cursor",
+      "semantic_ref": "agentide.surface.MoveCursor",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "title": "Integer"
+          },
+          "expected_version": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "focused_pane": {
+            "title": "Optional<agentide.surface.PaneId>"
+          },
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "line": {
+            "title": "Integer"
+          },
+          "open_files": {
+            "title": "List<agentide.coding.Path>"
+          },
+          "pane_id": {
+            "title": "agentide.surface.PaneId"
+          },
+          "panes": {
+            "title": "List<agentide.surface.PaneSnapshot>"
+          },
+          "path": {
+            "title": "agentide.coding.Path"
+          },
+          "request_id": {
+            "title": "agentide.session.RequestId"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "column",
+          "expected_version",
+          "idempotency_key",
+          "line",
+          "open_files",
+          "pane_id",
+          "panes",
+          "path",
+          "request_id",
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "open_file",
+      "operation_ref": "agentide.open_file",
+      "semantic_ref": "agentide.surface.OpenFile",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "expected_version": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "focused_pane": {
+            "title": "Optional<agentide.surface.PaneId>"
+          },
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "line": {
+            "title": "Optional<Integer>"
+          },
+          "open_files": {
+            "title": "List<agentide.coding.Path>"
+          },
+          "pane_id": {
+            "title": "Optional<agentide.surface.PaneId>"
+          },
+          "panes": {
+            "title": "List<agentide.surface.PaneSnapshot>"
+          },
+          "path": {
+            "title": "agentide.coding.Path"
+          },
+          "request_id": {
+            "title": "agentide.session.RequestId"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "expected_version",
+          "idempotency_key",
+          "open_files",
+          "panes",
+          "path",
+          "request_id",
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "open_pane",
+      "operation_ref": "agentide.open_pane",
+      "semantic_ref": "agentide.surface.OpenPane",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "expected_version": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "focused_pane": {
+            "title": "Optional<agentide.surface.PaneId>"
+          },
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "kind": {
+            "title": "agentide.surface.PaneKind"
+          },
+          "open_files": {
+            "title": "List<agentide.coding.Path>"
+          },
+          "pane_id": {
+            "title": "agentide.surface.PaneId"
+          },
+          "panes": {
+            "title": "List<agentide.surface.PaneSnapshot>"
+          },
+          "request_id": {
+            "title": "agentide.session.RequestId"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          },
+          "split": {
+            "title": "Optional<agentide.surface.SplitDirection>"
+          }
+        },
+        "required": [
+          "expected_version",
+          "idempotency_key",
+          "kind",
+          "open_files",
+          "pane_id",
+          "panes",
+          "request_id",
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    },
+    {
       "name": "pin_context",
       "operation_ref": "agentide.pin_context",
       "semantic_ref": "agentide.coordination.PinContext",
@@ -7788,6 +9093,153 @@
           "expected_version",
           "grant_id",
           "idempotency_key",
+          "request_id",
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "show_diff",
+      "operation_ref": "agentide.show_diff",
+      "semantic_ref": "agentide.surface.ShowDiff",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "base": {
+            "title": "Optional<String>"
+          },
+          "expected_version": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "focused_pane": {
+            "title": "Optional<agentide.surface.PaneId>"
+          },
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "open_files": {
+            "title": "List<agentide.coding.Path>"
+          },
+          "pane_id": {
+            "title": "Optional<agentide.surface.PaneId>"
+          },
+          "panes": {
+            "title": "List<agentide.surface.PaneSnapshot>"
+          },
+          "path": {
+            "title": "Optional<agentide.coding.Path>"
+          },
+          "request_id": {
+            "title": "agentide.session.RequestId"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "expected_version",
+          "idempotency_key",
+          "open_files",
+          "panes",
+          "request_id",
+          "session_id"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "through_version": {
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "outcome",
+          "events",
+          "through_version",
+          "replayed"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "snapshot_surface",
+      "operation_ref": "agentide.snapshot_surface",
+      "semantic_ref": "agentide.surface.SnapshotSurface",
+      "kind": "intent",
+      "effect": "write",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "expected_version": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "focused_pane": {
+            "title": "Optional<agentide.surface.PaneId>"
+          },
+          "idempotency_key": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "open_files": {
+            "title": "List<agentide.coding.Path>"
+          },
+          "panes": {
+            "title": "List<agentide.surface.PaneSnapshot>"
+          },
+          "request_id": {
+            "title": "agentide.session.RequestId"
+          },
+          "session_id": {
+            "title": "agentide.session.SessionId"
+          }
+        },
+        "required": [
+          "expected_version",
+          "idempotency_key",
+          "open_files",
+          "panes",
           "request_id",
           "session_id"
         ],

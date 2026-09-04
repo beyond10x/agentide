@@ -1,7 +1,7 @@
 {
   "format": "service-connector-contribution/1",
   "service": "agentide",
-  "ess_source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
+  "ess_source_digest": "509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab",
   "operations": [
     {
       "operation": "approve_checkpoint",
@@ -22,6 +22,102 @@
         {
           "name": "idempotency_key",
           "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "operation": "close_file",
+      "semantic_ref": "agentide.surface.CloseFile",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "type_ref": "agentide.coding.Path",
+          "optional": false
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "operation": "close_pane",
+      "semantic_ref": "agentide.surface.ClosePane",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "agentide.surface.PaneId",
+          "optional": false
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
           "optional": false
         },
         {
@@ -209,8 +305,69 @@
       ]
     },
     {
+      "operation": "focus_pane",
+      "semantic_ref": "agentide.surface.FocusPane",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "agentide.surface.PaneId",
+          "optional": false
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
       "operation": "get_session",
       "semantic_ref": "agentide.session.SessionSnapshot",
+      "kind": "query",
+      "effect": "read",
+      "inputs": [
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "operation": "get_workbench",
+      "semantic_ref": "agentide.surface.WorkbenchSnapshot",
       "kind": "query",
       "effect": "read",
       "inputs": [
@@ -265,6 +422,185 @@
       "semantic_ref": "agentide.session.SessionSnapshot",
       "kind": "query",
       "effect": "read"
+    },
+    {
+      "operation": "move_cursor",
+      "semantic_ref": "agentide.surface.MoveCursor",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "column",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "line",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "agentide.surface.PaneId",
+          "optional": false
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "type_ref": "agentide.coding.Path",
+          "optional": false
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "operation": "open_file",
+      "semantic_ref": "agentide.surface.OpenFile",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "line",
+          "type_ref": "Optional<Integer>",
+          "optional": true
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "type_ref": "agentide.coding.Path",
+          "optional": false
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "operation": "open_pane",
+      "semantic_ref": "agentide.surface.OpenPane",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "kind",
+          "type_ref": "agentide.surface.PaneKind",
+          "optional": false
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "agentide.surface.PaneId",
+          "optional": false
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        },
+        {
+          "name": "split",
+          "type_ref": "Optional<agentide.surface.SplitDirection>",
+          "optional": true
+        }
+      ]
     },
     {
       "operation": "pin_context",
@@ -419,6 +755,107 @@
         {
           "name": "idempotency_key",
           "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "operation": "show_diff",
+      "semantic_ref": "agentide.surface.ShowDiff",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "base",
+          "type_ref": "Optional<String>",
+          "optional": true
+        },
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false
+        },
+        {
+          "name": "path",
+          "type_ref": "Optional<agentide.coding.Path>",
+          "optional": true
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false
+        }
+      ]
+    },
+    {
+      "operation": "snapshot_surface",
+      "semantic_ref": "agentide.surface.SnapshotSurface",
+      "kind": "intent",
+      "effect": "write",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
           "optional": false
         },
         {

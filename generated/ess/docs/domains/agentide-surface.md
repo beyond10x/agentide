@@ -1,7 +1,7 @@
 <!--
 generated from agentide v1
-model digest 360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3
-contract digest d9a3cdee69e8401b04e0e219e938ee8cda129354febcea80966293ab57d9a6da
+model digest 509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab
+contract digest 91570fc68352850104519423ede46a5eded913f94fb9d5488c253b21f052bc75
 do not edit: regenerate with `ess generate`
 -->
 
@@ -19,7 +19,7 @@ A renderer-neutral virtual workbench shared by agents, the browser, CLI snapshot
 
 ### `PaneKind`
 
-`agentide.surface.PaneKind` is one of `Editor`, `Diff`, `Terminal`, `Timeline`, `Agents`, `Approvals` and `Evidence`.
+`agentide.surface.PaneKind` is one of `Editor`, `Diff`, `Terminal`, `Chat`, `Timeline`, `Agents`, `Approvals` and `Evidence`.
 
 ### `PaneSnapshot`
 
@@ -48,11 +48,14 @@ An instance is identified by `session_id`, a `agentide.session.SessionId`. The n
 
 It holds:
 
+- `coding_session_id` — `agentide.session.SessionId`
 - `panes` — `List<agentide.surface.PaneSnapshot>`
 - `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
 - `open_files` — `List<agentide.coding.Path>`
+- `owner` — `String`
+- `scopes` — `agentide.session.SessionScopes`
 
-It declares no relation to another entity, and no other entity names it.
+It references at most one [`agentide.session.CodingSession`](agentide-session.md#codingsession), as `session`, carried by `Workbench.coding_session_id`.
 
 No invariant is declared, so nothing here constrains an instance at rest.
 
@@ -87,9 +90,12 @@ It contains every instance of that entity: no filter narrows it, which is a deci
 It exposes:
 
 - `session_id` — `agentide.session.SessionId`
+- `coding_session_id` — `agentide.session.SessionId`
 - `panes` — `List<agentide.surface.PaneSnapshot>`
 - `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
 - `open_files` — `List<agentide.coding.Path>`
+- `owner` — `String`
+- `scopes` — `agentide.session.SessionScopes`
 
 It declares no order, so the rows come back in whatever order the implementation has, and two reads may disagree.
 
@@ -108,10 +114,13 @@ It takes:
 - `session_id` — `agentide.session.SessionId`
 - `request_id` — `agentide.session.RequestId`
 - `path` — `agentide.coding.Path`
+- `panes` — `List<agentide.surface.PaneSnapshot>`
+- `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `open_files` — `List<agentide.coding.Path>`
 
 It has two outcomes.
 
-**`completed`** — The default branch, taken when no other outcome's condition matched. No entity in this specification changes. It emits `agentide.surface.SurfaceObserved`. A test reaches it by constructing an input that satisfies no other outcome's condition.
+**`completed`** — The default branch, taken when no other outcome's condition matched. It changes a `agentide.surface.Workbench` without moving it along its lifecycle. The instance is the one named by the input field `session_id`. It emits `agentide.surface.FileClosed`. A test reaches it by constructing an input that satisfies no other outcome's condition.
 
 **`refused`** — Decided outside the input: the requested surface state is unavailable. No predicate over the input reaches this branch, and saying `when: false` instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports `agentide.surface.SurfaceFailure`, carrying `code`, `message` and `retryable`. It emits nothing. A test reaches it by injecting the declared fault, because no input can.
 
@@ -124,10 +133,13 @@ It takes:
 - `session_id` — `agentide.session.SessionId`
 - `request_id` — `agentide.session.RequestId`
 - `pane_id` — `agentide.surface.PaneId`
+- `panes` — `List<agentide.surface.PaneSnapshot>`
+- `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `open_files` — `List<agentide.coding.Path>`
 
 It has two outcomes.
 
-**`completed`** — The default branch, taken when no other outcome's condition matched. No entity in this specification changes. It emits `agentide.surface.SurfaceObserved`. A test reaches it by constructing an input that satisfies no other outcome's condition.
+**`completed`** — The default branch, taken when no other outcome's condition matched. It changes a `agentide.surface.Workbench` without moving it along its lifecycle. The instance is the one named by the input field `session_id`. It emits `agentide.surface.PaneClosed`. A test reaches it by constructing an input that satisfies no other outcome's condition.
 
 **`refused`** — Decided outside the input: the requested surface state is unavailable. No predicate over the input reaches this branch, and saying `when: false` instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports `agentide.surface.SurfaceFailure`, carrying `code`, `message` and `retryable`. It emits nothing. A test reaches it by injecting the declared fault, because no input can.
 
@@ -140,10 +152,13 @@ It takes:
 - `session_id` — `agentide.session.SessionId`
 - `request_id` — `agentide.session.RequestId`
 - `pane_id` — `agentide.surface.PaneId`
+- `panes` — `List<agentide.surface.PaneSnapshot>`
+- `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `open_files` — `List<agentide.coding.Path>`
 
 It has two outcomes.
 
-**`completed`** — The default branch, taken when no other outcome's condition matched. No entity in this specification changes. It emits `agentide.surface.SurfaceObserved`. A test reaches it by constructing an input that satisfies no other outcome's condition.
+**`completed`** — The default branch, taken when no other outcome's condition matched. It changes a `agentide.surface.Workbench` without moving it along its lifecycle. The instance is the one named by the input field `session_id`. It emits `agentide.surface.PaneFocused`. A test reaches it by constructing an input that satisfies no other outcome's condition.
 
 **`refused`** — Decided outside the input: the requested surface state is unavailable. No predicate over the input reaches this branch, and saying `when: false` instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports `agentide.surface.SurfaceFailure`, carrying `code`, `message` and `retryable`. It emits nothing. A test reaches it by injecting the declared fault, because no input can.
 
@@ -159,10 +174,13 @@ It takes:
 - `path` — `agentide.coding.Path`
 - `line` — `Integer`
 - `column` — `Integer`
+- `panes` — `List<agentide.surface.PaneSnapshot>`
+- `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `open_files` — `List<agentide.coding.Path>`
 
 It has two outcomes.
 
-**`completed`** — The default branch, taken when no other outcome's condition matched. No entity in this specification changes. It emits `agentide.surface.SurfaceObserved`. A test reaches it by constructing an input that satisfies no other outcome's condition.
+**`completed`** — The default branch, taken when no other outcome's condition matched. It changes a `agentide.surface.Workbench` without moving it along its lifecycle. The instance is the one named by the input field `session_id`. It emits `agentide.surface.CursorMoved`. A test reaches it by constructing an input that satisfies no other outcome's condition.
 
 **`refused`** — Decided outside the input: the requested surface state is unavailable. No predicate over the input reaches this branch, and saying `when: false` instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports `agentide.surface.SurfaceFailure`, carrying `code`, `message` and `retryable`. It emits nothing. A test reaches it by injecting the declared fault, because no input can.
 
@@ -177,10 +195,13 @@ It takes:
 - `path` — `agentide.coding.Path`
 - `line` — `Optional<Integer>`, which may be absent
 - `pane_id` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `panes` — `List<agentide.surface.PaneSnapshot>`
+- `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `open_files` — `List<agentide.coding.Path>`
 
 It has two outcomes.
 
-**`completed`** — The default branch, taken when no other outcome's condition matched. No entity in this specification changes. It emits `agentide.surface.SurfaceObserved`. A test reaches it by constructing an input that satisfies no other outcome's condition.
+**`completed`** — The default branch, taken when no other outcome's condition matched. It changes a `agentide.surface.Workbench` without moving it along its lifecycle. The instance is the one named by the input field `session_id`. It emits `agentide.surface.FileOpened`. A test reaches it by constructing an input that satisfies no other outcome's condition.
 
 **`refused`** — Decided outside the input: the requested surface state is unavailable. No predicate over the input reaches this branch, and saying `when: false` instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports `agentide.surface.SurfaceFailure`, carrying `code`, `message` and `retryable`. It emits nothing. A test reaches it by injecting the declared fault, because no input can.
 
@@ -195,10 +216,13 @@ It takes:
 - `pane_id` — `agentide.surface.PaneId`
 - `kind` — `agentide.surface.PaneKind`
 - `split` — `Optional<agentide.surface.SplitDirection>`, which may be absent
+- `panes` — `List<agentide.surface.PaneSnapshot>`
+- `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `open_files` — `List<agentide.coding.Path>`
 
 It has two outcomes.
 
-**`completed`** — The default branch, taken when no other outcome's condition matched. No entity in this specification changes. It emits `agentide.surface.SurfaceObserved`. A test reaches it by constructing an input that satisfies no other outcome's condition.
+**`completed`** — The default branch, taken when no other outcome's condition matched. It changes a `agentide.surface.Workbench` without moving it along its lifecycle. The instance is the one named by the input field `session_id`. It emits `agentide.surface.PaneOpened`. A test reaches it by constructing an input that satisfies no other outcome's condition.
 
 **`refused`** — Decided outside the input: the requested surface state is unavailable. No predicate over the input reaches this branch, and saying `when: false` instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports `agentide.surface.SurfaceFailure`, carrying `code`, `message` and `retryable`. It emits nothing. A test reaches it by injecting the declared fault, because no input can.
 
@@ -213,10 +237,13 @@ It takes:
 - `pane_id` — `Optional<agentide.surface.PaneId>`, which may be absent
 - `path` — `Optional<agentide.coding.Path>`, which may be absent
 - `base` — `Optional<String>`, which may be absent
+- `panes` — `List<agentide.surface.PaneSnapshot>`
+- `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `open_files` — `List<agentide.coding.Path>`
 
 It has two outcomes.
 
-**`completed`** — The default branch, taken when no other outcome's condition matched. No entity in this specification changes. It emits `agentide.surface.SurfaceObserved`. A test reaches it by constructing an input that satisfies no other outcome's condition.
+**`completed`** — The default branch, taken when no other outcome's condition matched. It changes a `agentide.surface.Workbench` without moving it along its lifecycle. The instance is the one named by the input field `session_id`. It emits `agentide.surface.DiffShown`. A test reaches it by constructing an input that satisfies no other outcome's condition.
 
 **`refused`** — Decided outside the input: the requested surface state is unavailable. No predicate over the input reaches this branch, and saying `when: false` instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports `agentide.surface.SurfaceFailure`, carrying `code`, `message` and `retryable`. It emits nothing. A test reaches it by injecting the declared fault, because no input can.
 
@@ -228,10 +255,13 @@ It takes:
 
 - `session_id` — `agentide.session.SessionId`
 - `request_id` — `agentide.session.RequestId`
+- `panes` — `List<agentide.surface.PaneSnapshot>`
+- `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `open_files` — `List<agentide.coding.Path>`
 
 It has two outcomes.
 
-**`completed`** — The default branch, taken when no other outcome's condition matched. No entity in this specification changes. It emits `agentide.surface.SurfaceObserved`. A test reaches it by constructing an input that satisfies no other outcome's condition.
+**`completed`** — The default branch, taken when no other outcome's condition matched. It creates a `agentide.surface.Workbench`, which starts in `Active`. The new instance's identity is published as `session_id` on `agentide.surface.SurfaceObserved`. It emits `agentide.surface.SurfaceObserved`. A test reaches it by constructing an input that satisfies no other outcome's condition.
 
 **`refused`** — Decided outside the input: the requested surface state is unavailable. No predicate over the input reaches this branch, and saying `when: false` instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports `agentide.surface.SurfaceFailure`, carrying `code`, `message` and `retryable`. It emits nothing. A test reaches it by injecting the declared fault, because no input can.
 
@@ -247,8 +277,11 @@ It carries:
 - `pane_id` — `agentide.surface.PaneId`
 - `line` — `Integer`
 - `column` — `Integer`
+- `panes` — `List<agentide.surface.PaneSnapshot>`
+- `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `open_files` — `List<agentide.coding.Path>`
 
-No command in this system emits it, so something outside the specification does.
+Emitted by `agentide.surface.MoveCursor` on its `completed` outcome.
 
 Nothing in this system reacts to it.
 
@@ -259,9 +292,12 @@ Nothing in this system reacts to it.
 It carries:
 
 - `session_id` — `agentide.session.SessionId`
-- `pane_id` — `agentide.surface.PaneId`
+- `pane_id` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `panes` — `List<agentide.surface.PaneSnapshot>`
+- `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `open_files` — `List<agentide.coding.Path>`
 
-No command in this system emits it, so something outside the specification does.
+Emitted by `agentide.surface.ShowDiff` on its `completed` outcome.
 
 Nothing in this system reacts to it.
 
@@ -273,8 +309,11 @@ It carries:
 
 - `session_id` — `agentide.session.SessionId`
 - `path` — `agentide.coding.Path`
+- `panes` — `List<agentide.surface.PaneSnapshot>`
+- `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `open_files` — `List<agentide.coding.Path>`
 
-No command in this system emits it, so something outside the specification does.
+Emitted by `agentide.surface.CloseFile` on its `completed` outcome.
 
 Nothing in this system reacts to it.
 
@@ -286,9 +325,12 @@ It carries:
 
 - `session_id` — `agentide.session.SessionId`
 - `path` — `agentide.coding.Path`
-- `pane_id` — `agentide.surface.PaneId`
+- `pane_id` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `panes` — `List<agentide.surface.PaneSnapshot>`
+- `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `open_files` — `List<agentide.coding.Path>`
 
-No command in this system emits it, so something outside the specification does.
+Emitted by `agentide.surface.OpenFile` on its `completed` outcome.
 
 Nothing in this system reacts to it.
 
@@ -300,8 +342,11 @@ It carries:
 
 - `session_id` — `agentide.session.SessionId`
 - `pane_id` — `agentide.surface.PaneId`
+- `panes` — `List<agentide.surface.PaneSnapshot>`
+- `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `open_files` — `List<agentide.coding.Path>`
 
-No command in this system emits it, so something outside the specification does.
+Emitted by `agentide.surface.ClosePane` on its `completed` outcome.
 
 Nothing in this system reacts to it.
 
@@ -313,8 +358,11 @@ It carries:
 
 - `session_id` — `agentide.session.SessionId`
 - `pane_id` — `agentide.surface.PaneId`
+- `panes` — `List<agentide.surface.PaneSnapshot>`
+- `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `open_files` — `List<agentide.coding.Path>`
 
-No command in this system emits it, so something outside the specification does.
+Emitted by `agentide.surface.FocusPane` on its `completed` outcome.
 
 Nothing in this system reacts to it.
 
@@ -327,8 +375,11 @@ It carries:
 - `session_id` — `agentide.session.SessionId`
 - `pane_id` — `agentide.surface.PaneId`
 - `kind` — `agentide.surface.PaneKind`
+- `panes` — `List<agentide.surface.PaneSnapshot>`
+- `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `open_files` — `List<agentide.coding.Path>`
 
-No command in this system emits it, so something outside the specification does.
+Emitted by `agentide.surface.OpenPane` on its `completed` outcome.
 
 Nothing in this system reacts to it.
 
@@ -339,21 +390,11 @@ Nothing in this system reacts to it.
 It carries:
 
 - `session_id` — `agentide.session.SessionId`
+- `coding_session_id` — `agentide.session.SessionId`
 - `request_id` — `agentide.session.RequestId`
-
-Emitted by `agentide.surface.CloseFile` on its `completed` outcome.
-
-Emitted by `agentide.surface.ClosePane` on its `completed` outcome.
-
-Emitted by `agentide.surface.FocusPane` on its `completed` outcome.
-
-Emitted by `agentide.surface.MoveCursor` on its `completed` outcome.
-
-Emitted by `agentide.surface.OpenFile` on its `completed` outcome.
-
-Emitted by `agentide.surface.OpenPane` on its `completed` outcome.
-
-Emitted by `agentide.surface.ShowDiff` on its `completed` outcome.
+- `panes` — `List<agentide.surface.PaneSnapshot>`
+- `focused_pane` — `Optional<agentide.surface.PaneId>`, which may be absent
+- `open_files` — `List<agentide.coding.Path>`
 
 Emitted by `agentide.surface.SnapshotSurface` on its `completed` outcome.
 
@@ -400,4 +441,4 @@ It may invoke [`CloseFile`](#closefile), [`ClosePane`](#closepane), [`FocusPane`
 
 ---
 
-Generated from agentide v1 · model digest `360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3` · contract digest `d9a3cdee69e8401b04e0e219e938ee8cda129354febcea80966293ab57d9a6da`. Do not edit this file; change the specification and regenerate it with `ess generate`.
+Generated from agentide v1 · model digest `509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab` · contract digest `91570fc68352850104519423ede46a5eded913f94fb9d5488c253b21f052bc75`. Do not edit this file; change the specification and regenerate it with `ess generate`.

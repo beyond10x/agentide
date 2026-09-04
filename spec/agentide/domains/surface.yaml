@@ -6,7 +6,7 @@ types:
   - {name: agentide.surface.PaneId, kind: newtype, of: String}
   - name: agentide.surface.PaneKind
     kind: enum
-    variants: [Editor, Diff, Terminal, Timeline, Agents, Approvals, Evidence]
+    variants: [Editor, Diff, Terminal, Chat, Timeline, Agents, Approvals, Evidence]
   - name: agentide.surface.PaneSnapshot
     kind: struct
     fields:
@@ -24,9 +24,18 @@ entities:
   - name: agentide.surface.Workbench
     identity: {name: session_id, type: agentide.session.SessionId}
     fields:
+      - {name: coding_session_id, type: agentide.session.SessionId}
       - {name: panes, type: List<agentide.surface.PaneSnapshot>}
       - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
       - {name: open_files, type: List<agentide.coding.Path>}
+      - {name: owner, type: String}
+      - {name: scopes, type: agentide.session.SessionScopes}
+    relations:
+      - name: session
+        kind: references
+        target: agentide.session.CodingSession
+        cardinality: one
+        via: coding_session_id
     lifecycle:
       initial: Active
       states: [Active]
@@ -62,16 +71,45 @@ commands:
       - {name: path, type: agentide.coding.Path}
       - {name: line, type: Optional<Integer>}
       - {name: pane_id, type: Optional<agentide.surface.PaneId>}
-    outcomes: &surface_outcomes
-      - {name: completed, emits: [agentide.surface.SurfaceObserved]}
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
+      - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
+      - {name: open_files, type: List<agentide.coding.Path>}
+    outcomes:
+      - name: completed
+        updates: agentide.surface.Workbench
+        instance: session_id
+        emits: [agentide.surface.FileOpened]
+        payload:
+          agentide.surface.FileOpened:
+            session_id: input.session_id
+            path: input.path
+            pane_id: input.pane_id
+            panes: input.panes
+            focused_pane: input.focused_pane
+            open_files: input.open_files
       - {name: refused, external: the requested surface state is unavailable, error: agentide.surface.SurfaceFailure}
   - name: agentide.surface.CloseFile
     naming: {wire: file-close, display: Close file}
-    input: &file_request
+    input:
       - {name: session_id, type: agentide.session.SessionId}
       - {name: request_id, type: agentide.session.RequestId}
       - {name: path, type: agentide.coding.Path}
-    outcomes: *surface_outcomes
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
+      - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
+      - {name: open_files, type: List<agentide.coding.Path>}
+    outcomes:
+      - name: completed
+        updates: agentide.surface.Workbench
+        instance: session_id
+        emits: [agentide.surface.FileClosed]
+        payload:
+          agentide.surface.FileClosed:
+            session_id: input.session_id
+            path: input.path
+            panes: input.panes
+            focused_pane: input.focused_pane
+            open_files: input.open_files
+      - {name: refused, external: the requested surface state is unavailable, error: agentide.surface.SurfaceFailure}
   - name: agentide.surface.OpenPane
     naming: {wire: pane-open, display: Open pane}
     input:
@@ -80,18 +118,67 @@ commands:
       - {name: pane_id, type: agentide.surface.PaneId}
       - {name: kind, type: agentide.surface.PaneKind}
       - {name: split, type: Optional<agentide.surface.SplitDirection>}
-    outcomes: *surface_outcomes
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
+      - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
+      - {name: open_files, type: List<agentide.coding.Path>}
+    outcomes:
+      - name: completed
+        updates: agentide.surface.Workbench
+        instance: session_id
+        emits: [agentide.surface.PaneOpened]
+        payload:
+          agentide.surface.PaneOpened:
+            session_id: input.session_id
+            pane_id: input.pane_id
+            kind: input.kind
+            panes: input.panes
+            focused_pane: input.focused_pane
+            open_files: input.open_files
+      - {name: refused, external: the requested surface state is unavailable, error: agentide.surface.SurfaceFailure}
   - name: agentide.surface.ClosePane
     naming: {wire: pane-close, display: Close pane}
-    input: &pane_request
+    input:
       - {name: session_id, type: agentide.session.SessionId}
       - {name: request_id, type: agentide.session.RequestId}
       - {name: pane_id, type: agentide.surface.PaneId}
-    outcomes: *surface_outcomes
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
+      - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
+      - {name: open_files, type: List<agentide.coding.Path>}
+    outcomes:
+      - name: completed
+        updates: agentide.surface.Workbench
+        instance: session_id
+        emits: [agentide.surface.PaneClosed]
+        payload:
+          agentide.surface.PaneClosed:
+            session_id: input.session_id
+            pane_id: input.pane_id
+            panes: input.panes
+            focused_pane: input.focused_pane
+            open_files: input.open_files
+      - {name: refused, external: the requested surface state is unavailable, error: agentide.surface.SurfaceFailure}
   - name: agentide.surface.FocusPane
     naming: {wire: pane-focus, display: Focus pane}
-    input: *pane_request
-    outcomes: *surface_outcomes
+    input:
+      - {name: session_id, type: agentide.session.SessionId}
+      - {name: request_id, type: agentide.session.RequestId}
+      - {name: pane_id, type: agentide.surface.PaneId}
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
+      - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
+      - {name: open_files, type: List<agentide.coding.Path>}
+    outcomes:
+      - name: completed
+        updates: agentide.surface.Workbench
+        instance: session_id
+        emits: [agentide.surface.PaneFocused]
+        payload:
+          agentide.surface.PaneFocused:
+            session_id: input.session_id
+            pane_id: input.pane_id
+            panes: input.panes
+            focused_pane: input.focused_pane
+            open_files: input.open_files
+      - {name: refused, external: the requested surface state is unavailable, error: agentide.surface.SurfaceFailure}
   - name: agentide.surface.MoveCursor
     naming: {wire: cursor-move, display: Move editor cursor}
     input:
@@ -101,7 +188,24 @@ commands:
       - {name: path, type: agentide.coding.Path}
       - {name: line, type: Integer}
       - {name: column, type: Integer}
-    outcomes: *surface_outcomes
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
+      - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
+      - {name: open_files, type: List<agentide.coding.Path>}
+    outcomes:
+      - name: completed
+        updates: agentide.surface.Workbench
+        instance: session_id
+        emits: [agentide.surface.CursorMoved]
+        payload:
+          agentide.surface.CursorMoved:
+            session_id: input.session_id
+            pane_id: input.pane_id
+            line: input.line
+            column: input.column
+            panes: input.panes
+            focused_pane: input.focused_pane
+            open_files: input.open_files
+      - {name: refused, external: the requested surface state is unavailable, error: agentide.surface.SurfaceFailure}
   - name: agentide.surface.ShowDiff
     naming: {wire: diff-show, display: Show diff}
     input:
@@ -110,51 +214,107 @@ commands:
       - {name: pane_id, type: Optional<agentide.surface.PaneId>}
       - {name: path, type: Optional<agentide.coding.Path>}
       - {name: base, type: Optional<String>}
-    outcomes: *surface_outcomes
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
+      - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
+      - {name: open_files, type: List<agentide.coding.Path>}
+    outcomes:
+      - name: completed
+        updates: agentide.surface.Workbench
+        instance: session_id
+        emits: [agentide.surface.DiffShown]
+        payload:
+          agentide.surface.DiffShown:
+            session_id: input.session_id
+            pane_id: input.pane_id
+            panes: input.panes
+            focused_pane: input.focused_pane
+            open_files: input.open_files
+      - {name: refused, external: the requested surface state is unavailable, error: agentide.surface.SurfaceFailure}
   - name: agentide.surface.SnapshotSurface
     naming: {wire: surface-snapshot, display: Snapshot workspace surface}
     input:
       - {name: session_id, type: agentide.session.SessionId}
       - {name: request_id, type: agentide.session.RequestId}
-    outcomes: *surface_outcomes
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
+      - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
+      - {name: open_files, type: List<agentide.coding.Path>}
+    outcomes:
+      - name: completed
+        creates: agentide.surface.Workbench
+        instance: session_id
+        emits: [agentide.surface.SurfaceObserved]
+        payload:
+          agentide.surface.SurfaceObserved:
+            session_id: input.session_id
+            coding_session_id: input.session_id
+            request_id: input.request_id
+            panes: input.panes
+            focused_pane: input.focused_pane
+            open_files: input.open_files
+      - {name: refused, external: the requested surface state is unavailable, error: agentide.surface.SurfaceFailure}
 
 events:
   - name: agentide.surface.FileOpened
     fields:
       - {name: session_id, type: agentide.session.SessionId}
       - {name: path, type: agentide.coding.Path}
-      - {name: pane_id, type: agentide.surface.PaneId}
+      - {name: pane_id, type: Optional<agentide.surface.PaneId>}
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
+      - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
+      - {name: open_files, type: List<agentide.coding.Path>}
   - name: agentide.surface.FileClosed
     fields:
       - {name: session_id, type: agentide.session.SessionId}
       - {name: path, type: agentide.coding.Path}
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
+      - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
+      - {name: open_files, type: List<agentide.coding.Path>}
   - name: agentide.surface.PaneOpened
     fields:
       - {name: session_id, type: agentide.session.SessionId}
       - {name: pane_id, type: agentide.surface.PaneId}
       - {name: kind, type: agentide.surface.PaneKind}
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
+      - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
+      - {name: open_files, type: List<agentide.coding.Path>}
   - name: agentide.surface.PaneClosed
     fields:
       - {name: session_id, type: agentide.session.SessionId}
       - {name: pane_id, type: agentide.surface.PaneId}
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
+      - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
+      - {name: open_files, type: List<agentide.coding.Path>}
   - name: agentide.surface.PaneFocused
     fields:
       - {name: session_id, type: agentide.session.SessionId}
       - {name: pane_id, type: agentide.surface.PaneId}
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
+      - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
+      - {name: open_files, type: List<agentide.coding.Path>}
   - name: agentide.surface.CursorMoved
     fields:
       - {name: session_id, type: agentide.session.SessionId}
       - {name: pane_id, type: agentide.surface.PaneId}
       - {name: line, type: Integer}
       - {name: column, type: Integer}
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
+      - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
+      - {name: open_files, type: List<agentide.coding.Path>}
   - name: agentide.surface.DiffShown
     fields:
       - {name: session_id, type: agentide.session.SessionId}
-      - {name: pane_id, type: agentide.surface.PaneId}
+      - {name: pane_id, type: Optional<agentide.surface.PaneId>}
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
+      - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
+      - {name: open_files, type: List<agentide.coding.Path>}
   - name: agentide.surface.SurfaceObserved
     fields:
       - {name: session_id, type: agentide.session.SessionId}
+      - {name: coding_session_id, type: agentide.session.SessionId}
       - {name: request_id, type: agentide.session.RequestId}
+      - {name: panes, type: List<agentide.surface.PaneSnapshot>}
+      - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
+      - {name: open_files, type: List<agentide.coding.Path>}
 
 views:
   - name: agentide.surface.WorkbenchSnapshot
@@ -162,7 +322,10 @@ views:
     consistency: read_your_writes
     fields:
       - {name: session_id, type: agentide.session.SessionId}
+      - {name: coding_session_id, type: agentide.session.SessionId}
       - {name: panes, type: List<agentide.surface.PaneSnapshot>}
       - {name: focused_pane, type: Optional<agentide.surface.PaneId>}
       - {name: open_files, type: List<agentide.coding.Path>}
+      - {name: owner, type: String}
+      - {name: scopes, type: agentide.session.SessionScopes}
     naming: {wire: workbench, display: Workbench snapshot}

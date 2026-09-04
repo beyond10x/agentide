@@ -118,13 +118,21 @@ The browser, JSON CLI, and console TUI are renderers over `agentide.snapshot/1` 
 authoritative list of open files or focused pane privately. Source contents are observations, not
 session state, and are not written to the journal.
 
-The browser has an additional explicit target boundary. A host converts current session state into
-an immutable `agentide.renderer-frame/1`, delivers bounded transient
-`agentide.renderer-event/1` values, and handles `agentide.renderer-action/1` values emitted by the
-target. A target implements only `mount`, `update`, `deliver`, and `destroy`; it cannot know an HTTP
-route, bearer, polling interval, WebSocket, storage key, or deployment. Vanilla DOM and Vue are
-independent realizations of this same contract and can therefore be compared without changing the
-authority or execution path.
+The browser has an additional explicit target boundary. A framework-neutral AgentIDE controller
+converts host observations into an immutable `agentide.renderer-frame/2`, delivers ordered
+transient `agentide.renderer-event/2` values, and handles `agentide.renderer-action/2` values
+emitted by the target. Frame v2 has closed, typed tree, editor, diff, chat, terminal, preparation,
+coordination, and refusal projections; the v1 arbitrary observation bag is not part of the current
+contract. A target implements only `mount`, `update`, `deliver`, and `destroy`; it cannot know an
+HTTP route, bearer, polling interval, WebSocket, storage key, or deployment.
+
+Vanilla DOM and Vue are independent realizations of that same controller contract. Both accept the
+same optional Monaco editor and Ghostty terminal leaf adapters. The adapters only translate render,
+input, resize, and teardown calls; they never acquire transport, persistence, authorization, or
+workspace ownership. Unsaved editor bytes remain in the browser controller until an explicit save,
+including across snapshot refreshes and optimistic-concurrency refusals. Assistant Markdown is
+escaped and rendered continuously as ordered deltas arrive; raw HTML and non-HTTP link schemes are
+never activated.
 
 The local host owns the loopback API binding. A hosted product such as DevCenter owns its Identity,
 Workspace, Agent Platform, streaming, and terminal adapters. Both may select a renderer target, but

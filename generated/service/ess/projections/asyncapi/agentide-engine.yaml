@@ -1,6 +1,6 @@
 # generated from agentide v1
-# model digest 360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3
-# contract digest 4ac56b2329735879b33e680ccd1e4cf952f7034a5798949936ba074a8415d1ed
+# model digest 509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab
+# contract digest f98f45021efadc2c19cd0caae0941117eb7c2b937105f97be043e67ef0b74781
 # do not edit: regenerate with `ess generate`
 asyncapi: 3.0.0
 info:
@@ -18,8 +18,8 @@ info:
   x-ess-provenance:
     system: agentide
     specification_version: v1
-    source_digest: 360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3
-    contract_digest: 4ac56b2329735879b33e680ccd1e4cf952f7034a5798949936ba074a8415d1ed
+    source_digest: 509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab
+    contract_digest: f98f45021efadc2c19cd0caae0941117eb7c2b937105f97be043e67ef0b74781
 defaultContentType: application/json
 channels:
   agentide.coding.IntentCompleted:
@@ -316,7 +316,9 @@ operations:
       $ref: '#/channels/agentide.surface.CursorMoved'
     title: Publish CursorMoved
     summary: Publishes `agentide.surface.CursorMoved`.
-    description: Nothing in this specification reacts to `agentide.surface.CursorMoved`.
+    description: |-
+      Nothing in this specification reacts to `agentide.surface.CursorMoved`.
+      `agentide.surface.MoveCursor` emits it on `completed`, which changes a `agentide.surface.Workbench` without moving it.
     messages:
     - $ref: '#/channels/agentide.surface.CursorMoved/messages/agentide.surface.CursorMoved'
   send.agentide.surface.DiffShown:
@@ -325,7 +327,9 @@ operations:
       $ref: '#/channels/agentide.surface.DiffShown'
     title: Publish DiffShown
     summary: Publishes `agentide.surface.DiffShown`.
-    description: Nothing in this specification reacts to `agentide.surface.DiffShown`.
+    description: |-
+      Nothing in this specification reacts to `agentide.surface.DiffShown`.
+      `agentide.surface.ShowDiff` emits it on `completed`, which changes a `agentide.surface.Workbench` without moving it.
     messages:
     - $ref: '#/channels/agentide.surface.DiffShown/messages/agentide.surface.DiffShown'
   send.agentide.surface.FileClosed:
@@ -334,7 +338,9 @@ operations:
       $ref: '#/channels/agentide.surface.FileClosed'
     title: Publish FileClosed
     summary: Publishes `agentide.surface.FileClosed`.
-    description: Nothing in this specification reacts to `agentide.surface.FileClosed`.
+    description: |-
+      Nothing in this specification reacts to `agentide.surface.FileClosed`.
+      `agentide.surface.CloseFile` emits it on `completed`, which changes a `agentide.surface.Workbench` without moving it.
     messages:
     - $ref: '#/channels/agentide.surface.FileClosed/messages/agentide.surface.FileClosed'
   send.agentide.surface.FileOpened:
@@ -343,7 +349,9 @@ operations:
       $ref: '#/channels/agentide.surface.FileOpened'
     title: Publish FileOpened
     summary: Publishes `agentide.surface.FileOpened`.
-    description: Nothing in this specification reacts to `agentide.surface.FileOpened`.
+    description: |-
+      Nothing in this specification reacts to `agentide.surface.FileOpened`.
+      `agentide.surface.OpenFile` emits it on `completed`, which changes a `agentide.surface.Workbench` without moving it.
     messages:
     - $ref: '#/channels/agentide.surface.FileOpened/messages/agentide.surface.FileOpened'
   send.agentide.surface.PaneClosed:
@@ -352,7 +360,9 @@ operations:
       $ref: '#/channels/agentide.surface.PaneClosed'
     title: Publish PaneClosed
     summary: Publishes `agentide.surface.PaneClosed`.
-    description: Nothing in this specification reacts to `agentide.surface.PaneClosed`.
+    description: |-
+      Nothing in this specification reacts to `agentide.surface.PaneClosed`.
+      `agentide.surface.ClosePane` emits it on `completed`, which changes a `agentide.surface.Workbench` without moving it.
     messages:
     - $ref: '#/channels/agentide.surface.PaneClosed/messages/agentide.surface.PaneClosed'
   send.agentide.surface.PaneFocused:
@@ -361,7 +371,9 @@ operations:
       $ref: '#/channels/agentide.surface.PaneFocused'
     title: Publish PaneFocused
     summary: Publishes `agentide.surface.PaneFocused`.
-    description: Nothing in this specification reacts to `agentide.surface.PaneFocused`.
+    description: |-
+      Nothing in this specification reacts to `agentide.surface.PaneFocused`.
+      `agentide.surface.FocusPane` emits it on `completed`, which changes a `agentide.surface.Workbench` without moving it.
     messages:
     - $ref: '#/channels/agentide.surface.PaneFocused/messages/agentide.surface.PaneFocused'
   send.agentide.surface.PaneOpened:
@@ -370,7 +382,9 @@ operations:
       $ref: '#/channels/agentide.surface.PaneOpened'
     title: Publish PaneOpened
     summary: Publishes `agentide.surface.PaneOpened`.
-    description: Nothing in this specification reacts to `agentide.surface.PaneOpened`.
+    description: |-
+      Nothing in this specification reacts to `agentide.surface.PaneOpened`.
+      `agentide.surface.OpenPane` emits it on `completed`, which changes a `agentide.surface.Workbench` without moving it.
     messages:
     - $ref: '#/channels/agentide.surface.PaneOpened/messages/agentide.surface.PaneOpened'
   send.agentide.surface.SurfaceObserved:
@@ -379,7 +393,9 @@ operations:
       $ref: '#/channels/agentide.surface.SurfaceObserved'
     title: Publish SurfaceObserved
     summary: Publishes `agentide.surface.SurfaceObserved`.
-    description: Nothing in this specification reacts to `agentide.surface.SurfaceObserved`.
+    description: |-
+      Nothing in this specification reacts to `agentide.surface.SurfaceObserved`.
+      `agentide.surface.SnapshotSurface` emits it on `completed`, which creates a `agentide.surface.Workbench` in `Active`. It carries the new instance's identity in `session_id`.
     messages:
     - $ref: '#/channels/agentide.surface.SurfaceObserved/messages/agentide.surface.SurfaceObserved'
 components:
@@ -747,11 +763,23 @@ components:
           type: integer
         column:
           type: integer
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.surface.PaneSnapshot'
+        focused_pane:
+          $ref: '#/components/schemas/type.agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.coding.Path'
       required:
       - session_id
       - pane_id
       - line
       - column
+      - panes
+      - open_files
       additionalProperties: false
     event.agentide.surface.DiffShown:
       title: DiffShown payload
@@ -763,9 +791,20 @@ components:
           $ref: '#/components/schemas/type.agentide.session.SessionId'
         pane_id:
           $ref: '#/components/schemas/type.agentide.surface.PaneId'
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.surface.PaneSnapshot'
+        focused_pane:
+          $ref: '#/components/schemas/type.agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.coding.Path'
       required:
       - session_id
-      - pane_id
+      - panes
+      - open_files
       additionalProperties: false
     event.agentide.surface.FileClosed:
       title: FileClosed payload
@@ -777,9 +816,21 @@ components:
           $ref: '#/components/schemas/type.agentide.session.SessionId'
         path:
           $ref: '#/components/schemas/type.agentide.coding.Path'
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.surface.PaneSnapshot'
+        focused_pane:
+          $ref: '#/components/schemas/type.agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.coding.Path'
       required:
       - session_id
       - path
+      - panes
+      - open_files
       additionalProperties: false
     event.agentide.surface.FileOpened:
       title: FileOpened payload
@@ -793,10 +844,21 @@ components:
           $ref: '#/components/schemas/type.agentide.coding.Path'
         pane_id:
           $ref: '#/components/schemas/type.agentide.surface.PaneId'
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.surface.PaneSnapshot'
+        focused_pane:
+          $ref: '#/components/schemas/type.agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.coding.Path'
       required:
       - session_id
       - path
-      - pane_id
+      - panes
+      - open_files
       additionalProperties: false
     event.agentide.surface.PaneClosed:
       title: PaneClosed payload
@@ -808,9 +870,21 @@ components:
           $ref: '#/components/schemas/type.agentide.session.SessionId'
         pane_id:
           $ref: '#/components/schemas/type.agentide.surface.PaneId'
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.surface.PaneSnapshot'
+        focused_pane:
+          $ref: '#/components/schemas/type.agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.coding.Path'
       required:
       - session_id
       - pane_id
+      - panes
+      - open_files
       additionalProperties: false
     event.agentide.surface.PaneFocused:
       title: PaneFocused payload
@@ -822,9 +896,21 @@ components:
           $ref: '#/components/schemas/type.agentide.session.SessionId'
         pane_id:
           $ref: '#/components/schemas/type.agentide.surface.PaneId'
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.surface.PaneSnapshot'
+        focused_pane:
+          $ref: '#/components/schemas/type.agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.coding.Path'
       required:
       - session_id
       - pane_id
+      - panes
+      - open_files
       additionalProperties: false
     event.agentide.surface.PaneOpened:
       title: PaneOpened payload
@@ -838,10 +924,22 @@ components:
           $ref: '#/components/schemas/type.agentide.surface.PaneId'
         kind:
           $ref: '#/components/schemas/type.agentide.surface.PaneKind'
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.surface.PaneSnapshot'
+        focused_pane:
+          $ref: '#/components/schemas/type.agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.coding.Path'
       required:
       - session_id
       - pane_id
       - kind
+      - panes
+      - open_files
       additionalProperties: false
     event.agentide.surface.SurfaceObserved:
       title: SurfaceObserved payload
@@ -851,11 +949,26 @@ components:
       properties:
         session_id:
           $ref: '#/components/schemas/type.agentide.session.SessionId'
+        coding_session_id:
+          $ref: '#/components/schemas/type.agentide.session.SessionId'
         request_id:
           $ref: '#/components/schemas/type.agentide.session.RequestId'
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.surface.PaneSnapshot'
+        focused_pane:
+          $ref: '#/components/schemas/type.agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/type.agentide.coding.Path'
       required:
       - session_id
+      - coding_session_id
       - request_id
+      - panes
+      - open_files
       additionalProperties: false
     type.agentide.coding.Path:
       title: Path
@@ -983,7 +1096,31 @@ components:
       - Editor
       - Diff
       - Terminal
+      - Chat
       - Timeline
       - Agents
       - Approvals
       - Evidence
+    type.agentide.surface.PaneSnapshot:
+      title: PaneSnapshot
+      x-ess-name: agentide.surface.PaneSnapshot
+      x-ess-kind: struct
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/type.agentide.surface.PaneId'
+        kind:
+          $ref: '#/components/schemas/type.agentide.surface.PaneKind'
+        title:
+          type: string
+        path:
+          $ref: '#/components/schemas/type.agentide.coding.Path'
+        line:
+          type: integer
+        column:
+          type: integer
+      required:
+      - id
+      - kind
+      - title
+      additionalProperties: false

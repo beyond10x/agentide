@@ -692,6 +692,7 @@
           "Editor",
           "Diff",
           "Terminal",
+          "Chat",
           "Timeline",
           "Agents",
           "Approvals",
@@ -1232,6 +1233,14 @@
       },
       "fields": [
         {
+          "name": "coding_session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
           "name": "panes",
           "type_ref": {
             "kind": "list",
@@ -1263,6 +1272,22 @@
             }
           },
           "naming": {}
+        },
+        {
+          "name": "owner",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "scopes",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionScopes"
+          },
+          "naming": {}
         }
       ],
       "state_type": "agentide.surface.Workbench.State",
@@ -1276,6 +1301,15 @@
         ]
       },
       "invariants": [],
+      "relations": [
+        {
+          "name": "session",
+          "kind": "references",
+          "target": "agentide.session.CodingSession",
+          "cardinality": "one",
+          "via": "coding_session_id"
+        }
+      ],
       "naming": {}
     }
   },
@@ -5134,6 +5168,39 @@
             "name": "agentide.coding.Path"
           },
           "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneSnapshot"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
+          },
+          "naming": {}
         }
       ],
       "outcomes": [
@@ -5142,9 +5209,124 @@
           "condition": {
             "kind": "otherwise"
           },
+          "subject": {
+            "entity": "agentide.surface.Workbench",
+            "effect": "updates",
+            "instance": {
+              "from": "supplied",
+              "field": {
+                "name": "session_id",
+                "type_ref": {
+                  "kind": "declared",
+                  "name": "agentide.session.SessionId"
+                },
+                "naming": {}
+              }
+            }
+          },
           "test_strategy": "default_branch",
           "emits": [
-            "agentide.surface.SurfaceObserved"
+            "agentide.surface.FileClosed"
+          ],
+          "payload": [
+            {
+              "event": "agentide.surface.FileClosed",
+              "fields": [
+                {
+                  "target": "session_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.SessionId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "session_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.SessionId"
+                    }
+                  }
+                },
+                {
+                  "target": "path",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.coding.Path"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "path",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.coding.Path"
+                    }
+                  }
+                },
+                {
+                  "target": "panes",
+                  "target_type": {
+                    "kind": "list",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneSnapshot"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "panes",
+                    "type_ref": {
+                      "kind": "list",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneSnapshot"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "focused_pane",
+                  "target_type": {
+                    "kind": "optional",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneId"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "focused_pane",
+                    "type_ref": {
+                      "kind": "optional",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneId"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "open_files",
+                  "target_type": {
+                    "kind": "list",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.coding.Path"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "open_files",
+                    "type_ref": {
+                      "kind": "list",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.coding.Path"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
           ]
         },
         {
@@ -5190,6 +5372,39 @@
             "name": "agentide.surface.PaneId"
           },
           "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneSnapshot"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
+          },
+          "naming": {}
         }
       ],
       "outcomes": [
@@ -5198,9 +5413,124 @@
           "condition": {
             "kind": "otherwise"
           },
+          "subject": {
+            "entity": "agentide.surface.Workbench",
+            "effect": "updates",
+            "instance": {
+              "from": "supplied",
+              "field": {
+                "name": "session_id",
+                "type_ref": {
+                  "kind": "declared",
+                  "name": "agentide.session.SessionId"
+                },
+                "naming": {}
+              }
+            }
+          },
           "test_strategy": "default_branch",
           "emits": [
-            "agentide.surface.SurfaceObserved"
+            "agentide.surface.PaneClosed"
+          ],
+          "payload": [
+            {
+              "event": "agentide.surface.PaneClosed",
+              "fields": [
+                {
+                  "target": "session_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.SessionId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "session_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.SessionId"
+                    }
+                  }
+                },
+                {
+                  "target": "pane_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.surface.PaneId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "pane_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneId"
+                    }
+                  }
+                },
+                {
+                  "target": "panes",
+                  "target_type": {
+                    "kind": "list",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneSnapshot"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "panes",
+                    "type_ref": {
+                      "kind": "list",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneSnapshot"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "focused_pane",
+                  "target_type": {
+                    "kind": "optional",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneId"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "focused_pane",
+                    "type_ref": {
+                      "kind": "optional",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneId"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "open_files",
+                  "target_type": {
+                    "kind": "list",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.coding.Path"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "open_files",
+                    "type_ref": {
+                      "kind": "list",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.coding.Path"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
           ]
         },
         {
@@ -5246,6 +5576,39 @@
             "name": "agentide.surface.PaneId"
           },
           "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneSnapshot"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
+          },
+          "naming": {}
         }
       ],
       "outcomes": [
@@ -5254,9 +5617,124 @@
           "condition": {
             "kind": "otherwise"
           },
+          "subject": {
+            "entity": "agentide.surface.Workbench",
+            "effect": "updates",
+            "instance": {
+              "from": "supplied",
+              "field": {
+                "name": "session_id",
+                "type_ref": {
+                  "kind": "declared",
+                  "name": "agentide.session.SessionId"
+                },
+                "naming": {}
+              }
+            }
+          },
           "test_strategy": "default_branch",
           "emits": [
-            "agentide.surface.SurfaceObserved"
+            "agentide.surface.PaneFocused"
+          ],
+          "payload": [
+            {
+              "event": "agentide.surface.PaneFocused",
+              "fields": [
+                {
+                  "target": "session_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.SessionId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "session_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.SessionId"
+                    }
+                  }
+                },
+                {
+                  "target": "pane_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.surface.PaneId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "pane_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneId"
+                    }
+                  }
+                },
+                {
+                  "target": "panes",
+                  "target_type": {
+                    "kind": "list",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneSnapshot"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "panes",
+                    "type_ref": {
+                      "kind": "list",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneSnapshot"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "focused_pane",
+                  "target_type": {
+                    "kind": "optional",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneId"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "focused_pane",
+                    "type_ref": {
+                      "kind": "optional",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneId"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "open_files",
+                  "target_type": {
+                    "kind": "list",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.coding.Path"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "open_files",
+                    "type_ref": {
+                      "kind": "list",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.coding.Path"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
           ]
         },
         {
@@ -5326,6 +5804,39 @@
             "name": "integer"
           },
           "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneSnapshot"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
+          },
+          "naming": {}
         }
       ],
       "outcomes": [
@@ -5334,9 +5845,154 @@
           "condition": {
             "kind": "otherwise"
           },
+          "subject": {
+            "entity": "agentide.surface.Workbench",
+            "effect": "updates",
+            "instance": {
+              "from": "supplied",
+              "field": {
+                "name": "session_id",
+                "type_ref": {
+                  "kind": "declared",
+                  "name": "agentide.session.SessionId"
+                },
+                "naming": {}
+              }
+            }
+          },
           "test_strategy": "default_branch",
           "emits": [
-            "agentide.surface.SurfaceObserved"
+            "agentide.surface.CursorMoved"
+          ],
+          "payload": [
+            {
+              "event": "agentide.surface.CursorMoved",
+              "fields": [
+                {
+                  "target": "session_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.SessionId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "session_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.SessionId"
+                    }
+                  }
+                },
+                {
+                  "target": "pane_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.surface.PaneId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "pane_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneId"
+                    }
+                  }
+                },
+                {
+                  "target": "line",
+                  "target_type": {
+                    "kind": "primitive",
+                    "name": "integer"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "line",
+                    "type_ref": {
+                      "kind": "primitive",
+                      "name": "integer"
+                    }
+                  }
+                },
+                {
+                  "target": "column",
+                  "target_type": {
+                    "kind": "primitive",
+                    "name": "integer"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "column",
+                    "type_ref": {
+                      "kind": "primitive",
+                      "name": "integer"
+                    }
+                  }
+                },
+                {
+                  "target": "panes",
+                  "target_type": {
+                    "kind": "list",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneSnapshot"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "panes",
+                    "type_ref": {
+                      "kind": "list",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneSnapshot"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "focused_pane",
+                  "target_type": {
+                    "kind": "optional",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneId"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "focused_pane",
+                    "type_ref": {
+                      "kind": "optional",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneId"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "open_files",
+                  "target_type": {
+                    "kind": "list",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.coding.Path"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "open_files",
+                    "type_ref": {
+                      "kind": "list",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.coding.Path"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
           ]
         },
         {
@@ -5404,6 +6060,39 @@
             }
           },
           "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneSnapshot"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
+          },
+          "naming": {}
         }
       ],
       "outcomes": [
@@ -5412,9 +6101,145 @@
           "condition": {
             "kind": "otherwise"
           },
+          "subject": {
+            "entity": "agentide.surface.Workbench",
+            "effect": "updates",
+            "instance": {
+              "from": "supplied",
+              "field": {
+                "name": "session_id",
+                "type_ref": {
+                  "kind": "declared",
+                  "name": "agentide.session.SessionId"
+                },
+                "naming": {}
+              }
+            }
+          },
           "test_strategy": "default_branch",
           "emits": [
-            "agentide.surface.SurfaceObserved"
+            "agentide.surface.FileOpened"
+          ],
+          "payload": [
+            {
+              "event": "agentide.surface.FileOpened",
+              "fields": [
+                {
+                  "target": "session_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.SessionId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "session_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.SessionId"
+                    }
+                  }
+                },
+                {
+                  "target": "path",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.coding.Path"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "path",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.coding.Path"
+                    }
+                  }
+                },
+                {
+                  "target": "pane_id",
+                  "target_type": {
+                    "kind": "optional",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneId"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "pane_id",
+                    "type_ref": {
+                      "kind": "optional",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneId"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "panes",
+                  "target_type": {
+                    "kind": "list",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneSnapshot"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "panes",
+                    "type_ref": {
+                      "kind": "list",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneSnapshot"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "focused_pane",
+                  "target_type": {
+                    "kind": "optional",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneId"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "focused_pane",
+                    "type_ref": {
+                      "kind": "optional",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneId"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "open_files",
+                  "target_type": {
+                    "kind": "list",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.coding.Path"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "open_files",
+                    "type_ref": {
+                      "kind": "list",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.coding.Path"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
           ]
         },
         {
@@ -5479,6 +6304,39 @@
             }
           },
           "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneSnapshot"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
+          },
+          "naming": {}
         }
       ],
       "outcomes": [
@@ -5487,9 +6345,139 @@
           "condition": {
             "kind": "otherwise"
           },
+          "subject": {
+            "entity": "agentide.surface.Workbench",
+            "effect": "updates",
+            "instance": {
+              "from": "supplied",
+              "field": {
+                "name": "session_id",
+                "type_ref": {
+                  "kind": "declared",
+                  "name": "agentide.session.SessionId"
+                },
+                "naming": {}
+              }
+            }
+          },
           "test_strategy": "default_branch",
           "emits": [
-            "agentide.surface.SurfaceObserved"
+            "agentide.surface.PaneOpened"
+          ],
+          "payload": [
+            {
+              "event": "agentide.surface.PaneOpened",
+              "fields": [
+                {
+                  "target": "session_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.SessionId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "session_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.SessionId"
+                    }
+                  }
+                },
+                {
+                  "target": "pane_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.surface.PaneId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "pane_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneId"
+                    }
+                  }
+                },
+                {
+                  "target": "kind",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.surface.PaneKind"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "kind",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneKind"
+                    }
+                  }
+                },
+                {
+                  "target": "panes",
+                  "target_type": {
+                    "kind": "list",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneSnapshot"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "panes",
+                    "type_ref": {
+                      "kind": "list",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneSnapshot"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "focused_pane",
+                  "target_type": {
+                    "kind": "optional",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneId"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "focused_pane",
+                    "type_ref": {
+                      "kind": "optional",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneId"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "open_files",
+                  "target_type": {
+                    "kind": "list",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.coding.Path"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "open_files",
+                    "type_ref": {
+                      "kind": "list",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.coding.Path"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
           ]
         },
         {
@@ -5560,6 +6548,39 @@
             }
           },
           "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneSnapshot"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
+          },
+          "naming": {}
         }
       ],
       "outcomes": [
@@ -5568,9 +6589,130 @@
           "condition": {
             "kind": "otherwise"
           },
+          "subject": {
+            "entity": "agentide.surface.Workbench",
+            "effect": "updates",
+            "instance": {
+              "from": "supplied",
+              "field": {
+                "name": "session_id",
+                "type_ref": {
+                  "kind": "declared",
+                  "name": "agentide.session.SessionId"
+                },
+                "naming": {}
+              }
+            }
+          },
           "test_strategy": "default_branch",
           "emits": [
-            "agentide.surface.SurfaceObserved"
+            "agentide.surface.DiffShown"
+          ],
+          "payload": [
+            {
+              "event": "agentide.surface.DiffShown",
+              "fields": [
+                {
+                  "target": "session_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.SessionId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "session_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.SessionId"
+                    }
+                  }
+                },
+                {
+                  "target": "pane_id",
+                  "target_type": {
+                    "kind": "optional",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneId"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "pane_id",
+                    "type_ref": {
+                      "kind": "optional",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneId"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "panes",
+                  "target_type": {
+                    "kind": "list",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneSnapshot"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "panes",
+                    "type_ref": {
+                      "kind": "list",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneSnapshot"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "focused_pane",
+                  "target_type": {
+                    "kind": "optional",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneId"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "focused_pane",
+                    "type_ref": {
+                      "kind": "optional",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneId"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "open_files",
+                  "target_type": {
+                    "kind": "list",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.coding.Path"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "open_files",
+                    "type_ref": {
+                      "kind": "list",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.coding.Path"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
           ]
         },
         {
@@ -5608,6 +6750,39 @@
             "name": "agentide.session.RequestId"
           },
           "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneSnapshot"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
+          },
+          "naming": {}
         }
       ],
       "outcomes": [
@@ -5616,9 +6791,140 @@
           "condition": {
             "kind": "otherwise"
           },
+          "subject": {
+            "entity": "agentide.surface.Workbench",
+            "effect": "creates",
+            "instance": {
+              "from": "observed",
+              "event": "agentide.surface.SurfaceObserved",
+              "field": {
+                "name": "session_id",
+                "type_ref": {
+                  "kind": "declared",
+                  "name": "agentide.session.SessionId"
+                },
+                "naming": {}
+              }
+            }
+          },
           "test_strategy": "default_branch",
           "emits": [
             "agentide.surface.SurfaceObserved"
+          ],
+          "payload": [
+            {
+              "event": "agentide.surface.SurfaceObserved",
+              "fields": [
+                {
+                  "target": "session_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.SessionId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "session_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.SessionId"
+                    }
+                  }
+                },
+                {
+                  "target": "coding_session_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.SessionId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "session_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.SessionId"
+                    }
+                  }
+                },
+                {
+                  "target": "request_id",
+                  "target_type": {
+                    "kind": "declared",
+                    "name": "agentide.session.RequestId"
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "request_id",
+                    "type_ref": {
+                      "kind": "declared",
+                      "name": "agentide.session.RequestId"
+                    }
+                  }
+                },
+                {
+                  "target": "panes",
+                  "target_type": {
+                    "kind": "list",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneSnapshot"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "panes",
+                    "type_ref": {
+                      "kind": "list",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneSnapshot"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "focused_pane",
+                  "target_type": {
+                    "kind": "optional",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.surface.PaneId"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "focused_pane",
+                    "type_ref": {
+                      "kind": "optional",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.surface.PaneId"
+                      }
+                    }
+                  }
+                },
+                {
+                  "target": "open_files",
+                  "target_type": {
+                    "kind": "list",
+                    "of": {
+                      "kind": "declared",
+                      "name": "agentide.coding.Path"
+                    }
+                  },
+                  "value": {
+                    "kind": "input_field",
+                    "field": "open_files",
+                    "type_ref": {
+                      "kind": "list",
+                      "of": {
+                        "kind": "declared",
+                        "name": "agentide.coding.Path"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
           ]
         },
         {
@@ -6145,6 +7451,39 @@
             "name": "integer"
           },
           "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneSnapshot"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
+          },
+          "naming": {}
         }
       ],
       "naming": {}
@@ -6164,8 +7503,44 @@
         {
           "name": "pane_id",
           "type_ref": {
-            "kind": "declared",
-            "name": "agentide.surface.PaneId"
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneSnapshot"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
           },
           "naming": {}
         }
@@ -6189,6 +7564,39 @@
           "type_ref": {
             "kind": "declared",
             "name": "agentide.coding.Path"
+          },
+          "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneSnapshot"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
           },
           "naming": {}
         }
@@ -6218,8 +7626,44 @@
         {
           "name": "pane_id",
           "type_ref": {
-            "kind": "declared",
-            "name": "agentide.surface.PaneId"
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneSnapshot"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
           },
           "naming": {}
         }
@@ -6245,6 +7689,39 @@
             "name": "agentide.surface.PaneId"
           },
           "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneSnapshot"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
+          },
+          "naming": {}
         }
       ],
       "naming": {}
@@ -6266,6 +7743,39 @@
           "type_ref": {
             "kind": "declared",
             "name": "agentide.surface.PaneId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneSnapshot"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
           },
           "naming": {}
         }
@@ -6299,6 +7809,39 @@
             "name": "agentide.surface.PaneKind"
           },
           "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneSnapshot"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
+          },
+          "naming": {}
         }
       ],
       "naming": {}
@@ -6316,10 +7859,51 @@
           "naming": {}
         },
         {
+          "name": "coding_session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
           "name": "request_id",
           "type_ref": {
             "kind": "declared",
             "name": "agentide.session.RequestId"
+          },
+          "naming": {}
+        },
+        {
+          "name": "panes",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneSnapshot"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": {
+            "kind": "optional",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.surface.PaneId"
+            }
+          },
+          "naming": {}
+        },
+        {
+          "name": "open_files",
+          "type_ref": {
+            "kind": "list",
+            "of": {
+              "kind": "declared",
+              "name": "agentide.coding.Path"
+            }
           },
           "naming": {}
         }
@@ -6880,6 +8464,14 @@
           "naming": {}
         },
         {
+          "name": "coding_session_id",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionId"
+          },
+          "naming": {}
+        },
+        {
           "name": "panes",
           "type_ref": {
             "kind": "list",
@@ -6909,6 +8501,22 @@
               "kind": "declared",
               "name": "agentide.coding.Path"
             }
+          },
+          "naming": {}
+        },
+        {
+          "name": "owner",
+          "type_ref": {
+            "kind": "primitive",
+            "name": "string"
+          },
+          "naming": {}
+        },
+        {
+          "name": "scopes",
+          "type_ref": {
+            "kind": "declared",
+            "name": "agentide.session.SessionScopes"
           },
           "naming": {}
         }

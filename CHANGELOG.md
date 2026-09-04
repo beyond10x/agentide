@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 0.3.4 - 2026-09-05
+
+- Add a transport-neutral workbench controller and equivalent Vue and Vanilla renderer targets
+  with shared Monaco editor and Ghostty terminal leaf adapters.
+- Stream safely rendered Markdown in agent chat and replace untyped observations with versioned,
+  typed workbench frames, events, and semantic actions.
+- Generate actor-private, event-sourced workbench operations from ESS so a hosted product can
+  restore panes, open files, cursor state, and diffs without browser-owned persistence.
+
 ## 0.3.3 - 2026-09-04
 
 - Isolate pinned AEP and ESS command installation from restored Cargo binaries so the release gate

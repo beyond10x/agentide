@@ -2,8 +2,8 @@
   "provenance": {
     "system": "agentide",
     "specification_version": "v1",
-    "source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
-    "contract_digest": "90e1687e023e28f77eca4934db634944dcaf13a22a2075c642452ec5a97822b4"
+    "source_digest": "509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab",
+    "contract_digest": "a4cc516b70da249e7983921de639e15304b617e77b8a493363d888c039bee110"
   },
   "scope": {
     "profile": "component-skeletons"
@@ -1100,7 +1100,7 @@
           "class": "external",
           "cause": "the requested surface state is unavailable"
         },
-        "contract": "given `agentide.surface.CloseFile` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+        "contract": "given `agentide.surface.CloseFile` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.FileClosed`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
       }
     },
     {
@@ -1119,7 +1119,7 @@
           "class": "external",
           "cause": "the requested surface state is unavailable"
         },
-        "contract": "given `agentide.surface.ClosePane` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+        "contract": "given `agentide.surface.ClosePane` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.PaneClosed`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
       }
     },
     {
@@ -1138,7 +1138,7 @@
           "class": "external",
           "cause": "the requested surface state is unavailable"
         },
-        "contract": "given `agentide.surface.FocusPane` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+        "contract": "given `agentide.surface.FocusPane` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.PaneFocused`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
       }
     },
     {
@@ -1157,7 +1157,7 @@
           "class": "external",
           "cause": "the requested surface state is unavailable"
         },
-        "contract": "given `agentide.surface.MoveCursor` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+        "contract": "given `agentide.surface.MoveCursor` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.CursorMoved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
       }
     },
     {
@@ -1176,7 +1176,7 @@
           "class": "external",
           "cause": "the requested surface state is unavailable"
         },
-        "contract": "given `agentide.surface.OpenFile` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+        "contract": "given `agentide.surface.OpenFile` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.FileOpened`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
       }
     },
     {
@@ -1195,7 +1195,7 @@
           "class": "external",
           "cause": "the requested surface state is unavailable"
         },
-        "contract": "given `agentide.surface.OpenPane` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+        "contract": "given `agentide.surface.OpenPane` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.PaneOpened`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
       }
     },
     {
@@ -1214,7 +1214,7 @@
           "class": "external",
           "cause": "the requested surface state is unavailable"
         },
-        "contract": "given `agentide.surface.ShowDiff` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+        "contract": "given `agentide.surface.ShowDiff` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.DiffShown`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
       }
     },
     {
@@ -1233,7 +1233,7 @@
           "class": "external",
           "cause": "the requested surface state is unavailable"
         },
-        "contract": "given `agentide.surface.SnapshotSurface` input, decide and enact exactly one outcome — `completed` otherwise, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+        "contract": "given `agentide.surface.SnapshotSurface` input, decide and enact exactly one outcome — `completed` otherwise, creates `agentide.surface.Workbench`, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
       }
     },
     {

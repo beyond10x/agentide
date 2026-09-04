@@ -1,0 +1,97 @@
+{
+  "$id": "https://beyond10x.github.io/agentide/contracts/renderer/renderer-event-v2.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Transient host input that does not replace the immutable frame.",
+  "oneOf": [
+    {
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "assistant_delta",
+          "type": "string"
+        },
+        "markdown_delta": {
+          "type": "string"
+        },
+        "message_id": {
+          "type": "string"
+        },
+        "sequence": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "format",
+        "message_id",
+        "sequence",
+        "markdown_delta"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "bytes": {
+          "items": {
+            "format": "uint8",
+            "maximum": 255,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "format": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "terminal_output",
+          "type": "string"
+        },
+        "sequence": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "terminal_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "format",
+        "terminal_id",
+        "sequence",
+        "bytes"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "notice",
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "format",
+        "message"
+      ],
+      "type": "object"
+    }
+  ],
+  "title": "RendererEvent"
+}

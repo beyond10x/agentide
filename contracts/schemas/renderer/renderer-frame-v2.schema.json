@@ -1,0 +1,895 @@
+{
+  "$defs": {
+    "RendererActivity": {
+      "additionalProperties": false,
+      "description": "One displayable activity entry.",
+      "properties": {
+        "at": {
+          "description": "RFC 3339 observation time.",
+          "type": "string"
+        },
+        "intent": {
+          "description": "Optional semantic intent.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "description": "Event kind.",
+          "type": "string"
+        },
+        "sequence": {
+          "description": "Event sequence.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "sequence",
+        "at",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "RendererApproval": {
+      "additionalProperties": false,
+      "description": "Exact plan awaiting a human decision.",
+      "properties": {
+        "approval_required": {
+          "description": "Whether the exact plan requires a decision.",
+          "type": "boolean"
+        },
+        "digest": {
+          "description": "Exact plan digest.",
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "intent": {
+          "description": "Semantic intent being authorized.",
+          "type": "string"
+        },
+        "risk": {
+          "description": "Optional consequence label.",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "digest",
+        "intent",
+        "approval_required"
+      ],
+      "type": "object"
+    },
+    "RendererChange": {
+      "additionalProperties": false,
+      "description": "One observed workspace change.",
+      "properties": {
+        "patch": {
+          "description": "Optional bounded unified patch.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "path": {
+          "description": "Normalized workspace-relative path.",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/RendererChangeStatus",
+          "description": "Change kind."
+        }
+      },
+      "required": [
+        "path",
+        "status"
+      ],
+      "type": "object"
+    },
+    "RendererChangeStatus": {
+      "description": "Workspace change kinds.",
+      "oneOf": [
+        {
+          "const": "added",
+          "description": "Added path.",
+          "type": "string"
+        },
+        {
+          "const": "modified",
+          "description": "Modified path.",
+          "type": "string"
+        },
+        {
+          "const": "deleted",
+          "description": "Deleted path.",
+          "type": "string"
+        },
+        {
+          "const": "renamed",
+          "description": "Renamed path.",
+          "type": "string"
+        },
+        {
+          "const": "untracked",
+          "description": "Untracked path.",
+          "type": "string"
+        }
+      ]
+    },
+    "RendererChatMessage": {
+      "additionalProperties": false,
+      "description": "One safely rendered agent conversation message.",
+      "properties": {
+        "created_at": {
+          "description": "RFC 3339 creation time.",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable message identity.",
+          "type": "string"
+        },
+        "markdown": {
+          "description": "Markdown source, potentially incomplete while streaming.",
+          "type": "string"
+        },
+        "role": {
+          "$ref": "#/$defs/RendererChatRole",
+          "description": "Message role."
+        },
+        "state": {
+          "$ref": "#/$defs/RendererChatMessageState",
+          "description": "Message lifecycle."
+        }
+      },
+      "required": [
+        "id",
+        "role",
+        "markdown",
+        "state",
+        "created_at"
+      ],
+      "type": "object"
+    },
+    "RendererChatMessageState": {
+      "description": "Lifecycle of a projected chat message.",
+      "oneOf": [
+        {
+          "const": "streaming",
+          "description": "More Markdown deltas may follow.",
+          "type": "string"
+        },
+        {
+          "const": "complete",
+          "description": "The message is complete.",
+          "type": "string"
+        },
+        {
+          "const": "failed",
+          "description": "The turn failed after the message began.",
+          "type": "string"
+        }
+      ]
+    },
+    "RendererChatRole": {
+      "description": "Roles represented in an agent conversation.",
+      "oneOf": [
+        {
+          "const": "user",
+          "description": "Operator message.",
+          "type": "string"
+        },
+        {
+          "const": "assistant",
+          "description": "Agent response.",
+          "type": "string"
+        },
+        {
+          "const": "system",
+          "description": "Host-produced system message.",
+          "type": "string"
+        }
+      ]
+    },
+    "RendererContextPin": {
+      "additionalProperties": false,
+      "description": "Actor-private context pin summary.",
+      "properties": {
+        "id": {
+          "description": "Stable pin identity.",
+          "type": "string"
+        },
+        "label": {
+          "description": "Operator-facing label.",
+          "type": "string"
+        },
+        "source": {
+          "description": "Typed host-owned source reference.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "source"
+      ],
+      "type": "object"
+    },
+    "RendererEditorDocument": {
+      "additionalProperties": false,
+      "description": "One observed editor document. Draft content remains browser-local.",
+      "properties": {
+        "content": {
+          "description": "Current browser projection bytes.",
+          "type": "string"
+        },
+        "dirty": {
+          "description": "Whether content differs from the last host observation.",
+          "type": "boolean"
+        },
+        "language": {
+          "description": "Renderer language identifier.",
+          "type": "string"
+        },
+        "path": {
+          "description": "Normalized workspace-relative path.",
+          "type": "string"
+        },
+        "read_only": {
+          "description": "Whether writes are unavailable.",
+          "type": "boolean"
+        },
+        "version": {
+          "description": "Host-issued optimistic-concurrency version.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "language",
+        "content",
+        "version",
+        "read_only",
+        "dirty"
+      ],
+      "type": "object"
+    },
+    "RendererGrantState": {
+      "description": "Current state of a projected capability grant.",
+      "oneOf": [
+        {
+          "const": "active",
+          "description": "The grant may currently be exercised.",
+          "type": "string"
+        },
+        {
+          "const": "expired",
+          "description": "The grant passed its deadline.",
+          "type": "string"
+        },
+        {
+          "const": "revoked",
+          "description": "The grant was explicitly revoked.",
+          "type": "string"
+        }
+      ]
+    },
+    "RendererGrantSummary": {
+      "additionalProperties": false,
+      "description": "Display-only grant summary without credential material.",
+      "properties": {
+        "capability": {
+          "description": "Semantic capability.",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable grant identity.",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/RendererGrantState",
+          "description": "Current grant state."
+        }
+      },
+      "required": [
+        "id",
+        "capability",
+        "state"
+      ],
+      "type": "object"
+    },
+    "RendererPane": {
+      "additionalProperties": false,
+      "description": "Renderer-neutral pane metadata.",
+      "properties": {
+        "column": {
+          "description": "Optional one-based column.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "id": {
+          "description": "Stable pane identity.",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/RendererPaneKind",
+          "description": "Semantic pane kind."
+        },
+        "line": {
+          "description": "Optional one-based line.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "path": {
+          "description": "Optional workspace-relative path.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "title": {
+          "description": "Human-readable title.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "title"
+      ],
+      "type": "object"
+    },
+    "RendererPaneKind": {
+      "description": "Renderer-neutral pane kinds.",
+      "oneOf": [
+        {
+          "const": "editor",
+          "description": "Workspace source editor.",
+          "type": "string"
+        },
+        {
+          "const": "diff",
+          "description": "Current source changes.",
+          "type": "string"
+        },
+        {
+          "const": "terminal",
+          "description": "Interactive terminal.",
+          "type": "string"
+        },
+        {
+          "const": "chat",
+          "description": "Agent conversation.",
+          "type": "string"
+        },
+        {
+          "const": "timeline",
+          "description": "Durable event timeline.",
+          "type": "string"
+        },
+        {
+          "const": "agents",
+          "description": "Collaborating agents.",
+          "type": "string"
+        },
+        {
+          "const": "approvals",
+          "description": "Exact-plan approvals.",
+          "type": "string"
+        },
+        {
+          "const": "evidence",
+          "description": "Evidence and outcomes.",
+          "type": "string"
+        }
+      ]
+    },
+    "RendererPaneProjection": {
+      "description": "Typed projection selected for one pane.",
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "description": "Source editor state.",
+          "properties": {
+            "document": {
+              "$ref": "#/$defs/RendererEditorDocument",
+              "description": "Observed document or browser-local draft."
+            },
+            "kind": {
+              "const": "editor",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "document"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Source changes.",
+          "properties": {
+            "baseline_commit": {
+              "description": "Exact source commit used as the baseline.",
+              "type": "string"
+            },
+            "changes": {
+              "description": "Bounded changes.",
+              "items": {
+                "$ref": "#/$defs/RendererChange"
+              },
+              "type": "array"
+            },
+            "kind": {
+              "const": "diff",
+              "type": "string"
+            },
+            "truncated": {
+              "description": "Whether more changes or patch bytes exist.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "kind",
+            "baseline_commit",
+            "changes",
+            "truncated"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Agent conversation.",
+          "properties": {
+            "kind": {
+              "const": "chat",
+              "type": "string"
+            },
+            "messages": {
+              "description": "Ordered messages.",
+              "items": {
+                "$ref": "#/$defs/RendererChatMessage"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "messages"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Interactive terminal state.",
+          "properties": {
+            "columns": {
+              "description": "Current columns.",
+              "format": "uint16",
+              "maximum": 65535,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "kind": {
+              "const": "terminal",
+              "type": "string"
+            },
+            "rows": {
+              "description": "Current rows.",
+              "format": "uint16",
+              "maximum": 65535,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "state": {
+              "$ref": "#/$defs/RendererTerminalState",
+              "description": "Terminal lifecycle."
+            },
+            "terminal_id": {
+              "description": "Host-owned terminal identity.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "terminal_id",
+            "state",
+            "columns",
+            "rows"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Named refusal.",
+          "properties": {
+            "code": {
+              "description": "Stable refusal code.",
+              "type": "string"
+            },
+            "kind": {
+              "const": "refusal",
+              "type": "string"
+            },
+            "message": {
+              "description": "Operator-safe explanation.",
+              "type": "string"
+            },
+            "retryable": {
+              "description": "Whether retrying may succeed without changing the request.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "kind",
+            "code",
+            "message",
+            "retryable"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Empty state.",
+          "properties": {
+            "kind": {
+              "const": "empty",
+              "type": "string"
+            },
+            "message": {
+              "description": "Operator-facing explanation.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "message"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "RendererPreparation": {
+      "additionalProperties": false,
+      "description": "Current materialization or session-preparation stage.",
+      "properties": {
+        "message": {
+          "description": "Operator-safe status.",
+          "type": "string"
+        },
+        "retryable": {
+          "description": "Whether the preparation may be retried.",
+          "type": "boolean"
+        },
+        "stage": {
+          "description": "Stable preparation stage.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "stage",
+        "message",
+        "retryable"
+      ],
+      "type": "object"
+    },
+    "RendererSession": {
+      "additionalProperties": false,
+      "description": "Display-only session metadata.",
+      "properties": {
+        "cursor": {
+          "description": "Latest event cursor represented by the frame.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "id": {
+          "description": "Session identity, never a bearer credential.",
+          "type": "string"
+        },
+        "objective": {
+          "description": "Operator-visible objective.",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/RendererSessionStatus",
+          "description": "Current lifecycle state."
+        }
+      },
+      "required": [
+        "id",
+        "objective",
+        "status",
+        "cursor"
+      ],
+      "type": "object"
+    },
+    "RendererSessionStatus": {
+      "description": "Lifecycle states a renderer may display for a coding session.",
+      "oneOf": [
+        {
+          "const": "preparing",
+          "description": "The backing workspace is still being prepared.",
+          "type": "string"
+        },
+        {
+          "const": "active",
+          "description": "The session accepts interactions.",
+          "type": "string"
+        },
+        {
+          "const": "closed",
+          "description": "The durable `AgentIDE` session is closed.",
+          "type": "string"
+        },
+        {
+          "const": "completed",
+          "description": "The session finished successfully.",
+          "type": "string"
+        },
+        {
+          "const": "failed",
+          "description": "The session failed.",
+          "type": "string"
+        },
+        {
+          "const": "superseded",
+          "description": "A replacement session superseded this one.",
+          "type": "string"
+        }
+      ]
+    },
+    "RendererTerminalState": {
+      "description": "Lifecycle of an interactive terminal projection.",
+      "oneOf": [
+        {
+          "const": "opening",
+          "description": "The terminal is being created.",
+          "type": "string"
+        },
+        {
+          "const": "open",
+          "description": "The terminal accepts input.",
+          "type": "string"
+        },
+        {
+          "const": "closed",
+          "description": "The terminal has closed.",
+          "type": "string"
+        },
+        {
+          "const": "failed",
+          "description": "Terminal creation or transport failed.",
+          "type": "string"
+        }
+      ]
+    },
+    "RendererTreeEntry": {
+      "additionalProperties": false,
+      "description": "One entry in a lazily observed workspace tree.",
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/RendererTreeEntryKind",
+          "description": "Entry kind."
+        },
+        "name": {
+          "description": "Display name.",
+          "type": "string"
+        },
+        "path": {
+          "description": "Normalized workspace-relative path.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "name",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "RendererTreeEntryKind": {
+      "description": "Workspace tree entry kinds.",
+      "oneOf": [
+        {
+          "const": "file",
+          "description": "Regular file.",
+          "type": "string"
+        },
+        {
+          "const": "directory",
+          "description": "Directory.",
+          "type": "string"
+        },
+        {
+          "const": "symlink",
+          "description": "Symbolic link.",
+          "type": "string"
+        }
+      ]
+    },
+    "RendererTreeProjection": {
+      "additionalProperties": false,
+      "description": "One bounded page of the workspace tree.",
+      "properties": {
+        "entries": {
+          "description": "Bounded entries in stable order.",
+          "items": {
+            "$ref": "#/$defs/RendererTreeEntry"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "$ref": "#/$defs/RendererTreeProjectionKind",
+          "description": "The projection discriminator."
+        },
+        "next_cursor": {
+          "description": "Opaque continuation cursor supplied by the host.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "root": {
+          "description": "Directory represented by this page.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "root",
+        "entries"
+      ],
+      "type": "object"
+    },
+    "RendererTreeProjectionKind": {
+      "description": "Discriminator for a workspace tree page.",
+      "oneOf": [
+        {
+          "const": "tree",
+          "description": "Workspace tree page.",
+          "type": "string"
+        }
+      ]
+    },
+    "RendererWorkbench": {
+      "additionalProperties": false,
+      "description": "Display-only workbench projection.",
+      "properties": {
+        "focused_pane": {
+          "description": "Focused pane identity.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "open_files": {
+          "description": "Ordered open workspace paths.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "panes": {
+          "description": "Ordered panes.",
+          "items": {
+            "$ref": "#/$defs/RendererPane"
+          },
+          "type": "array"
+        },
+        "projections": {
+          "additionalProperties": {
+            "$ref": "#/$defs/RendererPaneProjection"
+          },
+          "description": "Pane projections keyed by pane identity.",
+          "type": "object"
+        },
+        "tree": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RendererTreeProjection"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Optional lazily observed tree page."
+        }
+      },
+      "required": [
+        "panes",
+        "open_files",
+        "projections"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://beyond10x.github.io/agentide/contracts/renderer/renderer-frame-v2.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Complete immutable state delivered to a renderer target.",
+  "properties": {
+    "activity": {
+      "description": "Recent activity projection.",
+      "items": {
+        "$ref": "#/$defs/RendererActivity"
+      },
+      "type": "array"
+    },
+    "context_pins": {
+      "description": "Actor-private context pins.",
+      "items": {
+        "$ref": "#/$defs/RendererContextPin"
+      },
+      "type": "array"
+    },
+    "format": {
+      "description": "Contract discriminator.",
+      "type": "string"
+    },
+    "grants": {
+      "description": "Credential-free capability summaries.",
+      "items": {
+        "$ref": "#/$defs/RendererGrantSummary"
+      },
+      "type": "array"
+    },
+    "notice": {
+      "description": "Optional host-produced status or refusal message.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pending_approvals": {
+      "description": "Exact plans waiting for a human decision.",
+      "items": {
+        "$ref": "#/$defs/RendererApproval"
+      },
+      "type": "array"
+    },
+    "preparation": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RendererPreparation"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Optional preparation progress."
+    },
+    "session": {
+      "$ref": "#/$defs/RendererSession",
+      "description": "Display-only session metadata."
+    },
+    "workbench": {
+      "$ref": "#/$defs/RendererWorkbench",
+      "description": "Current renderer-neutral workbench projection."
+    }
+  },
+  "required": [
+    "format",
+    "session",
+    "workbench",
+    "pending_approvals",
+    "context_pins",
+    "grants",
+    "activity"
+  ],
+  "title": "RendererFrame",
+  "type": "object"
+}

@@ -1,0 +1,7 @@
+{
+  "kind": "assistant_delta",
+  "format": "agentide.renderer-event/2",
+  "message_id": "message-agent-1",
+  "sequence": 1,
+  "markdown_delta": "**ready**"
+}

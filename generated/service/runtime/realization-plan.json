@@ -5,7 +5,7 @@
     "kind": "composed_connector"
   },
   "realm": "optional",
-  "ess_source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
+  "ess_source_digest": "509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab",
   "obligation_catalog_digest": "12e8b6adb5b214031bd1c101f71e91a666d19674d844683e35f32b67f966ecb3",
   "content": {},
   "intents": {
@@ -125,6 +125,346 @@
       },
       "projections": [
         "approval_checkpoint_snapshot_projection"
+      ]
+    },
+    "close_file": {
+      "command": "agentide.surface.CloseFile",
+      "scope": "agentide.manage",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "path",
+          "type_ref": "agentide.coding.Path",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "command_field",
+        "field": "session_id"
+      },
+      "expected_version": {
+        "kind": "operation_field",
+        "field": "expected_version"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.surface.Workbench",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.session.CodingSession.owner",
+            "scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.surface.Workbench.owner",
+            "scopes": "agentide.surface.Workbench.scopes"
+          }
+        },
+        {
+          "provider": "sdk.lifecycle.require-state/v1",
+          "bindings": {
+            "allowed": "Active",
+            "entity": "agentide.session.CodingSession"
+          }
+        },
+        {
+          "provider": "sdk.aggregate.nested-entity/v1",
+          "bindings": {
+            "child": "agentide.surface.Workbench",
+            "child_identity": "session_id",
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "completed",
+        "events": [
+          {
+            "event": "agentide.surface.FileClosed",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              },
+              {
+                "name": "path",
+                "source": {
+                  "kind": "input",
+                  "field": "path"
+                }
+              },
+              {
+                "name": "panes",
+                "source": {
+                  "kind": "input",
+                  "field": "panes"
+                }
+              },
+              {
+                "name": "focused_pane",
+                "source": {
+                  "kind": "input",
+                  "field": "focused_pane"
+                }
+              },
+              {
+                "name": "open_files",
+                "source": {
+                  "kind": "input",
+                  "field": "open_files"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "workbench_snapshot_projection"
+      ]
+    },
+    "close_pane": {
+      "command": "agentide.surface.ClosePane",
+      "scope": "agentide.manage",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "agentide.surface.PaneId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "command_field",
+        "field": "session_id"
+      },
+      "expected_version": {
+        "kind": "operation_field",
+        "field": "expected_version"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.surface.Workbench",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.session.CodingSession.owner",
+            "scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.surface.Workbench.owner",
+            "scopes": "agentide.surface.Workbench.scopes"
+          }
+        },
+        {
+          "provider": "sdk.lifecycle.require-state/v1",
+          "bindings": {
+            "allowed": "Active",
+            "entity": "agentide.session.CodingSession"
+          }
+        },
+        {
+          "provider": "sdk.aggregate.nested-entity/v1",
+          "bindings": {
+            "child": "agentide.surface.Workbench",
+            "child_identity": "session_id",
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "completed",
+        "events": [
+          {
+            "event": "agentide.surface.PaneClosed",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              },
+              {
+                "name": "pane_id",
+                "source": {
+                  "kind": "input",
+                  "field": "pane_id"
+                }
+              },
+              {
+                "name": "panes",
+                "source": {
+                  "kind": "input",
+                  "field": "panes"
+                }
+              },
+              {
+                "name": "focused_pane",
+                "source": {
+                  "kind": "input",
+                  "field": "focused_pane"
+                }
+              },
+              {
+                "name": "open_files",
+                "source": {
+                  "kind": "input",
+                  "field": "open_files"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "workbench_snapshot_projection"
       ]
     },
     "close_session": {
@@ -728,6 +1068,770 @@
         "session_snapshot_projection"
       ]
     },
+    "focus_pane": {
+      "command": "agentide.surface.FocusPane",
+      "scope": "agentide.manage",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "agentide.surface.PaneId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "command_field",
+        "field": "session_id"
+      },
+      "expected_version": {
+        "kind": "operation_field",
+        "field": "expected_version"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.surface.Workbench",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.session.CodingSession.owner",
+            "scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.surface.Workbench.owner",
+            "scopes": "agentide.surface.Workbench.scopes"
+          }
+        },
+        {
+          "provider": "sdk.lifecycle.require-state/v1",
+          "bindings": {
+            "allowed": "Active",
+            "entity": "agentide.session.CodingSession"
+          }
+        },
+        {
+          "provider": "sdk.aggregate.nested-entity/v1",
+          "bindings": {
+            "child": "agentide.surface.Workbench",
+            "child_identity": "session_id",
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "completed",
+        "events": [
+          {
+            "event": "agentide.surface.PaneFocused",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              },
+              {
+                "name": "pane_id",
+                "source": {
+                  "kind": "input",
+                  "field": "pane_id"
+                }
+              },
+              {
+                "name": "panes",
+                "source": {
+                  "kind": "input",
+                  "field": "panes"
+                }
+              },
+              {
+                "name": "focused_pane",
+                "source": {
+                  "kind": "input",
+                  "field": "focused_pane"
+                }
+              },
+              {
+                "name": "open_files",
+                "source": {
+                  "kind": "input",
+                  "field": "open_files"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "workbench_snapshot_projection"
+      ]
+    },
+    "move_cursor": {
+      "command": "agentide.surface.MoveCursor",
+      "scope": "agentide.manage",
+      "inputs": [
+        {
+          "name": "column",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "line",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "agentide.surface.PaneId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "path",
+          "type_ref": "agentide.coding.Path",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "command_field",
+        "field": "session_id"
+      },
+      "expected_version": {
+        "kind": "operation_field",
+        "field": "expected_version"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.surface.Workbench",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.session.CodingSession.owner",
+            "scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.surface.Workbench.owner",
+            "scopes": "agentide.surface.Workbench.scopes"
+          }
+        },
+        {
+          "provider": "sdk.lifecycle.require-state/v1",
+          "bindings": {
+            "allowed": "Active",
+            "entity": "agentide.session.CodingSession"
+          }
+        },
+        {
+          "provider": "sdk.aggregate.nested-entity/v1",
+          "bindings": {
+            "child": "agentide.surface.Workbench",
+            "child_identity": "session_id",
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "completed",
+        "events": [
+          {
+            "event": "agentide.surface.CursorMoved",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              },
+              {
+                "name": "pane_id",
+                "source": {
+                  "kind": "input",
+                  "field": "pane_id"
+                }
+              },
+              {
+                "name": "line",
+                "source": {
+                  "kind": "input",
+                  "field": "line"
+                }
+              },
+              {
+                "name": "column",
+                "source": {
+                  "kind": "input",
+                  "field": "column"
+                }
+              },
+              {
+                "name": "panes",
+                "source": {
+                  "kind": "input",
+                  "field": "panes"
+                }
+              },
+              {
+                "name": "focused_pane",
+                "source": {
+                  "kind": "input",
+                  "field": "focused_pane"
+                }
+              },
+              {
+                "name": "open_files",
+                "source": {
+                  "kind": "input",
+                  "field": "open_files"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "workbench_snapshot_projection"
+      ]
+    },
+    "open_file": {
+      "command": "agentide.surface.OpenFile",
+      "scope": "agentide.manage",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "line",
+          "type_ref": "Optional<Integer>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "path",
+          "type_ref": "agentide.coding.Path",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "command_field",
+        "field": "session_id"
+      },
+      "expected_version": {
+        "kind": "operation_field",
+        "field": "expected_version"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.surface.Workbench",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.session.CodingSession.owner",
+            "scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.surface.Workbench.owner",
+            "scopes": "agentide.surface.Workbench.scopes"
+          }
+        },
+        {
+          "provider": "sdk.lifecycle.require-state/v1",
+          "bindings": {
+            "allowed": "Active",
+            "entity": "agentide.session.CodingSession"
+          }
+        },
+        {
+          "provider": "sdk.aggregate.nested-entity/v1",
+          "bindings": {
+            "child": "agentide.surface.Workbench",
+            "child_identity": "session_id",
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "completed",
+        "events": [
+          {
+            "event": "agentide.surface.FileOpened",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              },
+              {
+                "name": "path",
+                "source": {
+                  "kind": "input",
+                  "field": "path"
+                }
+              },
+              {
+                "name": "pane_id",
+                "source": {
+                  "kind": "input",
+                  "field": "pane_id"
+                }
+              },
+              {
+                "name": "panes",
+                "source": {
+                  "kind": "input",
+                  "field": "panes"
+                }
+              },
+              {
+                "name": "focused_pane",
+                "source": {
+                  "kind": "input",
+                  "field": "focused_pane"
+                }
+              },
+              {
+                "name": "open_files",
+                "source": {
+                  "kind": "input",
+                  "field": "open_files"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "workbench_snapshot_projection"
+      ]
+    },
+    "open_pane": {
+      "command": "agentide.surface.OpenPane",
+      "scope": "agentide.manage",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "kind",
+          "type_ref": "agentide.surface.PaneKind",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "agentide.surface.PaneId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "split",
+          "type_ref": "Optional<agentide.surface.SplitDirection>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "command_field",
+        "field": "session_id"
+      },
+      "expected_version": {
+        "kind": "operation_field",
+        "field": "expected_version"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.surface.Workbench",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.session.CodingSession.owner",
+            "scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.surface.Workbench.owner",
+            "scopes": "agentide.surface.Workbench.scopes"
+          }
+        },
+        {
+          "provider": "sdk.lifecycle.require-state/v1",
+          "bindings": {
+            "allowed": "Active",
+            "entity": "agentide.session.CodingSession"
+          }
+        },
+        {
+          "provider": "sdk.aggregate.nested-entity/v1",
+          "bindings": {
+            "child": "agentide.surface.Workbench",
+            "child_identity": "session_id",
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "completed",
+        "events": [
+          {
+            "event": "agentide.surface.PaneOpened",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              },
+              {
+                "name": "pane_id",
+                "source": {
+                  "kind": "input",
+                  "field": "pane_id"
+                }
+              },
+              {
+                "name": "kind",
+                "source": {
+                  "kind": "input",
+                  "field": "kind"
+                }
+              },
+              {
+                "name": "panes",
+                "source": {
+                  "kind": "input",
+                  "field": "panes"
+                }
+              },
+              {
+                "name": "focused_pane",
+                "source": {
+                  "kind": "input",
+                  "field": "focused_pane"
+                }
+              },
+              {
+                "name": "open_files",
+                "source": {
+                  "kind": "input",
+                  "field": "open_files"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "workbench_snapshot_projection"
+      ]
+    },
     "pin_context": {
       "command": "agentide.coordination.PinContext",
       "scope": "agentide.manage",
@@ -1315,6 +2419,356 @@
         "grant_snapshot_projection"
       ]
     },
+    "show_diff": {
+      "command": "agentide.surface.ShowDiff",
+      "scope": "agentide.manage",
+      "inputs": [
+        {
+          "name": "base",
+          "type_ref": "Optional<String>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "path",
+          "type_ref": "Optional<agentide.coding.Path>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "command_field",
+        "field": "session_id"
+      },
+      "expected_version": {
+        "kind": "operation_field",
+        "field": "expected_version"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.surface.Workbench",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.session.CodingSession.owner",
+            "scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.surface.Workbench.owner",
+            "scopes": "agentide.surface.Workbench.scopes"
+          }
+        },
+        {
+          "provider": "sdk.lifecycle.require-state/v1",
+          "bindings": {
+            "allowed": "Active",
+            "entity": "agentide.session.CodingSession"
+          }
+        },
+        {
+          "provider": "sdk.aggregate.nested-entity/v1",
+          "bindings": {
+            "child": "agentide.surface.Workbench",
+            "child_identity": "session_id",
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "completed",
+        "events": [
+          {
+            "event": "agentide.surface.DiffShown",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              },
+              {
+                "name": "pane_id",
+                "source": {
+                  "kind": "input",
+                  "field": "pane_id"
+                }
+              },
+              {
+                "name": "panes",
+                "source": {
+                  "kind": "input",
+                  "field": "panes"
+                }
+              },
+              {
+                "name": "focused_pane",
+                "source": {
+                  "kind": "input",
+                  "field": "focused_pane"
+                }
+              },
+              {
+                "name": "open_files",
+                "source": {
+                  "kind": "input",
+                  "field": "open_files"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "workbench_snapshot_projection"
+      ]
+    },
+    "snapshot_surface": {
+      "command": "agentide.surface.SnapshotSurface",
+      "scope": "agentide.manage",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "stream": {
+        "kind": "command_field",
+        "field": "session_id"
+      },
+      "expected_version": {
+        "kind": "operation_field",
+        "field": "expected_version"
+      },
+      "idempotency": {
+        "kind": "operation_field",
+        "field": "idempotency_key"
+      },
+      "obligations": [
+        {
+          "provider": "sdk.aggregate.event-sourced/v1",
+          "bindings": {
+            "aggregate": "agentide.surface.Workbench",
+            "category": "agentide-session",
+            "identity": "session_id"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "agentide.session.CodingSession.owner",
+            "scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.lifecycle.require-state/v1",
+          "bindings": {
+            "allowed": "Active",
+            "entity": "agentide.session.CodingSession"
+          }
+        },
+        {
+          "provider": "sdk.derive.inherit-parent-authority/v1",
+          "bindings": {
+            "child": "agentide.surface.Workbench",
+            "child_owner": "agentide.surface.Workbench.owner",
+            "child_scopes": "agentide.surface.Workbench.scopes",
+            "parent": "agentide.session.CodingSession",
+            "parent_owner": "agentide.session.CodingSession.owner",
+            "parent_scopes": "agentide.session.CodingSession.scopes"
+          }
+        }
+      ],
+      "outcome": {
+        "name": "completed",
+        "events": [
+          {
+            "event": "agentide.surface.SurfaceObserved",
+            "fields": [
+              {
+                "name": "session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              },
+              {
+                "name": "coding_session_id",
+                "source": {
+                  "kind": "input",
+                  "field": "session_id"
+                }
+              },
+              {
+                "name": "request_id",
+                "source": {
+                  "kind": "input",
+                  "field": "request_id"
+                }
+              },
+              {
+                "name": "panes",
+                "source": {
+                  "kind": "input",
+                  "field": "panes"
+                }
+              },
+              {
+                "name": "focused_pane",
+                "source": {
+                  "kind": "input",
+                  "field": "focused_pane"
+                }
+              },
+              {
+                "name": "open_files",
+                "source": {
+                  "kind": "input",
+                  "field": "open_files"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "projections": [
+        "workbench_snapshot_projection"
+      ]
+    },
     "start_session": {
       "command": "agentide.session.StartSession",
       "scope": "agentide.manage",
@@ -1515,6 +2969,45 @@
           "bindings": {
             "owner": "owner",
             "scopes": "scopes"
+          }
+        }
+      ]
+    },
+    "get_workbench": {
+      "view": "agentide.surface.WorkbenchSnapshot",
+      "scope": "agentide.read",
+      "inputs": [
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "selector",
+            "view_field": "session_id"
+          }
+        }
+      ],
+      "obligations": [
+        {
+          "provider": "sdk.projection.auth-partitioned-visibility/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        },
+        {
+          "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        },
+        {
+          "provider": "sdk.projection.hide-terminal-parent/v1",
+          "bindings": {
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id",
+            "terminal_states": "Closed"
           }
         }
       ]
@@ -1852,6 +3345,134 @@
         "owner",
         "scopes"
       ]
+    },
+    "agentide.surface.CursorMoved": {
+      "entity": "agentide.surface.Workbench",
+      "identity_field": "session_id",
+      "effect": {
+        "kind": "update"
+      },
+      "fields": [
+        "coding_session_id",
+        "panes",
+        "focused_pane",
+        "open_files",
+        "owner",
+        "scopes"
+      ]
+    },
+    "agentide.surface.DiffShown": {
+      "entity": "agentide.surface.Workbench",
+      "identity_field": "session_id",
+      "effect": {
+        "kind": "update"
+      },
+      "fields": [
+        "coding_session_id",
+        "panes",
+        "focused_pane",
+        "open_files",
+        "owner",
+        "scopes"
+      ]
+    },
+    "agentide.surface.FileClosed": {
+      "entity": "agentide.surface.Workbench",
+      "identity_field": "session_id",
+      "effect": {
+        "kind": "update"
+      },
+      "fields": [
+        "coding_session_id",
+        "panes",
+        "focused_pane",
+        "open_files",
+        "owner",
+        "scopes"
+      ]
+    },
+    "agentide.surface.FileOpened": {
+      "entity": "agentide.surface.Workbench",
+      "identity_field": "session_id",
+      "effect": {
+        "kind": "update"
+      },
+      "fields": [
+        "coding_session_id",
+        "panes",
+        "focused_pane",
+        "open_files",
+        "owner",
+        "scopes"
+      ]
+    },
+    "agentide.surface.PaneClosed": {
+      "entity": "agentide.surface.Workbench",
+      "identity_field": "session_id",
+      "effect": {
+        "kind": "update"
+      },
+      "fields": [
+        "coding_session_id",
+        "panes",
+        "focused_pane",
+        "open_files",
+        "owner",
+        "scopes"
+      ]
+    },
+    "agentide.surface.PaneFocused": {
+      "entity": "agentide.surface.Workbench",
+      "identity_field": "session_id",
+      "effect": {
+        "kind": "update"
+      },
+      "fields": [
+        "coding_session_id",
+        "panes",
+        "focused_pane",
+        "open_files",
+        "owner",
+        "scopes"
+      ]
+    },
+    "agentide.surface.PaneOpened": {
+      "entity": "agentide.surface.Workbench",
+      "identity_field": "session_id",
+      "effect": {
+        "kind": "update"
+      },
+      "fields": [
+        "coding_session_id",
+        "panes",
+        "focused_pane",
+        "open_files",
+        "owner",
+        "scopes"
+      ]
+    },
+    "agentide.surface.SurfaceObserved": {
+      "entity": "agentide.surface.Workbench",
+      "identity_field": "session_id",
+      "effect": {
+        "kind": "create",
+        "initial_state": "Active"
+      },
+      "fields": [
+        "coding_session_id",
+        "panes",
+        "focused_pane",
+        "open_files",
+        "owner",
+        "scopes"
+      ],
+      "inherit": {
+        "parent": "agentide.session.CodingSession",
+        "parent_owner": "owner",
+        "parent_scopes": "scopes",
+        "child_owner": "owner",
+        "child_scopes": "scopes"
+      }
     }
   },
   "views": {
@@ -2003,6 +3624,46 @@
           "bindings": {
             "owner": "owner",
             "scopes": "scopes"
+          }
+        }
+      ]
+    },
+    "agentide.surface.WorkbenchSnapshot": {
+      "source": "agentide.surface.Workbench",
+      "fields": [
+        "session_id",
+        "coding_session_id",
+        "panes",
+        "focused_pane",
+        "open_files",
+        "owner",
+        "scopes"
+      ],
+      "obligations": [
+        {
+          "provider": "sdk.projection.auth-partitioned-visibility/v1",
+          "bindings": {
+            "owner": "owner",
+            "scopes": "scopes"
+          }
+        },
+        {
+          "provider": "sdk.derive.inherit-parent-authority/v1",
+          "bindings": {
+            "child": "agentide.surface.Workbench",
+            "child_owner": "agentide.surface.Workbench.owner",
+            "child_scopes": "agentide.surface.Workbench.scopes",
+            "parent": "agentide.session.CodingSession",
+            "parent_owner": "agentide.session.CodingSession.owner",
+            "parent_scopes": "agentide.session.CodingSession.scopes"
+          }
+        },
+        {
+          "provider": "sdk.projection.hide-terminal-parent/v1",
+          "bindings": {
+            "parent": "agentide.session.CodingSession",
+            "parent_identity": "session_id",
+            "terminal_states": "Closed"
           }
         }
       ]

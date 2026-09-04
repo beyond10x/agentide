@@ -31,6 +31,9 @@ function frame(cursor = 1): RendererFrame {
       })),
       focused_pane: `pane-${cursor % 24}`,
       open_files: files,
+      projections: {
+        [`pane-${cursor % 24}`]: { kind: "empty", message: "renderer benchmark observation" },
+      },
     },
     pending_approvals: Array.from({ length: 8 }, (_, index) => ({
       digest: String(index).padStart(64, "a"),
@@ -44,7 +47,8 @@ function frame(cursor = 1): RendererFrame {
       kind: "intent.completed",
       intent: index % 3 ? "code_read" : "diff_show",
     })),
-    observation: { cursor, content: "renderer benchmark observation".repeat(100) },
+    context_pins: [],
+    grants: [],
   };
 }
 

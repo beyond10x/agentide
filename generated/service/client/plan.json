@@ -4,7 +4,7 @@
   "delivery": {
     "kind": "composed_connector"
   },
-  "ess_source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
+  "ess_source_digest": "509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab",
   "realm_policy": "optional",
   "authentication": "session",
   "operations": [
@@ -59,6 +59,162 @@
         "kind": "intent",
         "emitted_events": [
           "agentide.coordination.ApprovalCheckpointApproved"
+        ]
+      }
+    },
+    {
+      "operation": "close_file",
+      "scope": "agentide.manage",
+      "semantic_ref": "agentide.surface.CloseFile",
+      "kind": "intent",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "path",
+          "type_ref": "agentide.coding.Path",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "result": {
+        "kind": "intent",
+        "emitted_events": [
+          "agentide.surface.FileClosed"
+        ]
+      }
+    },
+    {
+      "operation": "close_pane",
+      "scope": "agentide.manage",
+      "semantic_ref": "agentide.surface.ClosePane",
+      "kind": "intent",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "agentide.surface.PaneId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "result": {
+        "kind": "intent",
+        "emitted_events": [
+          "agentide.surface.PaneClosed"
         ]
       }
     },
@@ -343,6 +499,84 @@
       }
     },
     {
+      "operation": "focus_pane",
+      "scope": "agentide.manage",
+      "semantic_ref": "agentide.surface.FocusPane",
+      "kind": "intent",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "agentide.surface.PaneId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "result": {
+        "kind": "intent",
+        "emitted_events": [
+          "agentide.surface.PaneFocused"
+        ]
+      }
+    },
+    {
       "operation": "get_session",
       "scope": "agentide.read",
       "semantic_ref": "agentide.session.SessionSnapshot",
@@ -371,6 +605,40 @@
           "state": "agentide.session.CodingSession.State",
           "workspace_root": "agentide.session.WorkspaceRoot",
           "workspace_session_id": "Optional<agentide.session.WorkspaceSessionId>"
+        }
+      },
+      "pagination": {
+        "envelope": "$page",
+        "maximum_limit": 1000,
+        "opaque_cursor": true
+      }
+    },
+    {
+      "operation": "get_workbench",
+      "scope": "agentide.read",
+      "semantic_ref": "agentide.surface.WorkbenchSnapshot",
+      "kind": "query",
+      "inputs": [
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "selector",
+            "view_field": "session_id"
+          }
+        }
+      ],
+      "result": {
+        "kind": "query",
+        "fields": {
+          "coding_session_id": "agentide.session.SessionId",
+          "focused_pane": "Optional<agentide.surface.PaneId>",
+          "open_files": "List<agentide.coding.Path>",
+          "owner": "String",
+          "panes": "List<agentide.surface.PaneSnapshot>",
+          "scopes": "agentide.session.SessionScopes",
+          "session_id": "agentide.session.SessionId"
         }
       },
       "pagination": {
@@ -514,6 +782,296 @@
         "envelope": "$page",
         "maximum_limit": 1000,
         "opaque_cursor": true
+      }
+    },
+    {
+      "operation": "move_cursor",
+      "scope": "agentide.manage",
+      "semantic_ref": "agentide.surface.MoveCursor",
+      "kind": "intent",
+      "inputs": [
+        {
+          "name": "column",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "line",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "agentide.surface.PaneId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "path",
+          "type_ref": "agentide.coding.Path",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "result": {
+        "kind": "intent",
+        "emitted_events": [
+          "agentide.surface.CursorMoved"
+        ]
+      }
+    },
+    {
+      "operation": "open_file",
+      "scope": "agentide.manage",
+      "semantic_ref": "agentide.surface.OpenFile",
+      "kind": "intent",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "line",
+          "type_ref": "Optional<Integer>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "path",
+          "type_ref": "agentide.coding.Path",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "result": {
+        "kind": "intent",
+        "emitted_events": [
+          "agentide.surface.FileOpened"
+        ]
+      }
+    },
+    {
+      "operation": "open_pane",
+      "scope": "agentide.manage",
+      "semantic_ref": "agentide.surface.OpenPane",
+      "kind": "intent",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "kind",
+          "type_ref": "agentide.surface.PaneKind",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "agentide.surface.PaneId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "split",
+          "type_ref": "Optional<agentide.surface.SplitDirection>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "result": {
+        "kind": "intent",
+        "emitted_events": [
+          "agentide.surface.PaneOpened"
+        ]
       }
     },
     {
@@ -785,6 +1343,170 @@
         "kind": "intent",
         "emitted_events": [
           "agentide.coordination.GrantRevoked"
+        ]
+      }
+    },
+    {
+      "operation": "show_diff",
+      "scope": "agentide.manage",
+      "semantic_ref": "agentide.surface.ShowDiff",
+      "kind": "intent",
+      "inputs": [
+        {
+          "name": "base",
+          "type_ref": "Optional<String>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "pane_id",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "path",
+          "type_ref": "Optional<agentide.coding.Path>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "result": {
+        "kind": "intent",
+        "emitted_events": [
+          "agentide.surface.DiffShown"
+        ]
+      }
+    },
+    {
+      "operation": "snapshot_surface",
+      "scope": "agentide.manage",
+      "semantic_ref": "agentide.surface.SnapshotSurface",
+      "kind": "intent",
+      "inputs": [
+        {
+          "name": "expected_version",
+          "type_ref": "Integer",
+          "optional": false,
+          "source": {
+            "kind": "expected_version"
+          }
+        },
+        {
+          "name": "focused_pane",
+          "type_ref": "Optional<agentide.surface.PaneId>",
+          "optional": true,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "idempotency_key",
+          "type_ref": "String",
+          "optional": false,
+          "source": {
+            "kind": "idempotency"
+          }
+        },
+        {
+          "name": "open_files",
+          "type_ref": "List<agentide.coding.Path>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "panes",
+          "type_ref": "List<agentide.surface.PaneSnapshot>",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "request_id",
+          "type_ref": "agentide.session.RequestId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        },
+        {
+          "name": "session_id",
+          "type_ref": "agentide.session.SessionId",
+          "optional": false,
+          "source": {
+            "kind": "command"
+          }
+        }
+      ],
+      "result": {
+        "kind": "intent",
+        "emitted_events": [
+          "agentide.surface.SurfaceObserved"
         ]
       }
     },

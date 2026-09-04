@@ -1,0 +1,8 @@
+{
+  "format": "agentide.renderer-target/2",
+  "id": "vanilla",
+  "framework": "vanilla-dom",
+  "frame_format": "agentide.renderer-frame/2",
+  "event_format": "agentide.renderer-event/2",
+  "action_format": "agentide.renderer-action/2"
+}

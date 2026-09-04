@@ -13,19 +13,35 @@
     },
     "pane_id": {
       "$ref": "#/$defs/agentide.surface.PaneId"
+    },
+    "panes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/agentide.surface.PaneSnapshot"
+      }
+    },
+    "focused_pane": {
+      "$ref": "#/$defs/agentide.surface.PaneId"
+    },
+    "open_files": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/agentide.coding.Path"
+      }
     }
   },
   "required": [
     "session_id",
     "path",
-    "pane_id"
+    "panes",
+    "open_files"
   ],
   "additionalProperties": false,
   "x-ess-provenance": {
     "system": "agentide",
     "specification_version": "v1",
-    "source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
-    "contract_digest": "826c5d8f0b9d537d9d326b34f86f79f1b2eaae591d44cab462120b1672ae4f35",
+    "source_digest": "509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab",
+    "contract_digest": "6975996d2cdb2beab5105f6452760e4603560848325002f5c4c74955d40f3a60",
     "regenerate": "ess generate"
   },
   "$defs": {
@@ -46,6 +62,54 @@
       "x-ess-name": "agentide.surface.PaneId",
       "x-ess-kind": "newtype",
       "type": "string"
+    },
+    "agentide.surface.PaneKind": {
+      "title": "PaneKind",
+      "x-ess-name": "agentide.surface.PaneKind",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Editor",
+        "Diff",
+        "Terminal",
+        "Chat",
+        "Timeline",
+        "Agents",
+        "Approvals",
+        "Evidence"
+      ]
+    },
+    "agentide.surface.PaneSnapshot": {
+      "title": "PaneSnapshot",
+      "x-ess-name": "agentide.surface.PaneSnapshot",
+      "x-ess-kind": "struct",
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/agentide.surface.PaneId"
+        },
+        "kind": {
+          "$ref": "#/$defs/agentide.surface.PaneKind"
+        },
+        "title": {
+          "type": "string"
+        },
+        "path": {
+          "$ref": "#/$defs/agentide.coding.Path"
+        },
+        "line": {
+          "type": "integer"
+        },
+        "column": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "title"
+      ],
+      "additionalProperties": false
     }
   }
 }

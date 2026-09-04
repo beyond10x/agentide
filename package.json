@@ -1,16 +1,24 @@
 {
   "name": "@b10x/agentide-ui",
-  "version": "0.3.0",
+  "version": "0.3.4",
   "private": true,
   "type": "module",
   "exports": {
     "./protocol": "./web/src/renderer/protocol.ts",
+    "./controller": "./web/src/controller/workbench.ts",
+    "./adapters/editor": "./web/src/adapters/editor.ts",
+    "./adapters/terminal": "./web/src/adapters/terminal.ts",
+    "./markdown": "./web/src/renderer/markdown.ts",
+    "./styles": "./web/src/styles.css",
     "./vanilla": "./web/src/renderer/vanilla.ts",
     "./vue": "./web/src/renderer/vue.ts"
   },
   "files": [
     "web/src/generated",
-    "web/src/renderer"
+    "web/src/renderer",
+    "web/src/controller",
+    "web/src/adapters",
+    "web/src/styles.css"
   ],
   "peerDependencies": {
     "vue": "^3.5.0"

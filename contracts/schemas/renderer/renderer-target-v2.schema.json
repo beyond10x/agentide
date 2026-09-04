@@ -1,0 +1,42 @@
+{
+  "$id": "https://beyond10x.github.io/agentide/contracts/renderer/renderer-target-v2.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One renderer implementation discoverable by a browser host.",
+  "properties": {
+    "action_format": {
+      "description": "Emitted action format.",
+      "type": "string"
+    },
+    "event_format": {
+      "description": "Accepted event format.",
+      "type": "string"
+    },
+    "format": {
+      "description": "Contract discriminator.",
+      "type": "string"
+    },
+    "frame_format": {
+      "description": "Accepted frame format.",
+      "type": "string"
+    },
+    "framework": {
+      "description": "Informational implementation family.",
+      "type": "string"
+    },
+    "id": {
+      "description": "Stable target name.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "format",
+    "id",
+    "framework",
+    "frame_format",
+    "event_format",
+    "action_format"
+  ],
+  "title": "RendererTargetManifest",
+  "type": "object"
+}

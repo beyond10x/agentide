@@ -3,11 +3,11 @@
   "ess": {
     "system": "agentide",
     "version": "v1",
-    "source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3"
+    "source_digest": "509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab"
   },
   "synthesis": {
     "profile": "component-skeletons",
-    "digest": "8a28459e7f04c157bcf71ea474042b5e7d81c8bf6538d6111ae26b34de72acc9",
+    "digest": "7a0cff5a99b3db3cd317ea830bbc584040f52dd80fad151a8586b23cbcf36b6e",
     "capabilities": 186
   },
   "obligation_catalog": {
@@ -390,6 +390,245 @@
           "require_active_session",
           "nested_approval_checkpoint"
         ]
+      },
+      {
+        "name": "snapshot_surface",
+        "scope": "agentide.manage",
+        "command": "agentide.surface.SnapshotSurface",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "operation_field",
+          "field": "expected_version"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [],
+        "projections": [
+          "workbench_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_workbench_stream",
+          "authorize_session_owner",
+          "require_active_session",
+          "inherit_workbench_authority"
+        ]
+      },
+      {
+        "name": "open_file",
+        "scope": "agentide.manage",
+        "command": "agentide.surface.OpenFile",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "operation_field",
+          "field": "expected_version"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [],
+        "projections": [
+          "workbench_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_workbench_stream",
+          "authorize_session_owner",
+          "authorize_workbench_owner",
+          "require_active_session",
+          "nested_workbench"
+        ]
+      },
+      {
+        "name": "close_file",
+        "scope": "agentide.manage",
+        "command": "agentide.surface.CloseFile",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "operation_field",
+          "field": "expected_version"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [],
+        "projections": [
+          "workbench_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_workbench_stream",
+          "authorize_session_owner",
+          "authorize_workbench_owner",
+          "require_active_session",
+          "nested_workbench"
+        ]
+      },
+      {
+        "name": "open_pane",
+        "scope": "agentide.manage",
+        "command": "agentide.surface.OpenPane",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "operation_field",
+          "field": "expected_version"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [],
+        "projections": [
+          "workbench_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_workbench_stream",
+          "authorize_session_owner",
+          "authorize_workbench_owner",
+          "require_active_session",
+          "nested_workbench"
+        ]
+      },
+      {
+        "name": "close_pane",
+        "scope": "agentide.manage",
+        "command": "agentide.surface.ClosePane",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "operation_field",
+          "field": "expected_version"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [],
+        "projections": [
+          "workbench_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_workbench_stream",
+          "authorize_session_owner",
+          "authorize_workbench_owner",
+          "require_active_session",
+          "nested_workbench"
+        ]
+      },
+      {
+        "name": "focus_pane",
+        "scope": "agentide.manage",
+        "command": "agentide.surface.FocusPane",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "operation_field",
+          "field": "expected_version"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [],
+        "projections": [
+          "workbench_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_workbench_stream",
+          "authorize_session_owner",
+          "authorize_workbench_owner",
+          "require_active_session",
+          "nested_workbench"
+        ]
+      },
+      {
+        "name": "move_cursor",
+        "scope": "agentide.manage",
+        "command": "agentide.surface.MoveCursor",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "operation_field",
+          "field": "expected_version"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [],
+        "projections": [
+          "workbench_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_workbench_stream",
+          "authorize_session_owner",
+          "authorize_workbench_owner",
+          "require_active_session",
+          "nested_workbench"
+        ]
+      },
+      {
+        "name": "show_diff",
+        "scope": "agentide.manage",
+        "command": "agentide.surface.ShowDiff",
+        "stream_id": {
+          "kind": "command_field",
+          "field": "session_id"
+        },
+        "expected_version": {
+          "kind": "operation_field",
+          "field": "expected_version"
+        },
+        "idempotency": {
+          "kind": "operation_field",
+          "field": "idempotency_key"
+        },
+        "guards": [],
+        "content": [],
+        "event_bindings": [],
+        "projections": [
+          "workbench_snapshot_projection"
+        ],
+        "obligations": [
+          "bind_workbench_stream",
+          "authorize_session_owner",
+          "authorize_workbench_owner",
+          "require_active_session",
+          "nested_workbench"
+        ]
       }
     ],
     "projections": [
@@ -428,6 +667,16 @@
         "obligations": [
           "partition_session_projection",
           "inherit_checkpoint_authority",
+          "hide_closed_session_children"
+        ]
+      },
+      {
+        "name": "workbench_snapshot_projection",
+        "view": "agentide.surface.WorkbenchSnapshot",
+        "delivery": "inline_transactional",
+        "obligations": [
+          "partition_workbench_projection",
+          "inherit_workbench_authority",
           "hide_closed_session_children"
         ]
       }
@@ -681,6 +930,62 @@
           "filter_visible_sessions",
           "hide_closed_session_children"
         ]
+      },
+      {
+        "name": "get_workbench",
+        "scope": "agentide.read",
+        "view": "agentide.surface.WorkbenchSnapshot",
+        "projection": "workbench_snapshot_projection",
+        "selectors": [
+          {
+            "parameter": "session_id",
+            "view_field": "session_id"
+          }
+        ],
+        "guards": [
+          {
+            "name": "workbench_is_visible",
+            "refusal_code": "workbench_not_found",
+            "reads": [
+              {
+                "kind": "view_field",
+                "field": "owner"
+              },
+              {
+                "kind": "view_field",
+                "field": "scopes"
+              },
+              {
+                "kind": "context",
+                "value": "tenant_id"
+              },
+              {
+                "kind": "context",
+                "value": "realm_id_optional"
+              },
+              {
+                "kind": "context",
+                "value": "current_authority"
+              },
+              {
+                "kind": "context",
+                "value": "executor_optional"
+              }
+            ]
+          }
+        ],
+        "sort": [
+          {
+            "view_field": "session_id",
+            "direction": "ascending"
+          }
+        ],
+        "delivery": "read_your_writes",
+        "obligations": [
+          "partition_workbench_projection",
+          "filter_visible_sessions",
+          "hide_closed_session_children"
+        ]
       }
     ],
     "content": [],
@@ -696,6 +1001,16 @@
         "description": "Execute every coordination mutation against one AgentIDE session Eventlog stream."
       },
       {
+        "name": "bind_workbench_stream",
+        "provider": "sdk.aggregate.event-sourced/v1",
+        "bindings": {
+          "aggregate": "agentide.surface.Workbench",
+          "category": "agentide-session",
+          "identity": "session_id"
+        },
+        "description": "Persist workbench transitions in the same actor-private stream as the coding session."
+      },
+      {
         "name": "authorize_session_owner",
         "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
         "bindings": {
@@ -703,6 +1018,15 @@
           "scopes": "agentide.session.CodingSession.scopes"
         },
         "description": "Admit only the verified owner or a currently authorized delegated executor."
+      },
+      {
+        "name": "authorize_workbench_owner",
+        "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+        "bindings": {
+          "owner": "agentide.surface.Workbench.owner",
+          "scopes": "agentide.surface.Workbench.scopes"
+        },
+        "description": "Admit workbench mutations only for the verified session owner."
       },
       {
         "name": "authorize_requested_session_scopes",
@@ -773,6 +1097,17 @@
         "description": "Resolve an approval checkpoint only inside its parent coding-session stream."
       },
       {
+        "name": "nested_workbench",
+        "provider": "sdk.aggregate.nested-entity/v1",
+        "bindings": {
+          "child": "agentide.surface.Workbench",
+          "child_identity": "session_id",
+          "parent": "agentide.session.CodingSession",
+          "parent_identity": "session_id"
+        },
+        "description": "Resolve the workbench only inside the corresponding coding-session stream."
+      },
+      {
         "name": "inherit_grant_authority",
         "provider": "sdk.derive.inherit-parent-authority/v1",
         "bindings": {
@@ -812,6 +1147,19 @@
         "description": "Derive checkpoint visibility from the session; callers cannot supply owner or scope."
       },
       {
+        "name": "inherit_workbench_authority",
+        "provider": "sdk.derive.inherit-parent-authority/v1",
+        "bindings": {
+          "child": "agentide.surface.Workbench",
+          "child_owner": "agentide.surface.Workbench.owner",
+          "child_scopes": "agentide.surface.Workbench.scopes",
+          "parent": "agentide.session.CodingSession",
+          "parent_owner": "agentide.session.CodingSession.owner",
+          "parent_scopes": "agentide.session.CodingSession.scopes"
+        },
+        "description": "Derive workbench visibility from the session; callers cannot supply owner or scope."
+      },
+      {
         "name": "hide_closed_session_children",
         "provider": "sdk.projection.hide-terminal-parent/v1",
         "bindings": {
@@ -829,6 +1177,15 @@
           "scopes": "scopes"
         },
         "description": "Filter every session query with current verified authority."
+      },
+      {
+        "name": "partition_workbench_projection",
+        "provider": "sdk.projection.auth-partitioned-visibility/v1",
+        "bindings": {
+          "owner": "owner",
+          "scopes": "scopes"
+        },
+        "description": "Partition every workbench snapshot by its inherited authenticated authority."
       }
     ]
   },
@@ -848,11 +1205,28 @@
         "scopes": "agentide.session.CodingSession.scopes"
       }
     },
+    "authorize_workbench_owner": {
+      "name": "authorize_workbench_owner",
+      "provider": "sdk.auth.owner-and-conjunctive-scopes/v1",
+      "bindings": {
+        "owner": "agentide.surface.Workbench.owner",
+        "scopes": "agentide.surface.Workbench.scopes"
+      }
+    },
     "bind_session_stream": {
       "name": "bind_session_stream",
       "provider": "sdk.aggregate.event-sourced/v1",
       "bindings": {
         "aggregate": "agentide.session.CodingSession",
+        "category": "agentide-session",
+        "identity": "session_id"
+      }
+    },
+    "bind_workbench_stream": {
+      "name": "bind_workbench_stream",
+      "provider": "sdk.aggregate.event-sourced/v1",
+      "bindings": {
+        "aggregate": "agentide.surface.Workbench",
         "category": "agentide-session",
         "identity": "session_id"
       }
@@ -910,6 +1284,18 @@
         "parent_scopes": "agentide.session.CodingSession.scopes"
       }
     },
+    "inherit_workbench_authority": {
+      "name": "inherit_workbench_authority",
+      "provider": "sdk.derive.inherit-parent-authority/v1",
+      "bindings": {
+        "child": "agentide.surface.Workbench",
+        "child_owner": "agentide.surface.Workbench.owner",
+        "child_scopes": "agentide.surface.Workbench.scopes",
+        "parent": "agentide.session.CodingSession",
+        "parent_owner": "agentide.session.CodingSession.owner",
+        "parent_scopes": "agentide.session.CodingSession.scopes"
+      }
+    },
     "nested_approval_checkpoint": {
       "name": "nested_approval_checkpoint",
       "provider": "sdk.aggregate.nested-entity/v1",
@@ -940,8 +1326,26 @@
         "parent_identity": "session_id"
       }
     },
+    "nested_workbench": {
+      "name": "nested_workbench",
+      "provider": "sdk.aggregate.nested-entity/v1",
+      "bindings": {
+        "child": "agentide.surface.Workbench",
+        "child_identity": "session_id",
+        "parent": "agentide.session.CodingSession",
+        "parent_identity": "session_id"
+      }
+    },
     "partition_session_projection": {
       "name": "partition_session_projection",
+      "provider": "sdk.projection.auth-partitioned-visibility/v1",
+      "bindings": {
+        "owner": "owner",
+        "scopes": "scopes"
+      }
+    },
+    "partition_workbench_projection": {
+      "name": "partition_workbench_projection",
       "provider": "sdk.projection.auth-partitioned-visibility/v1",
       "bindings": {
         "owner": "owner",
@@ -983,6 +1387,80 @@
         "disposition": "obligation",
         "reason": "decided outside the system: durable state is unavailable",
         "contract": "given `agentide.coordination.ApproveCheckpoint` input, decide and enact exactly one outcome — `approved` otherwise, takes `approve` of `agentide.coordination.ApprovalCheckpoint`, emits `agentide.coordination.ApprovalCheckpointApproved`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
+    "close_file": {
+      "command": "agentide.surface.CloseFile",
+      "input_fields": {
+        "focused_pane": "Optional<agentide.surface.PaneId>",
+        "open_files": "List<agentide.coding.Path>",
+        "panes": "List<agentide.surface.PaneSnapshot>",
+        "path": "agentide.coding.Path",
+        "request_id": "agentide.session.RequestId",
+        "session_id": "agentide.session.SessionId"
+      },
+      "emitted_events": [
+        "agentide.surface.FileClosed"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: the requested surface state is unavailable",
+        "contract": "given `agentide.surface.CloseFile` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.FileClosed`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
+    "close_pane": {
+      "command": "agentide.surface.ClosePane",
+      "input_fields": {
+        "focused_pane": "Optional<agentide.surface.PaneId>",
+        "open_files": "List<agentide.coding.Path>",
+        "pane_id": "agentide.surface.PaneId",
+        "panes": "List<agentide.surface.PaneSnapshot>",
+        "request_id": "agentide.session.RequestId",
+        "session_id": "agentide.session.SessionId"
+      },
+      "emitted_events": [
+        "agentide.surface.PaneClosed"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: the requested surface state is unavailable",
+        "contract": "given `agentide.surface.ClosePane` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.PaneClosed`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
       },
       "pipeline": [
         "resolve_idempotency",
@@ -1145,6 +1623,161 @@
         "accept_content"
       ]
     },
+    "focus_pane": {
+      "command": "agentide.surface.FocusPane",
+      "input_fields": {
+        "focused_pane": "Optional<agentide.surface.PaneId>",
+        "open_files": "List<agentide.coding.Path>",
+        "pane_id": "agentide.surface.PaneId",
+        "panes": "List<agentide.surface.PaneSnapshot>",
+        "request_id": "agentide.session.RequestId",
+        "session_id": "agentide.session.SessionId"
+      },
+      "emitted_events": [
+        "agentide.surface.PaneFocused"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: the requested surface state is unavailable",
+        "contract": "given `agentide.surface.FocusPane` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.PaneFocused`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
+    "move_cursor": {
+      "command": "agentide.surface.MoveCursor",
+      "input_fields": {
+        "column": "Integer",
+        "focused_pane": "Optional<agentide.surface.PaneId>",
+        "line": "Integer",
+        "open_files": "List<agentide.coding.Path>",
+        "pane_id": "agentide.surface.PaneId",
+        "panes": "List<agentide.surface.PaneSnapshot>",
+        "path": "agentide.coding.Path",
+        "request_id": "agentide.session.RequestId",
+        "session_id": "agentide.session.SessionId"
+      },
+      "emitted_events": [
+        "agentide.surface.CursorMoved"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: the requested surface state is unavailable",
+        "contract": "given `agentide.surface.MoveCursor` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.CursorMoved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
+    "open_file": {
+      "command": "agentide.surface.OpenFile",
+      "input_fields": {
+        "focused_pane": "Optional<agentide.surface.PaneId>",
+        "line": "Optional<Integer>",
+        "open_files": "List<agentide.coding.Path>",
+        "pane_id": "Optional<agentide.surface.PaneId>",
+        "panes": "List<agentide.surface.PaneSnapshot>",
+        "path": "agentide.coding.Path",
+        "request_id": "agentide.session.RequestId",
+        "session_id": "agentide.session.SessionId"
+      },
+      "emitted_events": [
+        "agentide.surface.FileOpened"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: the requested surface state is unavailable",
+        "contract": "given `agentide.surface.OpenFile` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.FileOpened`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
+    "open_pane": {
+      "command": "agentide.surface.OpenPane",
+      "input_fields": {
+        "focused_pane": "Optional<agentide.surface.PaneId>",
+        "kind": "agentide.surface.PaneKind",
+        "open_files": "List<agentide.coding.Path>",
+        "pane_id": "agentide.surface.PaneId",
+        "panes": "List<agentide.surface.PaneSnapshot>",
+        "request_id": "agentide.session.RequestId",
+        "session_id": "agentide.session.SessionId",
+        "split": "Optional<agentide.surface.SplitDirection>"
+      },
+      "emitted_events": [
+        "agentide.surface.PaneOpened"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: the requested surface state is unavailable",
+        "contract": "given `agentide.surface.OpenPane` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.PaneOpened`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
     "pin_context": {
       "command": "agentide.coordination.PinContext",
       "input_fields": {
@@ -1271,6 +1904,81 @@
         "disposition": "obligation",
         "reason": "decided outside the system: durable state is unavailable",
         "contract": "given `agentide.coordination.RevokeGrant` input, decide and enact exactly one outcome — `revoked` otherwise, takes `revoke` of `agentide.coordination.AuthorityGrant`, emits `agentide.coordination.GrantRevoked`; `wrong-state` from a state no declared move starts in, error `agentide.coordination.CoordinationStateConflict`; `refused` externally decided (durable state is unavailable), error `agentide.coordination.CoordinationRefusal`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
+    "show_diff": {
+      "command": "agentide.surface.ShowDiff",
+      "input_fields": {
+        "base": "Optional<String>",
+        "focused_pane": "Optional<agentide.surface.PaneId>",
+        "open_files": "List<agentide.coding.Path>",
+        "pane_id": "Optional<agentide.surface.PaneId>",
+        "panes": "List<agentide.surface.PaneSnapshot>",
+        "path": "Optional<agentide.coding.Path>",
+        "request_id": "agentide.session.RequestId",
+        "session_id": "agentide.session.SessionId"
+      },
+      "emitted_events": [
+        "agentide.surface.DiffShown"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: the requested surface state is unavailable",
+        "contract": "given `agentide.surface.ShowDiff` input, decide and enact exactly one outcome — `completed` otherwise, updates `agentide.surface.Workbench`, emits `agentide.surface.DiffShown`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
+      },
+      "pipeline": [
+        "resolve_idempotency",
+        "resolve_stream",
+        "load",
+        "fold",
+        "guards",
+        "stage_content",
+        "construct_command",
+        "validate",
+        "decide",
+        "guarded_append",
+        "reduce",
+        "project",
+        "accept_content"
+      ]
+    },
+    "snapshot_surface": {
+      "command": "agentide.surface.SnapshotSurface",
+      "input_fields": {
+        "focused_pane": "Optional<agentide.surface.PaneId>",
+        "open_files": "List<agentide.coding.Path>",
+        "panes": "List<agentide.surface.PaneSnapshot>",
+        "request_id": "agentide.session.RequestId",
+        "session_id": "agentide.session.SessionId"
+      },
+      "emitted_events": [
+        "agentide.surface.SurfaceObserved"
+      ],
+      "contract": {
+        "disposition": "generated"
+      },
+      "behavior": {
+        "disposition": "obligation",
+        "reason": "decided outside the system: the requested surface state is unavailable",
+        "contract": "given `agentide.surface.SnapshotSurface` input, decide and enact exactly one outcome — `completed` otherwise, creates `agentide.surface.Workbench`, emits `agentide.surface.SurfaceObserved`; `refused` externally decided (the requested surface state is unavailable), error `agentide.surface.SurfaceFailure`"
       },
       "pipeline": [
         "resolve_idempotency",
@@ -1422,6 +2130,27 @@
         "reason": "how the projection is kept current is a storage decision",
         "contract": "a query answering `agentide.session.SessionSnapshot` with rows projected from `agentide.session.CodingSession` at `read_your_writes` consistency"
       }
+    },
+    "workbench_snapshot_projection": {
+      "view": "agentide.surface.WorkbenchSnapshot",
+      "fields": {
+        "coding_session_id": "agentide.session.SessionId",
+        "focused_pane": "Optional<agentide.surface.PaneId>",
+        "open_files": "List<agentide.coding.Path>",
+        "owner": "String",
+        "panes": "List<agentide.surface.PaneSnapshot>",
+        "scopes": "agentide.session.SessionScopes",
+        "session_id": "agentide.session.SessionId"
+      },
+      "consistency": "read_your_writes",
+      "view_type": {
+        "disposition": "generated"
+      },
+      "view_query": {
+        "disposition": "obligation",
+        "reason": "how the projection is kept current is a storage decision",
+        "contract": "a query answering `agentide.surface.WorkbenchSnapshot` with rows projected from `agentide.surface.Workbench` at `read_your_writes` consistency"
+      }
     }
   },
   "queries": {
@@ -1447,6 +2176,32 @@
         "disposition": "obligation",
         "reason": "how the projection is kept current is a storage decision",
         "contract": "a query answering `agentide.session.SessionSnapshot` with rows projected from `agentide.session.CodingSession` at `read_your_writes` consistency"
+      },
+      "pipeline": [
+        "guards",
+        "bind_selectors",
+        "read_projection"
+      ]
+    },
+    "get_workbench": {
+      "view": "agentide.surface.WorkbenchSnapshot",
+      "projection": "workbench_snapshot_projection",
+      "fields": {
+        "coding_session_id": "agentide.session.SessionId",
+        "focused_pane": "Optional<agentide.surface.PaneId>",
+        "open_files": "List<agentide.coding.Path>",
+        "owner": "String",
+        "panes": "List<agentide.surface.PaneSnapshot>",
+        "scopes": "agentide.session.SessionScopes",
+        "session_id": "agentide.session.SessionId"
+      },
+      "view_type": {
+        "disposition": "generated"
+      },
+      "view_query": {
+        "disposition": "obligation",
+        "reason": "how the projection is kept current is a storage decision",
+        "contract": "a query answering `agentide.surface.WorkbenchSnapshot` with rows projected from `agentide.surface.Workbench` at `read_your_writes` consistency"
       },
       "pipeline": [
         "guards",

@@ -17,7 +17,7 @@
   "x-ess-provenance": {
     "system": "agentide",
     "specification_version": "v1",
-    "source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
+    "source_digest": "509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab",
     "contract_digest": "f5e7317bb074ca075c05defe611b17032cb81ce9d88f0195711a740a4c2d02e6",
     "regenerate": "ess generate"
   }

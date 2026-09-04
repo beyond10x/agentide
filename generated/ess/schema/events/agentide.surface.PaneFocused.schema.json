@@ -10,21 +10,44 @@
     },
     "pane_id": {
       "$ref": "#/$defs/agentide.surface.PaneId"
+    },
+    "panes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/agentide.surface.PaneSnapshot"
+      }
+    },
+    "focused_pane": {
+      "$ref": "#/$defs/agentide.surface.PaneId"
+    },
+    "open_files": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/agentide.coding.Path"
+      }
     }
   },
   "required": [
     "session_id",
-    "pane_id"
+    "pane_id",
+    "panes",
+    "open_files"
   ],
   "additionalProperties": false,
   "x-ess-provenance": {
     "system": "agentide",
     "specification_version": "v1",
-    "source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
-    "contract_digest": "9a3ed08071428f6ae6c78b47cf397d2e8b25d8404dea2cb6ce1059c1f8eb4175",
+    "source_digest": "509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab",
+    "contract_digest": "ee3bfbc26dab3964a4bb586b9f8203de50cafa8bcab869e8c1b12dfcc9be7b8f",
     "regenerate": "ess generate"
   },
   "$defs": {
+    "agentide.coding.Path": {
+      "title": "Path",
+      "x-ess-name": "agentide.coding.Path",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
     "agentide.session.SessionId": {
       "title": "SessionId",
       "x-ess-name": "agentide.session.SessionId",
@@ -36,6 +59,54 @@
       "x-ess-name": "agentide.surface.PaneId",
       "x-ess-kind": "newtype",
       "type": "string"
+    },
+    "agentide.surface.PaneKind": {
+      "title": "PaneKind",
+      "x-ess-name": "agentide.surface.PaneKind",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Editor",
+        "Diff",
+        "Terminal",
+        "Chat",
+        "Timeline",
+        "Agents",
+        "Approvals",
+        "Evidence"
+      ]
+    },
+    "agentide.surface.PaneSnapshot": {
+      "title": "PaneSnapshot",
+      "x-ess-name": "agentide.surface.PaneSnapshot",
+      "x-ess-kind": "struct",
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/agentide.surface.PaneId"
+        },
+        "kind": {
+          "$ref": "#/$defs/agentide.surface.PaneKind"
+        },
+        "title": {
+          "type": "string"
+        },
+        "path": {
+          "$ref": "#/$defs/agentide.coding.Path"
+        },
+        "line": {
+          "type": "integer"
+        },
+        "column": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "title"
+      ],
+      "additionalProperties": false
     }
   }
 }

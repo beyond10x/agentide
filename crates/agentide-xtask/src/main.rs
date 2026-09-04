@@ -12,8 +12,11 @@ use agentide_contracts::{
     DiffHunk, DiffLine, DiffLineKind, DiffMode, DiffProjection, DiffRange, Effect,
     FileModificationState, FileProjection, FileRevision, IntentDefinition, IntentInventory,
     RENDERER_ACTION_FORMAT, RENDERER_EVENT_FORMAT, RENDERER_FRAME_FORMAT, RENDERER_TARGET_FORMAT,
-    RendererAction, RendererActivity, RendererApproval, RendererEvent, RendererFrame, RendererPane,
-    RendererSession, RendererTargetManifest, RendererWorkbench, Risk, SelectionKind,
+    RendererAction, RendererActivity, RendererApproval, RendererContextPin, RendererEditorDocument,
+    RendererEditorProjection, RendererEvent, RendererFrame, RendererGrantState,
+    RendererGrantSummary, RendererPane, RendererPaneKind, RendererPaneProjection, RendererSession,
+    RendererSessionStatus, RendererTargetManifest, RendererTreeEntry, RendererTreeEntryKind,
+    RendererTreeProjection, RendererTreeProjectionKind, RendererWorkbench, Risk, SelectionKind,
     TerminalControl, TerminalControlFrame, TerminalEvent, TerminalProfile, TerminalReplayBounds,
     TerminalServerFrame, TerminalSession, TerminalState, TerminalWorkspaceAccess, TreeEntry,
     TreeEntryKind, TreeProjection, WorkbenchPane,
@@ -22,6 +25,7 @@ use anyhow::{Context, Result, anyhow, bail};
 use ess_compiler::source::SourceMap;
 use ess_domain::spec::{RawSpecFile, Specification};
 use ess_domain::system::Source;
+use sha2::{Digest, Sha256};
 
 type GeneratedDocuments = BTreeMap<PathBuf, Vec<u8>>;
 type HostedContractDocuments = (GeneratedDocuments, GeneratedDocuments);
@@ -47,7 +51,9 @@ fn main() -> Result<()> {
     }
     if command == "generate-renderer-contracts" {
         write_renderer_contracts(root)?;
-        println!("contracts/schemas/renderer contracts/fixtures/renderer");
+        println!(
+            "contracts/schemas/renderer contracts/fixtures/renderer web/src/generated/renderer-protocol.ts"
+        );
         return Ok(());
     }
     if command == "generate-service" {
@@ -203,8 +209,24 @@ fn validate_hosted_contracts(root: &Path) -> Result<()> {
 
 fn write_renderer_contracts(root: &Path) -> Result<()> {
     let (schemas, fixtures) = renderer_contract_documents()?;
-    write_documents(&root.join("contracts/schemas/renderer"), &schemas)?;
-    write_documents(&root.join("contracts/fixtures/renderer"), &fixtures)?;
+    write_documents_incremental(&root.join("contracts/schemas/renderer"), &schemas)?;
+    write_documents_incremental(&root.join("contracts/fixtures/renderer"), &fixtures)?;
+    std::fs::write(
+        root.join("web/src/generated/renderer-protocol.ts"),
+        render_web_renderer_protocol(),
+    )?;
+    Ok(())
+}
+
+fn write_documents_incremental(root: &Path, documents: &GeneratedDocuments) -> Result<()> {
+    std::fs::create_dir_all(root)?;
+    for (path, bytes) in documents {
+        let target = root.join(path);
+        if let Some(parent) = target.parent() {
+            std::fs::create_dir_all(parent)?;
+        }
+        std::fs::write(target, bytes)?;
+    }
     Ok(())
 }
 
@@ -212,9 +234,40 @@ fn validate_renderer_contracts(root: &Path) -> Result<()> {
     let (expected_schemas, expected_fixtures) = renderer_contract_documents()?;
     let observed_schemas = read_tree(&root.join("contracts/schemas/renderer"))?;
     let observed_fixtures = read_tree(&root.join("contracts/fixtures/renderer"))?;
-    if observed_schemas != expected_schemas || observed_fixtures != expected_fixtures {
+    validate_immutable_renderer_v1(&observed_schemas, &observed_fixtures)?;
+    let expected_names = BTreeSet::from([
+        PathBuf::from("renderer-action-v1.schema.json"),
+        PathBuf::from("renderer-action-v2.schema.json"),
+        PathBuf::from("renderer-event-v1.schema.json"),
+        PathBuf::from("renderer-event-v2.schema.json"),
+        PathBuf::from("renderer-frame-v1.schema.json"),
+        PathBuf::from("renderer-frame-v2.schema.json"),
+        PathBuf::from("renderer-target-v1.schema.json"),
+        PathBuf::from("renderer-target-v2.schema.json"),
+    ]);
+    if observed_schemas.keys().cloned().collect::<BTreeSet<_>>() != expected_names
+        || observed_fixtures.keys().cloned().collect::<BTreeSet<_>>() != expected_names
+        || expected_schemas
+            .iter()
+            .any(|(path, expected)| observed_schemas.get(path) != Some(expected))
+        || expected_fixtures
+            .iter()
+            .any(|(path, expected)| observed_fixtures.get(path) != Some(expected))
+    {
         bail!(
             "renderer contracts drifted; regenerate with `cargo xtask generate-renderer-contracts`"
+        );
+    }
+    let generated_protocol = root.join("web/src/generated/renderer-protocol.ts");
+    if std::fs::read_to_string(&generated_protocol).with_context(|| {
+        format!(
+            "reading {}; regenerate it with `cargo xtask generate-renderer-contracts`",
+            generated_protocol.display()
+        )
+    })? != render_web_renderer_protocol()
+    {
+        bail!(
+            "web renderer protocol has drifted; regenerate with `cargo xtask generate-renderer-contracts`"
         );
     }
     for (path, schema_bytes) in &observed_schemas {
@@ -240,6 +293,83 @@ fn validate_renderer_contracts(root: &Path) -> Result<()> {
     Ok(())
 }
 
+fn validate_immutable_renderer_v1(
+    schemas: &GeneratedDocuments,
+    fixtures: &GeneratedDocuments,
+) -> Result<()> {
+    const SCHEMAS: [(&str, &str); 4] = [
+        (
+            "renderer-action-v1.schema.json",
+            "a9bd166b1e8d38d6b8bd4c8361d3c33716233b726ed0a764dcb2ff67a89123f8",
+        ),
+        (
+            "renderer-event-v1.schema.json",
+            "71b9f794a10e5f6de84d1cc1f5f7c9a4f90b866c572e771fb26908d20d0c426d",
+        ),
+        (
+            "renderer-frame-v1.schema.json",
+            "54936aa8d19a29ab3ccf533f61cd96a47542375812e2ba095bb64d3cfb399fea",
+        ),
+        (
+            "renderer-target-v1.schema.json",
+            "86b0857d75eb3d68a73dc3893c41a7137944ac3d6886e42778a145aa28d43654",
+        ),
+    ];
+    const FIXTURES: [(&str, &str); 4] = [
+        (
+            "renderer-action-v1.schema.json",
+            "ef86b0ae314fcc78dc3c9e79a2899acb61df7be285d76cbaeffce7016b0ead26",
+        ),
+        (
+            "renderer-event-v1.schema.json",
+            "43eccd588a2902b7bd599f98f9a8425a29b36e0383771d7a86d2e3ee204b15fc",
+        ),
+        (
+            "renderer-frame-v1.schema.json",
+            "9c1e0848f9bf5db5c30c6d3480ab76db35dc5aded3af17f51bb8d9a6cd04ba3c",
+        ),
+        (
+            "renderer-target-v1.schema.json",
+            "b95e95bd60f1e9eec6912ba80c94301fbd9b039fcf26fcba861cdaeeaf565e2d",
+        ),
+    ];
+    for (root, expected) in [
+        (schemas, SCHEMAS.as_slice()),
+        (fixtures, FIXTURES.as_slice()),
+    ] {
+        for (path, digest) in expected {
+            let bytes = root
+                .get(Path::new(path))
+                .ok_or_else(|| anyhow!("immutable renderer v1 artifact {path} is missing"))?;
+            let observed = hex_digest(&Sha256::digest(bytes));
+            if observed != *digest {
+                bail!("immutable renderer v1 artifact {path} changed")
+            }
+        }
+    }
+    Ok(())
+}
+
+fn hex_digest(bytes: &[u8]) -> String {
+    const DIGITS: &[u8; 16] = b"0123456789abcdef";
+    let mut output = String::with_capacity(bytes.len() * 2);
+    for byte in bytes {
+        output.push(char::from(DIGITS[usize::from(byte >> 4)]));
+        output.push(char::from(DIGITS[usize::from(byte & 0x0f)]));
+    }
+    output
+}
+
+fn render_web_renderer_protocol() -> String {
+    format!(
+        "// Generated by `cargo xtask generate-renderer-contracts`; do not edit.\n\
+export const rendererProtocolFormat = {RENDERER_TARGET_FORMAT:?} as const;\n\
+export const rendererFrameFormat = {RENDERER_FRAME_FORMAT:?} as const;\n\
+export const rendererEventFormat = {RENDERER_EVENT_FORMAT:?} as const;\n\
+export const rendererActionFormat = {RENDERER_ACTION_FORMAT:?} as const;\n"
+    )
+}
+
 fn renderer_contract_documents() -> Result<HostedContractDocuments> {
     let mut schemas = BTreeMap::new();
     let mut fixtures = BTreeMap::new();
@@ -259,7 +389,7 @@ fn renderer_contract_documents() -> Result<HostedContractDocuments> {
     }
 
     contract!(
-        "renderer-target-v1.schema",
+        "renderer-target-v2.schema",
         RendererTargetManifest,
         RendererTargetManifest {
             format: RENDERER_TARGET_FORMAT.into(),
@@ -271,20 +401,20 @@ fn renderer_contract_documents() -> Result<HostedContractDocuments> {
         }
     );
     contract!(
-        "renderer-frame-v1.schema",
+        "renderer-frame-v2.schema",
         RendererFrame,
         RendererFrame {
             format: RENDERER_FRAME_FORMAT.into(),
             session: RendererSession {
                 id: "session-renderer-fixture".into(),
                 objective: "Compare browser renderer targets".into(),
-                status: "active".into(),
+                status: RendererSessionStatus::Active,
                 cursor: 7,
             },
             workbench: RendererWorkbench {
                 panes: vec![RendererPane {
                     id: "pane-readme".into(),
-                    kind: "editor".into(),
+                    kind: RendererPaneKind::Editor,
                     title: "README.md".into(),
                     path: Some("README.md".into()),
                     line: Some(1),
@@ -292,6 +422,29 @@ fn renderer_contract_documents() -> Result<HostedContractDocuments> {
                 }],
                 focused_pane: Some("pane-readme".into()),
                 open_files: vec!["README.md".into()],
+                projections: BTreeMap::from([(
+                    "pane-readme".into(),
+                    RendererPaneProjection::Editor(RendererEditorProjection {
+                        document: RendererEditorDocument {
+                            path: "README.md".into(),
+                            language: "markdown".into(),
+                            content: "# AgentIDE".into(),
+                            version: "sha256:fixture".into(),
+                            read_only: false,
+                            dirty: false,
+                        },
+                    }),
+                )]),
+                tree: Some(RendererTreeProjection {
+                    kind: RendererTreeProjectionKind::Tree,
+                    root: String::new(),
+                    entries: vec![RendererTreeEntry {
+                        path: "README.md".into(),
+                        name: "README.md".into(),
+                        kind: RendererTreeEntryKind::File,
+                    }],
+                    next_cursor: None,
+                }),
             },
             pending_approvals: vec![RendererApproval {
                 digest: "a".repeat(64),
@@ -299,26 +452,38 @@ fn renderer_contract_documents() -> Result<HostedContractDocuments> {
                 risk: Some("workspace_write".into()),
                 approval_required: true,
             }],
+            context_pins: vec![RendererContextPin {
+                id: "pin-readme".into(),
+                label: "README introduction".into(),
+                source: "workspace:README.md#L1".into(),
+            }],
+            grants: vec![RendererGrantSummary {
+                id: "grant-code-read".into(),
+                capability: "code_read".into(),
+                state: RendererGrantState::Active,
+            }],
             activity: vec![RendererActivity {
                 sequence: 7,
                 at: "2026-09-03T12:00:00Z".into(),
                 kind: "intent.completed".into(),
                 intent: Some("code_read".into()),
             }],
-            observation: Some(serde_json::json!({"path": "README.md"})),
+            preparation: None,
             notice: None,
         }
     );
     contract!(
-        "renderer-event-v1.schema",
+        "renderer-event-v2.schema",
         RendererEvent,
-        RendererEvent::Notice {
+        RendererEvent::AssistantDelta {
             format: RENDERER_EVENT_FORMAT.into(),
-            message: "Host observation".into(),
+            message_id: "message-agent-1".into(),
+            sequence: 1,
+            markdown_delta: "**ready**".into(),
         }
     );
     contract!(
-        "renderer-action-v1.schema",
+        "renderer-action-v2.schema",
         RendererAction,
         RendererAction::OpenFile {
             format: RENDERER_ACTION_FORMAT.into(),

@@ -15,12 +15,27 @@ obligations:
       category: agentide-session
     description: Execute every coordination mutation against one AgentIDE session Eventlog stream.
 
+  - name: bind_workbench_stream
+    provider: sdk.aggregate.event-sourced/v1
+    bindings:
+      aggregate: agentide.surface.Workbench
+      identity: session_id
+      category: agentide-session
+    description: Persist workbench transitions in the same actor-private stream as the coding session.
+
   - name: authorize_session_owner
     provider: sdk.auth.owner-and-conjunctive-scopes/v1
     bindings:
       owner: agentide.session.CodingSession.owner
       scopes: agentide.session.CodingSession.scopes
     description: Admit only the verified owner or a currently authorized delegated executor.
+
+  - name: authorize_workbench_owner
+    provider: sdk.auth.owner-and-conjunctive-scopes/v1
+    bindings:
+      owner: agentide.surface.Workbench.owner
+      scopes: agentide.surface.Workbench.scopes
+    description: Admit workbench mutations only for the verified session owner.
 
   - name: authorize_requested_session_scopes
     provider: sdk.auth.requested-scopes/v1
@@ -71,6 +86,15 @@ obligations:
       child_identity: checkpoint_id
     description: Resolve an approval checkpoint only inside its parent coding-session stream.
 
+  - name: nested_workbench
+    provider: sdk.aggregate.nested-entity/v1
+    bindings:
+      parent: agentide.session.CodingSession
+      child: agentide.surface.Workbench
+      parent_identity: session_id
+      child_identity: session_id
+    description: Resolve the workbench only inside the corresponding coding-session stream.
+
   - name: inherit_grant_authority
     provider: sdk.derive.inherit-parent-authority/v1
     bindings:
@@ -104,6 +128,17 @@ obligations:
       child_scopes: agentide.coordination.ApprovalCheckpoint.scopes
     description: Derive checkpoint visibility from the session; callers cannot supply owner or scope.
 
+  - name: inherit_workbench_authority
+    provider: sdk.derive.inherit-parent-authority/v1
+    bindings:
+      parent: agentide.session.CodingSession
+      child: agentide.surface.Workbench
+      parent_owner: agentide.session.CodingSession.owner
+      parent_scopes: agentide.session.CodingSession.scopes
+      child_owner: agentide.surface.Workbench.owner
+      child_scopes: agentide.surface.Workbench.scopes
+    description: Derive workbench visibility from the session; callers cannot supply owner or scope.
+
   - name: hide_closed_session_children
     provider: sdk.projection.hide-terminal-parent/v1
     bindings:
@@ -116,6 +151,11 @@ obligations:
     provider: sdk.auth.owner-and-conjunctive-scopes/v1
     bindings: {owner: owner, scopes: scopes}
     description: Filter every session query with current verified authority.
+
+  - name: partition_workbench_projection
+    provider: sdk.projection.auth-partitioned-visibility/v1
+    bindings: {owner: owner, scopes: scopes}
+    description: Partition every workbench snapshot by its inherited authenticated authority.
 
 projections:
   - name: session_snapshot_projection
@@ -137,6 +177,11 @@ projections:
     view: agentide.coordination.ApprovalCheckpointSnapshot
     delivery: inline_transactional
     obligations: [partition_session_projection, inherit_checkpoint_authority, hide_closed_session_children]
+
+  - name: workbench_snapshot_projection
+    view: agentide.surface.WorkbenchSnapshot
+    delivery: inline_transactional
+    obligations: [partition_workbench_projection, inherit_workbench_authority, hide_closed_session_children]
 
 intents:
   - name: start_session
@@ -259,6 +304,78 @@ intents:
     projections: [approval_checkpoint_snapshot_projection]
     obligations: [bind_session_stream, authorize_session_owner, require_active_session, nested_approval_checkpoint]
 
+  - name: snapshot_surface
+    scope: agentide.manage
+    command: agentide.surface.SnapshotSurface
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: operation_field, field: expected_version}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    projections: [workbench_snapshot_projection]
+    obligations: [bind_workbench_stream, authorize_session_owner, require_active_session, inherit_workbench_authority]
+
+  - name: open_file
+    scope: agentide.manage
+    command: agentide.surface.OpenFile
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: operation_field, field: expected_version}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    projections: [workbench_snapshot_projection]
+    obligations: [bind_workbench_stream, authorize_session_owner, authorize_workbench_owner, require_active_session, nested_workbench]
+
+  - name: close_file
+    scope: agentide.manage
+    command: agentide.surface.CloseFile
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: operation_field, field: expected_version}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    projections: [workbench_snapshot_projection]
+    obligations: [bind_workbench_stream, authorize_session_owner, authorize_workbench_owner, require_active_session, nested_workbench]
+
+  - name: open_pane
+    scope: agentide.manage
+    command: agentide.surface.OpenPane
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: operation_field, field: expected_version}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    projections: [workbench_snapshot_projection]
+    obligations: [bind_workbench_stream, authorize_session_owner, authorize_workbench_owner, require_active_session, nested_workbench]
+
+  - name: close_pane
+    scope: agentide.manage
+    command: agentide.surface.ClosePane
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: operation_field, field: expected_version}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    projections: [workbench_snapshot_projection]
+    obligations: [bind_workbench_stream, authorize_session_owner, authorize_workbench_owner, require_active_session, nested_workbench]
+
+  - name: focus_pane
+    scope: agentide.manage
+    command: agentide.surface.FocusPane
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: operation_field, field: expected_version}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    projections: [workbench_snapshot_projection]
+    obligations: [bind_workbench_stream, authorize_session_owner, authorize_workbench_owner, require_active_session, nested_workbench]
+
+  - name: move_cursor
+    scope: agentide.manage
+    command: agentide.surface.MoveCursor
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: operation_field, field: expected_version}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    projections: [workbench_snapshot_projection]
+    obligations: [bind_workbench_stream, authorize_session_owner, authorize_workbench_owner, require_active_session, nested_workbench]
+
+  - name: show_diff
+    scope: agentide.manage
+    command: agentide.surface.ShowDiff
+    stream_id: {kind: command_field, field: session_id}
+    expected_version: {kind: operation_field, field: expected_version}
+    idempotency: {kind: operation_field, field: idempotency_key}
+    projections: [workbench_snapshot_projection]
+    obligations: [bind_workbench_stream, authorize_session_owner, authorize_workbench_owner, require_active_session, nested_workbench]
+
 queries:
   - name: get_session
     scope: agentide.read
@@ -357,3 +474,24 @@ queries:
       - {view_field: checkpoint_id, direction: ascending}
     delivery: read_your_writes
     obligations: [partition_session_projection, filter_visible_sessions, hide_closed_session_children]
+
+  - name: get_workbench
+    scope: agentide.read
+    view: agentide.surface.WorkbenchSnapshot
+    projection: workbench_snapshot_projection
+    selectors:
+      - {parameter: session_id, view_field: session_id}
+    guards:
+      - name: workbench_is_visible
+        refusal_code: workbench_not_found
+        reads:
+          - {kind: view_field, field: owner}
+          - {kind: view_field, field: scopes}
+          - {kind: context, value: tenant_id}
+          - {kind: context, value: realm_id_optional}
+          - {kind: context, value: current_authority}
+          - {kind: context, value: executor_optional}
+    sort:
+      - {view_field: session_id, direction: ascending}
+    delivery: read_your_writes
+    obligations: [partition_workbench_projection, filter_visible_sessions, hide_closed_session_children]

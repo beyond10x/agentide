@@ -1,6 +1,6 @@
 # generated from agentide v1
-# model digest 360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3
-# contract digest 26289f0ed3a5b78a46e32fe6615504f8461ee3c9545df7b9e9c23d6d4c7675f6
+# model digest 509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab
+# contract digest ed3593ffb7cb447522ffa77d7557ff51fe62a095924f66547513eb2541be2a45
 # do not edit: regenerate with `ess generate`
 openapi: 3.1.0
 info:
@@ -16,8 +16,8 @@ info:
   x-ess-provenance:
     system: agentide
     specification_version: v1
-    source_digest: 360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3
-    contract_digest: 26289f0ed3a5b78a46e32fe6615504f8461ee3c9545df7b9e9c23d6d4c7675f6
+    source_digest: 509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab
+    contract_digest: ed3593ffb7cb447522ffa77d7557ff51fe62a095924f66547513eb2541be2a45
   x-ess-reached-by: network
 tags:
 - name: coding
@@ -4037,14 +4037,26 @@ components:
           $ref: '#/components/schemas/agentide.session.RequestId'
         path:
           $ref: '#/components/schemas/agentide.coding.Path'
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.surface.PaneSnapshot'
+        focused_pane:
+          $ref: '#/components/schemas/agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.coding.Path'
       required:
       - session_id
       - request_id
       - path
+      - panes
+      - open_files
       additionalProperties: false
     agentide.surface.CloseFile.completed.Response:
       additionalProperties: false
-      description: Taken when no other outcome's condition matched. Emits `SurfaceObserved`, published to consumers rather than returned here.
+      description: Taken when no other outcome's condition matched. A `agentide.surface.Workbench` has changed, and its state is unchanged. The instance is the one `session_id` names. Emits `FileClosed`, published to consumers rather than returned here.
       properties:
         outcome:
           const: completed
@@ -4082,14 +4094,26 @@ components:
           $ref: '#/components/schemas/agentide.session.RequestId'
         pane_id:
           $ref: '#/components/schemas/agentide.surface.PaneId'
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.surface.PaneSnapshot'
+        focused_pane:
+          $ref: '#/components/schemas/agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.coding.Path'
       required:
       - session_id
       - request_id
       - pane_id
+      - panes
+      - open_files
       additionalProperties: false
     agentide.surface.ClosePane.completed.Response:
       additionalProperties: false
-      description: Taken when no other outcome's condition matched. Emits `SurfaceObserved`, published to consumers rather than returned here.
+      description: Taken when no other outcome's condition matched. A `agentide.surface.Workbench` has changed, and its state is unchanged. The instance is the one `session_id` names. Emits `PaneClosed`, published to consumers rather than returned here.
       properties:
         outcome:
           const: completed
@@ -4127,14 +4151,26 @@ components:
           $ref: '#/components/schemas/agentide.session.RequestId'
         pane_id:
           $ref: '#/components/schemas/agentide.surface.PaneId'
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.surface.PaneSnapshot'
+        focused_pane:
+          $ref: '#/components/schemas/agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.coding.Path'
       required:
       - session_id
       - request_id
       - pane_id
+      - panes
+      - open_files
       additionalProperties: false
     agentide.surface.FocusPane.completed.Response:
       additionalProperties: false
-      description: Taken when no other outcome's condition matched. Emits `SurfaceObserved`, published to consumers rather than returned here.
+      description: Taken when no other outcome's condition matched. A `agentide.surface.Workbench` has changed, and its state is unchanged. The instance is the one `session_id` names. Emits `PaneFocused`, published to consumers rather than returned here.
       properties:
         outcome:
           const: completed
@@ -4178,6 +4214,16 @@ components:
           type: integer
         column:
           type: integer
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.surface.PaneSnapshot'
+        focused_pane:
+          $ref: '#/components/schemas/agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.coding.Path'
       required:
       - session_id
       - request_id
@@ -4185,10 +4231,12 @@ components:
       - path
       - line
       - column
+      - panes
+      - open_files
       additionalProperties: false
     agentide.surface.MoveCursor.completed.Response:
       additionalProperties: false
-      description: Taken when no other outcome's condition matched. Emits `SurfaceObserved`, published to consumers rather than returned here.
+      description: Taken when no other outcome's condition matched. A `agentide.surface.Workbench` has changed, and its state is unchanged. The instance is the one `session_id` names. Emits `CursorMoved`, published to consumers rather than returned here.
       properties:
         outcome:
           const: completed
@@ -4230,14 +4278,26 @@ components:
           type: integer
         pane_id:
           $ref: '#/components/schemas/agentide.surface.PaneId'
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.surface.PaneSnapshot'
+        focused_pane:
+          $ref: '#/components/schemas/agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.coding.Path'
       required:
       - session_id
       - request_id
       - path
+      - panes
+      - open_files
       additionalProperties: false
     agentide.surface.OpenFile.completed.Response:
       additionalProperties: false
-      description: Taken when no other outcome's condition matched. Emits `SurfaceObserved`, published to consumers rather than returned here.
+      description: Taken when no other outcome's condition matched. A `agentide.surface.Workbench` has changed, and its state is unchanged. The instance is the one `session_id` names. Emits `FileOpened`, published to consumers rather than returned here.
       properties:
         outcome:
           const: completed
@@ -4279,15 +4339,27 @@ components:
           $ref: '#/components/schemas/agentide.surface.PaneKind'
         split:
           $ref: '#/components/schemas/agentide.surface.SplitDirection'
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.surface.PaneSnapshot'
+        focused_pane:
+          $ref: '#/components/schemas/agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.coding.Path'
       required:
       - session_id
       - request_id
       - pane_id
       - kind
+      - panes
+      - open_files
       additionalProperties: false
     agentide.surface.OpenPane.completed.Response:
       additionalProperties: false
-      description: Taken when no other outcome's condition matched. Emits `SurfaceObserved`, published to consumers rather than returned here.
+      description: Taken when no other outcome's condition matched. A `agentide.surface.Workbench` has changed, and its state is unchanged. The instance is the one `session_id` names. Emits `PaneOpened`, published to consumers rather than returned here.
       properties:
         outcome:
           const: completed
@@ -4327,6 +4399,7 @@ components:
       - Editor
       - Diff
       - Terminal
+      - Chat
       - Timeline
       - Agents
       - Approvals
@@ -4370,13 +4443,25 @@ components:
           $ref: '#/components/schemas/agentide.coding.Path'
         base:
           type: string
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.surface.PaneSnapshot'
+        focused_pane:
+          $ref: '#/components/schemas/agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.coding.Path'
       required:
       - session_id
       - request_id
+      - panes
+      - open_files
       additionalProperties: false
     agentide.surface.ShowDiff.completed.Response:
       additionalProperties: false
-      description: Taken when no other outcome's condition matched. Emits `SurfaceObserved`, published to consumers rather than returned here.
+      description: Taken when no other outcome's condition matched. A `agentide.surface.Workbench` has changed, and its state is unchanged. The instance is the one `session_id` names. Emits `DiffShown`, published to consumers rather than returned here.
       properties:
         outcome:
           const: completed
@@ -4412,13 +4497,25 @@ components:
           $ref: '#/components/schemas/agentide.session.SessionId'
         request_id:
           $ref: '#/components/schemas/agentide.session.RequestId'
+        panes:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.surface.PaneSnapshot'
+        focused_pane:
+          $ref: '#/components/schemas/agentide.surface.PaneId'
+        open_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/agentide.coding.Path'
       required:
       - session_id
       - request_id
+      - panes
+      - open_files
       additionalProperties: false
     agentide.surface.SnapshotSurface.completed.Response:
       additionalProperties: false
-      description: Taken when no other outcome's condition matched. Emits `SurfaceObserved`, published to consumers rather than returned here.
+      description: Taken when no other outcome's condition matched. A `agentide.surface.Workbench` now exists, in `Active`. Its identity is published as `session_id` on `agentide.surface.SurfaceObserved`. Emits `SurfaceObserved`, published to consumers rather than returned here.
       properties:
         outcome:
           const: completed
@@ -4490,6 +4587,8 @@ components:
       properties:
         session_id:
           $ref: '#/components/schemas/agentide.session.SessionId'
+        coding_session_id:
+          $ref: '#/components/schemas/agentide.session.SessionId'
         panes:
           type: array
           items:
@@ -4500,10 +4599,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/agentide.coding.Path'
+        owner:
+          type: string
+        scopes:
+          $ref: '#/components/schemas/agentide.session.SessionScopes'
       required:
       - session_id
+      - coding_session_id
       - panes
       - open_files
+      - owner
+      - scopes
       additionalProperties: false
 x-ess-entities:
   agentide.coding.Path:
@@ -4806,6 +4912,7 @@ x-ess-entities:
     - Editor
     - Diff
     - Terminal
+    - Chat
     - Timeline
     - Agents
     - Approvals
@@ -4841,6 +4948,16 @@ x-ess-entities:
     properties:
       session_id:
         $ref: '#/x-ess-entities/agentide.session.SessionId'
+      coding_session_id:
+        $ref: '#/x-ess-entities/agentide.session.SessionId'
+        x-ess-relation:
+          name: session
+          kind: references
+          source: agentide.surface.Workbench
+          target: agentide.session.CodingSession
+          cardinality: one
+          via: coding_session_id
+          $ref: '#/x-ess-entities/agentide.session.CodingSession'
       panes:
         type: array
         items:
@@ -4851,12 +4968,19 @@ x-ess-entities:
         type: array
         items:
           $ref: '#/x-ess-entities/agentide.coding.Path'
+      owner:
+        type: string
+      scopes:
+        $ref: '#/x-ess-entities/agentide.session.SessionScopes'
       state:
         $ref: '#/x-ess-entities/agentide.surface.Workbench.State'
     required:
     - session_id
+    - coding_session_id
     - panes
     - open_files
+    - owner
+    - scopes
     - state
     additionalProperties: false
   agentide.surface.Workbench.State:

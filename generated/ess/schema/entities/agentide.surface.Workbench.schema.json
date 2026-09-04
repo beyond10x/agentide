@@ -8,6 +8,17 @@
     "session_id": {
       "$ref": "#/$defs/agentide.session.SessionId"
     },
+    "coding_session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId",
+      "x-ess-relation": {
+        "name": "session",
+        "kind": "references",
+        "source": "agentide.surface.Workbench",
+        "target": "agentide.session.CodingSession",
+        "cardinality": "one",
+        "via": "coding_session_id"
+      }
+    },
     "panes": {
       "type": "array",
       "items": {
@@ -23,22 +34,31 @@
         "$ref": "#/$defs/agentide.coding.Path"
       }
     },
+    "owner": {
+      "type": "string"
+    },
+    "scopes": {
+      "$ref": "#/$defs/agentide.session.SessionScopes"
+    },
     "state": {
       "$ref": "#/$defs/agentide.surface.Workbench.State"
     }
   },
   "required": [
     "session_id",
+    "coding_session_id",
     "panes",
     "open_files",
+    "owner",
+    "scopes",
     "state"
   ],
   "additionalProperties": false,
   "x-ess-provenance": {
     "system": "agentide",
     "specification_version": "v1",
-    "source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
-    "contract_digest": "3dc28d7feaa1c6d6880b0bb2ce97dd22f10a37b2770f355b4f60d15606edabdf",
+    "source_digest": "509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab",
+    "contract_digest": "bdd9d5d646d3812999e9d5c5090b058870a61d7ca2583f343c54b65a5c60ee00",
     "regenerate": "ess generate"
   },
   "$defs": {
@@ -53,6 +73,24 @@
       "x-ess-name": "agentide.session.SessionId",
       "x-ess-kind": "newtype",
       "type": "string"
+    },
+    "agentide.session.SessionScopes": {
+      "title": "SessionScopes",
+      "x-ess-name": "agentide.session.SessionScopes",
+      "x-ess-kind": "struct",
+      "type": "object",
+      "properties": {
+        "principal": {
+          "type": "string"
+        },
+        "team": {
+          "type": "string"
+        },
+        "project": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
     },
     "agentide.surface.PaneId": {
       "title": "PaneId",
@@ -69,6 +107,7 @@
         "Editor",
         "Diff",
         "Terminal",
+        "Chat",
         "Timeline",
         "Agents",
         "Approvals",

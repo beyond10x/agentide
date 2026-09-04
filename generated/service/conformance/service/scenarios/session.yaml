@@ -9,6 +9,12 @@ scenarios:
         authority: person-a
         user: person-a
         facts: {principals: [person-a, agent-a], projects: [project-a]}
+      other_auth:
+        tenant: tenant-a
+        realm: null
+        authority: person-b
+        user: person-b
+        facts: {principals: [person-b], projects: [project-a]}
     when:
       - intent: ensure_hosted_session
         input:
@@ -33,6 +39,111 @@ scenarios:
           revision: 1
           expected_version: 1
           idempotency_key: create-agentide-grant-a
+      - intent: snapshot_surface
+        input:
+          session_id: workspace-session-a
+          request_id: request-surface-a
+          panes:
+            - {id: chat, kind: Chat, title: Agent, path: null, line: null, column: null}
+          focused_pane: chat
+          open_files: []
+          expected_version: 2
+          idempotency_key: snapshot-surface-a
+      - intent: open_file
+        input:
+          session_id: workspace-session-a
+          request_id: request-open-file-a
+          path: src/lib.rs
+          line: 1
+          pane_id: editor:src/lib.rs
+          panes:
+            - {id: chat, kind: Chat, title: Agent, path: null, line: null, column: null}
+            - {id: 'editor:src/lib.rs', kind: Editor, title: lib.rs, path: src/lib.rs, line: 1, column: 1}
+          focused_pane: editor:src/lib.rs
+          open_files: [src/lib.rs]
+          expected_version: 3
+          idempotency_key: open-file-a
+      - intent: move_cursor
+        input:
+          session_id: workspace-session-a
+          request_id: request-move-cursor-a
+          pane_id: editor:src/lib.rs
+          path: src/lib.rs
+          line: 8
+          column: 3
+          panes:
+            - {id: chat, kind: Chat, title: Agent, path: null, line: null, column: null}
+            - {id: 'editor:src/lib.rs', kind: Editor, title: lib.rs, path: src/lib.rs, line: 8, column: 3}
+          focused_pane: editor:src/lib.rs
+          open_files: [src/lib.rs]
+          expected_version: 4
+          idempotency_key: move-cursor-a
+      - intent: open_pane
+        input:
+          session_id: workspace-session-a
+          request_id: request-open-diff-a
+          pane_id: diff
+          kind: Diff
+          split: Vertical
+          panes:
+            - {id: chat, kind: Chat, title: Agent, path: null, line: null, column: null}
+            - {id: 'editor:src/lib.rs', kind: Editor, title: lib.rs, path: src/lib.rs, line: 8, column: 3}
+            - {id: diff, kind: Diff, title: Changes, path: null, line: null, column: null}
+          focused_pane: diff
+          open_files: [src/lib.rs]
+          expected_version: 5
+          idempotency_key: open-diff-a
+      - intent: focus_pane
+        input:
+          session_id: workspace-session-a
+          request_id: request-focus-editor-a
+          pane_id: editor:src/lib.rs
+          panes:
+            - {id: chat, kind: Chat, title: Agent, path: null, line: null, column: null}
+            - {id: 'editor:src/lib.rs', kind: Editor, title: lib.rs, path: src/lib.rs, line: 8, column: 3}
+            - {id: diff, kind: Diff, title: Changes, path: null, line: null, column: null}
+          focused_pane: editor:src/lib.rs
+          open_files: [src/lib.rs]
+          expected_version: 6
+          idempotency_key: focus-editor-a
+      - intent: show_diff
+        input:
+          session_id: workspace-session-a
+          request_id: request-show-diff-a
+          pane_id: diff
+          path: src/lib.rs
+          base: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          panes:
+            - {id: chat, kind: Chat, title: Agent, path: null, line: null, column: null}
+            - {id: 'editor:src/lib.rs', kind: Editor, title: lib.rs, path: src/lib.rs, line: 8, column: 3}
+            - {id: diff, kind: Diff, title: Changes, path: src/lib.rs, line: null, column: null}
+          focused_pane: diff
+          open_files: [src/lib.rs]
+          expected_version: 7
+          idempotency_key: show-diff-a
+      - intent: close_file
+        input:
+          session_id: workspace-session-a
+          request_id: request-close-file-a
+          path: src/lib.rs
+          panes:
+            - {id: chat, kind: Chat, title: Agent, path: null, line: null, column: null}
+            - {id: diff, kind: Diff, title: Changes, path: src/lib.rs, line: null, column: null}
+          focused_pane: diff
+          open_files: []
+          expected_version: 8
+          idempotency_key: close-file-a
+      - intent: close_pane
+        input:
+          session_id: workspace-session-a
+          request_id: request-close-diff-a
+          pane_id: diff
+          panes:
+            - {id: chat, kind: Chat, title: Agent, path: null, line: null, column: null}
+          focused_pane: chat
+          open_files: []
+          expected_version: 9
+          idempotency_key: close-diff-a
     then:
       - query: get_session
         input: {session_id: workspace-session-a}
@@ -40,6 +151,13 @@ scenarios:
       - query: list_grants
         input: {session_id: workspace-session-a}
         count: 1
+      - query: get_workbench
+        input: {session_id: workspace-session-a}
+        count: 1
+      - query: get_workbench
+        input: {session_id: workspace-session-a}
+        count: 0
+        using: other_auth
 
   - name: absent_realm_is_not_default_realm
     given:

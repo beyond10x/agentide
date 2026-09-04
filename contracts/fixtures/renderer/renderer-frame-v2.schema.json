@@ -1,0 +1,82 @@
+{
+  "format": "agentide.renderer-frame/2",
+  "session": {
+    "id": "session-renderer-fixture",
+    "objective": "Compare browser renderer targets",
+    "status": "active",
+    "cursor": 7
+  },
+  "preparation": null,
+  "workbench": {
+    "panes": [
+      {
+        "id": "pane-readme",
+        "kind": "editor",
+        "title": "README.md",
+        "path": "README.md",
+        "line": 1,
+        "column": 1
+      }
+    ],
+    "focused_pane": "pane-readme",
+    "open_files": [
+      "README.md"
+    ],
+    "projections": {
+      "pane-readme": {
+        "kind": "editor",
+        "document": {
+          "path": "README.md",
+          "language": "markdown",
+          "content": "# AgentIDE",
+          "version": "sha256:fixture",
+          "read_only": false,
+          "dirty": false
+        }
+      }
+    },
+    "tree": {
+      "kind": "tree",
+      "root": "",
+      "entries": [
+        {
+          "path": "README.md",
+          "name": "README.md",
+          "kind": "file"
+        }
+      ],
+      "next_cursor": null
+    }
+  },
+  "pending_approvals": [
+    {
+      "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "intent": "code_write",
+      "risk": "workspace_write",
+      "approval_required": true
+    }
+  ],
+  "context_pins": [
+    {
+      "id": "pin-readme",
+      "label": "README introduction",
+      "source": "workspace:README.md#L1"
+    }
+  ],
+  "grants": [
+    {
+      "id": "grant-code-read",
+      "capability": "code_read",
+      "state": "active"
+    }
+  ],
+  "activity": [
+    {
+      "sequence": 7,
+      "at": "2026-09-03T12:00:00Z",
+      "kind": "intent.completed",
+      "intent": "code_read"
+    }
+  ],
+  "notice": null
+}
