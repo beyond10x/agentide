@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<!--
+  generated from agentide v1
+  model digest 360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3
+  contract digest 90e1687e023e28f77eca4934db634944dcaf13a22a2075c642452ec5a97822b4
+  do not edit: regenerate with `ess generate`
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>agentide v1 · agentide</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="shell">
+<nav class="sidebar">
+<a class="masthead" href="index.html">
+<span class="system">agentide</span><span class="version">v1</span>
+</a>
+<div class="nav">
+<a href="index.html" aria-current="page">agentide v1</a>
+<a href="crossings.html">Type crossings</a>
+<div class="group">domains</div>
+<a class="nested" href="domains/agentide-coding.html">Coding session</a>
+<a class="nested" href="domains/agentide-coordination.html">Session coordination</a>
+<a class="nested" href="domains/agentide-session.html">Sessions</a>
+<a class="nested" href="domains/agentide-surface.html">Workspace surface</a>
+<a href="interactions.html">Interactions</a>
+<a href="topology.html">Topology</a>
+</div>
+</nav>
+<main>
+<article class="content">
+<h1>agentide v1</h1>
+<p>A coding-session interface in which agents invoke stable semantic intents while deployments bind those intents to guarded implementations and humans observe the same durable event projection.</p>
+<h2 id="the-system-as-a-graph">The system as a graph</h2>
+<pre class="mermaid">flowchart TB
+    subgraph who[&quot;who may ask&quot;]
+        who0[&quot;agentide.coding.CodingAgent&quot;]
+        who1[&quot;agentide.coordination.SessionExecutor&quot;]
+        who2[&quot;agentide.coordination.SessionOwner&quot;]
+        who3[&quot;agentide.coordination.TaskAuthority&quot;]
+        who4[&quot;agentide.session.CodingAgent&quot;]
+        who5[&quot;agentide.session.Operator&quot;]
+        who6[&quot;agentide.surface.CodingAgent&quot;]
+    end
+    subgraph unit0[&quot;agentide-engine&quot;]
+        cmd0[&quot;agentide.coding.ApplyDeployment&quot;]
+        cmd1[&quot;agentide.coding.CancelProcess&quot;]
+        cmd2[&quot;agentide.coding.CreateCode&quot;]
+        cmd3[&quot;agentide.coding.CreateWorktree&quot;]
+        cmd4[&quot;agentide.coding.CutRelease&quot;]
+        cmd5[&quot;agentide.coding.DelegateAgent&quot;]
+        cmd6[&quot;agentide.coding.DeleteCode&quot;]
+        cmd7[&quot;agentide.coding.EditCode&quot;]
+        cmd8[&quot;agentide.coding.FinishWorktree&quot;]
+        cmd9[&quot;agentide.coding.InputProcess&quot;]
+        cmd10[&quot;agentide.coding.ListTerminals&quot;]
+        cmd11[&quot;agentide.coding.MessageAgent&quot;]
+        cmd12[&quot;agentide.coding.ObserveAgents&quot;]
+        cmd13[&quot;agentide.coding.ObserveChanges&quot;]
+        cmd14[&quot;agentide.coding.ObserveDeployment&quot;]
+        cmd15[&quot;agentide.coding.ObserveProcess&quot;]
+        cmd16[&quot;agentide.coding.ObserveWorktree&quot;]
+        cmd17[&quot;agentide.coding.OpenInteractiveTerminal&quot;]
+        cmd18[&quot;agentide.coding.PublishCode&quot;]
+        cmd19[&quot;agentide.coding.ReadCode&quot;]
+        cmd20[&quot;agentide.coding.RecordEvidence&quot;]
+        cmd21[&quot;agentide.coding.RenameCode&quot;]
+        cmd22[&quot;agentide.coding.SearchCode&quot;]
+        cmd23[&quot;agentide.coding.StartProcess&quot;]
+        cmd24[&quot;agentide.coding.TerminateTerminal&quot;]
+        cmd25[&quot;agentide.coding.VerifyCode&quot;]
+        cmd26[&quot;agentide.coding.WaitAgent&quot;]
+        cmd27[&quot;agentide.coding.WaitProcess&quot;]
+        cmd28[&quot;agentide.coordination.ApproveCheckpoint&quot;]
+        cmd29[&quot;agentide.coordination.CreateGrant&quot;]
+        cmd30[&quot;agentide.coordination.DenyCheckpoint&quot;]
+        cmd31[&quot;agentide.coordination.PinContext&quot;]
+        cmd32[&quot;agentide.coordination.RecordApprovalCheckpoint&quot;]
+        cmd33[&quot;agentide.coordination.RemoveContextPin&quot;]
+        cmd34[&quot;agentide.coordination.RevokeGrant&quot;]
+        cmd35[&quot;agentide.session.CloseSession&quot;]
+        cmd36[&quot;agentide.session.EnsureHostedSession&quot;]
+        cmd37[&quot;agentide.session.ReadEvents&quot;]
+        cmd38[&quot;agentide.session.SnapshotSession&quot;]
+        cmd39[&quot;agentide.session.StartSession&quot;]
+        cmd40[&quot;agentide.surface.CloseFile&quot;]
+        cmd41[&quot;agentide.surface.ClosePane&quot;]
+        cmd42[&quot;agentide.surface.FocusPane&quot;]
+        cmd43[&quot;agentide.surface.MoveCursor&quot;]
+        cmd44[&quot;agentide.surface.OpenFile&quot;]
+        cmd45[&quot;agentide.surface.OpenPane&quot;]
+        cmd46[&quot;agentide.surface.ShowDiff&quot;]
+        cmd47[&quot;agentide.surface.SnapshotSurface&quot;]
+        evt0[&quot;agentide.coding.IntentCompleted&quot;]
+        evt1[&quot;agentide.coding.IntentRefused&quot;]
+        evt2[&quot;agentide.coordination.ApprovalCheckpointApproved&quot;]
+        evt3[&quot;agentide.coordination.ApprovalCheckpointDenied&quot;]
+        evt4[&quot;agentide.coordination.ApprovalCheckpointRecorded&quot;]
+        evt5[&quot;agentide.coordination.ContextPinRemoved&quot;]
+        evt6[&quot;agentide.coordination.ContextPinned&quot;]
+        evt7[&quot;agentide.coordination.GrantCreated&quot;]
+        evt8[&quot;agentide.coordination.GrantRevoked&quot;]
+        evt9[&quot;agentide.session.SessionClosed&quot;]
+        evt10[&quot;agentide.session.SessionObserved&quot;]
+        evt11[&quot;agentide.session.SessionStarted&quot;]
+        evt12[&quot;agentide.surface.CursorMoved&quot;]
+        evt13[&quot;agentide.surface.DiffShown&quot;]
+        evt14[&quot;agentide.surface.FileClosed&quot;]
+        evt15[&quot;agentide.surface.FileOpened&quot;]
+        evt16[&quot;agentide.surface.PaneClosed&quot;]
+        evt17[&quot;agentide.surface.PaneFocused&quot;]
+        evt18[&quot;agentide.surface.PaneOpened&quot;]
+        evt19[&quot;agentide.surface.SurfaceObserved&quot;]
+    end
+    who0 --&gt;|&quot;may invoke&quot;| cmd0
+    who0 --&gt;|&quot;may invoke&quot;| cmd1
+    who0 --&gt;|&quot;may invoke&quot;| cmd2
+    who0 --&gt;|&quot;may invoke&quot;| cmd3
+    who0 --&gt;|&quot;may invoke&quot;| cmd4
+    who0 --&gt;|&quot;may invoke&quot;| cmd5
+    who0 --&gt;|&quot;may invoke&quot;| cmd6
+    who0 --&gt;|&quot;may invoke&quot;| cmd7
+    who0 --&gt;|&quot;may invoke&quot;| cmd8
+    who0 --&gt;|&quot;may invoke&quot;| cmd9
+    who0 --&gt;|&quot;may invoke&quot;| cmd10
+    who0 --&gt;|&quot;may invoke&quot;| cmd11
+    who0 --&gt;|&quot;may invoke&quot;| cmd12
+    who0 --&gt;|&quot;may invoke&quot;| cmd13
+    who0 --&gt;|&quot;may invoke&quot;| cmd14
+    who0 --&gt;|&quot;may invoke&quot;| cmd15
+    who0 --&gt;|&quot;may invoke&quot;| cmd16
+    who0 --&gt;|&quot;may invoke&quot;| cmd17
+    who0 --&gt;|&quot;may invoke&quot;| cmd18
+    who0 --&gt;|&quot;may invoke&quot;| cmd19
+    who0 --&gt;|&quot;may invoke&quot;| cmd20
+    who0 --&gt;|&quot;may invoke&quot;| cmd21
+    who0 --&gt;|&quot;may invoke&quot;| cmd22
+    who0 --&gt;|&quot;may invoke&quot;| cmd23
+    who0 --&gt;|&quot;may invoke&quot;| cmd24
+    who0 --&gt;|&quot;may invoke&quot;| cmd25
+    who0 --&gt;|&quot;may invoke&quot;| cmd26
+    who0 --&gt;|&quot;may invoke&quot;| cmd27
+    who1 --&gt;|&quot;may invoke&quot;| cmd31
+    who1 --&gt;|&quot;may invoke&quot;| cmd33
+    who2 --&gt;|&quot;may invoke&quot;| cmd28
+    who2 --&gt;|&quot;may invoke&quot;| cmd29
+    who2 --&gt;|&quot;may invoke&quot;| cmd30
+    who2 --&gt;|&quot;may invoke&quot;| cmd31
+    who2 --&gt;|&quot;may invoke&quot;| cmd33
+    who2 --&gt;|&quot;may invoke&quot;| cmd34
+    who3 --&gt;|&quot;may invoke&quot;| cmd32
+    who4 --&gt;|&quot;may invoke&quot;| cmd37
+    who4 --&gt;|&quot;may invoke&quot;| cmd38
+    who5 --&gt;|&quot;may invoke&quot;| cmd35
+    who5 --&gt;|&quot;may invoke&quot;| cmd36
+    who5 --&gt;|&quot;may invoke&quot;| cmd39
+    who6 --&gt;|&quot;may invoke&quot;| cmd40
+    who6 --&gt;|&quot;may invoke&quot;| cmd41
+    who6 --&gt;|&quot;may invoke&quot;| cmd42
+    who6 --&gt;|&quot;may invoke&quot;| cmd43
+    who6 --&gt;|&quot;may invoke&quot;| cmd44
+    who6 --&gt;|&quot;may invoke&quot;| cmd45
+    who6 --&gt;|&quot;may invoke&quot;| cmd46
+    who6 --&gt;|&quot;may invoke&quot;| cmd47
+    cmd0 --&gt;|&quot;completed&quot;| evt0
+    cmd1 --&gt;|&quot;completed&quot;| evt0
+    cmd2 --&gt;|&quot;completed&quot;| evt0
+    cmd3 --&gt;|&quot;completed&quot;| evt0
+    cmd4 --&gt;|&quot;completed&quot;| evt0
+    cmd5 --&gt;|&quot;completed&quot;| evt0
+    cmd6 --&gt;|&quot;completed&quot;| evt0
+    cmd7 --&gt;|&quot;completed&quot;| evt0
+    cmd8 --&gt;|&quot;completed&quot;| evt0
+    cmd9 --&gt;|&quot;completed&quot;| evt0
+    cmd10 --&gt;|&quot;completed&quot;| evt0
+    cmd11 --&gt;|&quot;completed&quot;| evt0
+    cmd12 --&gt;|&quot;completed&quot;| evt0
+    cmd13 --&gt;|&quot;completed&quot;| evt0
+    cmd14 --&gt;|&quot;completed&quot;| evt0
+    cmd15 --&gt;|&quot;completed&quot;| evt0
+    cmd16 --&gt;|&quot;completed&quot;| evt0
+    cmd17 --&gt;|&quot;completed&quot;| evt0
+    cmd18 --&gt;|&quot;completed&quot;| evt0
+    cmd19 --&gt;|&quot;completed&quot;| evt0
+    cmd20 --&gt;|&quot;completed&quot;| evt0
+    cmd21 --&gt;|&quot;completed&quot;| evt0
+    cmd22 --&gt;|&quot;completed&quot;| evt0
+    cmd23 --&gt;|&quot;completed&quot;| evt0
+    cmd24 --&gt;|&quot;completed&quot;| evt0
+    cmd25 --&gt;|&quot;completed&quot;| evt0
+    cmd26 --&gt;|&quot;completed&quot;| evt0
+    cmd27 --&gt;|&quot;completed&quot;| evt0
+    cmd28 --&gt;|&quot;approved&quot;| evt2
+    cmd29 --&gt;|&quot;created&quot;| evt7
+    cmd30 --&gt;|&quot;denied&quot;| evt3
+    cmd31 --&gt;|&quot;pinned&quot;| evt6
+    cmd32 --&gt;|&quot;recorded&quot;| evt4
+    cmd33 --&gt;|&quot;removed&quot;| evt5
+    cmd34 --&gt;|&quot;revoked&quot;| evt8
+    cmd35 --&gt;|&quot;closed&quot;| evt9
+    cmd36 --&gt;|&quot;started&quot;| evt11
+    cmd37 --&gt;|&quot;observed&quot;| evt10
+    cmd38 --&gt;|&quot;observed&quot;| evt10
+    cmd39 --&gt;|&quot;started&quot;| evt11
+    cmd40 --&gt;|&quot;completed&quot;| evt19
+    cmd41 --&gt;|&quot;completed&quot;| evt19
+    cmd42 --&gt;|&quot;completed&quot;| evt19
+    cmd43 --&gt;|&quot;completed&quot;| evt19
+    cmd44 --&gt;|&quot;completed&quot;| evt19
+    cmd45 --&gt;|&quot;completed&quot;| evt19
+    cmd46 --&gt;|&quot;completed&quot;| evt19
+    cmd47 --&gt;|&quot;completed&quot;| evt19</pre>
+<p>A command is accepted by the component that owns its context, emits the events one of its outcomes declares, and a dashed edge is a binding carrying an event into the next command. Design §9 begins one step earlier, at the actor who invokes the first command, and so does this graph: a solid edge out of an actor is a grant, and an actor drawn with no edge at all may invoke nothing — which is something the model says, not an arrow somebody forgot.</p>
+<h2 id="bounded-contexts">Bounded contexts</h2>
+<ul>
+<li><strong><a href="domains/agentide-coding.html">Coding session</a></strong> (<code>agentide.coding</code>) — Semantic observation, change, execution, collaboration, evidence, and delivery intents. 11 types, no entities, no views, 28 commands, two events, one error and one actor.</li>
+<li><strong><a href="domains/agentide-coordination.html">Session coordination</a></strong> (<code>agentide.coordination</code>) — Durable hosted collaboration references stored by Service SDK without project file bytes. 10 types, three entities, three views, seven commands, seven events, two errors and three actors.</li>
+<li><strong><a href="domains/agentide-session.html">Sessions</a></strong> (<code>agentide.session</code>) — The durable identity and observable projection of one coding session. 10 types, one entity, one view, five commands, three events, two errors and two actors.</li>
+<li><strong><a href="domains/agentide-surface.html">Workspace surface</a></strong> (<code>agentide.surface</code>) — A renderer-neutral virtual workbench shared by agents, the browser, CLI snapshots, and the console TUI. Four types, one entity, one view, eight commands, eight events, one error and one actor.</li>
+</ul>
+<h2 id="components">Components</h2>
+<p>A component is a unit of ownership, not a deployment. How many of each runs, and what each needs, is <a href="topology.html">the topology</a>.</p>
+<p><strong><code>agentide-engine</code></strong> — Validates intents, plans effects, obtains authority, journals, dispatches, and projects sessions. It owns <a href="domains/agentide-coding.html"><code>agentide.coding</code></a>, <a href="domains/agentide-coordination.html"><code>agentide.coordination</code></a>, <a href="domains/agentide-session.html"><code>agentide.session</code></a> and <a href="domains/agentide-surface.html"><code>agentide.surface</code></a>. It accepts <code>agentide.coding.ApplyDeployment</code>, <code>agentide.coding.CancelProcess</code>, <code>agentide.coding.CreateCode</code>, <code>agentide.coding.CreateWorktree</code>, <code>agentide.coding.CutRelease</code>, <code>agentide.coding.DelegateAgent</code>, <code>agentide.coding.DeleteCode</code>, <code>agentide.coding.EditCode</code>, <code>agentide.coding.FinishWorktree</code>, <code>agentide.coding.InputProcess</code>, <code>agentide.coding.ListTerminals</code>, <code>agentide.coding.MessageAgent</code>, <code>agentide.coding.ObserveAgents</code>, <code>agentide.coding.ObserveChanges</code>, <code>agentide.coding.ObserveDeployment</code>, <code>agentide.coding.ObserveProcess</code>, <code>agentide.coding.ObserveWorktree</code>, <code>agentide.coding.OpenInteractiveTerminal</code>, <code>agentide.coding.PublishCode</code>, <code>agentide.coding.ReadCode</code>, <code>agentide.coding.RecordEvidence</code>, <code>agentide.coding.RenameCode</code>, <code>agentide.coding.SearchCode</code>, <code>agentide.coding.StartProcess</code>, <code>agentide.coding.TerminateTerminal</code>, <code>agentide.coding.VerifyCode</code>, <code>agentide.coding.WaitAgent</code>, <code>agentide.coding.WaitProcess</code>, <code>agentide.coordination.ApproveCheckpoint</code>, <code>agentide.coordination.CreateGrant</code>, <code>agentide.coordination.DenyCheckpoint</code>, <code>agentide.coordination.PinContext</code>, <code>agentide.coordination.RecordApprovalCheckpoint</code>, <code>agentide.coordination.RemoveContextPin</code>, <code>agentide.coordination.RevokeGrant</code>, <code>agentide.session.CloseSession</code>, <code>agentide.session.EnsureHostedSession</code>, <code>agentide.session.ReadEvents</code>, <code>agentide.session.SnapshotSession</code>, <code>agentide.session.StartSession</code>, <code>agentide.surface.CloseFile</code>, <code>agentide.surface.ClosePane</code>, <code>agentide.surface.FocusPane</code>, <code>agentide.surface.MoveCursor</code>, <code>agentide.surface.OpenFile</code>, <code>agentide.surface.OpenPane</code>, <code>agentide.surface.ShowDiff</code> and <code>agentide.surface.SnapshotSurface</code>. It publishes <code>agentide.coding.IntentCompleted</code>, <code>agentide.coding.IntentRefused</code>, <code>agentide.coordination.ApprovalCheckpointApproved</code>, <code>agentide.coordination.ApprovalCheckpointDenied</code>, <code>agentide.coordination.ApprovalCheckpointRecorded</code>, <code>agentide.coordination.ContextPinRemoved</code>, <code>agentide.coordination.ContextPinned</code>, <code>agentide.coordination.GrantCreated</code>, <code>agentide.coordination.GrantRevoked</code>, <code>agentide.session.SessionClosed</code>, <code>agentide.session.SessionObserved</code>, <code>agentide.session.SessionStarted</code>, <code>agentide.surface.CursorMoved</code>, <code>agentide.surface.DiffShown</code>, <code>agentide.surface.FileClosed</code>, <code>agentide.surface.FileOpened</code>, <code>agentide.surface.PaneClosed</code>, <code>agentide.surface.PaneFocused</code>, <code>agentide.surface.PaneOpened</code> and <code>agentide.surface.SurfaceObserved</code>.</p>
+<h2 id="the-other-pages">The other pages</h2>
+<table>
+<thead>
+<tr><th>page</th><th>what is on it</th></tr>
+</thead>
+<tbody>
+<tr><td><a href="domains/agentide-coding.html">Coding session</a></td><td>the <code>agentide.coding</code> vocabulary: its types, entities, views, commands, events, errors and actors</td></tr>
+<tr><td><a href="domains/agentide-coordination.html">Session coordination</a></td><td>the <code>agentide.coordination</code> vocabulary: its types, entities, views, commands, events, errors and actors</td></tr>
+<tr><td><a href="domains/agentide-session.html">Sessions</a></td><td>the <code>agentide.session</code> vocabulary: its types, entities, views, commands, events, errors and actors</td></tr>
+<tr><td><a href="domains/agentide-surface.html">Workspace surface</a></td><td>the <code>agentide.surface</code> vocabulary: its types, entities, views, commands, events, errors and actors</td></tr>
+<tr><td><a href="interactions.html">Interactions</a></td><td>every binding, with what it guarantees and what happens when it fails</td></tr>
+<tr><td><a href="crossings.html">Type crossings</a></td><td>every conversion this system permits, and the reason someone gave for it</td></tr>
+<tr><td><a href="topology.html">Topology</a></td><td>what each component needs in order to run</td></tr>
+</tbody>
+</table>
+<ul>
+</ul>
+</article>
+<footer class="provenance">
+Generated from agentide v1 · model digest <code>360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3</code> · contract digest <code>90e1687e023e28f77eca4934db634944dcaf13a22a2075c642452ec5a97822b4</code>. Do not edit this file; change the specification and regenerate it with <code>ess generate</code>.
+</footer>
+</main>
+</div>
+<script type="module">
+const diagrams = document.querySelectorAll("pre.mermaid");
+if (diagrams.length > 0) {
+  // A script element, not `import`: the bundle publishes itself with a top-level `var`, and a
+  // top-level `var` in a module is scoped to the module, so importing it throws.
+  await new Promise((resolve, reject) => {
+    const tag = document.createElement("script");
+    tag.src = "assets/mermaid.min.js";
+    tag.addEventListener("load", resolve);
+    tag.addEventListener("error", reject);
+    document.head.append(tag);
+  });
+  globalThis.mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: "strict",
+    theme: window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default",
+  });
+  await globalThis.mermaid.run({ querySelector: "pre.mermaid" });
+}
+</script>
+</body>
+</html>

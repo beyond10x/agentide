@@ -9,7 +9,7 @@ do not edit: regenerate with `ess generate`
 
 Durable hosted collaboration references stored by Service SDK without project file bytes.
 
-`agentide.coordination` is one of agentide's bounded contexts. [Back to the index](../README.md).
+`agentide.coordination` is one of agentide's bounded contexts. [Back to the index](../index.md).
 
 ## Types
 
@@ -72,6 +72,8 @@ It holds:
 - `owner` — `String`
 - `scopes` — `agentide.session.SessionScopes`
 
+It declares no relation to another entity, and no other entity names it.
+
 No invariant is declared, so nothing here constrains an instance at rest.
 
 Its state is a `agentide.coordination.ApprovalCheckpoint.State`, one of `Approved`, `Denied` and `Pending`. That enum is synthesised from the lifecycle rather than declared beside it, so the states a view's filter compares and the states drawn below cannot disagree.
@@ -121,6 +123,8 @@ It holds:
 - `owner` — `String`
 - `scopes` — `agentide.session.SessionScopes`
 
+It declares no relation to another entity, and no other entity names it.
+
 No invariant is declared, so nothing here constrains an instance at rest.
 
 Its state is a `agentide.coordination.AuthorityGrant.State`, one of `Active` and `Revoked`. That enum is synthesised from the lifecycle rather than declared beside it, so the states a view's filter compares and the states drawn below cannot disagree.
@@ -162,6 +166,8 @@ It holds:
 - `sha256` — `agentide.coordination.Digest`
 - `owner` — `String`
 - `scopes` — `agentide.session.SessionScopes`
+
+It declares no relation to another entity, and no other entity names it.
 
 No invariant is declared, so nothing here constrains an instance at rest.
 
@@ -211,6 +217,8 @@ It exposes:
 - `scopes` — `agentide.session.SessionScopes`
 - `state` — `agentide.coordination.ApprovalCheckpoint.State`
 
+It declares no order, so the rows come back in whatever order the implementation has, and two reads may disagree.
+
 **Read-your-writes**: it is current the moment the command that changed it returns. A caller that has just created an invoice and cannot see it in here has been told a lie about what it did.
 
 A generated scenario asserts it once, immediately after the command: a view promising this and not keeping the promise has to fail the suite rather than be retried until it passes.
@@ -235,6 +243,8 @@ It exposes:
 - `owner` — `String`
 - `scopes` — `agentide.session.SessionScopes`
 - `state` — `agentide.coordination.ContextPin.State`
+
+It declares no order, so the rows come back in whatever order the implementation has, and two reads may disagree.
 
 **Read-your-writes**: it is current the moment the command that changed it returns. A caller that has just created an invoice and cannot see it in here has been told a lie about what it did.
 
@@ -261,6 +271,8 @@ It exposes:
 - `owner` — `String`
 - `scopes` — `agentide.session.SessionScopes`
 - `state` — `agentide.coordination.AuthorityGrant.State`
+
+It declares no order, so the rows come back in whatever order the implementation has, and two reads may disagree.
 
 **Read-your-writes**: it is current the moment the command that changed it returns. A caller that has just created an invoice and cannot see it in here has been told a lie about what it did.
 

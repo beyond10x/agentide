@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.3.2 - 2026-09-04
+
+- Regenerate the hosted Connector-only service with Service SDK 0.5.6 so AgentIDE composes through
+  the same Connectors 0.5.11 authority-refresh and factory contract as Devcenter without acquiring
+  an unrelated standalone HTTP host.
+
 ## 0.3.1 - 2026-09-03
 
 - Migrate the generated Connector-only hosted service to Service SDK 0.4.2 with explicit operation

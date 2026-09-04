@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ApprovalCheckpoint",
+  "x-ess-name": "agentide.coordination.ApprovalCheckpoint",
+  "x-ess-kind": "entity",
+  "type": "object",
+  "properties": {
+    "checkpoint_id": {
+      "$ref": "#/$defs/agentide.coordination.CheckpointId"
+    },
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "attempt_ref": {
+      "$ref": "#/$defs/agentide.coordination.OpaqueRef"
+    },
+    "plan_digest": {
+      "$ref": "#/$defs/agentide.coordination.Digest"
+    },
+    "checkpoint_ref": {
+      "$ref": "#/$defs/agentide.coordination.OpaqueRef"
+    },
+    "owner": {
+      "type": "string"
+    },
+    "scopes": {
+      "$ref": "#/$defs/agentide.session.SessionScopes"
+    },
+    "state": {
+      "$ref": "#/$defs/agentide.coordination.ApprovalCheckpoint.State"
+    }
+  },
+  "required": [
+    "checkpoint_id",
+    "session_id",
+    "attempt_ref",
+    "plan_digest",
+    "checkpoint_ref",
+    "owner",
+    "scopes",
+    "state"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
+    "contract_digest": "8f399424fa4ed4791ed90c1e96ef61160c502f46ac2909fb7c83c4181eda1336",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.coordination.ApprovalCheckpoint.State": {
+      "title": "State",
+      "x-ess-name": "agentide.coordination.ApprovalCheckpoint.State",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Approved",
+        "Denied",
+        "Pending"
+      ]
+    },
+    "agentide.coordination.CheckpointId": {
+      "title": "CheckpointId",
+      "x-ess-name": "agentide.coordination.CheckpointId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coordination.Digest": {
+      "title": "Digest",
+      "x-ess-name": "agentide.coordination.Digest",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.coordination.OpaqueRef": {
+      "title": "OpaqueRef",
+      "x-ess-name": "agentide.coordination.OpaqueRef",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionScopes": {
+      "title": "SessionScopes",
+      "x-ess-name": "agentide.session.SessionScopes",
+      "x-ess-kind": "struct",
+      "type": "object",
+      "properties": {
+        "principal": {
+          "type": "string"
+        },
+        "team": {
+          "type": "string"
+        },
+        "project": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<!--
+  generated from agentide v1
+  model digest 360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3
+  contract digest bb0512dbd08f6b8b79d4ee19920478e38e93af3d98ed63ba40c8dbb38272c220
+  do not edit: regenerate with `ess generate`
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session coordination · agentide</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="shell">
+<nav class="sidebar">
+<a class="masthead" href="../index.html">
+<span class="system">agentide</span><span class="version">v1</span>
+</a>
+<div class="nav">
+<a href="../index.html">agentide v1</a>
+<a href="../crossings.html">Type crossings</a>
+<div class="group">domains</div>
+<a class="nested" href="agentide-coding.html">Coding session</a>
+<a class="nested" href="agentide-coordination.html" aria-current="page">Session coordination</a>
+<a class="nested" href="agentide-session.html">Sessions</a>
+<a class="nested" href="agentide-surface.html">Workspace surface</a>
+<a href="../interactions.html">Interactions</a>
+<a href="../topology.html">Topology</a>
+</div>
+</nav>
+<main>
+<article class="content">
+<h1>Session coordination</h1>
+<p>Durable hosted collaboration references stored by Service SDK without project file bytes.</p>
+<p><code>agentide.coordination</code> is one of agentide&#39;s bounded contexts. <a href="../index.html">Back to the index</a>.</p>
+<h2 id="types">Types</h2>
+<h3 id="checkpointid"><code>CheckpointId</code></h3>
+<p><code>agentide.coordination.CheckpointId</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h3 id="contextkind"><code>ContextKind</code></h3>
+<p><code>agentide.coordination.ContextKind</code> is one of <code>Editor</code>, <code>DiffHunk</code>, <code>Terminal</code>, <code>Process</code> and <code>Evidence</code>.</p>
+<h3 id="contextpinid"><code>ContextPinId</code></h3>
+<p><code>agentide.coordination.ContextPinId</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h3 id="digest"><code>Digest</code></h3>
+<p><code>agentide.coordination.Digest</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h3 id="grantid"><code>GrantId</code></h3>
+<p><code>agentide.coordination.GrantId</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h3 id="grantrisk"><code>GrantRisk</code></h3>
+<p><code>agentide.coordination.GrantRisk</code> is one of <code>Low</code> and <code>Medium</code>.</p>
+<h3 id="intentref"><code>IntentRef</code></h3>
+<p><code>agentide.coordination.IntentRef</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h3 id="opaqueref"><code>OpaqueRef</code></h3>
+<p><code>agentide.coordination.OpaqueRef</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h3 id="pathprefix"><code>PathPrefix</code></h3>
+<p><code>agentide.coordination.PathPrefix</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h3 id="subjectref"><code>SubjectRef</code></h3>
+<p><code>agentide.coordination.SubjectRef</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h2 id="entities">Entities</h2>
+<p>An entity is what this context is about: something with an identity that outlives any one request, a shape, and a lifecycle. The lifecycle is exhaustive — a move that is not drawn below is a move this specification does not permit, and that is the only way it says so. Every move is labelled with the command that takes it, because a move nothing can trigger is refused rather than drawn.</p>
+<h3 id="approvalcheckpoint"><code>ApprovalCheckpoint</code></h3>
+<p><code>agentide.coordination.ApprovalCheckpoint</code>.</p>
+<p>An instance is identified by <code>checkpoint_id</code>, a <code>agentide.coordination.CheckpointId</code>. The name is part of the model and not a convention: a view projects the identity under that name, so a projection inventing its own would disagree with the view.</p>
+<p>It holds:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>attempt_ref</code> — <code>agentide.coordination.OpaqueRef</code></li>
+<li><code>plan_digest</code> — <code>agentide.coordination.Digest</code></li>
+<li><code>checkpoint_ref</code> — <code>agentide.coordination.OpaqueRef</code></li>
+<li><code>owner</code> — <code>String</code></li>
+<li><code>scopes</code> — <code>agentide.session.SessionScopes</code></li>
+</ul>
+<p>It declares no relation to another entity, and no other entity names it.</p>
+<p>No invariant is declared, so nothing here constrains an instance at rest.</p>
+<p>Its state is a <code>agentide.coordination.ApprovalCheckpoint.State</code>, one of <code>Approved</code>, <code>Denied</code> and <code>Pending</code>. That enum is synthesised from the lifecycle rather than declared beside it, so the states a view&#39;s filter compares and the states drawn below cannot disagree.</p>
+<p>An instance is created in <code>Pending</code>. <code>Approved</code> and <code>Denied</code> are terminal, so an instance may rest there forever. That is declared rather than inferred from having no way out: an entity that cannot leave a state is either finished or stuck, and only its author knows which.</p>
+<pre class="mermaid">stateDiagram-v2
+    [*] --&gt; Pending
+    Pending --&gt; Approved: approve (ApproveCheckpoint)
+    Pending --&gt; Denied: deny (DenyCheckpoint)
+    Approved --&gt; [*]
+    Denied --&gt; [*]</pre>
+<p>Each move is taken by a declared command outcome, and a move nothing takes is refused as <code>missing_causation</code> rather than left as a state change nobody can trigger:</p>
+<ul>
+<li><code>approve</code> — taken by <code>agentide.coordination.ApproveCheckpoint</code> on its <code>approved</code> outcome</li>
+<li><code>deny</code> — taken by <code>agentide.coordination.DenyCheckpoint</code> on its <code>denied</code> outcome</li>
+</ul>
+<p>An instance is brought into existence by <code>agentide.coordination.RecordApprovalCheckpoint</code> on its <code>recorded</code> outcome.</p>
+<p>Illegal transitions are illegal by absence: no rule forbids them, there is simply no arrow, because a rule would be a second place for the same truth to live. A diagram cannot show an absence, so the pairs it does not connect are listed here, derived from the same transitions — anything named below is a move this specification does not permit.</p>
+<ul>
+<li><code>Approved</code> may not become <code>Denied</code></li>
+<li><code>Approved</code> may not become <code>Pending</code></li>
+<li><code>Denied</code> may not become <code>Approved</code></li>
+<li><code>Denied</code> may not become <code>Pending</code></li>
+</ul>
+<p>One view projects it: <a href="#approvalcheckpointsnapshot"><code>ApprovalCheckpointSnapshot</code></a>.</p>
+<h3 id="authoritygrant"><code>AuthorityGrant</code></h3>
+<p><code>agentide.coordination.AuthorityGrant</code>.</p>
+<p>An instance is identified by <code>grant_id</code>, a <code>agentide.coordination.GrantId</code>. The name is part of the model and not a convention: a view projects the identity under that name, so a projection inventing its own would disagree with the view.</p>
+<p>It holds:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>grantee</code> — <code>agentide.coordination.SubjectRef</code></li>
+<li><code>allowed_intents</code> — <code>List&lt;agentide.coordination.IntentRef&gt;</code></li>
+<li><code>path_prefixes</code> — <code>List&lt;agentide.coordination.PathPrefix&gt;</code></li>
+<li><code>maximum_risk</code> — <code>agentide.coordination.GrantRisk</code></li>
+<li><code>expires_at</code> — <code>Optional&lt;String&gt;</code>, which may be absent</li>
+<li><code>revision</code> — <code>Integer</code></li>
+<li><code>owner</code> — <code>String</code></li>
+<li><code>scopes</code> — <code>agentide.session.SessionScopes</code></li>
+</ul>
+<p>It declares no relation to another entity, and no other entity names it.</p>
+<p>No invariant is declared, so nothing here constrains an instance at rest.</p>
+<p>Its state is a <code>agentide.coordination.AuthorityGrant.State</code>, one of <code>Active</code> and <code>Revoked</code>. That enum is synthesised from the lifecycle rather than declared beside it, so the states a view&#39;s filter compares and the states drawn below cannot disagree.</p>
+<p>An instance is created in <code>Active</code>. <code>Revoked</code> is terminal, so an instance may rest there forever. That is declared rather than inferred from having no way out: an entity that cannot leave a state is either finished or stuck, and only its author knows which.</p>
+<pre class="mermaid">stateDiagram-v2
+    [*] --&gt; Active
+    Active --&gt; Revoked: revoke (RevokeGrant)
+    Revoked --&gt; [*]</pre>
+<p>Each move is taken by a declared command outcome, and a move nothing takes is refused as <code>missing_causation</code> rather than left as a state change nobody can trigger:</p>
+<ul>
+<li><code>revoke</code> — taken by <code>agentide.coordination.RevokeGrant</code> on its <code>revoked</code> outcome</li>
+</ul>
+<p>An instance is brought into existence by <code>agentide.coordination.CreateGrant</code> on its <code>created</code> outcome.</p>
+<p>Illegal transitions are illegal by absence: no rule forbids them, there is simply no arrow, because a rule would be a second place for the same truth to live. A diagram cannot show an absence, so the pairs it does not connect are listed here, derived from the same transitions — anything named below is a move this specification does not permit.</p>
+<ul>
+<li><code>Revoked</code> may not become <code>Active</code></li>
+</ul>
+<p>One view projects it: <a href="#grantsnapshot"><code>GrantSnapshot</code></a>.</p>
+<h3 id="contextpin"><code>ContextPin</code></h3>
+<p><code>agentide.coordination.ContextPin</code>.</p>
+<p>An instance is identified by <code>pin_id</code>, a <code>agentide.coordination.ContextPinId</code>. The name is part of the model and not a convention: a view projects the identity under that name, so a projection inventing its own would disagree with the view.</p>
+<p>It holds:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>kind</code> — <code>agentide.coordination.ContextKind</code></li>
+<li><code>reference</code> — <code>agentide.coordination.OpaqueRef</code></li>
+<li><code>start_line</code> — <code>Optional&lt;Integer&gt;</code>, which may be absent</li>
+<li><code>end_line</code> — <code>Optional&lt;Integer&gt;</code>, which may be absent</li>
+<li><code>sha256</code> — <code>agentide.coordination.Digest</code></li>
+<li><code>owner</code> — <code>String</code></li>
+<li><code>scopes</code> — <code>agentide.session.SessionScopes</code></li>
+</ul>
+<p>It declares no relation to another entity, and no other entity names it.</p>
+<p>No invariant is declared, so nothing here constrains an instance at rest.</p>
+<p>Its state is a <code>agentide.coordination.ContextPin.State</code>, one of <code>Active</code> and <code>Removed</code>. That enum is synthesised from the lifecycle rather than declared beside it, so the states a view&#39;s filter compares and the states drawn below cannot disagree.</p>
+<p>An instance is created in <code>Active</code>. <code>Removed</code> is terminal, so an instance may rest there forever. That is declared rather than inferred from having no way out: an entity that cannot leave a state is either finished or stuck, and only its author knows which.</p>
+<pre class="mermaid">stateDiagram-v2
+    [*] --&gt; Active
+    Active --&gt; Removed: remove (RemoveContextPin)
+    Removed --&gt; [*]</pre>
+<p>Each move is taken by a declared command outcome, and a move nothing takes is refused as <code>missing_causation</code> rather than left as a state change nobody can trigger:</p>
+<ul>
+<li><code>remove</code> — taken by <code>agentide.coordination.RemoveContextPin</code> on its <code>removed</code> outcome</li>
+</ul>
+<p>An instance is brought into existence by <code>agentide.coordination.PinContext</code> on its <code>pinned</code> outcome.</p>
+<p>Illegal transitions are illegal by absence: no rule forbids them, there is simply no arrow, because a rule would be a second place for the same truth to live. A diagram cannot show an absence, so the pairs it does not connect are listed here, derived from the same transitions — anything named below is a move this specification does not permit.</p>
+<ul>
+<li><code>Removed</code> may not become <code>Active</code></li>
+</ul>
+<p>One view projects it: <a href="#contextpinsnapshot"><code>ContextPinSnapshot</code></a>.</p>
+<h2 id="views">Views</h2>
+<p>A view is what the outside world is promised it can observe. Each one says which instances it contains and how soon it reflects a command that has already returned, because &quot;you can read this&quot; without &quot;how soon&quot; is the promise every flaky suite is built on.</p>
+<h3 id="approvalcheckpointsnapshot"><code>ApprovalCheckpointSnapshot</code></h3>
+<p><code>agentide.coordination.ApprovalCheckpointSnapshot</code>.</p>
+<p>It reads <a href="#approvalcheckpoint"><code>ApprovalCheckpoint</code></a>.</p>
+<p>It contains every instance of that entity: no filter narrows it, which is a decision somebody made and not a line somebody omitted.</p>
+<p>It exposes:</p>
+<ul>
+<li><code>checkpoint_id</code> — <code>agentide.coordination.CheckpointId</code></li>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>attempt_ref</code> — <code>agentide.coordination.OpaqueRef</code></li>
+<li><code>plan_digest</code> — <code>agentide.coordination.Digest</code></li>
+<li><code>checkpoint_ref</code> — <code>agentide.coordination.OpaqueRef</code></li>
+<li><code>owner</code> — <code>String</code></li>
+<li><code>scopes</code> — <code>agentide.session.SessionScopes</code></li>
+<li><code>state</code> — <code>agentide.coordination.ApprovalCheckpoint.State</code></li>
+</ul>
+<p>It declares no order, so the rows come back in whatever order the implementation has, and two reads may disagree.</p>
+<p><strong>Read-your-writes</strong>: it is current the moment the command that changed it returns. A caller that has just created an invoice and cannot see it in here has been told a lie about what it did.</p>
+<p>A generated scenario asserts it once, immediately after the command: a view promising this and not keeping the promise has to fail the suite rather than be retried until it passes.</p>
+<h3 id="contextpinsnapshot"><code>ContextPinSnapshot</code></h3>
+<p><code>agentide.coordination.ContextPinSnapshot</code>.</p>
+<p>It reads <a href="#contextpin"><code>ContextPin</code></a>.</p>
+<p>It contains every instance of that entity: no filter narrows it, which is a decision somebody made and not a line somebody omitted.</p>
+<p>It exposes:</p>
+<ul>
+<li><code>pin_id</code> — <code>agentide.coordination.ContextPinId</code></li>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>kind</code> — <code>agentide.coordination.ContextKind</code></li>
+<li><code>reference</code> — <code>agentide.coordination.OpaqueRef</code></li>
+<li><code>start_line</code> — <code>Optional&lt;Integer&gt;</code>, which may be absent</li>
+<li><code>end_line</code> — <code>Optional&lt;Integer&gt;</code>, which may be absent</li>
+<li><code>sha256</code> — <code>agentide.coordination.Digest</code></li>
+<li><code>owner</code> — <code>String</code></li>
+<li><code>scopes</code> — <code>agentide.session.SessionScopes</code></li>
+<li><code>state</code> — <code>agentide.coordination.ContextPin.State</code></li>
+</ul>
+<p>It declares no order, so the rows come back in whatever order the implementation has, and two reads may disagree.</p>
+<p><strong>Read-your-writes</strong>: it is current the moment the command that changed it returns. A caller that has just created an invoice and cannot see it in here has been told a lie about what it did.</p>
+<p>A generated scenario asserts it once, immediately after the command: a view promising this and not keeping the promise has to fail the suite rather than be retried until it passes.</p>
+<h3 id="grantsnapshot"><code>GrantSnapshot</code></h3>
+<p><code>agentide.coordination.GrantSnapshot</code>.</p>
+<p>It reads <a href="#authoritygrant"><code>AuthorityGrant</code></a>.</p>
+<p>It contains every instance of that entity: no filter narrows it, which is a decision somebody made and not a line somebody omitted.</p>
+<p>It exposes:</p>
+<ul>
+<li><code>grant_id</code> — <code>agentide.coordination.GrantId</code></li>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>grantee</code> — <code>agentide.coordination.SubjectRef</code></li>
+<li><code>allowed_intents</code> — <code>List&lt;agentide.coordination.IntentRef&gt;</code></li>
+<li><code>path_prefixes</code> — <code>List&lt;agentide.coordination.PathPrefix&gt;</code></li>
+<li><code>maximum_risk</code> — <code>agentide.coordination.GrantRisk</code></li>
+<li><code>expires_at</code> — <code>Optional&lt;String&gt;</code>, which may be absent</li>
+<li><code>revision</code> — <code>Integer</code></li>
+<li><code>owner</code> — <code>String</code></li>
+<li><code>scopes</code> — <code>agentide.session.SessionScopes</code></li>
+<li><code>state</code> — <code>agentide.coordination.AuthorityGrant.State</code></li>
+</ul>
+<p>It declares no order, so the rows come back in whatever order the implementation has, and two reads may disagree.</p>
+<p><strong>Read-your-writes</strong>: it is current the moment the command that changed it returns. A caller that has just created an invoice and cannot see it in here has been told a lie about what it did.</p>
+<p>A generated scenario asserts it once, immediately after the command: a view promising this and not keeping the promise has to fail the suite rather than be retried until it passes.</p>
+<h2 id="commands">Commands</h2>
+<h3 id="approvecheckpoint"><code>ApproveCheckpoint</code></h3>
+<p><code>agentide.coordination.ApproveCheckpoint</code>, shown to a person as &quot;Approve exact checkpoint&quot; and called <code>approval-checkpoint-approve</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>checkpoint_id</code> — <code>agentide.coordination.CheckpointId</code></li>
+</ul>
+<p>It has three outcomes.</p>
+<p><strong><code>approved</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. It moves a <code>agentide.coordination.ApprovalCheckpoint</code> from <code>Pending</code> to <code>Approved</code>, along the declared move <code>approve</code>. The instance is the one named by the input field <code>checkpoint_id</code>. It emits <code>agentide.coordination.ApprovalCheckpointApproved</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>wrong-state</code></strong> — Taken when the subject is resting in a state none of this command&#39;s moves start from — a <code>agentide.coordination.ApprovalCheckpoint</code> in <code>Approved</code> and <code>Denied</code>, which is what is left of the lifecycle once this command&#39;s own moves are taken away. The document lists none of it. No entity in this specification changes. It reports <code>agentide.coordination.CoordinationStateConflict</code>, carrying <code>state</code>. It emits nothing. A test reaches it by driving an instance into one of those states and then issuing the command, because no input selects this branch.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: durable state is unavailable. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coordination.CoordinationRefusal</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="creategrant"><code>CreateGrant</code></h3>
+<p><code>agentide.coordination.CreateGrant</code>, shown to a person as &quot;Create authority grant&quot; and called <code>grant-create</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>grantee</code> — <code>agentide.coordination.SubjectRef</code></li>
+<li><code>allowed_intents</code> — <code>List&lt;agentide.coordination.IntentRef&gt;</code></li>
+<li><code>path_prefixes</code> — <code>List&lt;agentide.coordination.PathPrefix&gt;</code></li>
+<li><code>maximum_risk</code> — <code>agentide.coordination.GrantRisk</code></li>
+<li><code>expires_at</code> — <code>Optional&lt;String&gt;</code>, which may be absent</li>
+<li><code>revision</code> — <code>Integer</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>created</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. It creates a <code>agentide.coordination.AuthorityGrant</code>, which starts in <code>Active</code>. The new instance&#39;s identity is published as <code>grant_id</code> on <code>agentide.coordination.GrantCreated</code>. It emits <code>agentide.coordination.GrantCreated</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: authority or durable state is unavailable. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coordination.CoordinationRefusal</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="denycheckpoint"><code>DenyCheckpoint</code></h3>
+<p><code>agentide.coordination.DenyCheckpoint</code>, shown to a person as &quot;Deny exact checkpoint&quot; and called <code>approval-checkpoint-deny</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>checkpoint_id</code> — <code>agentide.coordination.CheckpointId</code></li>
+</ul>
+<p>It has three outcomes.</p>
+<p><strong><code>denied</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. It moves a <code>agentide.coordination.ApprovalCheckpoint</code> from <code>Pending</code> to <code>Denied</code>, along the declared move <code>deny</code>. The instance is the one named by the input field <code>checkpoint_id</code>. It emits <code>agentide.coordination.ApprovalCheckpointDenied</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>wrong-state</code></strong> — Taken when the subject is resting in a state none of this command&#39;s moves start from — a <code>agentide.coordination.ApprovalCheckpoint</code> in <code>Approved</code> and <code>Denied</code>, which is what is left of the lifecycle once this command&#39;s own moves are taken away. The document lists none of it. No entity in this specification changes. It reports <code>agentide.coordination.CoordinationStateConflict</code>, carrying <code>state</code>. It emits nothing. A test reaches it by driving an instance into one of those states and then issuing the command, because no input selects this branch.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: durable state is unavailable. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coordination.CoordinationRefusal</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="pincontext"><code>PinContext</code></h3>
+<p><code>agentide.coordination.PinContext</code>, shown to a person as &quot;Pin context reference&quot; and called <code>context-pin</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>kind</code> — <code>agentide.coordination.ContextKind</code></li>
+<li><code>reference</code> — <code>agentide.coordination.OpaqueRef</code></li>
+<li><code>start_line</code> — <code>Optional&lt;Integer&gt;</code>, which may be absent</li>
+<li><code>end_line</code> — <code>Optional&lt;Integer&gt;</code>, which may be absent</li>
+<li><code>sha256</code> — <code>agentide.coordination.Digest</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>pinned</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. It creates a <code>agentide.coordination.ContextPin</code>, which starts in <code>Active</code>. The new instance&#39;s identity is published as <code>pin_id</code> on <code>agentide.coordination.ContextPinned</code>. It emits <code>agentide.coordination.ContextPinned</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the reference cannot be admitted or durable state is unavailable. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coordination.CoordinationRefusal</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="recordapprovalcheckpoint"><code>RecordApprovalCheckpoint</code></h3>
+<p><code>agentide.coordination.RecordApprovalCheckpoint</code>, shown to a person as &quot;Record approval checkpoint&quot; and called <code>approval-checkpoint-record</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>checkpoint_id</code> — <code>agentide.coordination.CheckpointId</code></li>
+<li><code>attempt_ref</code> — <code>agentide.coordination.OpaqueRef</code></li>
+<li><code>plan_digest</code> — <code>agentide.coordination.Digest</code></li>
+<li><code>checkpoint_ref</code> — <code>agentide.coordination.OpaqueRef</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>recorded</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. It creates a <code>agentide.coordination.ApprovalCheckpoint</code>, which starts in <code>Pending</code>. The new instance&#39;s identity is published as <code>checkpoint_id</code> on <code>agentide.coordination.ApprovalCheckpointRecorded</code>. It emits <code>agentide.coordination.ApprovalCheckpointRecorded</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: durable state is unavailable. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coordination.CoordinationRefusal</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="removecontextpin"><code>RemoveContextPin</code></h3>
+<p><code>agentide.coordination.RemoveContextPin</code>, shown to a person as &quot;Remove context pin&quot; and called <code>context-unpin</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>pin_id</code> — <code>agentide.coordination.ContextPinId</code></li>
+</ul>
+<p>It has three outcomes.</p>
+<p><strong><code>removed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. It moves a <code>agentide.coordination.ContextPin</code> from <code>Active</code> to <code>Removed</code>, along the declared move <code>remove</code>. The instance is the one named by the input field <code>pin_id</code>. It emits <code>agentide.coordination.ContextPinRemoved</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>wrong-state</code></strong> — Taken when the subject is resting in a state none of this command&#39;s moves start from — a <code>agentide.coordination.ContextPin</code> in <code>Removed</code>, which is what is left of the lifecycle once this command&#39;s own moves are taken away. The document lists none of it. No entity in this specification changes. It reports <code>agentide.coordination.CoordinationStateConflict</code>, carrying <code>state</code>. It emits nothing. A test reaches it by driving an instance into one of those states and then issuing the command, because no input selects this branch.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: durable state is unavailable. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coordination.CoordinationRefusal</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="revokegrant"><code>RevokeGrant</code></h3>
+<p><code>agentide.coordination.RevokeGrant</code>, shown to a person as &quot;Revoke authority grant&quot; and called <code>grant-revoke</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>grant_id</code> — <code>agentide.coordination.GrantId</code></li>
+</ul>
+<p>It has three outcomes.</p>
+<p><strong><code>revoked</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. It moves a <code>agentide.coordination.AuthorityGrant</code> from <code>Active</code> to <code>Revoked</code>, along the declared move <code>revoke</code>. The instance is the one named by the input field <code>grant_id</code>. It emits <code>agentide.coordination.GrantRevoked</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>wrong-state</code></strong> — Taken when the subject is resting in a state none of this command&#39;s moves start from — a <code>agentide.coordination.AuthorityGrant</code> in <code>Revoked</code>, which is what is left of the lifecycle once this command&#39;s own moves are taken away. The document lists none of it. No entity in this specification changes. It reports <code>agentide.coordination.CoordinationStateConflict</code>, carrying <code>state</code>. It emits nothing. A test reaches it by driving an instance into one of those states and then issuing the command, because no input selects this branch.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: durable state is unavailable. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coordination.CoordinationRefusal</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h2 id="events">Events</h2>
+<h3 id="approvalcheckpointapproved"><code>ApprovalCheckpointApproved</code></h3>
+<p><code>agentide.coordination.ApprovalCheckpointApproved</code>.</p>
+<p>It carries:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>checkpoint_id</code> — <code>agentide.coordination.CheckpointId</code></li>
+</ul>
+<p>Emitted by <code>agentide.coordination.ApproveCheckpoint</code> on its <code>approved</code> outcome.</p>
+<p>Nothing in this system reacts to it.</p>
+<h3 id="approvalcheckpointdenied"><code>ApprovalCheckpointDenied</code></h3>
+<p><code>agentide.coordination.ApprovalCheckpointDenied</code>.</p>
+<p>It carries:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>checkpoint_id</code> — <code>agentide.coordination.CheckpointId</code></li>
+</ul>
+<p>Emitted by <code>agentide.coordination.DenyCheckpoint</code> on its <code>denied</code> outcome.</p>
+<p>Nothing in this system reacts to it.</p>
+<h3 id="approvalcheckpointrecorded"><code>ApprovalCheckpointRecorded</code></h3>
+<p><code>agentide.coordination.ApprovalCheckpointRecorded</code>.</p>
+<p>It carries:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>checkpoint_id</code> — <code>agentide.coordination.CheckpointId</code></li>
+<li><code>attempt_ref</code> — <code>agentide.coordination.OpaqueRef</code></li>
+<li><code>plan_digest</code> — <code>agentide.coordination.Digest</code></li>
+<li><code>checkpoint_ref</code> — <code>agentide.coordination.OpaqueRef</code></li>
+</ul>
+<p>Emitted by <code>agentide.coordination.RecordApprovalCheckpoint</code> on its <code>recorded</code> outcome.</p>
+<p>Nothing in this system reacts to it.</p>
+<h3 id="contextpinremoved"><code>ContextPinRemoved</code></h3>
+<p><code>agentide.coordination.ContextPinRemoved</code>.</p>
+<p>It carries:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>pin_id</code> — <code>agentide.coordination.ContextPinId</code></li>
+</ul>
+<p>Emitted by <code>agentide.coordination.RemoveContextPin</code> on its <code>removed</code> outcome.</p>
+<p>Nothing in this system reacts to it.</p>
+<h3 id="contextpinned"><code>ContextPinned</code></h3>
+<p><code>agentide.coordination.ContextPinned</code>.</p>
+<p>It carries:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>pin_id</code> — <code>agentide.coordination.ContextPinId</code></li>
+<li><code>kind</code> — <code>agentide.coordination.ContextKind</code></li>
+<li><code>reference</code> — <code>agentide.coordination.OpaqueRef</code></li>
+<li><code>start_line</code> — <code>Optional&lt;Integer&gt;</code>, which may be absent</li>
+<li><code>end_line</code> — <code>Optional&lt;Integer&gt;</code>, which may be absent</li>
+<li><code>sha256</code> — <code>agentide.coordination.Digest</code></li>
+</ul>
+<p>Emitted by <code>agentide.coordination.PinContext</code> on its <code>pinned</code> outcome.</p>
+<p>Nothing in this system reacts to it.</p>
+<h3 id="grantcreated"><code>GrantCreated</code></h3>
+<p><code>agentide.coordination.GrantCreated</code>.</p>
+<p>It carries:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>grant_id</code> — <code>agentide.coordination.GrantId</code></li>
+<li><code>grantee</code> — <code>agentide.coordination.SubjectRef</code></li>
+<li><code>allowed_intents</code> — <code>List&lt;agentide.coordination.IntentRef&gt;</code></li>
+<li><code>path_prefixes</code> — <code>List&lt;agentide.coordination.PathPrefix&gt;</code></li>
+<li><code>maximum_risk</code> — <code>agentide.coordination.GrantRisk</code></li>
+<li><code>expires_at</code> — <code>Optional&lt;String&gt;</code>, which may be absent</li>
+<li><code>revision</code> — <code>Integer</code></li>
+</ul>
+<p>Emitted by <code>agentide.coordination.CreateGrant</code> on its <code>created</code> outcome.</p>
+<p>Nothing in this system reacts to it.</p>
+<h3 id="grantrevoked"><code>GrantRevoked</code></h3>
+<p><code>agentide.coordination.GrantRevoked</code>.</p>
+<p>It carries:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>grant_id</code> — <code>agentide.coordination.GrantId</code></li>
+</ul>
+<p>Emitted by <code>agentide.coordination.RevokeGrant</code> on its <code>revoked</code> outcome.</p>
+<p>Nothing in this system reacts to it.</p>
+<h2 id="errors">Errors</h2>
+<h3 id="coordinationrefusal"><code>CoordinationRefusal</code></h3>
+<p>The durable coordination mutation was refused.</p>
+<p>It carries:</p>
+<ul>
+<li><code>code</code> — <code>String</code></li>
+<li><code>message</code> — <code>String</code></li>
+<li><code>retryable</code> — <code>Boolean</code></li>
+</ul>
+<p>Reported by <code>agentide.coordination.ApproveCheckpoint</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coordination.CreateGrant</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coordination.DenyCheckpoint</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coordination.PinContext</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coordination.RecordApprovalCheckpoint</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coordination.RemoveContextPin</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coordination.RevokeGrant</code> on its <code>refused</code> outcome.</p>
+<h3 id="coordinationstateconflict"><code>CoordinationStateConflict</code></h3>
+<p>The selected record is no longer in the required lifecycle state.</p>
+<p>It carries:</p>
+<ul>
+<li><code>state</code> — <code>String</code></li>
+</ul>
+<p>Reported by <code>agentide.coordination.ApproveCheckpoint</code> on its <code>wrong-state</code> outcome.</p>
+<p>Reported by <code>agentide.coordination.DenyCheckpoint</code> on its <code>wrong-state</code> outcome.</p>
+<p>Reported by <code>agentide.coordination.RemoveContextPin</code> on its <code>wrong-state</code> outcome.</p>
+<p>Reported by <code>agentide.coordination.RevokeGrant</code> on its <code>wrong-state</code> outcome.</p>
+<h2 id="actors">Actors</h2>
+<p>An actor is who may ask this context for something. Every grant below points at a command this specification declares — a grant is a resolved reference, so &quot;may invoke&quot; something nobody wrote is not a permission this model can express, and an authorisation that authorises nothing cannot ship quietly.</p>
+<h3 id="sessionexecutor"><code>SessionExecutor</code></h3>
+<p><code>agentide.coordination.SessionExecutor</code>, shown to a person as &quot;Delegated session executor&quot;.</p>
+<p>It may invoke <a href="#pincontext"><code>PinContext</code></a> and <a href="#removecontextpin"><code>RemoveContextPin</code></a>.</p>
+<h3 id="sessionowner"><code>SessionOwner</code></h3>
+<p><code>agentide.coordination.SessionOwner</code>, shown to a person as &quot;Session owner&quot;.</p>
+<p>It may invoke <a href="#approvecheckpoint"><code>ApproveCheckpoint</code></a>, <a href="#creategrant"><code>CreateGrant</code></a>, <a href="#denycheckpoint"><code>DenyCheckpoint</code></a>, <a href="#pincontext"><code>PinContext</code></a>, <a href="#removecontextpin"><code>RemoveContextPin</code></a> and <a href="#revokegrant"><code>RevokeGrant</code></a>.</p>
+<h3 id="taskauthority"><code>TaskAuthority</code></h3>
+<p><code>agentide.coordination.TaskAuthority</code>, shown to a person as &quot;Task authority&quot;.</p>
+<p>It may invoke <a href="#recordapprovalcheckpoint"><code>RecordApprovalCheckpoint</code></a>.</p>
+<ul>
+</ul>
+</article>
+<footer class="provenance">
+Generated from agentide v1 · model digest <code>360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3</code> · contract digest <code>bb0512dbd08f6b8b79d4ee19920478e38e93af3d98ed63ba40c8dbb38272c220</code>. Do not edit this file; change the specification and regenerate it with <code>ess generate</code>.
+</footer>
+</main>
+</div>
+<script type="module">
+const diagrams = document.querySelectorAll("pre.mermaid");
+if (diagrams.length > 0) {
+  // A script element, not `import`: the bundle publishes itself with a top-level `var`, and a
+  // top-level `var` in a module is scoped to the module, so importing it throws.
+  await new Promise((resolve, reject) => {
+    const tag = document.createElement("script");
+    tag.src = "../assets/mermaid.min.js";
+    tag.addEventListener("load", resolve);
+    tag.addEventListener("error", reject);
+    document.head.append(tag);
+  });
+  globalThis.mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: "strict",
+    theme: window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default",
+  });
+  await globalThis.mermaid.run({ querySelector: "pre.mermaid" });
+}
+</script>
+</body>
+</html>
