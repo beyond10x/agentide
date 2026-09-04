@@ -42,8 +42,8 @@ jobs:
       - name: Install pinned specification tools
         run: |
           cargo install --git https://github.com/beyond10x/aep \
-            --rev 1c4e614829cfa9a35e9b809c44855bd3c8aefd9d \
-            --locked --bin aep protocol-cli
+            --tag 0.52.0 \
+            --locked --bin aep aep-cli
           cargo install --git https://github.com/beyond10x/ess \
             --tag 0.9.2 \
             --locked --bin ess ess-cli
