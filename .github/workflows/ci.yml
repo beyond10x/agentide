@@ -41,12 +41,14 @@ jobs:
 
       - name: Install pinned specification tools
         run: |
+          tool_root="$RUNNER_TEMP/specification-tools"
           cargo install --git https://github.com/beyond10x/aep \
             --tag 0.52.0 \
-            --locked --bin aep aep-cli
+            --locked --root "$tool_root" --bin aep aep-cli
           cargo install --git https://github.com/beyond10x/ess \
             --tag 0.9.2 \
-            --locked --bin ess ess-cli
+            --locked --root "$tool_root" --bin ess ess-cli
+          echo "$tool_root/bin" >> "$GITHUB_PATH"
 
       - name: Run the one repository gate
         run: cargo xtask gate
