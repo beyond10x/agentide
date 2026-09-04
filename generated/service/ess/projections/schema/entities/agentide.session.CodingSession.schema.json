@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CodingSession",
+  "x-ess-name": "agentide.session.CodingSession",
+  "x-ess-kind": "entity",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "#/$defs/agentide.session.SessionId"
+    },
+    "workspace_root": {
+      "$ref": "#/$defs/agentide.session.WorkspaceRoot"
+    },
+    "objective": {
+      "type": "string"
+    },
+    "project_id": {
+      "$ref": "#/$defs/agentide.session.ProjectId"
+    },
+    "source_revision": {
+      "$ref": "#/$defs/agentide.session.SourceRevision"
+    },
+    "workspace_session_id": {
+      "$ref": "#/$defs/agentide.session.WorkspaceSessionId"
+    },
+    "manifest_digest": {
+      "$ref": "#/$defs/agentide.session.ManifestDigest"
+    },
+    "owner": {
+      "type": "string"
+    },
+    "scopes": {
+      "$ref": "#/$defs/agentide.session.SessionScopes"
+    },
+    "state": {
+      "$ref": "#/$defs/agentide.session.CodingSession.State"
+    }
+  },
+  "required": [
+    "session_id",
+    "workspace_root",
+    "objective",
+    "owner",
+    "scopes",
+    "state"
+  ],
+  "additionalProperties": false,
+  "x-ess-provenance": {
+    "system": "agentide",
+    "specification_version": "v1",
+    "source_digest": "360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3",
+    "contract_digest": "9934535307052875dc1c1c7b48540c2790b771ec6bc326e574d25d5d7ea0bd60",
+    "regenerate": "ess generate"
+  },
+  "$defs": {
+    "agentide.session.CodingSession.State": {
+      "title": "State",
+      "x-ess-name": "agentide.session.CodingSession.State",
+      "x-ess-kind": "enum",
+      "type": "string",
+      "enum": [
+        "Active",
+        "Closed"
+      ]
+    },
+    "agentide.session.ManifestDigest": {
+      "title": "ManifestDigest",
+      "x-ess-name": "agentide.session.ManifestDigest",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.ProjectId": {
+      "title": "ProjectId",
+      "x-ess-name": "agentide.session.ProjectId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionId": {
+      "title": "SessionId",
+      "x-ess-name": "agentide.session.SessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.SessionScopes": {
+      "title": "SessionScopes",
+      "x-ess-name": "agentide.session.SessionScopes",
+      "x-ess-kind": "struct",
+      "type": "object",
+      "properties": {
+        "principal": {
+          "type": "string"
+        },
+        "team": {
+          "type": "string"
+        },
+        "project": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "agentide.session.SourceRevision": {
+      "title": "SourceRevision",
+      "x-ess-name": "agentide.session.SourceRevision",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.WorkspaceRoot": {
+      "title": "WorkspaceRoot",
+      "x-ess-name": "agentide.session.WorkspaceRoot",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    },
+    "agentide.session.WorkspaceSessionId": {
+      "title": "WorkspaceSessionId",
+      "x-ess-name": "agentide.session.WorkspaceSessionId",
+      "x-ess-kind": "newtype",
+      "type": "string"
+    }
+  }
+}

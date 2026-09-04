@@ -6,13 +6,13 @@ edition = "2024"
 publish = false
 
 [dependencies]
-service-engine = { git = "https://github.com/beyond10x/service-sdk.git", rev = "084defb7bf2960b9888db42feb9f009c1a78d4e4" }
-service-connectors = { git = "https://github.com/beyond10x/service-sdk.git", rev = "084defb7bf2960b9888db42feb9f009c1a78d4e4" }
-service-catalog = { git = "https://github.com/beyond10x/service-sdk.git", rev = "084defb7bf2960b9888db42feb9f009c1a78d4e4" }
-service-http = { git = "https://github.com/beyond10x/service-sdk.git", rev = "084defb7bf2960b9888db42feb9f009c1a78d4e4" }
+service-engine = { git = "https://github.com/beyond10x/service-sdk.git", rev = "68618abac0ddc4f9363fec8315bd2d9c87113b88" }
+service-connectors = { git = "https://github.com/beyond10x/service-sdk.git", rev = "68618abac0ddc4f9363fec8315bd2d9c87113b88" }
+service-catalog = { git = "https://github.com/beyond10x/service-sdk.git", rev = "68618abac0ddc4f9363fec8315bd2d9c87113b88" }
+service-http = { git = "https://github.com/beyond10x/service-sdk.git", rev = "68618abac0ddc4f9363fec8315bd2d9c87113b88" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
 [dev-dependencies]
-service-conformance = { git = "https://github.com/beyond10x/service-sdk.git", rev = "084defb7bf2960b9888db42feb9f009c1a78d4e4" }
+service-conformance = { git = "https://github.com/beyond10x/service-sdk.git", rev = "68618abac0ddc4f9363fec8315bd2d9c87113b88" }
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }

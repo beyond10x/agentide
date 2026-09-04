@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<!--
+  generated from agentide v1
+  model digest 360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3
+  contract digest 8870fa49cff527670e40afedcbec7930655a48c3c498e7a7da08b73be1f1e103
+  do not edit: regenerate with `ess generate`
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coding session · agentide</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="shell">
+<nav class="sidebar">
+<a class="masthead" href="../index.html">
+<span class="system">agentide</span><span class="version">v1</span>
+</a>
+<div class="nav">
+<a href="../index.html">agentide v1</a>
+<a href="../crossings.html">Type crossings</a>
+<div class="group">domains</div>
+<a class="nested" href="agentide-coding.html" aria-current="page">Coding session</a>
+<a class="nested" href="agentide-coordination.html">Session coordination</a>
+<a class="nested" href="agentide-session.html">Sessions</a>
+<a class="nested" href="agentide-surface.html">Workspace surface</a>
+<a href="../interactions.html">Interactions</a>
+<a href="../topology.html">Topology</a>
+</div>
+</nav>
+<main>
+<article class="content">
+<h1>Coding session</h1>
+<p>Semantic observation, change, execution, collaboration, evidence, and delivery intents.</p>
+<p><code>agentide.coding</code> is one of agentide&#39;s bounded contexts. <a href="../index.html">Back to the index</a>.</p>
+<h2 id="types">Types</h2>
+<h3 id="agentid"><code>AgentId</code></h3>
+<p><code>agentide.coding.AgentId</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h3 id="expecteddigest"><code>ExpectedDigest</code></h3>
+<p><code>agentide.coding.ExpectedDigest</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h3 id="operationid"><code>OperationId</code></h3>
+<p><code>agentide.coding.OperationId</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h3 id="path"><code>Path</code></h3>
+<p><code>agentide.coding.Path</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h3 id="pattern"><code>Pattern</code></h3>
+<p><code>agentide.coding.Pattern</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h3 id="processid"><code>ProcessId</code></h3>
+<p><code>agentide.coding.ProcessId</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h3 id="processprofile"><code>ProcessProfile</code></h3>
+<p><code>agentide.coding.ProcessProfile</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h3 id="signal"><code>Signal</code></h3>
+<p><code>agentide.coding.Signal</code> is one of <code>Interrupt</code>, <code>Terminate</code> and <code>Kill</code>.</p>
+<h3 id="terminalid"><code>TerminalId</code></h3>
+<p><code>agentide.coding.TerminalId</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h3 id="terminalprofile"><code>TerminalProfile</code></h3>
+<p><code>agentide.coding.TerminalProfile</code> wraps <code>String</code> and is not interchangeable with one: the whole value of naming it separately is the crossings the model then refuses.</p>
+<h3 id="verificationlevel"><code>VerificationLevel</code></h3>
+<p><code>agentide.coding.VerificationLevel</code> is one of <code>Focused</code>, <code>Full</code> and <code>Release</code>.</p>
+<h2 id="commands">Commands</h2>
+<h3 id="applydeployment"><code>ApplyDeployment</code></h3>
+<p><code>agentide.coding.ApplyDeployment</code>, shown to a person as &quot;Apply deployment&quot; and called <code>deployment-apply</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>environment</code> — <code>String</code></li>
+<li><code>revision</code> — <code>agentide.coding.ExpectedDigest</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="cancelprocess"><code>CancelProcess</code></h3>
+<p><code>agentide.coding.CancelProcess</code>, shown to a person as &quot;Cancel process&quot; and called <code>process-cancel</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>process_id</code> — <code>agentide.coding.ProcessId</code></li>
+<li><code>signal</code> — <code>agentide.coding.Signal</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="createcode"><code>CreateCode</code></h3>
+<p><code>agentide.coding.CreateCode</code>, shown to a person as &quot;Create code&quot; and called <code>code-create</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>path</code> — <code>agentide.coding.Path</code></li>
+<li><code>content</code> — <code>String</code></li>
+<li><code>expected_absent</code> — <code>Boolean</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="createworktree"><code>CreateWorktree</code></h3>
+<p><code>agentide.coding.CreateWorktree</code>, shown to a person as &quot;Create worktree&quot; and called <code>worktree-create</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>purpose</code> — <code>String</code></li>
+<li><code>base</code> — <code>Optional&lt;String&gt;</code>, which may be absent</li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="cutrelease"><code>CutRelease</code></h3>
+<p><code>agentide.coding.CutRelease</code>, shown to a person as &quot;Cut release&quot; and called <code>release-cut</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>version</code> — <code>String</code></li>
+<li><code>expected_head</code> — <code>agentide.coding.ExpectedDigest</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="delegateagent"><code>DelegateAgent</code></h3>
+<p><code>agentide.coding.DelegateAgent</code>, shown to a person as &quot;Delegate to agent&quot; and called <code>agent-delegate</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>task</code> — <code>String</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="deletecode"><code>DeleteCode</code></h3>
+<p><code>agentide.coding.DeleteCode</code>, shown to a person as &quot;Delete code&quot; and called <code>code-delete</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>path</code> — <code>agentide.coding.Path</code></li>
+<li><code>expected_sha256</code> — <code>agentide.coding.ExpectedDigest</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="editcode"><code>EditCode</code></h3>
+<p><code>agentide.coding.EditCode</code>, shown to a person as &quot;Edit code&quot; and called <code>code-edit</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>path</code> — <code>agentide.coding.Path</code></li>
+<li><code>content</code> — <code>String</code></li>
+<li><code>expected_sha256</code> — <code>Optional&lt;agentide.coding.ExpectedDigest&gt;</code>, which may be absent</li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="finishworktree"><code>FinishWorktree</code></h3>
+<p><code>agentide.coding.FinishWorktree</code>, shown to a person as &quot;Finish worktree&quot; and called <code>worktree-finish</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="inputprocess"><code>InputProcess</code></h3>
+<p><code>agentide.coding.InputProcess</code>, shown to a person as &quot;Write process input&quot; and called <code>process-input</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>process_id</code> — <code>agentide.coding.ProcessId</code></li>
+<li><code>content</code> — <code>String</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="listterminals"><code>ListTerminals</code></h3>
+<p><code>agentide.coding.ListTerminals</code>, shown to a person as &quot;List terminals&quot; and called <code>terminal-list</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="messageagent"><code>MessageAgent</code></h3>
+<p><code>agentide.coding.MessageAgent</code>, shown to a person as &quot;Message agent&quot; and called <code>agent-message</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>agent_id</code> — <code>agentide.coding.AgentId</code></li>
+<li><code>message</code> — <code>String</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="observeagents"><code>ObserveAgents</code></h3>
+<p><code>agentide.coding.ObserveAgents</code>, shown to a person as &quot;Observe agents&quot; and called <code>agent-observe</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="observechanges"><code>ObserveChanges</code></h3>
+<p><code>agentide.coding.ObserveChanges</code>, shown to a person as &quot;Observe code changes&quot; and called <code>code-changes</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="observedeployment"><code>ObserveDeployment</code></h3>
+<p><code>agentide.coding.ObserveDeployment</code>, shown to a person as &quot;Observe deployment&quot; and called <code>deployment-observe</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>environment</code> — <code>String</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="observeprocess"><code>ObserveProcess</code></h3>
+<p><code>agentide.coding.ObserveProcess</code>, shown to a person as &quot;Observe process&quot; and called <code>process-observe</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>process_id</code> — <code>agentide.coding.ProcessId</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="observeworktree"><code>ObserveWorktree</code></h3>
+<p><code>agentide.coding.ObserveWorktree</code>, shown to a person as &quot;Observe worktree&quot; and called <code>worktree-status</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="openinteractiveterminal"><code>OpenInteractiveTerminal</code></h3>
+<p><code>agentide.coding.OpenInteractiveTerminal</code>, shown to a person as &quot;Open interactive terminal&quot; and called <code>interactive-terminal</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>profile</code> — <code>agentide.coding.TerminalProfile</code></li>
+<li><code>working_directory</code> — <code>agentide.coding.Path</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="publishcode"><code>PublishCode</code></h3>
+<p><code>agentide.coding.PublishCode</code>, shown to a person as &quot;Publish code&quot; and called <code>code-publish</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>expected_head</code> — <code>agentide.coding.ExpectedDigest</code></li>
+<li><code>summary</code> — <code>String</code></li>
+<li><code>evidence</code> — <code>List&lt;String&gt;</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="readcode"><code>ReadCode</code></h3>
+<p><code>agentide.coding.ReadCode</code>, shown to a person as &quot;Read code&quot; and called <code>code-read</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>path</code> — <code>agentide.coding.Path</code></li>
+<li><code>offset</code> — <code>Integer</code></li>
+<li><code>limit_bytes</code> — <code>Integer</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="recordevidence"><code>RecordEvidence</code></h3>
+<p><code>agentide.coding.RecordEvidence</code>, shown to a person as &quot;Record evidence&quot; and called <code>evidence-record</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>subject</code> — <code>String</code></li>
+<li><code>kind</code> — <code>String</code></li>
+<li><code>source</code> — <code>String</code></li>
+<li><code>reference</code> — <code>Optional&lt;String&gt;</code>, which may be absent</li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="renamecode"><code>RenameCode</code></h3>
+<p><code>agentide.coding.RenameCode</code>, shown to a person as &quot;Rename code&quot; and called <code>code-rename</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>path</code> — <code>agentide.coding.Path</code></li>
+<li><code>destination</code> — <code>agentide.coding.Path</code></li>
+<li><code>expected_sha256</code> — <code>agentide.coding.ExpectedDigest</code></li>
+<li><code>destination_expected_absent</code> — <code>Boolean</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="searchcode"><code>SearchCode</code></h3>
+<p><code>agentide.coding.SearchCode</code>, shown to a person as &quot;Search code&quot; and called <code>code-search</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>pattern</code> — <code>agentide.coding.Pattern</code></li>
+<li><code>paths</code> — <code>List&lt;agentide.coding.Path&gt;</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="startprocess"><code>StartProcess</code></h3>
+<p><code>agentide.coding.StartProcess</code>, shown to a person as &quot;Start process&quot; and called <code>process-start</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>profile</code> — <code>agentide.coding.ProcessProfile</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="terminateterminal"><code>TerminateTerminal</code></h3>
+<p><code>agentide.coding.TerminateTerminal</code>, shown to a person as &quot;Terminate terminal&quot; and called <code>terminal-terminate</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>terminal_id</code> — <code>agentide.coding.TerminalId</code></li>
+<li><code>signal</code> — <code>agentide.coding.Signal</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="verifycode"><code>VerifyCode</code></h3>
+<p><code>agentide.coding.VerifyCode</code>, shown to a person as &quot;Verify code&quot; and called <code>code-verify</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>operation_id</code> — <code>agentide.coding.OperationId</code></li>
+<li><code>level</code> — <code>agentide.coding.VerificationLevel</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="waitagent"><code>WaitAgent</code></h3>
+<p><code>agentide.coding.WaitAgent</code>, shown to a person as &quot;Wait for agents&quot; and called <code>agent-wait</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>agent_ids</code> — <code>List&lt;agentide.coding.AgentId&gt;</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h3 id="waitprocess"><code>WaitProcess</code></h3>
+<p><code>agentide.coding.WaitProcess</code>, shown to a person as &quot;Wait for process&quot; and called <code>process-wait</code> on the wire.</p>
+<p>It takes:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>process_id</code> — <code>agentide.coding.ProcessId</code></li>
+<li><code>timeout_ms</code> — <code>Integer</code></li>
+</ul>
+<p>It has two outcomes.</p>
+<p><strong><code>completed</code></strong> — The default branch, taken when no other outcome&#39;s condition matched. No entity in this specification changes. It emits <code>agentide.coding.IntentCompleted</code>. A test reaches it by constructing an input that satisfies no other outcome&#39;s condition.</p>
+<p><strong><code>refused</code></strong> — Decided outside the input: the selected implementation cannot admit or complete the intent. No predicate over the input reaches this branch, and saying <code>when: false</code> instead would have claimed it is unreachable, which is a different and false statement. No entity in this specification changes. It reports <code>agentide.coding.IntentFailure</code>, carrying <code>code</code>, <code>message</code> and <code>retryable</code>. It emits nothing. A test reaches it by injecting the declared fault, because no input can.</p>
+<h2 id="events">Events</h2>
+<h3 id="intentcompleted"><code>IntentCompleted</code></h3>
+<p><code>agentide.coding.IntentCompleted</code>.</p>
+<p>It carries:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+</ul>
+<p>Emitted by <code>agentide.coding.ApplyDeployment</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.CancelProcess</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.CreateCode</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.CreateWorktree</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.CutRelease</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.DelegateAgent</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.DeleteCode</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.EditCode</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.FinishWorktree</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.InputProcess</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.ListTerminals</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.MessageAgent</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.ObserveAgents</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.ObserveChanges</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.ObserveDeployment</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.ObserveProcess</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.ObserveWorktree</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.OpenInteractiveTerminal</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.PublishCode</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.ReadCode</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.RecordEvidence</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.RenameCode</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.SearchCode</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.StartProcess</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.TerminateTerminal</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.VerifyCode</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.WaitAgent</code> on its <code>completed</code> outcome.</p>
+<p>Emitted by <code>agentide.coding.WaitProcess</code> on its <code>completed</code> outcome.</p>
+<p>Nothing in this system reacts to it.</p>
+<h3 id="intentrefused"><code>IntentRefused</code></h3>
+<p><code>agentide.coding.IntentRefused</code>.</p>
+<p>It carries:</p>
+<ul>
+<li><code>session_id</code> — <code>agentide.session.SessionId</code></li>
+<li><code>request_id</code> — <code>agentide.session.RequestId</code></li>
+<li><code>code</code> — <code>String</code></li>
+</ul>
+<p>No command in this system emits it, so something outside the specification does.</p>
+<p>Nothing in this system reacts to it.</p>
+<h2 id="errors">Errors</h2>
+<h3 id="intentfailure"><code>IntentFailure</code></h3>
+<p>The intent was refused or failed without claiming the requested effect happened.</p>
+<p>It carries:</p>
+<ul>
+<li><code>code</code> — <code>String</code></li>
+<li><code>message</code> — <code>String</code></li>
+<li><code>retryable</code> — <code>Boolean</code></li>
+</ul>
+<p>Reported by <code>agentide.coding.ApplyDeployment</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.CancelProcess</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.CreateCode</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.CreateWorktree</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.CutRelease</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.DelegateAgent</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.DeleteCode</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.EditCode</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.FinishWorktree</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.InputProcess</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.ListTerminals</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.MessageAgent</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.ObserveAgents</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.ObserveChanges</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.ObserveDeployment</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.ObserveProcess</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.ObserveWorktree</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.OpenInteractiveTerminal</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.PublishCode</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.ReadCode</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.RecordEvidence</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.RenameCode</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.SearchCode</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.StartProcess</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.TerminateTerminal</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.VerifyCode</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.WaitAgent</code> on its <code>refused</code> outcome.</p>
+<p>Reported by <code>agentide.coding.WaitProcess</code> on its <code>refused</code> outcome.</p>
+<h2 id="actors">Actors</h2>
+<p>An actor is who may ask this context for something. Every grant below points at a command this specification declares — a grant is a resolved reference, so &quot;may invoke&quot; something nobody wrote is not a permission this model can express, and an authorisation that authorises nothing cannot ship quietly.</p>
+<h3 id="codingagent"><code>CodingAgent</code></h3>
+<p><code>agentide.coding.CodingAgent</code>.</p>
+<p>It may invoke <a href="#applydeployment"><code>ApplyDeployment</code></a>, <a href="#cancelprocess"><code>CancelProcess</code></a>, <a href="#createcode"><code>CreateCode</code></a>, <a href="#createworktree"><code>CreateWorktree</code></a>, <a href="#cutrelease"><code>CutRelease</code></a>, <a href="#delegateagent"><code>DelegateAgent</code></a>, <a href="#deletecode"><code>DeleteCode</code></a>, <a href="#editcode"><code>EditCode</code></a>, <a href="#finishworktree"><code>FinishWorktree</code></a>, <a href="#inputprocess"><code>InputProcess</code></a>, <a href="#listterminals"><code>ListTerminals</code></a>, <a href="#messageagent"><code>MessageAgent</code></a>, <a href="#observeagents"><code>ObserveAgents</code></a>, <a href="#observechanges"><code>ObserveChanges</code></a>, <a href="#observedeployment"><code>ObserveDeployment</code></a>, <a href="#observeprocess"><code>ObserveProcess</code></a>, <a href="#observeworktree"><code>ObserveWorktree</code></a>, <a href="#openinteractiveterminal"><code>OpenInteractiveTerminal</code></a>, <a href="#publishcode"><code>PublishCode</code></a>, <a href="#readcode"><code>ReadCode</code></a>, <a href="#recordevidence"><code>RecordEvidence</code></a>, <a href="#renamecode"><code>RenameCode</code></a>, <a href="#searchcode"><code>SearchCode</code></a>, <a href="#startprocess"><code>StartProcess</code></a>, <a href="#terminateterminal"><code>TerminateTerminal</code></a>, <a href="#verifycode"><code>VerifyCode</code></a>, <a href="#waitagent"><code>WaitAgent</code></a> and <a href="#waitprocess"><code>WaitProcess</code></a>.</p>
+<ul>
+</ul>
+</article>
+<footer class="provenance">
+Generated from agentide v1 · model digest <code>360a1e3f4110754181c30d72530c91ae4344a5f5d4c3aff968bda22d67ca12f3</code> · contract digest <code>8870fa49cff527670e40afedcbec7930655a48c3c498e7a7da08b73be1f1e103</code>. Do not edit this file; change the specification and regenerate it with <code>ess generate</code>.
+</footer>
+</main>
+</div>
+<script type="module">
+const diagrams = document.querySelectorAll("pre.mermaid");
+if (diagrams.length > 0) {
+  // A script element, not `import`: the bundle publishes itself with a top-level `var`, and a
+  // top-level `var` in a module is scoped to the module, so importing it throws.
+  await new Promise((resolve, reject) => {
+    const tag = document.createElement("script");
+    tag.src = "../assets/mermaid.min.js";
+    tag.addEventListener("load", resolve);
+    tag.addEventListener("error", reject);
+    document.head.append(tag);
+  });
+  globalThis.mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: "strict",
+    theme: window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default",
+  });
+  await globalThis.mermaid.run({ querySelector: "pre.mermaid" });
+}
+</script>
+</body>
+</html>

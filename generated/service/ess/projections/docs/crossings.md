@@ -13,7 +13,7 @@ Declaring a crossing is also the only way to make one. Two newtypes over `String
 
 This system declares no crossings. Every type is used only as itself.
 
-[Back to the index](README.md).
+[Back to the index](index.md).
 
 ---
 

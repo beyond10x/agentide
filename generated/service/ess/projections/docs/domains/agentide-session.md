@@ -9,7 +9,7 @@ do not edit: regenerate with `ess generate`
 
 The durable identity and observable projection of one coding session.
 
-`agentide.session` is one of agentide's bounded contexts. [Back to the index](../README.md).
+`agentide.session` is one of agentide's bounded contexts. [Back to the index](../index.md).
 
 ## Types
 
@@ -78,6 +78,8 @@ It holds:
 - `owner` — `String`
 - `scopes` — `agentide.session.SessionScopes`
 
+It declares no relation to another entity, and no other entity names it.
+
 No invariant is declared, so nothing here constrains an instance at rest.
 
 Its state is a `agentide.session.CodingSession.State`, one of `Active` and `Closed`. That enum is synthesised from the lifecycle rather than declared beside it, so the states a view's filter compares and the states drawn below cannot disagree.
@@ -127,6 +129,8 @@ It exposes:
 - `owner` — `String`
 - `scopes` — `agentide.session.SessionScopes`
 - `state` — `agentide.session.CodingSession.State`
+
+It declares no order, so the rows come back in whatever order the implementation has, and two reads may disagree.
 
 **Read-your-writes**: it is current the moment the command that changed it returns. A caller that has just created an invoice and cannot see it in here has been told a lie about what it did.
 
