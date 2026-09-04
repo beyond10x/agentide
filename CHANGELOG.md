@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.3.3 - 2026-09-04
+
+- Isolate pinned AEP and ESS command installation from restored Cargo binaries so the release gate
+  deterministically publishes the existing AgentIDE renderer and Service SDK 0.5.6 / Connectors
+  0.5.11 generated-service update.
+
 ## 0.3.2 - 2026-09-04
 
 - Regenerate the hosted Connector-only service with Service SDK 0.5.6 so AgentIDE composes through
