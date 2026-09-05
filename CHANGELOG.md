@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.3.6 - 2026-09-05
+
+- Regenerate the hosted service with Service SDK 0.5.10 so its Connector factory composes with
+  the Connectors 0.6.4 Smart Git runtime and shares the exact service dependency identity.
+
 ## 0.3.5 - 2026-09-05
 
 - Regenerate the hosted service with Service SDK 0.5.9 so its Connector factory composes through

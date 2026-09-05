@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "agentide-cli"
-version = "0.3.5"
+version = "0.3.6"
 dependencies = [
  "agentide-contracts",
  "agentide-core",
@@ -26,7 +26,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-contracts"
-version = "0.3.5"
+version = "0.3.6"
 dependencies = [
  "chrono",
  "schemars 1.2.2",
@@ -39,7 +39,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-core"
-version = "0.3.5"
+version = "0.3.6"
 dependencies = [
  "agentide-contracts",
  "chrono",
@@ -57,17 +57,17 @@ version = "0.1.0"
 dependencies = [
  "serde",
  "serde_json",
- "service-catalog 0.5.9",
+ "service-catalog 0.5.10",
  "service-conformance",
- "service-connectors 0.5.9",
- "service-engine 0.5.9",
+ "service-connectors 0.5.10",
+ "service-engine 0.5.10",
  "service-http",
  "tokio",
 ]
 
 [[package]]
 name = "agentide-harness"
-version = "0.3.5"
+version = "0.3.6"
 dependencies = [
  "agentide-contracts",
  "agentide-core",
@@ -84,7 +84,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-substrate"
-version = "0.3.5"
+version = "0.3.6"
 dependencies = [
  "agentide-contracts",
  "agentide-core",
@@ -96,7 +96,7 @@ dependencies = [
 
 [[package]]
 name = "agentide-xtask"
-version = "0.3.5"
+version = "0.3.6"
 dependencies = [
  "agentide-contracts",
  "anyhow",
@@ -549,10 +549,10 @@ dependencies = [
 
 [[package]]
 name = "catalog"
-version = "0.6.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=03d7fc146c2e11f56ae6fb12e5da578821e2be15#03d7fc146c2e11f56ae6fb12e5da578821e2be15"
+version = "0.6.4"
+source = "git+https://github.com/beyond10x/connectors.git?rev=dbdd285c629d8b93bb685cc5a89a270316978ce5#dbdd285c629d8b93bb685cc5a89a270316978ce5"
 dependencies = [
- "catalog-reader 0.6.2",
+ "catalog-reader 0.6.4",
  "serde",
  "serde_json",
 ]
@@ -564,8 +564,8 @@ source = "git+https://github.com/beyond10x/connectors.git?rev=c4e8ea44cd760c5469
 
 [[package]]
 name = "catalog-reader"
-version = "0.6.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=03d7fc146c2e11f56ae6fb12e5da578821e2be15#03d7fc146c2e11f56ae6fb12e5da578821e2be15"
+version = "0.6.4"
+source = "git+https://github.com/beyond10x/connectors.git?rev=dbdd285c629d8b93bb685cc5a89a270316978ce5#dbdd285c629d8b93bb685cc5a89a270316978ce5"
 
 [[package]]
 name = "cc"
@@ -682,8 +682,8 @@ dependencies = [
 
 [[package]]
 name = "connector-address"
-version = "0.6.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=03d7fc146c2e11f56ae6fb12e5da578821e2be15#03d7fc146c2e11f56ae6fb12e5da578821e2be15"
+version = "0.6.4"
+source = "git+https://github.com/beyond10x/connectors.git?rev=dbdd285c629d8b93bb685cc5a89a270316978ce5#dbdd285c629d8b93bb685cc5a89a270316978ce5"
 dependencies = [
  "thiserror",
 ]
@@ -705,13 +705,13 @@ dependencies = [
 
 [[package]]
 name = "connector-resolve"
-version = "0.6.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=03d7fc146c2e11f56ae6fb12e5da578821e2be15#03d7fc146c2e11f56ae6fb12e5da578821e2be15"
+version = "0.6.4"
+source = "git+https://github.com/beyond10x/connectors.git?rev=dbdd285c629d8b93bb685cc5a89a270316978ce5#dbdd285c629d8b93bb685cc5a89a270316978ce5"
 dependencies = [
- "catalog 0.6.2",
- "catalog-reader 0.6.2",
- "connector-address 0.6.2",
- "connector-secrets 0.6.2",
+ "catalog 0.6.4",
+ "catalog-reader 0.6.4",
+ "connector-address 0.6.4",
+ "connector-secrets 0.6.4",
  "serde",
  "serde_json",
  "thiserror",
@@ -734,11 +734,11 @@ dependencies = [
 
 [[package]]
 name = "connector-secrets"
-version = "0.6.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=03d7fc146c2e11f56ae6fb12e5da578821e2be15#03d7fc146c2e11f56ae6fb12e5da578821e2be15"
+version = "0.6.4"
+source = "git+https://github.com/beyond10x/connectors.git?rev=dbdd285c629d8b93bb685cc5a89a270316978ce5#dbdd285c629d8b93bb685cc5a89a270316978ce5"
 dependencies = [
  "async-trait",
- "connector-address 0.6.2",
+ "connector-address 0.6.4",
  "fs2",
  "rustix 1.1.4",
  "thiserror",
@@ -756,8 +756,8 @@ dependencies = [
 
 [[package]]
 name = "connector-state"
-version = "0.6.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=03d7fc146c2e11f56ae6fb12e5da578821e2be15#03d7fc146c2e11f56ae6fb12e5da578821e2be15"
+version = "0.6.4"
+source = "git+https://github.com/beyond10x/connectors.git?rev=dbdd285c629d8b93bb685cc5a89a270316978ce5#dbdd285c629d8b93bb685cc5a89a270316978ce5"
 dependencies = [
  "thiserror",
 ]
@@ -1035,11 +1035,11 @@ dependencies = [
 
 [[package]]
 name = "domain"
-version = "0.6.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=03d7fc146c2e11f56ae6fb12e5da578821e2be15#03d7fc146c2e11f56ae6fb12e5da578821e2be15"
+version = "0.6.4"
+source = "git+https://github.com/beyond10x/connectors.git?rev=dbdd285c629d8b93bb685cc5a89a270316978ce5#dbdd285c629d8b93bb685cc5a89a270316978ce5"
 dependencies = [
  "async-trait",
- "connector-state 0.6.2",
+ "connector-state 0.6.4",
  "schemars 1.2.2",
  "serde",
  "serde_json",
@@ -2231,10 +2231,10 @@ dependencies = [
 
 [[package]]
 name = "protocol"
-version = "0.6.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=03d7fc146c2e11f56ae6fb12e5da578821e2be15#03d7fc146c2e11f56ae6fb12e5da578821e2be15"
+version = "0.6.4"
+source = "git+https://github.com/beyond10x/connectors.git?rev=dbdd285c629d8b93bb685cc5a89a270316978ce5#dbdd285c629d8b93bb685cc5a89a270316978ce5"
 dependencies = [
- "domain 0.6.2",
+ "domain 0.6.4",
  "schemars 1.2.2",
  "serde",
  "serde_json",
@@ -2869,17 +2869,17 @@ dependencies = [
 
 [[package]]
 name = "service"
-version = "0.6.2"
-source = "git+https://github.com/beyond10x/connectors.git?rev=03d7fc146c2e11f56ae6fb12e5da578821e2be15#03d7fc146c2e11f56ae6fb12e5da578821e2be15"
+version = "0.6.4"
+source = "git+https://github.com/beyond10x/connectors.git?rev=dbdd285c629d8b93bb685cc5a89a270316978ce5#dbdd285c629d8b93bb685cc5a89a270316978ce5"
 dependencies = [
  "async-trait",
  "base64 0.22.1",
- "connector-resolve 0.6.2",
- "connector-secrets 0.6.2",
- "connector-state 0.6.2",
- "domain 0.6.2",
+ "connector-resolve 0.6.4",
+ "connector-secrets 0.6.4",
+ "connector-state 0.6.4",
+ "domain 0.6.4",
  "ed25519-dalek",
- "protocol 0.6.2",
+ "protocol 0.6.4",
  "serde",
  "serde_json",
  "sha2 0.10.9",
@@ -2916,8 +2916,8 @@ dependencies = [
 
 [[package]]
 name = "service-builder"
-version = "0.5.9"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=93cd33452f929f675daaf3af307a70e642a8b53d#93cd33452f929f675daaf3af307a70e642a8b53d"
+version = "0.5.10"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9#14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9"
 dependencies = [
  "anyhow",
  "clap",
@@ -2932,11 +2932,11 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_yaml",
- "service-catalog 0.5.9",
- "service-connectors 0.5.9",
- "service-definition 0.5.9",
- "service-engine 0.5.9",
- "service-runtime-ir 0.5.9",
+ "service-catalog 0.5.10",
+ "service-connectors 0.5.10",
+ "service-definition 0.5.10",
+ "service-engine 0.5.10",
+ "service-runtime-ir 0.5.10",
  "sha2 0.11.0",
  "thiserror",
 ]
@@ -2958,34 +2958,34 @@ dependencies = [
 
 [[package]]
 name = "service-catalog"
-version = "0.5.9"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=93cd33452f929f675daaf3af307a70e642a8b53d#93cd33452f929f675daaf3af307a70e642a8b53d"
+version = "0.5.10"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9#14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9"
 dependencies = [
  "async-trait",
  "hex",
- "protocol 0.6.2",
+ "protocol 0.6.4",
  "serde",
  "serde_json",
- "service 0.6.2",
+ "service 0.6.4",
  "sha2 0.11.0",
  "thiserror",
 ]
 
 [[package]]
 name = "service-conformance"
-version = "0.5.9"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=93cd33452f929f675daaf3af307a70e642a8b53d#93cd33452f929f675daaf3af307a70e642a8b53d"
+version = "0.5.10"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9#14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9"
 dependencies = [
  "async-trait",
  "eventlog-sqlite",
- "protocol 0.6.2",
+ "protocol 0.6.4",
  "serde",
  "serde_json",
  "serde_yaml",
- "service 0.6.2",
- "service-builder 0.5.9",
- "service-connectors 0.5.9",
- "service-runtime-ir 0.5.9",
+ "service 0.6.4",
+ "service-builder 0.5.10",
+ "service-connectors 0.5.10",
+ "service-runtime-ir 0.5.10",
  "thiserror",
 ]
 
@@ -3010,19 +3010,19 @@ dependencies = [
 
 [[package]]
 name = "service-connectors"
-version = "0.5.9"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=93cd33452f929f675daaf3af307a70e642a8b53d#93cd33452f929f675daaf3af307a70e642a8b53d"
+version = "0.5.10"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9#14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9"
 dependencies = [
  "async-trait",
  "eventlog-core",
  "hex",
- "protocol 0.6.2",
+ "protocol 0.6.4",
  "serde",
  "serde_json",
- "service 0.6.2",
- "service-engine 0.5.9",
- "service-eventlog 0.5.9",
- "service-runtime 0.5.9",
+ "service 0.6.4",
+ "service-engine 0.5.10",
+ "service-eventlog 0.5.10",
+ "service-runtime 0.5.10",
  "sha2 0.11.0",
  "thiserror",
 ]
@@ -3040,8 +3040,8 @@ dependencies = [
 
 [[package]]
 name = "service-definition"
-version = "0.5.9"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=93cd33452f929f675daaf3af307a70e642a8b53d#93cd33452f929f675daaf3af307a70e642a8b53d"
+version = "0.5.10"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9#14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9"
 dependencies = [
  "ess-compiler 0.13.1",
  "serde",
@@ -3065,13 +3065,13 @@ dependencies = [
 
 [[package]]
 name = "service-engine"
-version = "0.5.9"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=93cd33452f929f675daaf3af307a70e642a8b53d#93cd33452f929f675daaf3af307a70e642a8b53d"
+version = "0.5.10"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9#14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9"
 dependencies = [
  "hex",
  "serde",
  "serde_json",
- "service-runtime 0.5.9",
+ "service-runtime 0.5.10",
  "sha2 0.11.0",
  "thiserror",
  "time",
@@ -3096,15 +3096,15 @@ dependencies = [
 
 [[package]]
 name = "service-eventlog"
-version = "0.5.9"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=93cd33452f929f675daaf3af307a70e642a8b53d#93cd33452f929f675daaf3af307a70e642a8b53d"
+version = "0.5.10"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9#14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9"
 dependencies = [
  "eventlog-core",
  "hex",
  "serde",
  "serde_json",
- "service-engine 0.5.9",
- "service-runtime 0.5.9",
+ "service-engine 0.5.10",
+ "service-runtime 0.5.10",
  "sha2 0.11.0",
  "thiserror",
  "time",
@@ -3113,8 +3113,8 @@ dependencies = [
 
 [[package]]
 name = "service-http"
-version = "0.5.9"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=93cd33452f929f675daaf3af307a70e642a8b53d#93cd33452f929f675daaf3af307a70e642a8b53d"
+version = "0.5.10"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9#14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9"
 dependencies = [
  "axum",
  "bytes",
@@ -3123,9 +3123,9 @@ dependencies = [
  "reqwest",
  "serde",
  "serde_json",
- "service-engine 0.5.9",
- "service-eventlog 0.5.9",
- "service-runtime 0.5.9",
+ "service-engine 0.5.10",
+ "service-eventlog 0.5.10",
+ "service-runtime 0.5.10",
  "thiserror",
 ]
 
@@ -3143,12 +3143,12 @@ dependencies = [
 
 [[package]]
 name = "service-obligations"
-version = "0.5.9"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=93cd33452f929f675daaf3af307a70e642a8b53d#93cd33452f929f675daaf3af307a70e642a8b53d"
+version = "0.5.10"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9#14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9"
 dependencies = [
  "serde",
  "serde_json",
- "service-definition 0.5.9",
+ "service-definition 0.5.10",
  "sha2 0.11.0",
  "thiserror",
 ]
@@ -3166,8 +3166,8 @@ dependencies = [
 
 [[package]]
 name = "service-runtime"
-version = "0.5.9"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=93cd33452f929f675daaf3af307a70e642a8b53d#93cd33452f929f675daaf3af307a70e642a8b53d"
+version = "0.5.10"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9#14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9"
 dependencies = [
  "serde",
  "serde_json",
@@ -3191,15 +3191,15 @@ dependencies = [
 
 [[package]]
 name = "service-runtime-ir"
-version = "0.5.9"
-source = "git+https://github.com/beyond10x/service-sdk.git?rev=93cd33452f929f675daaf3af307a70e642a8b53d#93cd33452f929f675daaf3af307a70e642a8b53d"
+version = "0.5.10"
+source = "git+https://github.com/beyond10x/service-sdk.git?rev=14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9#14bb3ba65b3f0f2b8a577bd9f30961bfc0a92ad9"
 dependencies = [
  "ess-compiler 0.13.1",
  "ess-synth",
  "serde",
  "serde_json",
- "service-definition 0.5.9",
- "service-obligations 0.5.9",
+ "service-definition 0.5.10",
+ "service-obligations 0.5.10",
  "sha2 0.11.0",
 ]
 
