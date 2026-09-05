@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.3.7 - 2026-09-05
+
+- Align the generated service with Service SDK 0.5.11 and Connectors 0.6.5 so hosted GitLab
+  connections can be reauthorized after an upgrade without taking the composed host offline.
+
 ## 0.3.6 - 2026-09-05
 
 - Regenerate the hosted service with Service SDK 0.5.10 so its Connector factory composes with
