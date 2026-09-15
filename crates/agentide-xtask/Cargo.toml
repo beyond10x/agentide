@@ -18,9 +18,9 @@ workspace = true
 [dependencies]
 agentide-contracts.workspace = true
 anyhow.workspace = true
-ess-compiler = { git = "https://github.com/beyond10x/ess", tag = "0.9.2", version = "=0.9.2" }
-ess-domain = { git = "https://github.com/beyond10x/ess", tag = "0.9.2", version = "=0.9.2" }
-ess-realization = { git = "https://github.com/beyond10x/ess", tag = "0.9.2", version = "=0.9.2" }
+ess-compiler = { git = "https://github.com/beyond10x/ess", tag = "0.24.0", version = "=0.24.0" }
+ess-domain = { git = "https://github.com/beyond10x/ess", tag = "0.24.0", version = "=0.24.0" }
+ess-realization = { git = "https://github.com/beyond10x/ess", tag = "0.24.0", version = "=0.24.0" }
 jsonschema.workspace = true
 schemars.workspace = true
 serde.workspace = true

@@ -1290,6 +1290,21 @@ fn read_tree(root: &Path) -> Result<std::collections::BTreeMap<std::path::PathBu
     while let Some(directory) = pending.pop() {
         for entry in std::fs::read_dir(&directory)? {
             let path = entry?.path();
+            // A generator's own bookkeeping is not output it owns, and this tree is read to compare
+            // owned bytes. ESS after 0.9.2 writes a publication ledger at `.ess-output/state.json`
+            // beside the artifacts `ess generate` produces; `validate_generated_ess` compares that
+            // fresh tree against the committed `generated/ess`, which has no such directory, so
+            // reading the ledger reported it as an artifact nobody committed and failed the drift
+            // check with every real artifact byte-identical. Hidden entries are tool state by
+            // convention, and none of the four trees read here has ever held a dot-prefixed
+            // artifact. `root` itself is never filtered: only what is found inside it.
+            if path
+                .file_name()
+                .and_then(std::ffi::OsStr::to_str)
+                .is_some_and(|name| name.starts_with('.'))
+            {
+                continue;
+            }
             if path.is_dir() {
                 pending.push(path);
             } else if path.is_file() {
@@ -1311,4 +1326,65 @@ fn run(directory: &Path, program: &str, arguments: &[&str]) -> Result<()> {
         bail!("`{program} {}` failed with {status}", arguments.join(" "));
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::read_tree;
+    use std::path::PathBuf;
+
+    /// A generator's hidden bookkeeping must not reach a byte comparison.
+    ///
+    /// ESS after `0.9.2` writes `.ess-output/state.json` beside what `ess generate` produces.
+    /// `validate_generated_ess` compares that fresh tree against the committed `generated/ess`,
+    /// which holds no dot-prefixed entry, so a [`read_tree`] that returned the ledger reported an
+    /// artifact nobody committed and bailed — with all 130 real artifacts byte-identical. Without
+    /// the skip this fails on the two hidden paths.
+    #[test]
+    fn read_tree_skips_a_generators_hidden_bookkeeping() {
+        let temporary = tempfile::tempdir().expect("temporary directory");
+        let root = temporary.path();
+        std::fs::create_dir_all(root.join("schema/commands")).expect("artifact directories");
+        std::fs::write(root.join("ir.json"), b"{}\n").expect("artifact");
+        std::fs::write(root.join("schema/commands/a.schema.json"), b"{}\n").expect("artifact");
+        std::fs::create_dir_all(root.join(".ess-output")).expect("ledger directory");
+        std::fs::write(
+            root.join(".ess-output/state.json"),
+            b"{\"checksum\":\"\"}\n",
+        )
+        .expect("ledger");
+        std::fs::write(root.join(".gitignore"), b"*\n").expect("hidden file");
+
+        let tree = read_tree(root).expect("reading the tree");
+
+        assert_eq!(
+            tree.keys().cloned().collect::<Vec<PathBuf>>(),
+            vec![
+                PathBuf::from("ir.json"),
+                PathBuf::from("schema/commands/a.schema.json"),
+            ],
+            "only owned artifacts belong in a tree read for byte comparison"
+        );
+    }
+
+    /// The filter reads entries, not the root it was handed.
+    ///
+    /// `validate_hosted_contracts` and `validate_renderer_contracts` pass ordinary paths, but a
+    /// caller reading a tree that itself lives under a dotted directory — `.engineering`, a CI
+    /// scratch root — must still get its contents.
+    #[test]
+    fn read_tree_does_not_filter_a_dotted_root() {
+        let temporary = tempfile::tempdir().expect("temporary directory");
+        let root = temporary.path().join(".generated");
+        std::fs::create_dir_all(&root).expect("dotted root");
+        std::fs::write(root.join("ir.json"), b"{}\n").expect("artifact");
+
+        let tree = read_tree(&root).expect("reading the tree");
+
+        assert_eq!(
+            tree.keys().cloned().collect::<Vec<PathBuf>>(),
+            vec![PathBuf::from("ir.json")],
+            "the root is the tree being read, not an entry in it"
+        );
+    }
 }
