@@ -2,7 +2,7 @@
 format: aep.planning-md/1
 id: story:harness-0-15-0
 kind: story
-status: draft
+status: implemented
 title: Move to harness 0.15.0 (Substrate 0.7.17)
 summary: Pin harness 0.15.0, build the model port through b10x-harness-llm over llm 0.8.0, take Registry from tools; drops the four deleted harness wire and credential crates and Substrate 0.5.0.
 tags:
@@ -10,7 +10,7 @@ tags:
 - pins
 relations:
 - serves: vision:agent-first-coding-surface
-revision: 2
+revision: 5
 ---
 ## Acceptance
 
