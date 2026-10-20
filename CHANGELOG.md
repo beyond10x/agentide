@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.3.8 - 2026-10-20
+
+- First release since 0.3.5. It also ships the 0.3.6 and 0.3.7 entries below, which were recorded
+  but never tagged.
 - Move to Harness 0.15.0 (Substrate 0.7.17). The model-backed TUI reaches its endpoint through
   Harness's `llm` adapter over llm 0.8.0; `--api-key-env`, `--oauth-token-env` and
   `--oauth-token-file` still resolve their credential for each request. Toolchain discovery comes
