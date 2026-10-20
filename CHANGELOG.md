@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.3.9 - 2026-10-20
+
+- Move to Harness 0.15.1, which pins llm 0.8.1. A live `--wire anthropic-messages` endpoint that
+  sends response fields llm 0.8.0 refused, such as `message_start.message.container`, is decoded
+  again.
+
 ## 0.3.8 - 2026-10-20
 
 - First release since 0.3.5. It also ships the 0.3.6 and 0.3.7 entries below, which were recorded
