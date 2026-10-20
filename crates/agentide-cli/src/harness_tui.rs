@@ -113,7 +113,7 @@ fn worker_loop(
             messages: messages.clone(),
         };
         let (tools, approvals) = ports(engine, &session_id, approver)?;
-        let model = connection.connect(cancel.clone())?;
+        let model = connection.connect(&cancel)?;
         let config = LoopConfig::new(&connection.model, standing_instruction(&objective))
             .with_budget(Budget::default().with_max_turns(max_turns))
             .with_unattended_ceiling(Risk::Low)

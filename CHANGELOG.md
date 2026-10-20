@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Move to Harness 0.15.0 (Substrate 0.7.17). The model-backed TUI reaches its endpoint through
+  Harness's `llm` adapter over llm 0.8.0; `--api-key-env`, `--oauth-token-env` and
+  `--oauth-token-file` still resolve their credential for each request. Toolchain discovery comes
+  from the `tools` repository's toolchain crate, through Harness's Substrate crate.
+
 ## 0.3.7 - 2026-09-05
 
 - Align the generated service with Service SDK 0.5.11 and Connectors 0.6.5 so hosted GitLab

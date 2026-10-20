@@ -15,6 +15,5 @@ workspace = true
 agentide-contracts.workspace = true
 agentide-core.workspace = true
 b10x-harness-substrate.workspace = true
-b10x-harness-toolchain.workspace = true
 serde_json.workspace = true
 sha2.workspace = true

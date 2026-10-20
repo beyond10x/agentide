@@ -26,13 +26,10 @@ agentide-substrate = { path = "crates/agentide-substrate" }
 anyhow = "1"
 async-trait = "0.1"
 axum = { version = "0.8", features = ["json", "tokio"] }
-b10x-harness-credential = { git = "https://github.com/beyond10x/harness", rev = "0f2edfef9f6dc3333b9377a730dfb40aeff14351", version = "=0.11.1" }
-b10x-harness-loop = { git = "https://github.com/beyond10x/harness", rev = "0f2edfef9f6dc3333b9377a730dfb40aeff14351", version = "=0.11.1" }
-b10x-harness-messages = { git = "https://github.com/beyond10x/harness", rev = "0f2edfef9f6dc3333b9377a730dfb40aeff14351", version = "=0.11.1" }
-b10x-harness-responses = { git = "https://github.com/beyond10x/harness", rev = "0f2edfef9f6dc3333b9377a730dfb40aeff14351", version = "=0.11.1" }
-b10x-harness-substrate = { git = "https://github.com/beyond10x/harness", rev = "0f2edfef9f6dc3333b9377a730dfb40aeff14351", version = "=0.11.1" }
-b10x-harness-toolchain = { git = "https://github.com/beyond10x/harness", rev = "0f2edfef9f6dc3333b9377a730dfb40aeff14351", version = "=0.11.1" }
-b10x-harness-wire = { git = "https://github.com/beyond10x/harness", rev = "0f2edfef9f6dc3333b9377a730dfb40aeff14351", version = "=0.11.1" }
+b10x-harness-llm = { git = "https://github.com/beyond10x/harness", rev = "dd5c2a66218a5f2555c4a9fdab6fdfac8515cc6d", version = "=0.15.0" }
+b10x-harness-loop = { git = "https://github.com/beyond10x/harness", rev = "dd5c2a66218a5f2555c4a9fdab6fdfac8515cc6d", version = "=0.15.0" }
+b10x-harness-substrate = { git = "https://github.com/beyond10x/harness", rev = "dd5c2a66218a5f2555c4a9fdab6fdfac8515cc6d", version = "=0.15.0" }
+b10x-harness-wire = { git = "https://github.com/beyond10x/harness", rev = "dd5c2a66218a5f2555c4a9fdab6fdfac8515cc6d", version = "=0.15.0" }
 chrono = { version = "0.4", default-features = false, features = ["clock", "serde", "std"] }
 clap = { version = "4", features = ["derive", "env"] }
 crossterm = "0.29"

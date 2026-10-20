@@ -14,14 +14,14 @@ use agentide_contracts::{
     IntentDefinition, IntentInventory, Risk as IntentRisk,
 };
 use agentide_core::{Engine, IntentPort, Plan, Refusal};
-use b10x_harness_credential::{NamedSource, SubscriptionToken};
 use b10x_harness_loop::{ApprovalDecision, ApprovalPort, LoopCancel};
-use b10x_harness_messages::{Endpoint as MessagesEndpoint, MessagesClient};
-use b10x_harness_responses::{Endpoint as ResponsesEndpoint, ResponsesClient};
 use b10x_harness_wire::{
-    AccessKind, Bearer, BearerSource, CredentialKind, Effect, Envelope, Idempotency, ModelPort,
-    Risk, Subject, ToolCall, ToolName, ToolOutcome, ToolPort, ToolSpec, WireError,
+    AccessKind, Effect, Envelope, Idempotency, ModelPort, Risk, Subject, ToolCall, ToolName,
+    ToolOutcome, ToolPort, ToolSpec, WireError,
 };
+use harness_llm::llm_credentials::SecretRef;
+use harness_llm::llm_credentials::environment::EnvironmentResolver;
+use harness_llm::{Presentation, Protocol, Source, Target, client};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use thiserror::Error;
@@ -96,86 +96,45 @@ pub struct ModelConnection {
 }
 
 impl ModelConnection {
-    /// Builds the selected Harness wire over one cancellation token.
-    pub fn connect(&self, cancel: LoopCancel) -> Result<Box<dyn ModelPort>, WireError> {
-        let bearer = credential(&self.credential);
-        match self.wire {
-            ModelWire::OpenaiResponses => {
-                let endpoint = ResponsesEndpoint::new(
-                    self.base_url.clone(),
-                    self.model.clone(),
-                    self.context_window,
-                )?;
-                match bearer {
-                    None => ResponsesClient::unauthenticated(endpoint)
-                        .map(|client| Box::new(client.with_cancel(cancel)) as Box<dyn ModelPort>),
-                    Some(bearer) => ResponsesClient::new(endpoint, bearer)
-                        .map(|client| Box::new(client.with_cancel(cancel)) as Box<dyn ModelPort>),
-                }
-            }
-            ModelWire::AnthropicMessages => {
-                let endpoint = MessagesEndpoint::new(
-                    self.base_url.clone(),
-                    self.model.clone(),
-                    self.context_window,
-                )?
-                .with_max_output_tokens(self.max_output_tokens)?;
-                match bearer {
-                    None => MessagesClient::unauthenticated(endpoint)
-                        .map(|client| Box::new(client.with_cancel(cancel)) as Box<dyn ModelPort>),
-                    Some(bearer) => MessagesClient::new(endpoint, bearer)
-                        .map(|client| Box::new(client.with_cancel(cancel)) as Box<dyn ModelPort>),
-                }
-            }
-        }
+    /// Builds the selected wire through Harness's `llm` adapter over one cancellation token.
+    ///
+    /// No credential is read here: every source is resolved again for each request.
+    pub fn connect(&self, cancel: &LoopCancel) -> Result<Box<dyn ModelPort>, WireError> {
+        let target = Target {
+            protocol: match self.wire {
+                ModelWire::OpenaiResponses => Protocol::Responses,
+                ModelWire::AnthropicMessages => Protocol::Messages,
+            },
+            base_url: &self.base_url,
+            model: &self.model,
+            context_window: self.context_window,
+            max_output_tokens: Some(self.max_output_tokens),
+        };
+        let source = credential(&self.credential).map_err(WireError::unauthorized)?;
+        client(&target, source, cancel)
+            .map(|port| port as Box<dyn ModelPort>)
+            .map_err(WireError::unsupported)
     }
 }
 
-#[derive(Debug)]
-struct EnvironmentCredential {
-    variable: String,
-    kind: CredentialKind,
-}
+/// The reference an API key read from a named environment variable is resolved under.
+const API_KEY_REFERENCE: &str = "api-key-env";
 
-impl BearerSource for EnvironmentCredential {
-    fn bearer(&self) -> Result<Bearer, WireError> {
-        let value = std::env::var(&self.variable).map_err(|_| {
-            WireError::unauthorized(format!(
-                "credential environment variable `{}` is unavailable",
-                self.variable
-            ))
-        })?;
-        if value.is_empty() {
-            return Err(WireError::unauthorized(format!(
-                "credential environment variable `{}` is empty",
-                self.variable
-            )));
-        }
-        Ok(Bearer::new(value))
-    }
-
-    fn kind(&self) -> CredentialKind {
-        self.kind
-    }
-}
-
-fn credential(source: &CredentialSource) -> Option<Arc<dyn BearerSource>> {
+fn credential(source: &CredentialSource) -> Result<Option<Source>, String> {
     match source {
-        CredentialSource::None => None,
-        CredentialSource::ApiKeyEnvironment(variable) => Some(Arc::new(EnvironmentCredential {
-            variable: variable.clone(),
-            kind: CredentialKind::ApiKey,
-        })),
-        CredentialSource::OauthEnvironment(variable) => Some(Arc::new(EnvironmentCredential {
-            variable: variable.clone(),
-            kind: CredentialKind::Oauth,
-        })),
+        CredentialSource::None => Ok(None),
+        CredentialSource::ApiKeyEnvironment(variable) => {
+            let reference = SecretRef::new(API_KEY_REFERENCE).map_err(|error| error.to_string())?;
+            let resolver =
+                EnvironmentResolver::new(BTreeMap::from([(reference, variable.clone())]))
+                    .map_err(|error| format!("the environment variable `{variable}`: {error}"))?;
+            Source::resolver(API_KEY_REFERENCE, Arc::new(resolver), Presentation::ApiKey).map(Some)
+        }
+        CredentialSource::OauthEnvironment(variable) => {
+            Source::environment(variable, None).map(Some)
+        }
         CredentialSource::OauthFile { path, pointer } => {
-            let mut token = SubscriptionToken::new(NamedSource::file(path));
-            if let Some(pointer) = pointer {
-                token = token.at_pointer(pointer);
-            }
-            Some(Arc::new(token))
+            Source::file(path, pointer.as_deref()).map(Some)
         }
     }
 }
@@ -1117,5 +1076,36 @@ mod tests {
         assert!(session.events.iter().any(|event| {
             event.kind == "intent.completed" && event.intent.as_deref() == Some("code_edit")
         }));
+    }
+
+    #[test]
+    fn an_api_key_variable_is_read_for_each_request_and_not_at_connect() {
+        let variable = "AGENTIDE_TEST_API_KEY_THAT_IS_NEVER_SET";
+        assert!(std::env::var_os(variable).is_none());
+        let connection = ModelConnection {
+            wire: ModelWire::OpenaiResponses,
+            base_url: "http://127.0.0.1:9/v1".into(),
+            model: "model-id".into(),
+            context_window: 128_000,
+            max_output_tokens: 8_192,
+            credential: CredentialSource::ApiKeyEnvironment(variable.into()),
+        };
+        let mut model = connection
+            .connect(&LoopCancel::new())
+            .expect("connecting reads no credential");
+        let (mut tools, mut approvals, _store, _session_id, _temporary) = fixture();
+        let mut sink = VecLoopSink::new();
+        let error = AgentLoop::new(
+            model.as_mut(),
+            &mut tools,
+            &mut approvals,
+            LoopConfig::new("model-id", "test"),
+        )
+        .run("hello", &mut sink)
+        .expect_err("the request has no credential");
+        assert!(
+            error.to_string().contains("Unauthorized"),
+            "unexpected refusal: {error}"
+        );
     }
 }

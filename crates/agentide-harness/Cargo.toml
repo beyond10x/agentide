@@ -14,10 +14,8 @@ workspace = true
 [dependencies]
 agentide-contracts.workspace = true
 agentide-core.workspace = true
-b10x-harness-credential.workspace = true
+b10x-harness-llm.workspace = true
 b10x-harness-loop.workspace = true
-b10x-harness-messages.workspace = true
-b10x-harness-responses.workspace = true
 b10x-harness-wire.workspace = true
 serde.workspace = true
 serde_json.workspace = true

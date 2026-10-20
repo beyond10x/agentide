@@ -6,10 +6,10 @@ use std::time::Duration;
 
 use agentide_contracts::Binding;
 use agentide_core::{IntentPort, Refusal};
+use b10x_harness_substrate::tool_toolchain::Registry;
 use b10x_harness_substrate::{
     Backend, Embedded, ProcessWorkspaceAccess, Toolchain, process_workspace_access,
 };
-use b10x_harness_toolchain::Registry;
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
 
