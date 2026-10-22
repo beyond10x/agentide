@@ -45,9 +45,6 @@ surfaces:
     discoverability: public
   relationships:
   - kind: uses
-    label: Runs coding intents through Harness toolchains
-    target: harness/docs
-  - kind: uses
     label: Derives executable intent contracts and realization IR from ESS
     target: ess/docs
   routeBase: /docs/agentide/
