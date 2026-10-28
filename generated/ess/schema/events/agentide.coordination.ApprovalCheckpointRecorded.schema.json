@@ -33,7 +33,7 @@
     "system": "agentide",
     "specification_version": "v1",
     "source_digest": "509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab",
-    "contract_digest": "ef4f27cd801f6f0947ec9f6e3e511131c7dea673f31079774ff409feb46e70b0",
+    "contract_digest": "slice-sha256/2:ef4f27cd801f6f0947ec9f6e3e511131c7dea673f31079774ff409feb46e70b0",
     "regenerate": "ess generate"
   },
   "$defs": {

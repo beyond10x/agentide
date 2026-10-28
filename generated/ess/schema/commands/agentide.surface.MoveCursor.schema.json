@@ -54,7 +54,7 @@
     "system": "agentide",
     "specification_version": "v1",
     "source_digest": "509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab",
-    "contract_digest": "b6409dc7bc3a128ff28d11246f5a708c5f80337e2acec518be7ae61230cc7421",
+    "contract_digest": "slice-sha256/2:2cb1969f62fe9eb7024cfef4d37401f05b55c65cfd3e6de8447ef0c5f71573f6",
     "regenerate": "ess generate"
   },
   "$defs": {

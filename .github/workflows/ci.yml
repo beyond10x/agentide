@@ -46,7 +46,7 @@ jobs:
             --tag 0.52.0 \
             --locked --root "$tool_root" --bin aep aep-cli
           cargo install --git https://github.com/beyond10x/ess \
-            --tag 0.9.2 \
+            --tag 0.72.0 \
             --locked --root "$tool_root" --bin ess ess-cli
           echo "$tool_root/bin" >> "$GITHUB_PATH"
 

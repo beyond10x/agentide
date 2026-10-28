@@ -42,7 +42,7 @@
     "system": "agentide",
     "specification_version": "v1",
     "source_digest": "509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab",
-    "contract_digest": "5f63407c8c71f298822724aa78476a8b6d9a9217aeb2cc30e6de8b2b064a537b",
+    "contract_digest": "slice-sha256/2:c08a87639c0e5f12300c4eea6404e6f05018b5299e5b02ae017bdebb8ad90442",
     "regenerate": "ess generate"
   },
   "$defs": {
