@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Move both ESS pins to 0.72.0: the xtask libraries from 0.24.0 and the CI's `ess` CLI from 0.9.2.
+  `generated/ess` is regenerated with that CLI; its contract digests read `slice-sha256/2:` and
+  the OpenAPI document now declares each branch's published events and refusal bodies.
+
 ## 0.3.9 - 2026-10-20
 
 - Move to Harness 0.15.1, which pins llm 0.8.1. A live `--wire anthropic-messages` endpoint that

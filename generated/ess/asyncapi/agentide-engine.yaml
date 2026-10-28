@@ -1,6 +1,6 @@
 # generated from agentide v1
 # model digest 509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab
-# contract digest f98f45021efadc2c19cd0caae0941117eb7c2b937105f97be043e67ef0b74781
+# contract digest slice-sha256/2:45abaa152ec56f989bf77b29b515aa13ab5d2d6cacec1f80cd65450b685f4dd1
 # do not edit: regenerate with `ess generate`
 asyncapi: 3.0.0
 info:
@@ -19,7 +19,7 @@ info:
     system: agentide
     specification_version: v1
     source_digest: 509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab
-    contract_digest: f98f45021efadc2c19cd0caae0941117eb7c2b937105f97be043e67ef0b74781
+    contract_digest: slice-sha256/2:45abaa152ec56f989bf77b29b515aa13ab5d2d6cacec1f80cd65450b685f4dd1
 defaultContentType: application/json
 channels:
   agentide.coding.IntentCompleted:

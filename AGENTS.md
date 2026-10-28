@@ -44,36 +44,27 @@ mutate Atlas, Website source locks, documentation snapshots, or façade delivery
 
 ## Pins
 
-There are **two** ESS pins in this repository and they are deliberately at different versions.
+There are **two** ESS pins in this repository. They move independently but are both at `0.72.0`
+since 2026-10-28.
 
-**The ESS libraries are pinned at `0.24.0`, the current tag.** `crates/agentide-xtask/Cargo.toml:21-23`
-take `ess-compiler`, `ess-domain` and `ess-realization` at `tag = "0.24.0", version = "=0.24.0"`
-(ESS's latest tag on 2026-09-15). The surface this crate uses — `ess_compiler::source::SourceMap`,
-`ess_domain::spec::{RawSpecFile, Specification}`, `ess_domain::system::Source`,
-`ess_compiler::resolve::compile_locating`, `EssIr`, `ess_realization::{RealizationSpec, compile}` —
-is unchanged from `0.9.2`, so the bump needed no source edit and `Cargo.lock` moved only those three
-packages' version and source lines. `cargo check -p agentide-xtask --locked` is green against it, and
-so are the gate's `validate_ess` and `validate_realizations`: `EssIr::to_canonical_json()` from
-`0.24.0` still equals `generated/ess/ir.json` byte for byte, and `docs/running-modes.md` still
-regenerates byte-identically (`ess-realization/1` is still accepted beside the newer
-`ess-realization/2`).
+**The ESS libraries.** `crates/agentide-xtask/Cargo.toml:21-23` take `ess-compiler`, `ess-domain`
+and `ess-realization` at `tag = "0.72.0", version = "=0.72.0"`. The surface this crate uses —
+`ess_compiler::source::SourceMap`, `ess_domain::spec::{RawSpecFile, Specification}`,
+`ess_domain::system::Source`, `ess_compiler::resolve::compile_locating`, `EssIr`,
+`ess_realization::{RealizationSpec, compile}` — compiled unchanged from `0.24.0`, and
+`EssIr::to_canonical_json()` still equals `generated/ess/ir.json` byte for byte.
 
-**The ESS *CLI* is deliberately held at `0.9.2`** — `.github/workflows/ci.yml:49` installs it, and
+**The ESS CLI.** `.github/workflows/ci.yml:49` installs the `ess` binary at tag `0.72.0`;
 `validate_generated_ess` shells out to it (`AGENTIDE_ESS_BIN`, else `ess` on `PATH`) rather than to
-the pinned library. What moving that pin costs was measured on 2026-09-15 by regenerating
-`spec/agentide` with ESS CLI `0.23.0` into a scratch tree and comparing it to `generated/ess`:
+the pinned library. Moving it from `0.9.2` regenerated `generated/ess` with that CLI: `ir.json` and
+four other files stayed byte-identical; the other 125 files changed their contract digest to
+`slice-sha256/2:<hex>`, and the OpenAPI document gained each branch's published events and refusal
+bodies. The newer CLI also writes a publication ledger at `.ess-output/state.json`, which
+`read_tree` (`crates/agentide-xtask/src/main.rs`) skips as a dot-prefixed entry.
 
-| what | result |
-|---|---|
-| `generated/ess/ir.json` and 4 other files | byte-identical |
-| the other **125** files | differ **only** in the contract digest, `<hex>` → `slice-sha256/2:<hex>` |
-| `.ess-output/state.json` | **new** — a publication ledger the newer CLI writes beside its output, with no flag to suppress it. **Handled:** `read_tree` (`crates/agentide-xtask/src/main.rs:1287`) now skips dot-prefixed entries, under two unit tests. None of the four trees it reads holds a dot-prefixed artifact, so no committed byte moved. |
-
-Nothing structural is left. Moving the CLI tag needs `generated/ess` regenerated with the **same** tag
-the workflow installs — 125 files, the digest field only, through the CLI and never by hand — and a
-complete `cargo xtask gate` green with both pins at once. Tracked by `story:ess-pin-0-9-2` in
-`.engineering/planning/`. Do not move the CLI tag outside that story, and keep the two pins'
-relationship written down here when either one moves.
+Moving the CLI tag needs `generated/ess` regenerated with the **same** tag the workflow installs,
+through the CLI and never by hand, and a complete `cargo xtask gate` green with both pins at once.
+Keep the two pins' relationship written down here when either one moves.
 
 ## Gate
 

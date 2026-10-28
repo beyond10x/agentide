@@ -5,7 +5,7 @@
     "system": "agentide",
     "specification_version": "v1",
     "source_digest": "509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab",
-    "contract_digest": "06c7038028f26990713cab7300616f47403b29ba1a2689e627fbcbcbe2b7c560",
+    "contract_digest": "slice-sha256/2:06c7038028f26990713cab7300616f47403b29ba1a2689e627fbcbcbe2b7c560",
     "regenerate": "ess generate"
   },
   "$defs": {

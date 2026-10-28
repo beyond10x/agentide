@@ -26,7 +26,7 @@
     "system": "agentide",
     "specification_version": "v1",
     "source_digest": "509495079a366d767a747dbfcd22e419c28040b7ff32d15a1f284393168d16ab",
-    "contract_digest": "71001cdfbf34c368887d736d9cd54f6fc8f24d90401041061872c2a8bbeabb49",
+    "contract_digest": "slice-sha256/2:71001cdfbf34c368887d736d9cd54f6fc8f24d90401041061872c2a8bbeabb49",
     "regenerate": "ess generate"
   }
 }

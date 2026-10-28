@@ -1187,7 +1187,7 @@ fn validate_generated_ess(root: &Path) -> Result<()> {
         .arg(out.join("ir.json"))
         .status()
         .with_context(
-            || "starting the pinned ESS CLI; install tag 0.9.2 or set AGENTIDE_ESS_BIN",
+            || "starting the pinned ESS CLI; install tag 0.72.0 or set AGENTIDE_ESS_BIN",
         )?;
     if !compile.success() {
         bail!("ESS canonical IR generation failed with {compile}");
